@@ -21,11 +21,17 @@ model = genai.GenerativeModel('gemini-1.5-pro-latest')
 # - It would be useful if you also would generate comments to explain your "chain of thought".
 
 prompt_part1 = r"""
-Your task is to convert LaTeX source code from a mathematical text book to a sequence of highly formalized statements which can be easily postprocessed. Your input data consists of several parts which are separated by `----`. Each part has a different meaning. In the formalized statements "arg1" and "arg2" are placeholders (i.e. variables) for specific values. In the abstract examples in Input Part 1 the strings "<arg1>" and "<arg2>" serve as such placeholders.
+Your task is to convert LaTeX source code from a mathematical text book to a sequence of highly formalized statements which can be easily post-processed. Your input data consists of several parts which are separated by `----`. Each part has a different meaning. In the formalized statements "arg1" and "arg2" are placeholders (i.e. variables) for specific values. In the abstract examples in Input Part 1 the strings "<arg1>" and "<arg2>" serve as such placeholders.
 
 ----
 
-# Input Part 1: The following **types** of formalized statements are allowed:
+# Input Part 1: Description of allowed formalized statements
+
+All statements are represented as a bullet list in markdown syntax. There are two general types of formalized statements: Simple Formalized Statements and Complex Formalized Statements.
+
+## Simple Formalized Statements
+
+Simple Formalized Statements consist of one line. They are not followed by a line with a higher indentation level. The following Simple Formalized Statements are allowed:
 
 - // This is a comment to explain modeling decisions. It is an arbitrary single line string.
 - There is a class: <arg1>.
@@ -44,15 +50,32 @@ Your task is to convert LaTeX source code from a mathematical text book to a seq
 - The type of argument2 of <arg1> is <arg2>.
 - The result type of <arg1> is <arg2>.
 - <arg1> has the verbal description <arg2>.
-- <arg1> hast the alternative label <arg2>.
-- There is an equivalence statement
-    - full source code: <arg1>
-    - source code of assertion: <arg1>
-        - // the assertion is the part before "if and only if"
-    - source code of premise: <arg2>
-        - // the premise is the part after "if and only if"
-- <arg1> is associate with <<arg2>>
+- <arg1> has the alternative label <arg2>.
+- <arg1> is associate with <arg2>.
+- <arg1> has the property <arg2>.
 
+
+## Complex Formalized Statements
+
+Complex Formalized Statements consists of multiple lines which correspond to one list item of the current level followed at least one sub-list. The sub-list can consist of Simple Formalized Statements or Complex Formalized Statements. Thus, a Complex Formalized Statement contains lines with at least two indentation levels. The following Complex Formalized Statements are allowed:
+
+- There is an equivalence statement:
+    - full source code: <arg1>.
+    - // the assertion is the part before "if and only if"
+    - source code of assertion: <arg1>.
+    - // the premise is the part after "if and only if"
+    - source code of premise: <arg2>.
+
+- // The following starts a definition statement which can contain either one OR or one AND block. Such blocks can be nested which is represented by their indentation level
+- <arg1> has the definition:
+    - // the following starts an OR-block, i.e. a block of an arbitrary number of conditions which are linked by logical OR
+    - OR
+        - <condition1>
+        - <condition2>
+    - // the following starts an AND-block, i.e. a block of an arbitrary number of conditions which are linked by logical AND
+    - AND
+        - <condition1>
+        - <condition2>
 
 ----
 
@@ -63,7 +86,9 @@ Your task is to convert LaTeX source code from a mathematical text book to a seq
 - In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore the following:
     - `\label{...}`
     - `\index{...}`
-    - % ... (comment until the next newline)
+- The LaTeX source code (Input Part 3 and Input Part 5) contains special snippet-delimiter comments like `% snippet(5)`
+- In the list of resulting formalized statements we use a comment like `- // snippet(5)` to indicate the following statements are from `snippet(5)` of the LaTeX source code. Thereby `snippet(5)` is that substring of the LaTeX source code which starts with the special comment `% snippet(5)` and ends just before the next such comment `% snippet(6)`. The numbers 5 and 6 are only examples here.
+- In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore all other comments (i.e. substrings that start with `%` and span until the next newline)
 - In the LaTeX source code (Input Part 3 and Input Part 5) some custom macros are used to abbreviate variables (`\SX`, `\SY`) and operators. The macro `\it` means italic and is used to emphasize words.
 - The order of the formalized statements in Input Part 4 mainly follows the order in which the information is presented by the LaTeX source code in Input Part 3.
 
@@ -71,92 +96,19 @@ Your task is to convert LaTeX source code from a mathematical text book to a seq
 ----
 """
 
-prompt_part2 = r"""
+prompt_part2 = """
 
 # Input Part 3: The LaTeX source code which was already processed
 
 ```
-\section{Sets}
-
-
-A {\it set} $\{x,y,\ldots\}$ is a collection of elements.
-A set can include either a finite or infinite number of elements.
-The set $\SX$ is {\it finite} if it has a finite number of elements; otherwise, $\SX$ is {\it infinite}. The set $\SX$ is {\it countably infinite} if $\SX$ is infinite and its elements are in one-to-one correspondence with the positive integers.  The set $\SX$ is {\it countable} if it is either finite or countably infinite.
-
-Let $\SX$ be a set.
-Then, \begin{align}x\in \SX\end{align} means that $x$ is an {\it element}
-\label{insym}%
-\index{element!definition}%
-of $\SX$. If $w$ is not an element of $\SX$, then we write
-\begin{align}w\not\in \SX.\end{align}
-\label{notinsym}
-
-No set can be an element of itself.  Therefore, there does not exist a set that includes every set.  The set with no elements, denoted by $\varnothing\mspace{-1mu},$ is the {\it empty set}.
-%
-\label{varnothingsym}%
-\index{empty set!definition}%
-\index{nonempty set!definition}%
-If $\SX\not=\varnothing\mspace{-1mu},$ then $\SX$ is {\it nonempty}.
-
-
-
-Let $\SX$ and $\SY$ be sets. The {\it intersection}
-\index{intersection!definition}%
-of $\SX$ and $\SY$ is the set of common elements of $\SX$ and
-$\SY$, which is given by
-\begin{align}
-\SX\cap \SY
-%
-\isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ and } x\in \SY \}
-%
-=  \{ x\in \SX \mspace{-2mu}\colon\ x\in \SY \}
-%
-=\{x\in \SY\mspace{-2mu}\colon\ x\in \SX \}
-%
-= \SY \cap \SX,\end{align}
+{}
 ```
 
 ----
 
 # Input Part 4: The formalized statements which where extracted from that LaTeX source code
 
-- There is a class: 'set'.
-
-- There is a property: 'finite'.
-- There is a property: 'infinite'.
-- There is a property: 'countably infinite'.
-- There is a property: 'countable'.
-- There is a property: 'empty'.
-- There is a property: 'nonempty'.
-
-- 'finite' is applicable to 'set'.
-- 'infinite' is applicable to 'set'.
-- 'countably infinite' is applicable to 'set'.
-- 'countable' is applicable to 'set'.
-- 'empty' is applicable to 'set'.
-- 'nonempty' is applicable to 'set'.
-
-- 'countably infinite' is a subproperty of 'infinite'.
-- 'positive integers' is an instance of 'set'.
-- 'empty set' is an instance of 'set'.
-- 'empty set' has the associated LaTeX notation `$\varnothing$`.
-- 'empty set' has the verbal description "The set with no elements".
-
-- There is a class: 'element'.
-- There is a relation: 'is element of'.
-- 'is element of' has the associated LaTeX notation `$arg1 \in arg2$`.
-- There is a relation: 'is not element of'.
-- 'is not element of' has the associated LaTeX notation `$arg1 \not\in arg2$`.
-- There is a relation: 'is in one-to-one correspondence with'.
-
-- There is a binary operator: 'intersection'.
-- The type of argument1 of 'intersection' is 'set'.
-- The type of argument2 of 'intersection' is 'set'.
-- The result type of 'intersection' is 'set'.
-- 'intersection' has the associated LaTeX notation `$arg1 \cap arg2$`
-- 'intersection' has defining formula `$\SX\cap \SY \isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ and } x\in \SY \}$`.
-- 'intersection' has the verbal description "The intersection of arg1 and arg2 is the set of common elements of arg1 and arg2".
-
+{}
 ----
 
 """

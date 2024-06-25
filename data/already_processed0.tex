@@ -1,0 +1,43 @@
+\section{Sets}
+
+% snippet(1)
+A {\it set} $\{x,y,\ldots\}$ is a collection of elements.
+A set can include either a finite or infinite number of elements.
+The set $\SX$ is {\it finite} if it has a finite number of elements; otherwise, $\SX$ is {\it infinite}.
+%
+% snippet(2)
+The set $\SX$ is {\it countably infinite} if $\SX$ is infinite and its elements are in one-to-one correspondence with the positive integers. The set $\SX$ is {\it countable} if it is either finite or countably infinite.
+
+% snippet(3)
+Let $\SX$ be a set.
+Then, \begin{align}x\in \SX\end{align} means that $x$ is an {\it element}
+\label{insym}%
+\index{element!definition}%
+of $\SX$. If $w$ is not an element of $\SX$, then we write
+\begin{align}w\not\in \SX.\end{align}
+\label{notinsym}
+
+% snippet(3)
+No set can be an element of itself.  Therefore, there does not exist a set that includes every set.  The set with no elements, denoted by $\varnothing\mspace{-1mu},$ is the {\it empty set}.
+%
+\label{varnothingsym}%
+\index{empty set!definition}%
+\index{nonempty set!definition}%
+If $\SX\not=\varnothing\mspace{-1mu},$ then $\SX$ is {\it nonempty}.
+
+
+
+Let $\SX$ and $\SY$ be sets. The {\it intersection}
+\index{intersection!definition}%
+of $\SX$ and $\SY$ is the set of common elements of $\SX$ and
+$\SY$, which is given by
+\begin{align}
+\SX\cap \SY
+%
+\isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ and } x\in \SY \}
+%
+=  \{ x\in \SX \mspace{-2mu}\colon\ x\in \SY \}
+%
+=\{x\in \SY\mspace{-2mu}\colon\ x\in \SX \}
+%
+= \SY \cap \SX,\end{align}
