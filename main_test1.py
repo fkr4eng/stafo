@@ -96,28 +96,31 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 ----
 """
 
-prompt_part2 = """
+prompt_part2_template = """
 
 # Input Part 3: The LaTeX source code which was already processed
 
 ```
-{}
+{processed_tex}
 ```
 
 ----
 
 # Input Part 4: The formalized statements which where extracted from that LaTeX source code
 
-{}
+{resulting_statements}
 ----
 
 """
+
 
 prompt_part3 = r"""
 
 # Input Part 5: The new LaTeX source code from which you should generate new formalized statements
 
 ```
+
+% snippet(6)
 The {\it union} of $\SX $ and $\SY$ is the set of
 elements in either $\SX $ or $\SY$, which is the set
 \index{union!definition}%
@@ -136,6 +139,14 @@ Please generate a list of formalized statements (like in Input Part 4) which rep
 """
 
 
+with open("data/already_processed0.tex") as fp:
+    processed_tex = fp.read()
+
+with open("data/formalized_statements0.md") as fp:
+    resulting_statements = fp.read()
+
+prompt_part2 = prompt_part2_template.format(processed_tex=processed_tex, resulting_statements=resulting_statements)
+
 message = "\n".join([prompt_part1, prompt_part2, prompt_part3])
 
 print(model.count_tokens(message))
@@ -147,4 +158,4 @@ if 0:
 
 
 
-IPS()
+IPS(print_tb=False)

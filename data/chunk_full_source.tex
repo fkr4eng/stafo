@@ -1,0 +1,222 @@
+% TODO: incorporate headings of chapter and section
+
+
+% snippet(1)
+A {\it set} $\{x,y,\ldots\}$ is a collection of elements.
+A set can include either a finite or infinite number of elements.
+The set $\SX$ is {\it finite} if it has a finite number of elements; otherwise, $\SX$ is {\it infinite}.
+%
+% snippet(2)
+The set $\SX$ is {\it countably infinite} if $\SX$ is infinite and its elements are in one-to-one correspondence with the positive integers. The set $\SX$ is {\it countable} if it is either finite or countably infinite.
+
+% snippet(3)
+Let $\SX$ be a set.
+Then, \begin{align}x\in \SX\end{align} means that $x$ is an {\it element}
+\label{insym}%
+\index{element!definition}%
+of $\SX$. If $w$ is not an element of $\SX$, then we write
+\begin{align}w\not\in \SX.\end{align}
+\label{notinsym}
+
+% snippet(4)
+No set can be an element of itself.  Therefore, there does not exist a set that includes every set.  The set with no elements, denoted by $\varnothing\mspace{-1mu},$ is the {\it empty set}.
+%
+\label{varnothingsym}%
+\index{empty set!definition}%
+\index{nonempty set!definition}%
+If $\SX\not=\varnothing\mspace{-1mu},$ then $\SX$ is {\it nonempty}.
+
+% snippet(5)
+Let $\SX$ and $\SY$ be sets. The {\it intersection}
+\index{intersection!definition}%
+of $\SX$ and $\SY$ is the set of common elements of $\SX$ and
+$\SY$, which is given by
+\begin{align}
+\SX\cap \SY
+%
+\isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ and } x\in \SY \}
+%
+=  \{ x\in \SX \mspace{-2mu}\colon\ x\in \SY \}
+%
+=\{x\in \SY\mspace{-2mu}\colon\ x\in \SX \}
+%
+= \SY \cap \SX,\end{align}
+
+\label{capsym}%
+%
+% snippet(6)
+The {\it union} of $\SX $ and $\SY$ is the set of
+elements in either $\SX $ or $\SY$, which is the set
+\index{union!definition}%
+%
+\begin{align}\SX \cup \SY \isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ or } x\in \SY \}=\SY \cup
+\SX.\end{align}
+\label{cupsym}%
+%
+%
+% snippet(7)
+The {\it complement}
+\label{backslashsym}%
+\index{relative complement!definition}%
+\index{$\SY\backslash\SX$!relative complement!definition}%
+of  $\SX$ {\it relative} to $\SY$ is
+%
+\begin{align}\SY  \backslash\SX \isdef \{x \in \SY
+\mspace{-2mu}\colon\ x \not\in \SX \}.\end{align}
+%
+\label{simsym}%
+\index{complement!definition}%
+\index{$\SX^\sim$!complement!definition}%
+%
+% snippet(8)
+If  $\SY$ is specified, then the {\it complement} of $\SX$ is
+%
+\begin{align}\SX^\sim \isdef \SY \backslash  \SX.\end{align}
+%
+% snippet(9)
+The {\it symmetric difference}
+\index{symmetric difference!definition}%
+of $\SX$ and $\SY$ is the set of elements that are in either $\SX$ or $\SY$ but not both, which is given by
+%
+\begin{align}
+\SX\ominus \SY
+%
+\isdef (\SX \cup \SY)\backslash(\SX \cap \SY).
+%
+\end{align}
+\label{symdiffsym}%
+%
+% snippet(10)
+If $x\in \SX $ implies that $x\in \SY\mspace{-1mu},$ then
+%
+$\SX$ is a {\it subset}
+\label{subseteqsym}%
+\index{subset!definition}%
+of $\SY$ (equivalently, $\SY$ {\it contains} $\SX$), which is written as
+\index{contains!definition}%
+%
+\begin{equation}
+\SX \subseteq\SY\mspace{-1mu}.\end{equation}
+%
+% snippet(11)
+Equivalently,
+%
+\begin{equation}
+\SY \supseteq\SX\mspace{-1mu}.\end{equation}
+%
+% snippet(12)
+Note that $\SX \subseteq\SY$ if and only if $\SX\backslash\SY=\varnothing.$
+%
+% snippet(13)
+Furthermore, $\SX =\SY$ if and only if
+$\SX \subseteq \SY $ and $\SY \subseteq \SX $. If $\SX \subseteq
+\SY $ and $\SX \not= \SY $, then $\SX$ is a {\it proper subset}
+\label{subsetneqsym}%
+\index{proper subset!definition}%
+of $\SY$ and we write $\SX \subset   \SY $.
+%
+% snippet(14)
+The sets $\SX$ and
+$\SY$ are {\it disjoint}
+\index{disjoint!definition}%
+if $\SX \cap \SY =\varnothing\mspace{-1mu}.$
+%
+% snippet(15)
+A {\it partition}
+\index{partition!definition}%
+of $\SX$ is a set of pairwise-disjoint and nonempty subsets of $\SX$
+whose union is equal to $\SX$.
+
+% snippet(16)
+The symbols $\BBN$, $\BBP,$ $\BBZ$, $\BBQ,$ and $\BBR$ denote the
+\label{BBNsym}%
+\label{BBPsym}%
+\label{BBZsym}%
+\label{BBQsym}%
+\label{BBRsym}%
+\index{$\BBZ$!real numbers!definition}%
+\index{$\BBN$!real numbers!definition}%
+\index{$\BBP$!real numbers!definition}%
+\index{$\BBQ$!real numbers!definition}%
+\index{$\BBR$!real numbers!definition}%
+sets of nonnegative integers, positive integers, integers, rational numbers, and real numbers,
+respectively.
+
+
+
+
+
+% snippet(17)
+A set cannot have repeated elements.
+Therefore, $\{x,x\}=\{x\}.$
+%
+% snippet(18)
+A {\it multiset}
+\index{multiset!definition}%
+is a finite collection of elements that allows for repetition.  The
+multiset consisting of two copies of $x$ is written as
+\label{multisetsym}%
+$\{x,x\}_{\rmms}$.
+% snippet(19)
+For example, the roots of the polynomial $p(x) = (x-1)^2$ are the elements of the multiset $\{1,1\}_{\mspace{-1mu}_\rmms},$
+while the prime factors of 72 are the elements of the multiset $\{2,2,2,3,3\}_\rmms.$
+
+% snippet(20)
+The operations ``$\cap,$'' ``$\cup,$''
+``$\mspace{1mu}\backslash,$'' ``$\ominus,$'' and ``$\times$'' and the relations ``$\subset$''
+and ``$\subseteq$'' extend to multisets.
+% snippet(21)
+For example,
+\begin{align}
+\{x,x\}_{\rmms}\cup\{x\}_{\rmms}
+=\{x,x,x\}_{\rmms}.\end{align}
+% snippet(22)
+By ignoring
+repetitions, a multiset can be converted to a set, while a set can
+be viewed as  a multiset with distinct elements.
+
+% snippet(23)
+The {\it Cartesian product}
+\index{Cartesian product!definition}%
+$\SX_1\mspace{-2mu} \times\cdots \times \SX_n$ of sets
+$\SX_1\mspace{-1mu},\ldots,\SX_n$ is the set consisting of {\it
+tuples}
+\index{tuple!definition}%
+\label{tuplesym}%
+of the form $(x_1,\ldots, x_n)$, where, for all $i\in\{1,\ldots,n\},$ $x_i\in \SX_i.$
+A tuple with $n$ components is an $n$-{\it tuple}.
+\index{$n$-tuple!definition}%
+% snippet(24)
+The components of a tuple are ordered but need not be distinct.  Therefore, a tuple can be viewed as an ordered multiset.
+% snippet(25)
+We thus write
+%
+\begin{align}
+(x_1,\ldots, x_n)\in{\textstyle\varprod_{i=1}^n} \SX_i \isdef \SX_1\mspace{-2mu} \times\cdots \times \SX_n.
+\end{align}
+%
+$\SX^n$ denotes $\varprod_{i=1}^n \SX.$
+\label{cartprodsym}%
+
+% snippet(26)
+\begin{defin}  \label{defin:nine5} {\rm
+%
+\index{sequence!definition!Definition \ref{defin:nine5}}%
+\label{sequencesym}%
+%
+A {\it sequence} $(x_i)^{\infty}_{i=1} = (x_1,x_2,\ldots)$ is a tuple with a
+countably infinite number of components. Now, let $i_1 < i_2 < \cdots.$ Then, $(x_{i_j} )^{\infty}_{j=1}$ is a {\it subsequence} of
+$(x_i)^{\infty}_{i=1}.$
+%
+}\end{defin}
+
+
+% snippet(27)
+Let $\SX$ be a set, and let $X\isdef(x_i)_{i=1}^\infty$ be a sequence whose components are elements of $\SX;$ that is, $\{x_1,x_2,\ldots\}\subseteq\SX.$
+%
+For convenience, we write either $X\subseteq \SX$ or $X\subset \SX,$  where $X$ is viewed as a set and the multiplicity of the components of the sequence is ignored.
+%
+% snippet(28)
+For sequences $X,Y\subset\BBF^n,$ define $X + Y\isdef (x_i + y_i)_{i=1}^\infty$ and $X\odot Y\isdef (x_i\odot y_i)_{i=1}^\infty,$ where ``$\odot$'' denotes component-wise multiplication.  In the case $n=1,$ we define $XY\isdef (x_i y_i)_{i=1}^\infty.$
+
+% snippet(29)
