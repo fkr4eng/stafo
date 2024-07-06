@@ -105,7 +105,9 @@ class MainManager:
             print(f"processing snippet{i:02d}, {tokens} tokens ({self.dev_mode=})")
 
             response = self.tracked_model_response(message, generation_config=self.llm_config)
-            self.resulting_statements = "".join((self.resulting_statements, response.text))
+            self.resulting_statements = "\n".join((self.resulting_statements, response.text))
+
+            # this should be joined via the empty string to recreate the original latex code
             self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
 
             with open(f"tmp{i:02d}.md", "w") as fp:
@@ -113,6 +115,7 @@ class MainManager:
 
             break
 
+        IPS()
         with open(f"final_response_list.md", "w") as fp:
             fp.write(self.resulting_statements)
             fp.write(f"\n\n- // {self.token_counter} tokens were transmitted")
@@ -146,7 +149,7 @@ class MainManager:
             res = model.generate_content(message, generation_config=self.llm_config)
         else:
             res = Container()
-            res.text = f"\n\n-// snippet({0})\n- response text\n- response text"
+            res.text = f"-// snippet({0})\n- response text\n- response text\n"
 
         return res
 
