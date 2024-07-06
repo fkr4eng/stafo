@@ -1,3 +1,6 @@
+- // snippet(1i)
+- // snippet(1)
+- test2
 - // snippet(1)
 - There is a class: 'set'.
 - There is a property: 'finite'.

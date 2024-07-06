@@ -21,7 +21,8 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "data")
 # config file starts with .git_config to prevent nextcloud synchronizing it to (unencrypted) cloud
 CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
 
-SNIPPET_MACRO_PATTERN = r"\\snippet{(.*?)}"
+SNIPPET_LATEX_MACRO_PATTERN = r"\\snippet{(.*?)}"
+SNIPPET_MD_COMMENT_PATTERN = r"- // snippet\((.*?)\)"
 
 class Container:
     pass
@@ -220,13 +221,18 @@ def main(dev_mode):
     # IPS(print_tb=False)
 
 
-class LatexSourceSnippet:
+class SourceSnippet:
+
+    # classvariable undefined for this abstract class
+    PATTERN = None
     def __init__(self, snippet_source):
         self.snippet_source = snippet_source
         self.process()
 
     def process(self):
-        matches = list(re.finditer(SNIPPET_MACRO_PATTERN, self.snippet_source))
+        # ensure we are not using the abstract base class
+        assert self.PATTERN is not None
+        matches = list(re.finditer(self.PATTERN, self.snippet_source))
         assert len(matches) == 1
         match, = matches
         inner_content = match.group(1)
@@ -240,6 +246,28 @@ class LatexSourceSnippet:
         self.end_part = self.snippet_source[i1:]
 
 
+class MDSourceSnippet(SourceSnippet):
+    PATTERN = SNIPPET_MD_COMMENT_PATTERN
+
+
+class LatexSourceSnippet(SourceSnippet):
+    PATTERN = SNIPPET_LATEX_MACRO_PATTERN
+
+
+def auto_md_snippet_numbering(src_fpath):
+    """
+    Process a markdown source file and enumerate all snippets consecutively.
+    """
+
+    with open(src_fpath, "r") as fp:
+        src = fp.read()
+
+    parts: List[str] = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, src)
+
+    assert len(parts) > 0
+    results = iterate_over_parts(parts[1:], source_snippet_type=MDSourceSnippet)
+    save_result(src_fpath, old_src=src, new_source="".join(results))
+
 
 def auto_tex_snippet_numbering(src_fpath):
     """
@@ -248,11 +276,11 @@ def auto_tex_snippet_numbering(src_fpath):
     e.g.
     \snippet{XX} -> \snippet{123}
     """
-
     with open(src_fpath, "r") as fp:
         src = fp.read()
 
-    parts: List[str] = nonconsuming_regex_split(SNIPPET_MACRO_PATTERN, src)
+    parts: List[str] = nonconsuming_regex_split(SNIPPET_LATEX_MACRO_PATTERN, src)
+
 
     part0 = parts[0].strip()
     if not (part0.startswith(r"\snippet{") or part0 == ""):
@@ -261,20 +289,29 @@ def auto_tex_snippet_numbering(src_fpath):
 
     assert len(parts) > 0
 
+    results = iterate_over_parts(parts[1:], source_snippet_type=LatexSourceSnippet)
+    save_result(src_fpath, old_src=src, new_source="".join(results))
+
+
+def iterate_over_parts(parts, source_snippet_type: type) -> List[str]:
     results = []
-    for k, part in enumerate(parts[1:], start=1):
-        sn = LatexSourceSnippet(part)
+    for k, part in enumerate(parts, start=1):
+        # create an instance of the appropriate type
+        sn = source_snippet_type(part)
 
         enumerated_snippet_macro = f"\\snippet{{{k}{sn.ignore_char}}}"
         new_snippet = f"{sn.start_part}{enumerated_snippet_macro}{sn.end_part}"
         results.append(new_snippet)
 
-    new_source = "".join(results)
+    return results
+
+
+def save_result(src_fpath: str, old_src: str, new_source: str):
     basepath, ext = os.path.splitext(src_fpath)
 
     backup_fpath = f"{basepath}_backup{ext}"
     with open(backup_fpath, "w") as fp:
-        fp.write(src)
+        fp.write(old_src)
     print(f"\nFile written: {backup_fpath}")
 
     with open(src_fpath, "w") as fp:
