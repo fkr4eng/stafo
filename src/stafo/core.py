@@ -57,76 +57,104 @@ class MainManager:
     Main class for this script to prevent global variables
     """
 
-    def __init__(self, dev_mode: bool) -> None:
+    def __init__(
+            self,
+            dev_mode: bool,
+            tex_fpath: str = None,
+            statement_fpath: str = None,
+            interactive_mode: bool = False,
+        ) -> None:
 
         self.dev_mode = dev_mode
-        self.chunk_full_source = None
-        self.resulting_statements = None
+        self.interactive_mode = interactive_mode
+        self.tex_source = None
+        self.statement_source = None
 
         self.processed_latex_source = None
         self.last_llm_result = None
         self.token_counter = 0
-        self.latex_snippets = None
+        self.tex_snippet_list = None
         self.token_count_cache: Dict[str, int] = {}
 
         self.llm_config = genai.GenerationConfig(temperature=0)
+
+        # prepare the paths
+        self.tex_fpath = os.path.join(BASE_DIR, "data", "chunk_full_source.tex") if tex_fpath is None else tex_fpath
+        self.statement_fpath = \
+            os.path.join(BASE_DIR, "data", "formalized_statements0.md") if statement_fpath is None else statement_fpath
 
         self.get_data()
 
     def get_data(self):
 
-        tex_path = os.path.join(BASE_DIR, "data", "chunk_full_source.tex")
-        formalized_statements_path = os.path.join(BASE_DIR, "data", "formalized_statements0.md")
+        with open(self.tex_fpath) as fp:
+            self.tex_source = fp.read()
 
-        with open(tex_path) as fp:
-            self.chunk_full_source = fp.read()
-
-        with open(formalized_statements_path) as fp:
-            self.resulting_statements = fp.read()
-
-    def main(self):
+        with open(self.statement_fpath) as fp:
+            self.statement_source = fp.read()
 
         # note: first snippet should be empty and last snippet is irrelevant (thus excluded)
-        self.latex_snippets = nonconsuming_regex_split(r"% snippet\(.*?\)", self.chunk_full_source)[0:-1]
-        assert self.latex_snippets[0].strip() == ""
+        self.tex_snippet_list = nonconsuming_regex_split(SNIPPET_LATEX_MACRO_PATTERN, self.tex_source)[0:-1]
+        assert self.tex_snippet_list[0].strip() == ""
+
+        self.statement_snippet_list = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, self.statement_source)[0:-1]
+        assert self.statement_snippet_list[0].strip() == ""
 
         # indices of latex_snippets now correspond to enumeration in the source
         # e.g. latex_snippets[2] starts with "% snippet(2)"
 
-        # initialize process:
-        start_snippets_idx = 6  # the first snippet which is not included
-        self.processed_latex_source = "".join(self.latex_snippets[:start_snippets_idx])
+        # initialize iteration process:
+        self.start_snippet_idx = len(self.statement_snippet_list)  # the first snippet which is not included
+        self.processed_latex_source = "".join(self.tex_snippet_list[:self.start_snippet_idx])
 
+    def do_next_query_iteration(self):
 
-        for i in range(start_snippets_idx, len(self.latex_snippets)):
-            j = i - start_snippets_idx
+        i = len(self.statement_snippet_list)
+        return self.iteration_step(i)
+
+    def iteration_step(self, i):
+
+        new_latex_source = self.tex_snippet_list[i]
+
+        look_ahead_latex_source = self.get_look_ahead_latex_source(i)
+        context = self.create_context(new_latex_source, look_ahead_latex_source)
+        message = render_template("prompt01_template.md", context)
+
+        tokens = self.count_tokens(message)
+        self.token_counter += tokens
+        print(f"processing snippet {i:02d}, {tokens} tokens ({self.dev_mode=})")
+
+        response = self.tracked_model_response(message, generation_config=self.llm_config)
+        self.statement_source = "\n".join((self.statement_source, response.text))
+
+        if self.interactive_mode:
+            print(f"Response:\n\n{response.text}")
+            with open(self.statement_fpath, "w") as fp:
+                fp.write(self.statement_source)
+                print(f"{self.statement_fpath} written")
+
+        # this should be joined via the empty string to recreate the original latex code
+        self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
+        # write the message for debugging
+
+        tmp_fname = f"tmp{i:02d}.md"
+        with open(tmp_fname, "w") as fp:
+            fp.write(message)
+            print(f"{tmp_fname} written")
+
+    def main(self):
+        """
+        Unsupervised iteration over snippets
+        """
+
+        for i in range(self.start_snippet_idx, len(self.tex_snippet_list)):
+            j = i - self.start_snippet_idx
             if j >= 5:
-                pass
-            new_latex_source = self.latex_snippets[i]
+                break
+            self.iteration_step(i)
 
-            look_ahead_latex_source = self.get_look_ahead_latex_source(i)
-            context = self.create_context(new_latex_source, look_ahead_latex_source)
-            message = render_template("prompt01_template.md", context)
-
-            tokens = self.count_tokens(message)
-            self.token_counter += tokens
-            print(f"processing snippet{i:02d}, {tokens} tokens ({self.dev_mode=})")
-
-            response = self.tracked_model_response(message, generation_config=self.llm_config)
-            self.resulting_statements = "\n".join((self.resulting_statements, response.text))
-
-            # this should be joined via the empty string to recreate the original latex code
-            self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
-
-            # write the message for debugging
-            tmp_fname = f"tmp{i:02d}.md"
-            with open(tmp_fname, "w") as fp:
-                fp.write(message)
-                print(f"{tmp_fname} written")
-
-        IPS()
         with open(f"final_response_list.md", "w") as fp:
-            fp.write(self.resulting_statements)
+            fp.write(self.statement_source)
             fp.write(f"\n\n- // {self.token_counter} tokens were transmitted")
 
     def get_look_ahead_latex_source(self, i: int) -> str:
@@ -135,7 +163,7 @@ class MainManager:
 
         # note: this slice does not result in an IndexError even if i+1 would be too big
         # the result is just an empty list
-        rest: list = self.latex_snippets[i+1:i + 1+ N]
+        rest: list = self.tex_snippet_list[i+1:i + 1+ N]
         if len(rest) < N:
             rest.append("\n\n% This is the end of the LaTeX code of this section.")
 
@@ -146,7 +174,7 @@ class MainManager:
 
         context = {
             "processed_latex_source": self.processed_latex_source,
-            "resulting_statements": self.resulting_statements,
+            "resulting_statements": self.statement_source,
             "new_latex_source": new_latex_source,
             "look_ahead_latex_source": look_ahead_latex_source,
         }
@@ -320,3 +348,13 @@ def save_result(src_fpath: str, old_src: str, new_source: str):
     with open(src_fpath, "w") as fp:
         fp.write(new_source)
     print(f"\nFile written: {src_fpath}")
+
+
+def interactive_mode(dev_mode, tex_fpath, statement_fpath):
+    """
+    In this mode the user is assumend to review the new statements from the currently
+    processed snippet.
+    """
+
+    mm = MainManager(dev_mode, tex_fpath, statement_fpath, interactive_mode=True)
+    mm.do_next_query_iteration()

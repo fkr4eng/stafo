@@ -21,6 +21,12 @@ def main():
         default=None
     )
 
+    parser.add_argument(
+        "-i", "--interactive-mode",
+        help=f"start interactive mode", metavar=("TEX_FILE", "STATEMENT_FILE"),
+        nargs=2,
+    )
+
     args = parser.parse_args()
 
     dev_mode = (args.dev_mode == "true")
@@ -35,5 +41,8 @@ def main():
             msg = f"unexpected file extension of {src_fpath}"
             raise ValueError(msg)
 
+    elif args.interactive_mode:
+        tex_fpath, statement_fpath = args.interactive_mode
+        core.interactive_mode(args.dev_mode, tex_fpath, statement_fpath)
     else:
         core.main(dev_mode=dev_mode)
