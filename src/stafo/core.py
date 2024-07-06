@@ -225,6 +225,7 @@ class SourceSnippet:
 
     # classvariable undefined for this abstract class
     PATTERN = None
+    MARKER = None
     def __init__(self, snippet_source):
         self.snippet_source = snippet_source
         self.process()
@@ -248,10 +249,12 @@ class SourceSnippet:
 
 class MDSourceSnippet(SourceSnippet):
     PATTERN = SNIPPET_MD_COMMENT_PATTERN
+    MARKER = "- // snippet({k}{ignore_char})"
 
 
 class LatexSourceSnippet(SourceSnippet):
     PATTERN = SNIPPET_LATEX_MACRO_PATTERN
+    MARKER = "\\snippet{{{k}{ignore_char}}}"
 
 
 def auto_md_snippet_numbering(src_fpath):
@@ -299,8 +302,8 @@ def iterate_over_parts(parts, source_snippet_type: type) -> List[str]:
         # create an instance of the appropriate type
         sn = source_snippet_type(part)
 
-        enumerated_snippet_macro = f"\\snippet{{{k}{sn.ignore_char}}}"
-        new_snippet = f"{sn.start_part}{enumerated_snippet_macro}{sn.end_part}"
+        enumerated_snippet_marker = source_snippet_type.MARKER.format(k=k, ignore_char=sn.ignore_char)
+        new_snippet = f"{sn.start_part}{enumerated_snippet_marker}{sn.end_part}"
         results.append(new_snippet)
 
     return results
