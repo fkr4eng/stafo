@@ -25,7 +25,15 @@ def main():
 
     dev_mode = (args.dev_mode == "true")
 
-    if (tex_file := args.auto_snippet_numbering) is not None:
-        core.auto_tex_snippet_numbering(tex_file)
+    src_fpath: str
+    if (src_fpath := args.auto_snippet_numbering) is not None:
+        if src_fpath.endswith(".tex"):
+            core.auto_tex_snippet_numbering(src_fpath)
+        elif src_fpath.endswith(".md"):
+            core.auto_md_snippet_numbering(src_fpath)
+        else:
+            msg = f"unexpected file extension of {src_fpath}"
+            raise ValueError(msg)
+
     else:
         core.main(dev_mode=dev_mode)
