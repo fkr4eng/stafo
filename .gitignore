@@ -1,2 +1,6 @@
 .git_config.toml
 .vscode
+_git_bundle*zip
+tmp*
+_token_tracking.txt
+final_response_list.md

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer with Columns</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .title-bar {
+            height: 80px;
+            width: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .pdf-container {
+            height: 40vh;
+            width: 100%;
+            overflow-y: auto;
+        }
+        .columns-container {
+            display: flex;
+            height: 50vh;
+            background-color: hsl(20, 80%, 90%);
+        }
+        .column {
+            width: 50vw;
+            height: 100%;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .column:first-child {
+            border-right: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-bar">Page Title</div>
+    <div class="pdf-container">
+        <canvas id="pdf-render"></canvas>
+    </div>
+    <div class="columns-container">
+        <div class="column">
+            <h2>Column 1</h2>
+            <p>This is the content for column 1. You can add more text or elements here.</p>
+        </div>
+        <div class="column">
+            <h2>Column 2</h2>
+            <p>This is the content for column 2. You can add more text or elements here.</p>
+        </div>
+    </div>
+
+    <script>
+
+        function get_rect(textItem) {
+            const s = 2;
+
+            // text height dependent offset
+            const dy = (24.78 - textItem.transform[0])*1;
+            rect = {
+                x: textItem.transform[4]*s,
+                y: -s * textItem.transform[5] + 1550 + dy,
+                w: textItem.width*s,
+                h: textItem.height*s
+            }
+            return rect;
+        }
+
+        // PDF.js script
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+        const url = 'a.pdf';
+        const loadingTask = pdfjsLib.getDocument(url);
+        var pageNumber = 1;
+        var textItem1 = null;
+        loadingTask.promise.then(function(pdf) {
+            pdf.getPage(1).then(function(page) {
+                const scale = 2.0;
+                const viewport = page.getViewport({scale: scale});
+
+                const canvas = document.getElementById('pdf-render');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+
+                page.getTextContent().then(function(textContent) {
+                var textItems = textContent.items;
+                var canvas = document.getElementById('pdf-render');
+                var context = canvas.getContext('2d');
+                var x1 = 0, x2 = 0, w = 0, h = 0;
+                var i = 0, j = 1;
+
+                // Words to highlight
+                var wordsToHighlight = ['bly'];
+
+                    textItems.forEach(function(textItem) {
+                        wordsToHighlight.forEach(function(word) {
+                            j += 1;
+                            // if (textItem.str == "Chapter 1") {
+                            //     textItem1 = textItem;
+                            //     var s = 2;
+
+                            //     context.fillStyle = 'rgba(100, 20, 100, 0.3)';
+                            //     context.fillRect(textItem.transform[4]*s, 388, textItem.width*s, textItem.height*s);
+                            // }
+
+                            // if (textItem.str == "Relations, Orderings, Graphs,") {
+                            //     textItem1 = textItem;
+                            //     var s = 2;
+
+                            //     h = -s * textItem.transform[5] + 1550;
+
+                            //     context.fillStyle = 'rgba(150, 20, 100, 0.3)';
+                            //     context.fillRect(textItem.transform[4]*s, h, textItem.width*s, textItem.height*s);
+                            // }
+
+
+                            // if (j < 10) {
+                            //     console.log(textItem.str, textItem.transform);
+                            // }
+                            if (textItem.str.toLowerCase().includes(word.toLowerCase())) {
+                                console.log(textItem.str, textItem.transform);
+                            // Calculate position and size of the highlight
+                            var transform = pdfjsLib.Util.transform(
+                                page.getViewport({scale: 1}).transform,
+                                textItem.transform
+                            );
+                            var r = pdfjsLib.Util.normalizeRect([
+                                transform[0], transform[3],
+                                transform[2], transform[5]
+                            ]);
+
+                            // Draw the highlight
+                            context.fillStyle = 'rgba(255, 255, 0, 0.3)';
+                            context.fillRect(r[0], r[1], r[2] - r[0], r[3] - r[1]);
+
+
+                            [x1, y1, w, h] = [r[0], r[1], r[2] - r[0], r[3] - r[1]];
+
+                            y1 = 0;
+                            h = 700;
+                            i += 20;
+                            var r = get_rect(textItem);
+                            context.fillStyle = 'rgba(100, 200, 0, 0.3)';
+                            context.fillRect(r.x, r.y, r.w, r.h);
+                            console.log("x1, ...=", r.x, r.y, r.w, r.h)
+
+                            textItem1 = textItem;
+
+                            }
+                        });
+                    });
+                });
+
+
+            // end of page-function
+            });
+
+        // end of pdf-function
+        });
+
+    </script>
+</body>
+</html>
