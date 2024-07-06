@@ -1,14 +1,20 @@
-- // snippet(1i)
 - // snippet(1)
-- test2
-- // snippet(1)
+- New capter: 'Sets, Logic, Numbers, Relations, Orderings, Graphs, and Functions'.
+
+- // snippet(2i)
+- // ignored content
+
+- // snippet(3)
+- New section: 'Sets'.
+
+- // snippet(4)
 - There is a class: 'set'.
 - There is a property: 'finite'.
 - 'finite' is applicable to 'set'.
 - There is a property: 'infinite'.
 - 'infinite' is applicable to 'set'.
 
-- // snippet(2)
+- // snippet(5)
 - There is a property: 'countably infinite'.
 - 'countably infinite' is applicable to 'set'.
 - 'countably infinite' is a subproperty of 'infinite'.
@@ -23,7 +29,7 @@
         - arg1 has the property 'countably infinite'
 
 
-- // snippet(3)
+- // snippet(6)
 - There is a class: 'element'.
 - There is a relation: 'is element of'.
 - 'is element of' has the associated LaTeX notation `$arg1 \in arg2$`.
@@ -35,12 +41,12 @@
 - There is a property: 'nonempty'.
 - 'nonempty' is applicable to 'set'.
 
-- // snippet(4)
+- // snippet(7)
 - 'empty set' is an instance of 'set'.
 - 'empty set' has the associated LaTeX notation `$\varnothing$`.
 - 'empty set' has the verbal description "The set with no elements".
 
-- // snippet(5)
+- // snippet(8)
 - There is a binary operator: 'intersection'.
 - The type of argument1 of 'intersection' is 'set'.
 - The type of argument2 of 'intersection' is 'set'.

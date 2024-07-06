@@ -1,12 +1,46 @@
-% snippet(1)
+\snippet{1}
+\chapter{Sets, Logic, Numbers, Relations, Orderings, Graphs, and Functions}
+\snippet{2i}
+
+
+%change odot to circledast----for khatri rao----done
+
+%change circ to odot-----for Schur prod
+
+%change bullet to circ-----for composition
+
+
+
+
+
+
+%$f\bulled g$
+
+
+\indent\indent In this chapter we review basic terminology
+and results concerning sets, logic, numbers, relations, orderings, graphs, and functions. This material is used throughout the book.
+
+
+
+
+
+%\cite{CraWal93}%%%%%%%%%%%%%%%%%%%
+
+
+
+\snippet{3}
+\section{Sets}
+
+
+\snippet{4}
 A {\it set} $\{x,y,\ldots\}$ is a collection of elements.
 A set can include either a finite or infinite number of elements.
 The set $\SX$ is {\it finite} if it has a finite number of elements; otherwise, $\SX$ is {\it infinite}.
 %
-% snippet(2)
+\snippet{5}
 The set $\SX$ is {\it countably infinite} if $\SX$ is infinite and its elements are in one-to-one correspondence with the positive integers. The set $\SX$ is {\it countable} if it is either finite or countably infinite.
 
-% snippet(3)
+\snippet{6}
 Let $\SX$ be a set.
 Then, \begin{align}x\in \SX\end{align} means that $x$ is an {\it element}
 \label{insym}%
@@ -15,7 +49,7 @@ of $\SX$. If $w$ is not an element of $\SX$, then we write
 \begin{align}w\not\in \SX.\end{align}
 \label{notinsym}
 
-% snippet(4)
+\snippet{7}
 No set can be an element of itself.  Therefore, there does not exist a set that includes every set.  The set with no elements, denoted by $\varnothing\mspace{-1mu},$ is the {\it empty set}.
 %
 \label{varnothingsym}%
@@ -23,7 +57,7 @@ No set can be an element of itself.  Therefore, there does not exist a set that 
 \index{nonempty set!definition}%
 If $\SX\not=\varnothing\mspace{-1mu},$ then $\SX$ is {\it nonempty}.
 
-% snippet(5)
+\snippet{8}
 Let $\SX$ and $\SY$ be sets. The {\it intersection}
 \index{intersection!definition}%
 of $\SX$ and $\SY$ is the set of common elements of $\SX$ and
@@ -41,7 +75,7 @@ $\SY$, which is given by
 
 \label{capsym}%
 %
-% snippet(6)
+\snippet{9}
 The {\it union} of $\SX $ and $\SY$ is the set of
 elements in either $\SX $ or $\SY$, which is the set
 \index{union!definition}%
@@ -51,7 +85,7 @@ elements in either $\SX $ or $\SY$, which is the set
 \label{cupsym}%
 %
 %
-% snippet(7)
+\snippet{10}
 The {\it complement}
 \label{backslashsym}%
 \index{relative complement!definition}%
@@ -65,12 +99,12 @@ of  $\SX$ {\it relative} to $\SY$ is
 \index{complement!definition}%
 \index{$\SX^\sim$!complement!definition}%
 %
-% snippet(8)
+\snippet{11}
 If  $\SY$ is specified, then the {\it complement} of $\SX$ is
 %
 \begin{align}\SX^\sim \isdef \SY \backslash  \SX.\end{align}
 %
-% snippet(9)
+\snippet{12}
 The {\it symmetric difference}
 \index{symmetric difference!definition}%
 of $\SX$ and $\SY$ is the set of elements that are in either $\SX$ or $\SY$ but not both, which is given by
@@ -83,7 +117,7 @@ of $\SX$ and $\SY$ is the set of elements that are in either $\SX$ or $\SY$ but 
 \end{align}
 \label{symdiffsym}%
 %
-% snippet(10)
+\snippet{13}
 If $x\in \SX $ implies that $x\in \SY\mspace{-1mu},$ then
 %
 $\SX$ is a {\it subset}
@@ -95,16 +129,16 @@ of $\SY$ (equivalently, $\SY$ {\it contains} $\SX$), which is written as
 \begin{equation}
 \SX \subseteq\SY\mspace{-1mu}.\end{equation}
 %
-% snippet(11)
+\snippet{14}
 Equivalently,
 %
 \begin{equation}
 \SY \supseteq\SX\mspace{-1mu}.\end{equation}
 %
-% snippet(12)
+\snippet{15}
 Note that $\SX \subseteq\SY$ if and only if $\SX\backslash\SY=\varnothing.$
 %
-% snippet(13)
+\snippet{16}
 Furthermore, $\SX =\SY$ if and only if
 $\SX \subseteq \SY $ and $\SY \subseteq \SX $. If $\SX \subseteq
 \SY $ and $\SX \not= \SY $, then $\SX$ is a {\it proper subset}
@@ -112,19 +146,19 @@ $\SX \subseteq \SY $ and $\SY \subseteq \SX $. If $\SX \subseteq
 \index{proper subset!definition}%
 of $\SY$ and we write $\SX \subset   \SY $.
 %
-% snippet(14)
+\snippet{17}
 The sets $\SX$ and
 $\SY$ are {\it disjoint}
 \index{disjoint!definition}%
 if $\SX \cap \SY =\varnothing\mspace{-1mu}.$
 %
-% snippet(15)
+\snippet{18}
 A {\it partition}
 \index{partition!definition}%
 of $\SX$ is a set of pairwise-disjoint and nonempty subsets of $\SX$
 whose union is equal to $\SX$.
 
-% snippet(16)
+\snippet{19}
 The symbols $\BBN$, $\BBP,$ $\BBZ$, $\BBQ,$ and $\BBR$ denote the
 \label{BBNsym}%
 \label{BBPsym}%
@@ -143,36 +177,36 @@ respectively.
 
 
 
-% snippet(17)
+\snippet{20}
 A set cannot have repeated elements.
 Therefore, $\{x,x\}=\{x\}.$
 %
-% snippet(18)
+\snippet{21}
 A {\it multiset}
 \index{multiset!definition}%
 is a finite collection of elements that allows for repetition.  The
 multiset consisting of two copies of $x$ is written as
 \label{multisetsym}%
 $\{x,x\}_{\rmms}$.
-% snippet(19)
+\snippet{22}
 For example, the roots of the polynomial $p(x) = (x-1)^2$ are the elements of the multiset $\{1,1\}_{\mspace{-1mu}_\rmms},$
 while the prime factors of 72 are the elements of the multiset $\{2,2,2,3,3\}_\rmms.$
 
-% snippet(20)
+\snippet{23}
 The operations ``$\cap,$'' ``$\cup,$''
 ``$\mspace{1mu}\backslash,$'' ``$\ominus,$'' and ``$\times$'' and the relations ``$\subset$''
 and ``$\subseteq$'' extend to multisets.
-% snippet(21)
+\snippet{24}
 For example,
 \begin{align}
 \{x,x\}_{\rmms}\cup\{x\}_{\rmms}
 =\{x,x,x\}_{\rmms}.\end{align}
-% snippet(22)
+\snippet{25}
 By ignoring
 repetitions, a multiset can be converted to a set, while a set can
 be viewed as  a multiset with distinct elements.
 
-% snippet(23)
+\snippet{26}
 The {\it Cartesian product}
 \index{Cartesian product!definition}%
 $\SX_1\mspace{-2mu} \times\cdots \times \SX_n$ of sets
@@ -183,9 +217,9 @@ tuples}
 of the form $(x_1,\ldots, x_n)$, where, for all $i\in\{1,\ldots,n\},$ $x_i\in \SX_i.$
 A tuple with $n$ components is an $n$-{\it tuple}.
 \index{$n$-tuple!definition}%
-% snippet(24)
+\snippet{27}
 The components of a tuple are ordered but need not be distinct.  Therefore, a tuple can be viewed as an ordered multiset.
-% snippet(25)
+\snippet{28}
 We thus write
 %
 \begin{align}
@@ -195,7 +229,7 @@ We thus write
 $\SX^n$ denotes $\varprod_{i=1}^n \SX.$
 \label{cartprodsym}%
 
-% snippet(26)
+\snippet{29}
 \begin{defin}  \label{defin:nine5} {\rm
 %
 \index{sequence!definition!Definition \ref{defin:nine5}}%
@@ -208,12 +242,86 @@ $(x_i)^{\infty}_{i=1}.$
 }\end{defin}
 
 
-% snippet(27)
+\snippet{30}
 Let $\SX$ be a set, and let $X\isdef(x_i)_{i=1}^\infty$ be a sequence whose components are elements of $\SX;$ that is, $\{x_1,x_2,\ldots\}\subseteq\SX.$
 %
 For convenience, we write either $X\subseteq \SX$ or $X\subset \SX,$  where $X$ is viewed as a set and the multiplicity of the components of the sequence is ignored.
 %
-% snippet(28)
+\snippet{31}
 For sequences $X,Y\subset\BBF^n,$ define $X + Y\isdef (x_i + y_i)_{i=1}^\infty$ and $X\odot Y\isdef (x_i\odot y_i)_{i=1}^\infty,$ where ``$\odot$'' denotes component-wise multiplication.  In the case $n=1,$ we define $XY\isdef (x_i y_i)_{i=1}^\infty.$
 
-% snippet(29)
+\snippet{32}
+
+
+
+
+
+
+
+
+
+
+
+%
+%just defins of sum and product of sequences
+
+%sequence componentwise multiplication!  AX = {Aixi)
+
+\snippet{33}
+\section{Logic}
+
+
+\snippet{34}
+Every {\it statement} is either true or false, and no statement is both true and false.
+\snippet{35}
+\index{statement!definition}%
+%
+%
+%{\it Logic} is a collection of rules used to analyze statements.
+%\index{logic!definition}%
+%
+\snippet{36}
+A {\it proof} is a collection of statements that verify that a statement is true.
+\index{proof!definition}%
+%
+\snippet{37}
+A {\it conjecture} is a statement that is believed to be true but whose proof is not known.
+\index{conjecture!definition}%
+%
+%An {\it assumption} is a true statement whose truth is not subject to proof.----hypothesis deals with this
+%
+
+
+
+
+\snippet{38}
+Let $A$ and $B$ be statements.  %Then, $A$ {\it holds} if $A$ is true.
+\index{holds!definition}%
+%
+\snippet{39}
+The {\it not} of $A$ is the
+statement $(\mbox{not } A),$ the {\it and} of $A$ and $B$ is the
+statement
+%
+\index{not!definition}%
+\index{and!definition}%
+\index{or!definition}%
+\index{inclusive or!definition}%
+\index{xor!definition}%
+\index{exclusive or!definition}%
+%
+$(A\mbox{ and } B),$ and the {\it or} of $A$ and $B$ is the
+statement $(A\mbox{ or } B).$
+\snippet{40}
+The statement $(A\mbox{ or } B)$ does
+not contradict the statement $(A\mbox{ and } B);$ hence, the word ``or'' is
+inclusive.
+\snippet{41}
+The {\it exclusive or} of $A$ and $B$ is the statement $(A\mbox{ xor } B),$
+which is $[(A\mbox{ and not } B) \mbox{ or }(B\mbox{ and not } A)].$
+%
+\snippet{42}
+Equivalently, $(A\mbox{ xor } B)$ is the statement [$(A\mbox{ or } B)\mbox{ and not}(A\mbox{ and }B)]$, that is, $A$ or $B,$ but not both.
+%
+\snippet{43}
+Note that $(A\mbox{ and } B)= (B\mbox{ and } A),$  $(A\mbox{ or } B)= (B\mbox{ or } A),$ and $(A\mbox{ xor } B)= (B\mbox{ xor } A).$

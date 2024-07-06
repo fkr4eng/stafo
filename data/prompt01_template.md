@@ -12,6 +12,8 @@ All statements are represented as a bullet list in markdown syntax. There are tw
 Simple Formalized Statements consist of one line. They are not followed by a line with a higher indentation level. The following Simple Formalized Statements are allowed:
 
 - // This is a comment to explain modeling decisions. It is an arbitrary single line string.
+- New chapter: <arg1>.
+- New section: <arg1>.
 - There is a class: <arg1>.
 - There is a property: <arg1>.
 - There is a relation: <arg1>.
@@ -64,9 +66,10 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 - In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore the following:
     - `\label{...}`
     - `\index{...}`
-- The LaTeX source code (Input Part 3 and Input Part 5) contains special snippet-delimiter comments like `% snippet(5)`
-- In the list of resulting formalized statements we use a comment like `- // snippet(5)` to indicate the following statements are from `snippet(5)` of the LaTeX source code. Thereby `snippet(5)` is that substring of the LaTeX source code which starts with the special comment `% snippet(5)` and ends just before the next such comment `% snippet(6)`. The numbers 5 and 6 are only examples here.
-- In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore all other comments (i.e. substrings that start with `%` and span until the next newline)
+- The LaTeX source code (Input Part 3 and Input Part 5) contains special snippet-delimiter macros like `\snippet{5}`
+- In the list of resulting formalized statements we use a comment like `- // snippet(5)` to indicate the following statements are from `snippet 5` of the LaTeX source code. Thereby `snippet 5` is that substring of the LaTeX source code which starts with special macro `\snippet{5}` and ends just before the next such macro `\snippet{6}`. The numbers 5 and 6 are only examples here.
+- The argument of some of these macros ends with 'i', for example: `\snippet{2i}`. This indicates that this snippet should be ignored.
+- In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore all LaTeX comments (i.e. substrings that start with `%` and span until the next newline)
 - In the LaTeX source code (Input Part 3 and Input Part 5) some custom macros are used to abbreviate variables (`\SX`, `\SY`) and operators. The macro `\it` means italic and is used to emphasize words.
 - The order of the formalized statements in Input Part 4 mainly follows the order in which the information is presented by the LaTeX source code in Input Part 3.
 
