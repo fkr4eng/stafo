@@ -13,8 +13,7 @@
 
 ## Next steps:
 
-- Refactoring
 
--> iterate over snippets and evaluate performance on nontrivial snippets
+- automatic snippet numbering in LaTeX-Code
 
-- find good way for semi-automation
+- find good way for semi-automation: Interactive mode

@@ -1,5 +1,5 @@
 import os
-from typing import Dict
+from typing import Dict, List
 from pathlib import Path
 import re
 import tomllib
@@ -20,6 +20,8 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "data")
 
 # config file starts with .git_config to prevent nextcloud synchronizing it to (unencrypted) cloud
 CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
+
+SNIPPET_MACRO_PATTERN = r"\\snippet{(.*?)}"
 
 class Container:
     pass
@@ -216,3 +218,65 @@ def main(dev_mode):
     mm = MainManager(dev_mode)
     mm.main()
     # IPS(print_tb=False)
+
+
+class LatexSourceSnippet:
+    def __init__(self, snippet_source):
+        self.snippet_source = snippet_source
+        self.process()
+
+    def process(self):
+        matches = list(re.finditer(SNIPPET_MACRO_PATTERN, self.snippet_source))
+        assert len(matches) == 1
+        match, = matches
+        inner_content = match.group(1)
+        # \snippet{XXi} or \snippet{123i} should be ignored -> only placeholder statements should be generated
+        self.ignore_flag = inner_content.endswith("i")
+        self.ignore_char = "i" if self.ignore_flag else ""
+
+        i0, i1 = match.span()
+
+        self.start_part = self.snippet_source[:i0]
+        self.end_part = self.snippet_source[i1:]
+
+
+
+def auto_tex_snippet_numbering(src_fpath):
+    """
+    Process a LaTeX source file and enumerate all snippets consecutively.
+
+    e.g.
+    \snippet{XX} -> \snippet{123}
+    """
+
+    with open(src_fpath, "r") as fp:
+        src = fp.read()
+
+    parts: List[str] = nonconsuming_regex_split(SNIPPET_MACRO_PATTERN, src)
+
+    part0 = parts[0].strip()
+    if not (part0.startswith(r"\snippet{") or part0 == ""):
+        msg = f"unexpected first part of LaTeX source: {part0[:30]}"
+        raise ValueError(msg)
+
+    assert len(parts) > 0
+
+    results = []
+    for k, part in enumerate(parts[1:], start=1):
+        sn = LatexSourceSnippet(part)
+
+        enumerated_snippet_macro = f"\\snippet{{{k}{sn.ignore_char}}}"
+        new_snippet = f"{sn.start_part}{enumerated_snippet_macro}{sn.end_part}"
+        results.append(new_snippet)
+
+    new_source = "".join(results)
+    basepath, ext = os.path.splitext(src_fpath)
+
+    backup_fpath = f"{basepath}_backup{ext}"
+    with open(backup_fpath, "w") as fp:
+        fp.write(src)
+    print(f"\nFile written: {backup_fpath}")
+
+    with open(src_fpath, "w") as fp:
+        fp.write(new_source)
+    print(f"\nFile written: {src_fpath}")
