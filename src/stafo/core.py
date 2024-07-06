@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 from pathlib import Path
 import re
 import tomllib
@@ -63,6 +64,7 @@ class MainManager:
         self.last_llm_result = None
         self.token_counter = 0
         self.latex_snippets = None
+        self.token_count_cache: Dict[str, int] = {}
 
         self.llm_config = genai.GenerationConfig(temperature=0)
 
@@ -96,14 +98,14 @@ class MainManager:
         for i in range(start_snippets_idx, len(self.latex_snippets)):
             j = i - start_snippets_idx
             if j >= 5:
-                break
+                pass
             new_latex_source = self.latex_snippets[i]
 
             look_ahead_latex_source = self.get_look_ahead_latex_source(i)
             context = self.create_context(new_latex_source, look_ahead_latex_source)
             message = render_template("prompt01_template.md", context)
 
-            tokens = model.count_tokens(message).total_tokens
+            tokens = self.count_tokens(message)
             self.token_counter += tokens
             print(f"processing snippet{i:02d}, {tokens} tokens ({self.dev_mode=})")
 
@@ -119,8 +121,6 @@ class MainManager:
                 fp.write(message)
                 print(f"{tmp_fname} written")
 
-            break
-
         IPS()
         with open(f"final_response_list.md", "w") as fp:
             fp.write(self.resulting_statements)
@@ -134,7 +134,7 @@ class MainManager:
         # the result is just an empty list
         rest: list = self.latex_snippets[i+1:i + 1+ N]
         if len(rest) < N:
-            rest.append("\n\n% This is the end of the LaTeX code of this section")
+            rest.append("\n\n% This is the end of the LaTeX code of this section.")
 
         result = "".join(rest)
         return result
@@ -150,6 +150,22 @@ class MainManager:
 
         return context
 
+    def count_tokens(self, message: str) -> int:
+
+        # speed up the process
+        cached_result = self.token_count_cache.get(message)
+        if cached_result is not None:
+            return cached_result
+
+        if self.dev_mode:
+            res = 1000
+        else:
+            res = model.count_tokens(message).total_tokens
+
+        self.token_count_cache[message] = res
+        return res
+
+
 
     def tracked_model_response(self, message, **kwargs):
         """
@@ -160,7 +176,7 @@ class MainManager:
             return an object with a .text attribute containing the model response
             (faked in case of dev_mode)
         """
-        tokens = model.count_tokens(message).total_tokens
+        tokens = self.count_tokens(message)
         track_line = f'{time.strftime("%Y-%m-%d %H:%M:%S")}, {tokens}\n'
 
         if not self.dev_mode:
