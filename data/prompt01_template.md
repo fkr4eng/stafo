@@ -96,7 +96,17 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 ----
 
 
-# Input Part 6: Final Instructions
+# Input Part 6: LaTeX source code which follows the previous snippet
+
+You are not supposed to convert this LaTeX code to formalized statements. However, it might give you some additional context which helps to formalize the source code from Input Part 5.
+
+```
+{{context.look_ahead_latex_source}}
+```
+
+
+
+# Input Part 7: Final Instructions
 
 Please generate a list of formalized statements (like in Input Part 4) which represent the information from Input Part 5. Thereby, adhere to the statement types given in Input Part 1 and the given instructions.
 """

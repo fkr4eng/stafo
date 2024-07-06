@@ -62,6 +62,7 @@ class MainManager:
         self.processed_latex_source = None
         self.last_llm_result = None
         self.token_counter = 0
+        self.latex_snippets = None
 
         self.llm_config = genai.GenerationConfig(temperature=0)
 
@@ -81,23 +82,25 @@ class MainManager:
     def main(self):
 
         # note: first snippet should be empty and last snippet is irrelevant (thus excluded)
-        latex_snippets = nonconsuming_regex_split(r"% snippet\(.*?\)", self.chunk_full_source)[0:-1]
-        assert latex_snippets[0].strip() == ""
+        self.latex_snippets = nonconsuming_regex_split(r"% snippet\(.*?\)", self.chunk_full_source)[0:-1]
+        assert self.latex_snippets[0].strip() == ""
 
         # indices of latex_snippets now correspond to enumeration in the source
         # e.g. latex_snippets[2] starts with "% snippet(2)"
 
         # initialize process:
         start_snippets_idx = 6  # the first snippet which is not included
-        self.processed_latex_source = "".join(latex_snippets[:start_snippets_idx])
+        self.processed_latex_source = "".join(self.latex_snippets[:start_snippets_idx])
 
 
-        for i in range(start_snippets_idx, len(latex_snippets)):
+        for i in range(start_snippets_idx, len(self.latex_snippets)):
             j = i - start_snippets_idx
             if j >= 5:
                 break
-            new_latex_source = latex_snippets[i]
-            context = self.create_context(new_latex_source)
+            new_latex_source = self.latex_snippets[i]
+
+            look_ahead_latex_source = self.get_look_ahead_latex_source(i)
+            context = self.create_context(new_latex_source, look_ahead_latex_source)
             message = render_template("prompt01_template.md", context)
 
             tokens = model.count_tokens(message).total_tokens
@@ -110,8 +113,11 @@ class MainManager:
             # this should be joined via the empty string to recreate the original latex code
             self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
 
-            with open(f"tmp{i:02d}.md", "w") as fp:
+            # write the message for debugging
+            tmp_fname = f"tmp{i:02d}.md"
+            with open(tmp_fname, "w") as fp:
                 fp.write(message)
+                print(f"{tmp_fname} written")
 
             break
 
@@ -120,12 +126,26 @@ class MainManager:
             fp.write(self.resulting_statements)
             fp.write(f"\n\n- // {self.token_counter} tokens were transmitted")
 
-    def create_context(self, new_latex_source: str) -> dict:
+    def get_look_ahead_latex_source(self, i: int) -> str:
+        # number of look-ahead-snippets
+        N = 2
+
+        # note: this slice does not result in an IndexError even if i+1 would be too big
+        # the result is just an empty list
+        rest: list = self.latex_snippets[i+1:i + 1+ N]
+        if len(rest) < N:
+            rest.append("\n\n% This is the end of the LaTeX code of this section")
+
+        result = "".join(rest)
+        return result
+
+    def create_context(self, new_latex_source: str, look_ahead_latex_source: str) -> dict:
 
         context = {
             "processed_latex_source": self.processed_latex_source,
             "resulting_statements": self.resulting_statements,
             "new_latex_source": new_latex_source,
+            "look_ahead_latex_source": look_ahead_latex_source,
         }
 
         return context
