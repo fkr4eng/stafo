@@ -97,7 +97,8 @@ class MainManager:
         self.tex_snippet_list = nonconsuming_regex_split(SNIPPET_LATEX_MACRO_PATTERN, self.tex_source)[0:-1]
         assert self.tex_snippet_list[0].strip() == ""
 
-        self.statement_snippet_list = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, self.statement_source)[0:-1]
+        # for the statements the last snippet is relevant
+        self.statement_snippet_list = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, self.statement_source)
         assert self.statement_snippet_list[0].strip() == ""
 
         # indices of latex_snippets now correspond to enumeration in the source
