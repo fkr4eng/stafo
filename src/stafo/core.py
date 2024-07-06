@@ -123,6 +123,8 @@ class MainManager:
         tokens = self.count_tokens(message)
         self.token_counter += tokens
         print(f"processing snippet {i:02d}, {tokens} tokens ({self.dev_mode=})")
+        if self.interactive_mode:
+            print(new_latex_source)
 
         response = self.tracked_model_response(message, generation_config=self.llm_config)
         self.statement_source = "\n".join((self.statement_source, response.text))

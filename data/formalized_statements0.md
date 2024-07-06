@@ -54,3 +54,92 @@
 - 'intersection' has the associated LaTeX notation `$arg1 \cap arg2$`
 - 'intersection' has defining formula `$\SX\cap \SY \isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ and } x\in \SY \}$`.
 - 'intersection' has the verbal description "The intersection of arg1 and arg2 is the set of common elements of arg1 and arg2".
+
+- // snippet(9)
+- There is a binary operator: 'union'.
+- The type of argument1 of 'union' is 'set'.
+- The type of argument2 of 'union' is 'set'.
+- The result type of 'union' is 'set'.
+- 'union' has the associated LaTeX notation `$arg1 \cup arg2$`.
+- 'union' has defining formula `$\SX \cup \SY \isdef\{x\mspace{-1mu}\colon\ x\in \SX \mbox{ or } x\in \SY \}$`.
+- 'union' has the verbal description "The union of arg1 and arg2 is the set of elements in either arg1 or arg2".
+
+
+- // snippet(10)
+- There is a binary operator: 'binary complement'.
+- // explanation: In the LaTeX source this is only called 'complement' but we use the label 'binary complement' to prevent confusion with 'unary complement' (see next snippet)
+- 'binary complement' has the alternative label "complement".
+- The type of argument1 of 'binary complement' is 'set'.
+- The type of argument2 of 'binary complement' is 'set'.
+- The result type of 'binary complement' is 'set'.
+- 'binary complement' has the associated LaTeX notation `$arg1 \backslash arg2$`.
+- 'binary complement' has defining formula `$\SY  \backslash\SX \isdef \{x \in \SY \mspace{-2mu}\colon\ x \not\in \SX \}$`.
+
+- // snippet(11)
+- There is a unary operator: 'unary complement'.
+- 'unary complement' has the alternative label "complement".
+- The type of argument1 of 'unary complement' is 'set'.
+- The result type of 'unary complement' is 'set'.
+- 'unary complement' has the associated LaTeX notation `$arg1^\sim$`.
+- 'unary complement' has defining formula `$\SX^\sim \isdef \SY \backslash  \SX$`.
+- // the challenge here is that arg2 of 'complement' must be taken from the context. Thus it is unsiutable to model this as a simple triple. At least this statement should have a qualifier ('arg2 depends on context')
+
+- // snippet(12)
+- There is a binary operator: 'symmetric difference'.
+- The type of argument1 of 'symmetric difference' is 'set'.
+- The type of argument2 of 'symmetric difference' is 'set'.
+- The result type of 'symmetric difference' is 'set'.
+- 'symmetric difference' has the associated LaTeX notation `$arg1 \ominus arg2$`.
+- 'symmetric difference' has defining formula `$\SX\ominus \SY \isdef (\SX \cup \SY)\backslash(\SX \cap \SY)$`.
+- 'symmetric difference' has the verbal description "The symmetric difference of X and Y is the set of elements that are in either X or Y but not both".
+
+- // snippet(13)
+- There is a binary operator: 'subset'.
+- The type of argument1 of 'subset' is 'set'.
+- The type of argument2 of 'subset' is 'set'.
+- The result type of 'subset' is 'set'.
+- 'subset' has the associated LaTeX notation `$arg1 \subseteq arg2$`.
+- 'subset' has the alternative associated LaTeX notation `$arg2 \supseteq arg1$`.
+- // for 'subset' no defining formula is given
+- 'subset' has the verbal description "If $x \in X$ implies that $x \in Y$, then $X$ is a subset of $Y$".
+- 'subset' has the alternative verbal description "$Y$ contains $X$".
+
+- // snippet(14)
+- There is an equivalence-statement
+    - full source code: "Note that $\SX \subseteq\SY$ if and only if $\SX\backslash\SY=\varnothing.$"
+    - // from the context can be taken that X and Y are sets
+    - source code of assertion: "$\SX \subseteq\SY$"
+    - source code of premise: "$\SX\backslash\SY=\varnothing.$"
+    - // in a later processing stage we can determine that this statement relates the items 'subset', 'complement' and 'empty set'
+
+- // snippet(15)
+- There is an equivalence-statement
+    - full source code: "Furthermore, $\SX =\SY$ if and only if $\SX \subseteq \SY $ and $\SY \subseteq \SX $."
+    - // from the context can be taken that X and Y are sets
+    - source code of assertion: "$\SX =\SY$"
+    - source code of premise: "$\SX \subseteq \SY $ and $\SY \subseteq \SX$"
+    - // in a later processing stage we can determine that the premise consists of two conditions
+
+- // snippet(16)
+- There is a binary operator: 'proper subset'.
+- The type of argument1 of 'proper subset' is 'set'.
+- The type of argument2 of 'proper subset' is 'set'.
+- The result type of 'proper subset' is 'set'.
+- 'proper subset' has the associated LaTeX notation `$arg1 \subset arg2$`.
+- 'proper subset' has the verbal description "If $\SX \subseteq \SY $ and $\SX \not= \SY $, then $\SX$ is a {\it proper subset} of $\SY$ and we write $\SX \subset \SY $".
+
+- // snippet(17)
+- There is a relation: 'is disjont to'.
+- The type of argument1 of 'is disjont to' is 'set'.
+- The type of argument2 of 'is disjont to' is 'set'.
+- 'is disjoint to' has the verbal description "The sets $\SX$ and $\SY$ are {\it disjoint} if $\SX \cap \SY =\varnothing\mspace{-1mu}.$".
+
+- // snippet(18)
+- There is a class: 'partition'.
+- 'partition' is a subclass of 'set'.
+- 'partition' has the verbal description "A partition of X is a set of pairwise-disjoint and nonempty subsets of X whose union is equal to X".
+- // the following association statements are a supplement for not having a semantical definition yet
+- 'partition' is associated with 'is disjont to'.
+- 'partition' is associated with 'nonempty'.
+- 'partition' is associated with 'subset'.
+- 'partition' is associated with 'union'.
