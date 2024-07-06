@@ -1,0 +1,3 @@
+ipydex
+google-generativeai
+jinja2

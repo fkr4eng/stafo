@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: stafo
+Version: 0.1.0
+Summary: ...
+Author-email: Carsten Knoll <firstname.lastname@tu-dresden.de>, Julius Fiedler <firstname.lastname@tu-dresden.de>
+License: GNU General Public License v3 (GPLv3)
+Project-URL: Homepage, ...
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: ipydex
+Requires-Dist: google-generativeai
+Requires-Dist: jinja2
+
+# Stafo – Statement Formalizer
+
+## Installation
+
+`pip install -e .`
+
+
+## Usage
+
+`stafo --help`
+
+
+
+## Next steps:
+
+- Refactoring
+
+-> iterate over snippets and evaluate performance on nontrivial snippets
+
+- find good way for semi-automation

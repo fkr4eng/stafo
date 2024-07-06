@@ -1,0 +1,14 @@
+MANIFEST.in
+README.md
+pyproject.toml
+requirements.txt
+src/stafo/__init__.py
+src/stafo/cli.py
+src/stafo/core..py
+src/stafo/release.py
+src/stafo.egg-info/PKG-INFO
+src/stafo.egg-info/SOURCES.txt
+src/stafo.egg-info/dependency_links.txt
+src/stafo.egg-info/entry_points.txt
+src/stafo.egg-info/requires.txt
+src/stafo.egg-info/top_level.txt

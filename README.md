@@ -1,4 +1,17 @@
-# Next steps:
+# Stafo – Statement Formalizer
+
+## Installation
+
+`pip install -e .`
+
+
+## Usage
+
+`stafo --help`
+
+
+
+## Next steps:
 
 - Refactoring
 
