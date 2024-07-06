@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 import re
 import tomllib
 import time
@@ -11,13 +13,17 @@ from ipydex import IPS, activate_ips_on_exception
 activate_ips_on_exception()
 
 
-TEMPLATE_DIR = "data"
+# TODO: this assumes package to be installed with pip install -e .
+BASE_DIR = Path(__file__).parents[2].as_posix()
+TEMPLATE_DIR = os.path.join(BASE_DIR, "data")
+
+# config file starts with .git_config to prevent nextcloud synchronizing it to (unencrypted) cloud
+CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
 
 class Container:
     pass
 
-# config file starts with .git_config # to prevent synchronizing it to (unencrypted) cloud
-with open(".git_config.toml", "rb") as fp:
+with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 # https://github.com/google-gemini/generative-ai-python
@@ -47,7 +53,9 @@ class MainManager:
     Main class for this script to prevent global variables
     """
 
-    def __init__(self) -> None:
+    def __init__(self, dev_mode: bool) -> None:
+
+        self.dev_mode = dev_mode
         self.chunk_full_source = None
         self.resulting_statements = None
 
@@ -61,13 +69,13 @@ class MainManager:
 
     def get_data(self):
 
-        with open("data/chunk_full_source.tex") as fp:
+        tex_path = os.path.join(BASE_DIR, "data", "chunk_full_source.tex")
+        formalized_statements_path = os.path.join(BASE_DIR, "data", "formalized_statements0.md")
+
+        with open(tex_path) as fp:
             self.chunk_full_source = fp.read()
 
-        # with open("data/already_processed0.tex") as fp:
-        #     self.processed_tex = fp.read()
-
-        with open("data/formalized_statements0.md") as fp:
+        with open(formalized_statements_path) as fp:
             self.resulting_statements = fp.read()
 
     def main(self):
@@ -94,7 +102,7 @@ class MainManager:
 
             tokens = model.count_tokens(message).total_tokens
             self.token_counter += tokens
-            print(f"processing snippet{i:02d}, {tokens} tokens")
+            print(f"processing snippet{i:02d}, {tokens} tokens ({self.dev_mode=})")
 
             response = self.tracked_model_response(message, generation_config=self.llm_config)
             self.resulting_statements = "".join((self.resulting_statements, response.text))
@@ -102,6 +110,8 @@ class MainManager:
 
             with open(f"tmp{i:02d}.md", "w") as fp:
                 fp.write(message)
+
+            break
 
         with open(f"final_response_list.md", "w") as fp:
             fp.write(self.resulting_statements)
@@ -120,17 +130,24 @@ class MainManager:
 
     def tracked_model_response(self, message, **kwargs):
         """
-        track the number of tokens we send to the model
+        if not in dev_mode:
+            track the number of tokens we send to the model
+
+        always:
+            return an object with a .text attribute containing the model response
+            (faked in case of dev_mode)
         """
         tokens = model.count_tokens(message).total_tokens
         track_line = f'{time.strftime("%Y-%m-%d %H:%M:%S")}, {tokens}\n'
 
-        with open("_token_tracking.txt", "a") as fp:
-            fp.write(track_line)
+        if not self.dev_mode:
+            with open("_token_tracking.txt", "a") as fp:
+                fp.write(track_line)
+            res = model.generate_content(message, generation_config=self.llm_config)
+        else:
+            res = Container()
+            res.text = f"\n\n-// snippet({0})\n- response text\n- response text"
 
-        # res = Container()
-        # res.text = f"\n\n-// snippet({0})\n- response text\n- response text"
-        res = model.generate_content(message, generation_config=self.llm_config)
         return res
 
 
@@ -155,21 +172,8 @@ def nonconsuming_regex_split(pattern, string):
     return parts
 
 
-if __name__ == "__main__":
-    mm = MainManager()
+# this function is intended to be called from cli.py
+def main(dev_mode):
+    mm = MainManager(dev_mode)
     mm.main()
-
-IPS(print_tb=False)
-exit()
-
-
-
-
-
-if 0:
-    res = model.generate_content(message, generation_config=config)
-    print(res.text)
-
-
-
-IPS(print_tb=False)
+    # IPS(print_tb=False)
