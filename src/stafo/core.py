@@ -109,8 +109,20 @@ class MainManager:
         self.processed_latex_source = "".join(self.tex_snippet_list[:self.start_snippet_idx])
 
     def do_next_query_iteration(self):
+        self.continue_mode = False
 
-        i = len(self.statement_snippet_list)
+        # look for "// please continue" or "// pc" in last nonempty line
+        last_line = self.statement_snippet_list[-1].strip().split("\n")[-1].strip()
+        if last_line in ("// please continue", "// pc"):
+            if last_line == "// pc":
+                self.statement_snippet_list[-1].replace("\n// pc", "\n // please continue")
+                self.statement_source = "".join(self.statement_snippet_list)
+
+            self.continue_mode = True
+            i = len(self.statement_snippet_list)
+        else:
+            i = len(self.statement_snippet_list)
+
         return self.iteration_step(i)
 
     def iteration_step(self, i):
@@ -180,6 +192,7 @@ class MainManager:
             "resulting_statements": self.statement_source,
             "new_latex_source": new_latex_source,
             "look_ahead_latex_source": look_ahead_latex_source,
+            "continue_mode": self.continue_mode,
         }
 
         return context

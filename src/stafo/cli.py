@@ -12,7 +12,7 @@ def main():
 
     # default will be changed to true later
     parser.add_argument(
-        "-d", "--dev-mode", help=f"toogle development mode", choices=("true", "false"), default="true"
+        "-d", "--dev-mode", help=f"toogle development mode", choices=("true", "false"), default="false"
     )
 
     parser.add_argument(
@@ -43,6 +43,6 @@ def main():
 
     elif args.interactive_mode:
         tex_fpath, statement_fpath = args.interactive_mode
-        core.interactive_mode(args.dev_mode, tex_fpath, statement_fpath)
+        core.interactive_mode(dev_mode, tex_fpath, statement_fpath)
     else:
         core.main(dev_mode=dev_mode)

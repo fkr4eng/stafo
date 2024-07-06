@@ -143,3 +143,40 @@
 - 'partition' is associated with 'nonempty'.
 - 'partition' is associated with 'subset'.
 - 'partition' is associated with 'union'.
+
+- // snippet(19)
+- 'nonnegative integers' is an instance of 'set'.
+- 'nonnegative integers' has the associated LaTeX notation `$\BBN$`.
+- 'positive integers' is an instance of 'set'.
+- 'positive integers' has the associated LaTeX notation `$\BBP$`.
+- 'integers' is an instance of 'set'.
+- 'integers' has the associated LaTeX notation `$\BBZ$`.
+- 'rational numbers' is an instance of 'set'.
+- 'rational numbers' has the associated LaTeX notation `$\BBQ$`.
+- 'real numbers' is an instance of 'set'.
+- 'real numbers' has the associated LaTeX notation `$\BBR$`.
+
+- // snippet(20)
+- There is an equation:
+    - full source code: '$\{x,x\}=\{x\}.$'
+    - left hand side: '$\{x,x\}$'
+    - right hand side: '$\{x\}$'
+    - // explanation: From the context can be taken that `\{x,x\}` and \{x\} are instances of 'set'. This statement expresses that a set with twice the element x is equal to the set with element x. This implicitly expresses that a set cannot have repeated elements. However, this information is not given explicitly.
+
+- // snippet(21)
+- There is a class: 'multiset'.
+- 'multiset' has the verbal description 'A multiset is a finite collection of elements that allows for repetition.'.
+- 'multiset' has the associated LaTeX notation `$\{arg1\}_{\rmms}`.
+- // explanation: `arg1` represents the elements of the multiset.
+
+- // snippet(22i)
+- // ignored content
+
+- // snippet(23)
+- // This statement expresses that the operators 'intersection', 'union', 'binary complement', 'symmetric difference', 'Cartesian product' and the relations 'proper subset' and 'subset' can also be applied to the class 'multiset'. To model this we have to amend (generalize) the defining statements for those
+- There is a class: 'generalized set'.
+- 'multiset' is a subclass of 'generalized set'
+- 'set' is a subclass of 'multiset'
+- Amend definition of 'intersection':
+    - replace 'set' by 'generalized set'
+// please continue

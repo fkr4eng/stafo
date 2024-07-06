@@ -1,5 +1,5 @@
 
-Your task is to convert LaTeX source code from a mathematical text book to a sequence of highly formalized statements which can be easily post-processed. Your input data consists of several parts which are separated by `----`. Each part has a different meaning. In the formalized statements "arg1" and "arg2" are placeholders (i.e. variables) for specific values. In the abstract examples in Input Part 1 the strings "<arg1>" and "<arg2>" serve as such placeholders.
+Your task is to convert LaTeX source code from a mathematical text book to a sequence of highly formalized statements which can be easily post-processed. Your input data consists of several parts which are separated by `----`. Each part has a different meaning. In the formalized statements "arg1" and "arg2" are placeholders (i.e. variables) for specific values. In the abstract examples in Input Part 1 the strings "<arg1>", "<arg2>" etc. serve as such placeholders.
 
 ----
 
@@ -46,6 +46,14 @@ Complex Formalized Statements consists of multiple lines which correspond to one
     - // the premise is the part after "if and only if"
     - source code of premise: <arg2>.
 
+- There is an equation:
+    - full source code: <arg1>.
+    - left hand side: <arg2>.
+    - right hand side: <arg3>.
+
+- Amend definition of <arg1>:
+    - replace <arg1> by <arg2>
+
 - // The following starts a definition statement which can contain either one OR or one AND block. Such blocks can be nested which is represented by their indentation level
 - <arg1> has the definition:
     - // the following starts an OR-block, i.e. a block of an arbitrary number of conditions which are linked by logical OR
@@ -61,7 +69,7 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 
 # Input Part 2: Remarks and Instructions
 
-- In your output only generate statements which correspond to one of the statements of the above list (Input Part 1).
+- In your output only generate statements which correspond to one of the statement types of the above list (Input Part 1).
 - If you think that a piece of information cannot be represented by one of the above statements, just generate a comment with explanations.
 - In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore the following:
     - `\label{...}`
@@ -87,6 +95,10 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 
 {{context.resulting_statements}}
 
+{% if context.continue_mode %}
+## Instructive Remark
+Note that the last of theses formalized statement-snippets is incomplete. You are expected to continue the this snippet based on the LaTeX source in Input Part 5
+{% endif %}
 ----
 
 
@@ -95,6 +107,11 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 ```
 {{context.new_latex_source}}
 ```
+
+{% if context.continue_mode %}
+## Instructive Remark
+Note that part of this LaTeX snippet already has been formalized. You are expected to continue the last snippet of Input Part 4
+{% endif %}
 
 ----
 
