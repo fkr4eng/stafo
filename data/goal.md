@@ -167,3 +167,4 @@ For simplicity some information is not represented by the above statements:
 ## Mathematical (Modelling) Questions
 
 Is there just *one* empty set? In other words: Are all empty sets identical or just equivalent?
+Are {3, 2} = {2, 3} the same set? Because: "a tuple can be viewed as an ordered multiset"

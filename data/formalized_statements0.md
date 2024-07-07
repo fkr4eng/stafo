@@ -94,15 +94,14 @@
 - 'symmetric difference' has the verbal description "The symmetric difference of X and Y is the set of elements that are in either X or Y but not both".
 
 - // snippet(13)
-- There is a binary operator: 'subset'.
+- There is a relation: 'is subset of'.
 - The type of argument1 of 'subset' is 'set'.
 - The type of argument2 of 'subset' is 'set'.
-- The result type of 'subset' is 'set'.
-- 'subset' has the associated LaTeX notation `$arg1 \subseteq arg2$`.
-- 'subset' has the alternative associated LaTeX notation `$arg2 \supseteq arg1$`.
+- 'is subset of' has the associated LaTeX notation `$arg1 \subseteq arg2$`.
+- 'is subset of' has the alternative associated LaTeX notation `$arg2 \supseteq arg1$`.
 - // for 'subset' no defining formula is given
-- 'subset' has the verbal description "If $x \in X$ implies that $x \in Y$, then $X$ is a subset of $Y$".
-- 'subset' has the alternative verbal description "$Y$ contains $X$".
+- 'is subset of' has the verbal description "If $x \in X$ implies that $x \in Y$, then $X$ is a subset of $Y$".
+- 'is subset of' has the alternative verbal description "$Y$ contains $X$".
 
 - // snippet(14)
 - There is an equivalence-statement
@@ -110,7 +109,14 @@
     - // from the context can be taken that X and Y are sets
     - source code of assertion: "$\SX \subseteq\SY$"
     - source code of premise: "$\SX\backslash\SY=\varnothing.$"
-    - // in a later processing stage we can determine that this statement relates the items 'subset', 'complement' and 'empty set'
+    - formalized premise:
+        - There is an equation:
+            - formalized left hand side
+                - 'binary complement'(\SX, \SY)
+            - formalized right hand side:
+                - 'empty set'
+    - formalized assertion:
+        - $\SX$ 'is subset of' $\SY$
 
 - // snippet(15)
 - There is an equivalence-statement
@@ -180,3 +186,48 @@
 - Amend definition of 'intersection':
     - replace 'set' by 'generalized set'
 // please continue
+
+- Amend definition of 'union':
+    - replace 'set' by 'generalized set'
+- Amend definition of 'binary complement':
+    - replace 'set' by 'generalized set'
+- Amend definition of 'symmetric difference':
+    - replace 'set' by 'generalized set'
+- Amend definition of 'subset':
+    - replace 'set' by 'generalized set'
+- Amend definition of 'proper subset':
+    - replace 'set' by 'generalized set'
+- // snippet(24)
+- There is an equation:
+    - // this is used as example
+    - full source code: '$\{x,x\}_{\rmms}\cup\{x\}_{\rmms} =\{x,x,x\}_{\rmms}$'
+    - left hand side: '$\{x,x\}_{\rmms}\cup\{x\}_{\rmms}$'
+    - right hand side: '$\{x,x,x\}_{\rmms}$'
+    - // explanation: From the context can be taken that '$\{x,x\}_{\rmms}$', '$\{x\}_{\rmms}$' and '$\{x,x,x\}_{\rmms}$' are instances of 'multiset'. This statement illustrates the application of the operator 'union' to instances of 'multiset'.
+
+- // snippet(25)
+- // The first sentence expresses that there is a mapping from the class 'multiset' to the class 'set'. However, this mapping is not defined explicitly.
+- // The second sentence expresses that there is a mapping from the class 'set' to the class 'multiset'. However, this mapping is not defined explicitly.
+- 'set' is a subclass of 'multiset'.
+- // explanation: This statement was already given in snippet(23). However, here it is given again from a different perspective.
+
+- // snippet(26)
+- There is a binary operator: 'Cartesian product'.
+- 'Cartesian product' has the associated LaTeX notation `$arg1 \times arg2$`.
+- 'Cartesian product' has the alternative associated LaTeX notation `$\varprod_{i=1}^n arg1$`.
+- // explanation: `arg1` represents a sequence of sets.
+- The type of argument1 of 'Cartesian product' is 'generalized set'.
+- The type of argument2 of 'Cartesian product' is 'generalized set'.
+- The result type of 'Cartesian product' is 'generalized set'.
+- 'Cartesian product' has the verbal description "The Cartesian product  X_1 ×⋯× X_n  of sets  X_1,…,X_n  is the set consisting of tuples of the form  (x_1,…,x_n) , where, for all  i∈{1,…,n},  x_i∈X_i.".
+- There is a class: 'tuple'.
+- 'tuple' has the associated LaTeX notation `$(arg1)$`.
+- // explanation: `arg1` represents the components of the tuple.
+- 'tuple' has the alternative label "n-tuple".
+- 'tuple' has the verbal description 'A tuple with n components is an n-tuple'.
+
+- // snippet(27)
+- // The first sentence expresses that there is a mapping from the class 'tuple' to the class 'multiset'. However, this mapping is not defined explicitly.
+- 'tuple' is a subclass of 'multiset'.
+- There is a property: 'ordered'.
+- 'ordered' is applicable to 'multiset'.

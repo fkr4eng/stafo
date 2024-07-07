@@ -37,20 +37,22 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 
 ## Complex Formalized Statements
 
-Complex Formalized Statements consists of multiple lines which correspond to one list item of the current level followed at least one sub-list. The sub-list can consist of Simple Formalized Statements or Complex Formalized Statements. Thus, a Complex Formalized Statement contains lines with at least two indentation levels. The following Complex Formalized Statements are allowed:
+Complex Formalized Statements consists of multiple lines which correspond to one list item of the current level followed at least one sub-list. The sub-list can consist of Simple Formalized Statements or Complex Formalized Statements. Thus, a Complex Formalized Statement contains lines with at least two indentation levels.
 
-- There is an equivalence statement:
-    - full source code: <arg1>.
-    - // the assertion is the part before "if and only if"
-    - source code of assertion: <arg1>.
-    - // the premise is the part after "if and only if"
-    - source code of premise: <arg2>.
+It might be possible that there is not enough infomation to completely generate all aspects of a Complex Fomalized Statement. Please do as best as you can and explain doubts and problems via comments.
+
+The following Complex Formalized Statements are allowed:
 
 - There is an equation:
     - full source code: <arg1>.
-    - left hand side: <arg2>.
-    - right hand side: <arg3>.
+    - source code of left hand side: <arg2>.
+    - source code of right hand side: <arg3>.
+    - formalized left hand side:
+        - <statement1>
+    - formalized right hand side: <arg2>.
+        - <statement2>
 
+- // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
 - Amend definition of <arg1>:
     - replace <arg1> by <arg2>
 
@@ -64,6 +66,56 @@ Complex Formalized Statements consists of multiple lines which correspond to one
     - AND
         - <condition1>
         - <condition2>
+
+
+- There is an equivalence-statement:
+    - full source code: <arg1>.
+    - // the assertion is the part before "if and only if"
+    - source code of assertion: <arg2>.
+    - // the premise is the part after "if and only if"
+    - source code of premise: <arg3>.
+    - // the following is optional (there might be no enough information)
+    - formalized premise:
+        - <condition1>
+        - // The condition can consist of (nested) 'OR' and 'AND'-blocks.
+    - formalized assertion:
+        - <condition2>
+        - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
+
+- There is an if-then-statement:
+    - full source code: <arg1>.
+    - source code of premise: <arg1>.
+    - source code of assertion: <arg1>.
+    - // the following is optional (there might be no enough information)
+    - formalized premise:
+        - <condition1>
+        - // The condition can consist of (nested) 'OR' and 'AND'-blocks.
+    - formalized assertion:
+        - <condition2>
+        - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
+
+
+## Expressions
+
+As arguments to the above statement types the following is allowed:
+
+- Literals:
+    - double-quote delimited strings:
+        - example 1: "Hello world"
+    - numbers in Python syntax:
+        - example: 1
+            - explanation: integer number
+        - examples: 2.5
+            - explanation: real number expressed as floating point number
+        - examples: 4 + 3.6j
+            - explanation: complex number expressed expressed like in Python
+- explicitly defined entities:
+    - examples: 'set', 'infinite', 'union'
+    - exmplanation: these entities will be defined below
+- applied operators
+    - example 1: 'intersection'(\SX, \SY)
+    - example 2: 'symmetric difference'(\SX, \SY)
+    - exmplanation: these operators will be defined below. The syntax is: '<operator_name>'(<argument_list>)
 
 ----
 
