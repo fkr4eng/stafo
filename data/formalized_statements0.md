@@ -231,3 +231,26 @@
 - 'tuple' is a subclass of 'multiset'.
 - There is a property: 'ordered'.
 - 'ordered' is applicable to 'multiset'.
+- // express that every tuple is ordered (this is implictly stated)
+- There is an if-then-statement:
+    - formalized premise:
+        - $T$ 'is instance of' 'tuple'.
+    - formalized assertion:
+        - $T$ has the property 'ordered'
+
+- // snippet(28)
+- There is an equation:
+    - reference: 'ref_eq1'
+    - full source code: `$(x_1,\ldots, x_n)\in{\textstyle\varprod_{i=1}^n} \SX_i \isdef \SX_1\mspace{-2mu} \times\cdots \times \SX_n.`
+    - // explanation: This statement defines that a tuple is an element of the Cartesian product of sets.
+- 'ref_eq1' is associated to 'Cartesian product'
+- 'Cartesian product' has the alternative associated LaTeX notation `${\textstyle\varprod_{i=1}^n} arg1$`.
+- There is an equation:
+    - reference: 'ref_eq2'
+    - full source code: `$\SX^n$ denotes $\varprod_{i=1}^n \SX.$`
+    - left hand side: `$\SX^n$`
+    - right hand side: `$\varprod_{i=1}^n \SX.$`
+    - // explanation: This statement defines a shorthand notation for the Cartesian product if all sets are equal.
+- 'ref_eq2' is associated to 'Cartesian product'
+- 'Cartesian product' has the alternative associated LaTeX notation `$arg1^n$`.
+- // explanation: `arg1` represents a set.

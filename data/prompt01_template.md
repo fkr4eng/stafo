@@ -33,6 +33,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> has the alternative label <arg2>.
 - <arg1> is associate with <arg2>.
 - <arg1> has the property <arg2>.
+- <arg1> is associated to <arg2>.
 
 
 ## Complex Formalized Statements
@@ -42,15 +43,6 @@ Complex Formalized Statements consists of multiple lines which correspond to one
 It might be possible that there is not enough infomation to completely generate all aspects of a Complex Fomalized Statement. Please do as best as you can and explain doubts and problems via comments.
 
 The following Complex Formalized Statements are allowed:
-
-- There is an equation:
-    - full source code: <arg1>.
-    - source code of left hand side: <arg2>.
-    - source code of right hand side: <arg3>.
-    - formalized left hand side:
-        - <statement1>
-    - formalized right hand side: <arg2>.
-        - <statement2>
 
 - // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
 - Amend definition of <arg1>:
@@ -67,6 +59,14 @@ The following Complex Formalized Statements are allowed:
         - <condition1>
         - <condition2>
 
+- There is an equation:
+    - full source code: <arg1>.
+    - source code of left hand side: <arg2>.
+    - source code of right hand side: <arg3>.
+    - formalized left hand side:
+        - <statement1>
+    - formalized right hand side: <arg2>.
+        - <statement2>
 
 - There is an equivalence-statement:
     - full source code: <arg1>.
@@ -93,6 +93,16 @@ The following Complex Formalized Statements are allowed:
     - formalized assertion:
         - <condition2>
         - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
+
+
+### References to Complex Formalized Statements
+
+It might be desirable to reference a Complex Formalized Statements in a later statement. This can be done as in the following example:
+
+- There is an equation:
+    - full source code: $a^2 + b^2 = c^2$.
+    - reference: 'ref_eq1'
+- 'ref_eq1' is associated to 'Pythagorean theorem'
 
 
 ## Expressions
