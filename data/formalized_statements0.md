@@ -295,3 +295,24 @@
 - // snippet(34)
 - There is a class: 'statement'.
 - 'statement' has the verbal description "Every statement is either true or false, and no statement is both true and false."
+
+- // snippet(35i)
+- // ignored content
+
+- // snippet(36)
+- There is a class: 'proof'.
+- 'proof' has the verbal description "A proof is a collection of statements that verify that a statement is true.".
+- // It is not clear how to formally model "a collection of statements". At least we can say that 'proof' and 'statement' are related.
+- 'proof' is associated to 'statement'
+
+- // snippet(37)
+- There is a class: 'conjecture'.
+- 'conjecture' is a subclass of 'statement'.
+- 'conjecture' has the verbal description "A conjecture is a statement that is believed to be true but whose proof is not known.".
+
+- // snippet(38)
+- There is special terminology:
+    - example: "$A$ {\it holds} if $A$ is true.".
+    - keywords:
+        - holds
+    - related to: 'statement'.

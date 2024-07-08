@@ -103,6 +103,11 @@ The following Complex Formalized Statements are allowed:
     - verbal summary: <arg1>.
     - related to: <arg2>.
 
+- There is special terminology:
+    - example: <arg1>.
+    - keywords:
+        - <arg2>
+    - related to: <arg3>.
 
 ### References to Complex Formalized Statements
 
