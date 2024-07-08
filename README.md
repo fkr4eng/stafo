@@ -14,7 +14,7 @@
     - `stafo --help`
 
 - Process one snippet of the source file
-    - `stafo data/chunk_full_source.tex formalized_statements0.md`
+    - `stafo -i data/chunk_full_source.tex data/formalized_statements0.md`
     - after running this command the user is expected to review the changes to the statement-file
 
 
