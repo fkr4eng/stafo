@@ -316,3 +316,22 @@
     - keywords:
         - holds
     - related to: 'statement'.
+
+- // snippet(39)
+- There is a unary operator: 'not'.
+- 'not' has the alternative label 'not of'.
+- The type of argument1 of 'not' is 'statement'.
+- The result type of 'not' is 'statement'.
+- 'not' has the verbal description "The 'not' of A is the statement (not A)".
+- There is a binary operator: 'and'.
+- 'and' has the alternative label 'and of'.
+- The type of argument1 of 'and' is 'statement'.
+- The type of argument2 of 'and' is 'statement'.
+- The result type of 'and' is 'statement'.
+- 'and' has the verbal description "The 'and' of A and B is the statement (A and B)".
+- There is a binary operator: 'or'.
+- 'or' has the alternative label 'or of'.
+- The type of argument1 of 'or' is 'statement'.
+- The type of argument2 of 'or' is 'statement'.
+- The result type of 'or' is 'statement'.
+- 'or' has the verbal description "The 'or' of A and B is the statement (A or B)".
