@@ -63,10 +63,8 @@ The following Complex Formalized Statements are allowed:
     - full source code: <arg1>.
     - source code of left hand side: <arg2>.
     - source code of right hand side: <arg3>.
-    - formalized left hand side:
-        - <statement1>
-    - formalized right hand side: <arg2>.
-        - <statement2>
+    - formalized left hand side: <expression1>
+    - formalized right hand side: <expression2>.
 
 - There is an equivalence-statement:
     - full source code: <arg1>.

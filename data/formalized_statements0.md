@@ -111,10 +111,8 @@
     - source code of premise: "$\SX\backslash\SY=\varnothing.$"
     - formalized premise:
         - There is an equation:
-            - formalized left hand side
-                - 'binary complement'(\SX, \SY)
-            - formalized right hand side:
-                - 'empty set'
+            - formalized left hand side 'binary complement'(\SX, \SY)
+            - formalized right hand side: 'empty set'
     - formalized assertion:
         - $\SX$ 'is subset of' $\SY$
 
@@ -382,12 +380,26 @@
         - AND
             - arg1 has the property 'false'
             - 'truth'(arg1) = 0
+- // The following operator is not defined in the snippet. However, it is necessary to correctly express the next equation.
+- There is a binary operator: 'plus_mod2'
+- 'plus_mod2' has the verbal description "addition in the sense of modulo-2 arithmetic".
 - There is an equation:
     - full source code: `$\truth(\mbox{not }A) = \truth(A)+1$`
     - source code of left hand side: `$\truth(\mbox{not }A)$`
     - source code of right hand side: `$\truth(A)+1$`
-    - formalized left hand side:
-        - 'truth'('not'(A))
-    - formalized right hand side:
-        - '+'('truth'(A), 1)
-- // explanation: It is not stated explicitly that '+' on the right hand side means addition in the sense of modulo-2 arithmetic. However, this can be taken from the context (looking at the next snippet).
+    - formalized left hand side: 'truth'('not'(A))
+    - formalized right hand side: 'plus_mod2'('truth'(A), 1)
+
+- // snippet(47)
+- There is an equation:
+    - formalized left hand side: 'plus_mod2'(0, 0)
+    - formalized right hand side: 0
+- There is an equation:
+    - formalized left hand side: 'plus_mod2'(1, 0)
+    - formalized right hand side: 1
+- There is an equation:
+    - formalized left hand side: 'plus_mod2'(0, 1)
+    - formalized right hand side: 1
+- There is an equation:
+    - formalized left hand side: 'plus_mod2'(1, 1)
+    - formalized right hand side: 0
