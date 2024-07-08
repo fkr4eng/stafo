@@ -123,13 +123,14 @@ class MainManager:
 
         # look for "// please continue" or "// pc" in last nonempty line
         last_line = self.statement_snippet_list[-1].strip().split("\n")[-1].strip()
+
         if last_line in ("// please continue", "// pc"):
             if last_line == "// pc":
-                self.statement_snippet_list[-1].replace("\n// pc", "\n // please continue")
+                self.statement_snippet_list[-1] = self.statement_snippet_list[-1].replace("\n// pc", "\n// please continue")
                 self.statement_source = "".join(self.statement_snippet_list)
 
             self.continue_mode = True
-            i = len(self.statement_snippet_list)
+            i = len(self.statement_snippet_list) - 1
         else:
             i = len(self.statement_snippet_list)
 
