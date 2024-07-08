@@ -335,3 +335,32 @@
 - The type of argument2 of 'or' is 'statement'.
 - The result type of 'or' is 'statement'.
 - 'or' has the verbal description "The 'or' of A and B is the statement (A or B)".
+
+- // snippet(40)
+- There is an explanation:
+    - verbal summary: "The statement $(A\mbox{ or } B)$ does not contradict the statement $(A\mbox{ and } B)$"
+    - related to: 'or'
+
+- // snippet(41)
+- There is a binary operator: 'xor'.
+- The type of argument1 of 'xor' is 'statement'.
+- The type of argument2 of 'xor' is 'statement'.
+- The result type of 'xor' is 'statement'.
+- 'xor' has the associated LaTeX notation `$arg1 xor arg2$`.
+- 'xor' has the verbal description "The exclusive or of  A  and  B  is the statement  ( A  xor  B ), which is  [( A  and not  B ) or ( B  and not  A )]."
+- // explanation: The verbal description implicitly contains the defining formula as: `(A xor B) = [(A and not B) or (B and not A)]`.
+
+- // snippet(42)
+- 'xor' has the alternative verbal description "Equivalently,  ( A  xor  B )  is the statement  [( A  or  B ) and not ( A  and  B )], that is,  A  or  B , but not both.".
+
+- // snippet(43)
+- // explanations: The 'commutative'-property is not mentioned explicitly in this snippet. However, introducing it makes it very convenient to formalize the content of this snippet
+- There is a property: 'commutative'.
+- 'commutative' is applicable to 'binary operator'.
+- 'commutative' has the verbal description "Swapping the arguments does not change the result."
+- 'and' has the property 'commutative'.
+- 'or' has the property 'commutative'.
+- 'xor' has the property 'commutative'.
+
+- // snippet(44i)
+- // ignored content
