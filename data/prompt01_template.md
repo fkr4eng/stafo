@@ -94,6 +94,15 @@ The following Complex Formalized Statements are allowed:
         - <condition2>
         - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
 
+- There is an example:
+    - verbal summary: <arg1>.
+    - related to: <arg2>.
+
+- There is an explanation:
+    - // This statement type should be used for information that is not new but serves to illustrate other information.
+    - verbal summary: <arg1>.
+    - related to: <arg2>.
+
 
 ### References to Complex Formalized Statements
 
@@ -121,17 +130,18 @@ As arguments to the above statement types the following is allowed:
             - explanation: complex number expressed expressed like in Python
 - explicitly defined entities:
     - examples: 'set', 'infinite', 'union'
-    - exmplanation: these entities will be defined below
+    - explanation: these entities will be defined below
 - applied operators
     - example 1: 'intersection'(\SX, \SY)
     - example 2: 'symmetric difference'(\SX, \SY)
-    - exmplanation: these operators will be defined below. The syntax is: '<operator_name>'(<argument_list>)
+    - explanation: these operators will be defined below. The syntax is: '<operator_name>'(<argument_list>)
 
 ----
 
 # Input Part 2: Remarks and Instructions
 
 - In your output only generate statements which correspond to one of the statement types of the above list (Input Part 1).
+- Please generate your output as markdown list. No heading, no delimiter.
 - If you think that a piece of information cannot be represented by one of the above statements, just generate a comment with explanations.
 - In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore the following:
     - `\label{...}`

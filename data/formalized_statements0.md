@@ -171,7 +171,7 @@
 
 - // snippet(21)
 - There is a class: 'multiset'.
-- 'multiset' has the verbal description 'A multiset is a finite collection of elements that allows for repetition.'.
+- 'multiset' has the verbal description "A multiset is a finite collection of elements that allows for repetition.".
 - 'multiset' has the associated LaTeX notation `$\{arg1\}_{\rmms}`.
 - // explanation: `arg1` represents the elements of the multiset.
 
@@ -224,7 +224,7 @@
 - 'tuple' has the associated LaTeX notation `$(arg1)$`.
 - // explanation: `arg1` represents the components of the tuple.
 - 'tuple' has the alternative label "n-tuple".
-- 'tuple' has the verbal description 'A tuple with n components is an n-tuple'.
+- 'tuple' has the verbal description "A tuple with n components is an n-tuple".
 
 - // snippet(27)
 - // The first sentence expresses that there is a mapping from the class 'tuple' to the class 'multiset'. However, this mapping is not defined explicitly.
@@ -261,11 +261,11 @@
 - // explanation: `arg1` represents the components of the tuple.
 - 'sequence' has the alternative associated LaTeX notation `$(arg1, arg2, \ldots)$`.
 - // explanation: `arg1` and `arg2` represent the first two components of the tuple.
-- 'sequence' has the verbal description 'A sequence (x1,x2,…) is a tuple with a countably infinite number of components.'.
+- 'sequence' has the verbal description "A sequence (x1,x2,…) is a tuple with a countably infinite number of components.".
 - 'sequence' is a subclass of 'tuple'.
 - There is a class: 'subsequence'.
 - 'subsequence' is a subclass of 'sequence'.
-- 'subsequence' has the verbal description 'A subsequence $A$ of a sequence $B$ contains a subset of its elements.'.
+- 'subsequence' has the verbal description "A subsequence $A$ of a sequence $B$ contains a subset of its elements.".
 
 - // snippet(30i)
 - // ignored content
@@ -288,3 +288,10 @@
 
 - // snippet(32i)
 - // ignored content
+
+- // snippet(33)
+- New section: 'Logic'.
+
+- // snippet(34)
+- There is a class: 'statement'.
+- 'statement' has the verbal description "Every statement is either true or false, and no statement is both true and false."
