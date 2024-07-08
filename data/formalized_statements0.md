@@ -254,3 +254,16 @@
 - 'ref_eq2' is associated to 'Cartesian product'
 - 'Cartesian product' has the alternative associated LaTeX notation `$arg1^n$`.
 - // explanation: `arg1` represents a set.
+
+- // snippet(29)
+- There is a class: 'sequence'.
+- 'sequence' has the associated LaTeX notation `$(arg1)^{\infty}_{i=1}$`.
+- // explanation: `arg1` represents the components of the tuple.
+- 'sequence' has the alternative associated LaTeX notation `$(arg1, arg2, \ldots)$`.
+- // explanation: `arg1` and `arg2` represent the first two components of the tuple.
+- 'sequence' has the verbal description 'A sequence (x1,x2,…) is a tuple with a countably infinite number of components.'.
+- 'sequence' is a subclass of 'tuple'.
+- There is a class: 'subsequence'.
+- 'subsequence' has the verbal description 'Now, let  i1<i2<⋯.  Then,  (xij)∞j=1  is a subsequence of  (xi)∞i=1.'.
+- // It is unclear how to formalize the relation between a sequence and its subsequence.
+- // It is unclear how to represent the condition  i1<i2<⋯  in a formalized way.
