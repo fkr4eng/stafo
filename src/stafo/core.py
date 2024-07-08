@@ -2,7 +2,14 @@ import os
 from typing import Dict, List
 from pathlib import Path
 import re
-import tomllib
+
+try:
+    # available in python >=3.11
+    import tomllib
+except ModuleNotFoundError:
+    # this is for python3.10
+    import tomli as tomllib
+
 import time
 from jinja2 import Environment, FileSystemLoader
 
