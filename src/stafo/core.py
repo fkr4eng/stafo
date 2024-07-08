@@ -83,6 +83,9 @@ class MainManager:
         self.tex_snippet_list = None
         self.token_count_cache: Dict[str, int] = {}
 
+        # will refer to the currently processed snippet
+        self.snippet_object: LatexSourceSnippet = None
+
         self.llm_config = genai.GenerationConfig(temperature=0)
 
         # prepare the paths
@@ -139,6 +142,9 @@ class MainManager:
         look_ahead_latex_source = self.get_look_ahead_latex_source(i)
         context = self.create_context(new_latex_source, look_ahead_latex_source)
         message = render_template("prompt01_template.md", context)
+
+        # do not make an llm-call if snippet should be ignored
+        self.snippet_object = LatexSourceSnippet(new_latex_source)
 
         tokens = self.count_tokens(message)
         self.token_counter += tokens
@@ -223,6 +229,8 @@ class MainManager:
 
     def tracked_model_response(self, message, **kwargs):
         """
+        if ignore_flag:
+            return the already known answer ("ignored content")
         if not in dev_mode:
             track the number of tokens we send to the model
 
@@ -233,13 +241,16 @@ class MainManager:
         tokens = self.count_tokens(message)
         track_line = f'{time.strftime("%Y-%m-%d %H:%M:%S")}, {tokens}\n'
 
-        if not self.dev_mode:
+        res = Container()
+
+        if self.snippet_object.ignore_flag:
+            res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- // ignored content"
+        elif not self.dev_mode:
             with open("_token_tracking.txt", "a") as fp:
                 fp.write(track_line)
             res = model.generate_content(message, generation_config=self.llm_config)
         else:
-            res = Container()
-            res.text = f"-// snippet({0})\n- response text\n- response text\n"
+            res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- response text\n- response text\n"
 
         return res
 
@@ -282,14 +293,17 @@ class SourceSnippet:
         self.process()
 
     def process(self):
+        """
+        parses the source snippet and determines the relevant instance variables
+        """
         # ensure we are not using the abstract base class
         assert self.PATTERN is not None
         matches = list(re.finditer(self.PATTERN, self.snippet_source))
         assert len(matches) == 1
         match, = matches
-        inner_content = match.group(1)
+        self.snippet_delimiter_inner_content = match.group(1)
         # \snippet{XXi} or \snippet{123i} should be ignored -> only placeholder statements should be generated
-        self.ignore_flag = inner_content.endswith("i")
+        self.ignore_flag = self.snippet_delimiter_inner_content.endswith("i")
         self.ignore_char = "i" if self.ignore_flag else ""
 
         i0, i1 = match.span()
@@ -348,6 +362,9 @@ def auto_tex_snippet_numbering(src_fpath):
 
 
 def iterate_over_parts(parts, source_snippet_type: type) -> List[str]:
+    """
+    Used in auto_tex/md_snippet_numbering
+    """
     results = []
     for k, part in enumerate(parts, start=1):
         # create an instance of the appropriate type
