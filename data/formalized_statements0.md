@@ -364,3 +364,30 @@
 
 - // snippet(44i)
 - // ignored content
+
+- // snippet(45i)
+- // ignored content
+
+- // snippet(46)
+- There is a unary operator: 'truth'.
+- 'truth' has the associated LaTeX notation `$\truth(arg1)$`.
+- The type of argument1 of 'truth' is 'statement'.
+- The result type of 'truth' is 'integer'.
+- // explanation: It is not stated explicitly that the result type is 'integer'. However, this can be taken from the context (looking at the defining formula).
+- 'truth' has the definition:
+    - OR
+        - AND
+            - arg1 has the property 'true'
+            - 'truth'(arg1) = 1
+        - AND
+            - arg1 has the property 'false'
+            - 'truth'(arg1) = 0
+- There is an equation:
+    - full source code: `$\truth(\mbox{not }A) = \truth(A)+1$`
+    - source code of left hand side: `$\truth(\mbox{not }A)$`
+    - source code of right hand side: `$\truth(A)+1$`
+    - formalized left hand side:
+        - 'truth'('not'(A))
+    - formalized right hand side:
+        - '+'('truth'(A), 1)
+- // explanation: It is not stated explicitly that '+' on the right hand side means addition in the sense of modulo-2 arithmetic. However, this can be taken from the context (looking at the next snippet).
