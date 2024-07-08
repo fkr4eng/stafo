@@ -264,6 +264,27 @@
 - 'sequence' has the verbal description 'A sequence (x1,x2,…) is a tuple with a countably infinite number of components.'.
 - 'sequence' is a subclass of 'tuple'.
 - There is a class: 'subsequence'.
-- 'subsequence' has the verbal description 'Now, let  i1<i2<⋯.  Then,  (xij)∞j=1  is a subsequence of  (xi)∞i=1.'.
-- // It is unclear how to formalize the relation between a sequence and its subsequence.
-- // It is unclear how to represent the condition  i1<i2<⋯  in a formalized way.
+- 'subsequence' is a subclass of 'sequence'.
+- 'subsequence' has the verbal description 'A subsequence $A$ of a sequence $B$ contains a subset of its elements.'.
+
+- // snippet(30i)
+- // ignored content
+- // Informal summary: This snippet explains the notion of 'subset' and 'proper subset' for sequences. However, this is already clear since 'sequence' is a subclass of 'multiset' (via the class 'tuple')
+
+- // snippet(31)
+- There is a binary operator: 'sequence addition'.
+- 'sequence addition' has the associated LaTeX notation '$arg1 + arg2$'.
+- 'sequence addition' has defining formula '$X + Y\isdef (x_i + y_i)_{i=1}^\infty$'.
+- // explanation: It is not explicitly stated that X and Y are sequences. However, this can be taken from the context.
+- // explanation: It is not explicitly stated that '+' on the right hand side of the defining formula means component-wise addition. However, this can be taken from the context.
+- There is a binary operator: 'sequence component-wise multiplication'.
+- 'sequence component-wise multiplication' has the associated LaTeX notation '$arg1 \odot arg2$'.
+- 'sequence component-wise multiplication' has defining formula '$X\odot Y\isdef (x_i\odot y_i)_{i=1}^\infty$'.
+- // explanation: Same remarks as for 'sequence addition'
+- There is a binary operator: 'sequence scalar multiplication'.
+- 'sequence scalar multiplication' has the associated LaTeX notation '$arg1 arg2$'.
+- 'sequence scalar multiplication' has defining formula '$XY\isdef (x_i y_i)_{i=1}^\infty$'.
+- // explanation: Same remarks as for 'sequence addition'
+
+- // snippet(32i)
+- // ignored content
