@@ -292,8 +292,6 @@ A {\it conjecture} is a statement that is believed to be true but whose proof is
 %
 
 
-
-
 \snippet{38}
 Let $A$ and $B$ be statements.  %Then, $A$ {\it holds} if $A$ is true.
 \index{holds!definition}%
@@ -325,3 +323,621 @@ Equivalently, $(A\mbox{ xor } B)$ is the statement [$(A\mbox{ or } B)\mbox{ and 
 %
 \snippet{43}
 Note that $(A\mbox{ and } B)= (B\mbox{ and } A),$  $(A\mbox{ or } B)= (B\mbox{ or } A),$ and $(A\mbox{ xor } B)= (B\mbox{ xor } A).$
+
+
+\snippet{44i}
+Let $A$, $B,$ and $C$ be statements.  Then, the statements ($A$ and $B$ or $C$) and ($A$ or $B$ and $C$) are
+ambiguous. For clarity, we thus write, for example, [$A$ and ($B$ or $C$)] and [$A$ or ($B$ and $C$)].  In words, we write
+``$A$ and either $B$ or $C$'' and ``$A$ or both $B$ and $C$,'' respectively, where ``either'' and ``both'' signify parentheses.
+%
+\snippet{45i}
+Furthermore,
+%
+%
+%
+\begin{gather}
+%
+(A\mbox{ and } B) \mbox{ or } C = (A\mbox{ and } C)\mbox{ or }(B\mbox{ and }C),\\
+%
+(A\mbox{ or } B) \mbox{ and } C = (A\mbox{ or } C)\mbox{ and }(B\mbox{ or }C).
+%
+\end{gather}
+
+
+%does xor distribute???
+
+%could be 4 more equalities
+
+%also and/and, or/or, xor/xor
+
+
+
+
+
+
+\snippet{46}
+Let $A$ be a statement.  To analyze statements involving logic operators, define $\truth(A) = 1$ if $A$ is true, and $\truth(A) = 0$ if $A$ is false.  Then,
+%
+%
+\begin{align}
+%
+\truth(\mbox{not }A) = \truth(A)+1,
+%
+\end{align}
+%
+\snippet{47}
+where $0+0=0,$ $1+0 = 0+1 = 1,$ and $1+1=0.$
+%
+\snippet{48i}
+Therefore, $A$ is true if and only if $(\mbox{not }A)$ is false, while $A$ is false if and only if $(\mbox{not }A)$ is true.
+%
+\snippet{49i}
+Note that
+%
+%
+\begin{align*}
+%
+\truth[\mbox{not}(\mbox{not }A)] &= \truth(\mbox{not }A)+1\\
+%
+&= [\truth(A)+1]+1\\
+%
+&= \truth(A).
+%
+\end{align*}
+%
+\snippet{50}
+Furthermore, note that $\truth(A)+\truth(A)=0$ and $\truth(A)\truth(A)=\truth(A).$
+
+
+
+
+\snippet{51}
+Let $A$ and $B$ be statements.
+%
+%
+Then,
+%
+%
+\begin{gather}
+%
+\truth(A\mbox{ and }B) = \truth(A)\truth(B),\\
+%
+%
+\truth(A\mbox{ or }B) = \truth(A)\truth(B)+\truth(A)+\truth(B),\\
+%
+%
+\truth(A\mbox{ xor }B) = \truth(A)+\truth(B).
+%
+\end{gather}
+%
+\snippet{52}
+Hence,
+%
+\begin{gather}
+%
+\truth(A\mbox{ and }B) = \min\,\{\truth(A),\truth(B)\},\\
+%
+%
+\truth(A\mbox{ or }B) = \max\,\{\truth(A),\truth(B)\}.
+%
+\end{gather}
+\snippet{53i}
+%
+%Consequently, if $A$ and $B$ are true, then $(A\mbox{ and } B)$ and
+%$(A\mbox{ or } B)$ are true;
+%
+%if $A$ is true and $B$ is false, then $(A\mbox{ and } B)$ is false and
+%$(A\mbox{ or } B)$ is true;
+%
+%if $A$ is false and $B$ is true, then $(A\mbox{ and } B)$ is false and
+%$(A\mbox{ or } B)$ is true;
+%
+%and, if $A$ and $B$ are false, then $(A\mbox{ and } B)$ and
+%$(A\mbox{ or } B)$ are false.
+%
+%Note that $(A\mbox{ and } B)$ is true if and only if $(B\mbox{ and } A)$ is true, and that
+%$(A\mbox{ or } B)$ is true if and only if $(B\mbox{ or } A)$ is true.
+%
+\snippet{54i}
+Consequently, $\truth(A\mbox{ and }B) = \truth(B\mbox{ and }A),$ $\truth(A\mbox{ or }B) = \truth(B\mbox{ or }A),$ and $\truth(A\mbox{ xor }B) = \truth(B\mbox{ xor }A).$
+%
+\snippet{55}
+Furthermore,
+%
+$\truth(A\mbox{ and }A) = \truth(A\mbox{ or }A) =  \truth(A),$ and
+%
+%
+%
+$\truth(A\mbox{ xor }A) = 0.$
+%
+
+
+
+
+
+
+
+\snippet{56}
+Let $A$ and $B$ be statements.  The {\it implication}
+\index{implication!definition}%
+%
+$(A\Longrightarrow B)$ is the statement $[(\mbox{not }A) \mbox{ or }B].$
+%
+\snippet{57}
+Therefore,
+%
+\begin{align}
+%
+\truth(A\Longrightarrow B) = \truth(A)\truth(B) + \truth(A)+1.\label{truthAimpliesB}
+%
+\end{align}
+%
+\snippet{58}
+The implication $(A\Longrightarrow B)$ is read as either ``if $A$, then $B$,'' ``if $A$ holds, then $B$ holds,'' or
+``$A$ implies $B\mspace{-1mu}.$''
+\snippet{59}
+The statement $A$ is the {\it hypothesis}, while the statement $B$ is the {\it conclusion}.
+\index{hypothesis!definition}%
+\index{conclusion!definition}%
+%
+\snippet{60}
+If $(A\Longrightarrow B),$  then $A$ is a {\it sufficient condition} for $B,$ and $B$ is a {\it necessary condition} for $A.$
+\index{sufficient condition!definition}%
+\index{necessary condition!definition}%
+%
+%
+\snippet{61}
+It follows from (\ref{truthAimpliesB}) that,
+%
+if $A$ and $B$ are true, then $(A\Longrightarrow B)$ is true;
+%
+if $A$ is true and $B$ is false, then $(A\Longrightarrow B)$ is false;
+%
+and, if $A$ is false, then $(A\Longrightarrow B)$ is true whether or not $B$ is true.
+%
+\snippet{62i}
+For example, both implications [$(2+2=5) \Longrightarrow (3+3=6)$] and [$(2+2=5) \Longrightarrow (3+3=8)$] are true.
+%
+\snippet{63}
+Finally, note that $[(A\Longrightarrow B)\mbox{ and } A] = A \mbox{ and } B.$
+
+\snippet{64i}
+%how do we know this?  truth[A(x)] = truth[B(x)] for all x implies A = B?  No, doubt it
+
+%how do we show 2 statements are equal withOUT Venn diagrams???
+
+
+
+
+
+
+
+
+
+
+
+
+
+\snippet{65}
+A {\it predicate} is a statement that depends on a variable.  Let $\SX$ be a set, let $x\in\SX,$ and let $A(x)$ be a predicate.
+%
+%Then, for each $x\in\SX,$ $A(x)$ is a statement.
+%
+%The predicate $A(x)$ may be true for some values of $x\in\SX$ and false for other values of $x\in\SX.$
+\index{predicate!definition}%
+%
+\snippet{66}
+There are two ways to use a predicate to create a statement.   An {\it existential statement}
+\index{existential statement!definition}%
+has the form
+\begin{align}\mbox{there exists}\  x\in \SX \mbox{ such that } A(x) \mbox{ holds,} \label{0.1}
+\end{align} whereas a {\it universal statement}
+\index{universal statement!definition}%
+has the form
+\begin{equation}\mbox{for all } x\in \SX,  A(x) \mbox{ holds.}\label{0.2X}
+\end{equation}
+\snippet{67i}
+%or, equivalently,
+%
+%
+%\begin{equation} A(x)   \mbox{ holds for all } x\in \SX.\label{0.2}
+%\end{equation}
+%
+\snippet{68}
+Note that   %$[\mbox{for all }x\in\SX, A(x)\mbox{ holds}]$ is the statement whose truth is given by
+%
+\begin{gather}
+%
+%
+\truth[\mbox{there exists }x\in\SX \mbox{ such that } A(x) \mbox{ holds}] = \max_{x\in\SX} \truth[A(x)],\\
+%
+\truth[\mbox{for all }x\in\SX, A(x)\mbox{ holds}] = \min_{x\in\SX} \truth[A(x)].       %min is and
+%
+%\end{align}
+%
+%while $[\mbox{there exists }x\in\SX \mbox{ such that } A(x)\mbox{ holds}]$ is the statement whose truth is given by
+%
+%\begin{align}          %max is or
+%
+\end{gather}
+%
+
+
+
+
+\snippet{69}
+An {\it argument} is an implication whose hypothesis and conclusion are predicates that depend on the same variable.
+In particular, letting $x$ denote a variable, and letting $A(x)$ and $B(x)$ be predicates, the implication $[A(x)\Longrightarrow B(x)]$ is an argument.
+\index{argument!definition}%
+%
+\snippet{70}
+For example, for each real number $x,$ the implication [$(x=1)\Longrightarrow (x+1=2)$] is an argument.
+\snippet{71}
+Note that the variable $x$ links the hypothesis and the conclusion, thereby making this implication useful for the purpose of {\it inference}.
+\index{inference!definition}%
+In particular, for all real numbers $x,$ $\truth[(x=1)\Longrightarrow (x+1=2)]=1.$  The statements $(\mbox{for all }x, [A(x)\Longrightarrow B(x)]\mbox{ holds})$ and $(\mbox{there exists }x \mbox{ such that } [A(x)\Longrightarrow B(x)]\mbox{ holds})$ are inferences.
+
+
+
+
+
+\snippet{72}
+Let $A$ and $B$ be statements.
+The {\it bidirectional implication} $(A\Longleftrightarrow B)$ is the statement
+\index{bidirectional implication!definition}%
+$[(A\Longrightarrow B) \mbox{ and } (A\Longleftarrow B)],$  where
+$(A\Longleftarrow B)$ means $(B\Longrightarrow A)$.
+%
+If $(A\Longleftrightarrow B)$, then $A$ and $B$ are {\it equivalent}.
+%
+%
+\snippet{73}
+Furthermore,
+%
+\begin{align}
+%
+\truth(A\Longleftrightarrow B) = \truth(A) + \truth(B) + 1.
+%
+\end{align}
+%
+\snippet{74i}
+Therefore, $A$ and $B$ are equivalent if and only if either both $A$ and $B$
+are true or both $A$ and $B$ are false.
+\snippet{75i}
+
+
+%Note that
+%
+%\begin{align}
+%
+%\truth(A\Longrightarrow B)  = \truth[(\mbox{not }A)\mbox{ or } B].
+%
+%\end{align}
+%
+%Therefore, $(A\Longrightarrow B)$ is equivalent to $[(\mbox{not }A)\mbox{ or } B].$
+
+
+
+
+
+
+
+
+
+
+\snippet{76}
+Let $A$ and $B$ be statements, and assume that $(A\Longleftrightarrow B).$
+%
+Then, $A$ holds {\it if and only if} $B$ holds.  The
+implication $A\Longrightarrow B$ (the ``only if'' part) is {\it necessity},
+\index{necessity!definition}%
+\index{sufficiency!definition}%
+while $B\Longrightarrow A$ (the ``if'' part) is {\it sufficiency}.
+
+
+
+
+
+
+
+\snippet{77}
+Let $A$ and $B$ be statements.  The {\it converse}
+\index{converse!definition}%
+of $(A\Longrightarrow B)$ is $(B \Longrightarrow A)$.
+\snippet{78}
+Note that
+%
+\begin{align*}
+%
+(A\Longrightarrow B) &\Longleftrightarrow [(\mbox{not }A)\mbox{ or } B]\\
+%
+&\Longleftrightarrow [(\mbox{not }A) \mbox{ or } \mbox{not}(\mbox{not }B)]\\
+%
+&\Longleftrightarrow [ \mbox{not}(\mbox{not }B) \mbox{ or } \mbox{not }A ]\\
+%
+%&\Longleftrightarrow \mbox{not}[\mbox{not }A \mbox{ and not} B]\\
+%
+&\Longleftrightarrow(\mbox{not }B\Longrightarrow \mbox{not }A).
+%
+\end{align*}
+%
+\snippet{79}
+Therefore, the statement
+$(A\Longrightarrow B)$ is equivalent to its {\it contrapositive}
+\index{contrapositive!definition}%
+[(not $B$)  $\Longrightarrow$ (not $A$)].
+
+
+\snippet{80}
+Let $A$, $B$, $A',$ and $B'$ be statements, and assume that $(A^{\mspace{-1mu}\prime}\Longrightarrow A \Longrightarrow B\Longrightarrow B^{\prime}).$ Then, $(A^{\mspace{-1mu}\prime}
+\Longrightarrow B^{\prime})$ is a {\it corollary} of $(A\Longrightarrow
+B).$
+
+\snippet{81}
+Let $A$, $B,$ and $A'$ be statements, and assume that
+$A\Longrightarrow B\mspace{-1mu}.$ Then, $(A\Longrightarrow B)$ is a
+{\it strengthening} of $[(A\mbox{ and
+}A')\Longrightarrow B].$
+\index{strengthening!definition}%
+\index{redundant assumptions!definition}%
+If, in addition, $(A\Longrightarrow A'),$ then the
+statement $[(A\mbox{ and }A')\Longrightarrow B]$ has a {\it redundant
+assumption}.
+
+\snippet{82}
+An {\it interpretation} is a feasible assignment of true or false to all statements that comprise a statement.
+\snippet{83}
+For example, there are four interpretations of  the statement $(A\mbox{ and }B)$, depending on whether $A$ is assigned to be true or false and $B$ is assigned to be true or false.
+%
+Likewise, $[(x=1)\mbox{ and }(x=2)]$ has three interpretations, which depend on the value of $x.$
+
+
+
+
+\snippet{84}
+Let $A_1,A_2,\ldots$ be statements, and let $B$ be a statement that depends on $A_1,A_2,\ldots$   Then, $B$ is a {\it tautology} if $B$ is true whether or not $A_1,A_2,\ldots$ are true.
+%
+\index{tautology!definition}%
+%
+\snippet{85}
+For example, let $B$ denote the statement $(A\mbox{ or not } A).$  Then,
+\begin{align}
+%
+\truth(A\mbox{ or not } A) = 1,
+%
+\end{align}
+%
+and thus the statement $(A\mbox{ or not } A)$ is true whether or not $A$ is true.  Hence, $(A\mbox{ or not } A)$ is a tautology.
+%
+%Furthermore, $\truth(A\mbox{ or not }A)=1$, and thus this statement is a tautology.
+%
+Likewise, %the implication $(A\Longrightarrow B)$ is a tautology if it is true whether or not $A$ and $B$ are true.
+%
+%For example,
+%
+$(A\Longrightarrow A)$ is a tautology.
+%
+Furthermore, since
+%
+\begin{align}
+%
+\truth[(A\mbox{ and } B)\Longrightarrow A] = \truth(A)^2\truth(B)+\truth(A)\truth(B)+1=1,
+%
+\end{align}
+%
+it follows that $[(A\mbox{ and } B)\Longrightarrow A]$ is a tautology.
+%
+\snippet{86}
+Likewise, $\truth([A\mbox{ and not }A]\Longrightarrow B)=1,$ and thus $([A\mbox{ and not }A]\Longrightarrow B)$ is a tautology.
+\snippet{87i}
+%
+%
+%
+%
+
+
+
+%when is an argument a tautology?
+%I am not sure an argument can be a tautology!  This is just a true contingency
+%For each real number $x,$ $\truth[(x=1)\Longrightarrow (x+1=2)]=1,$ and thus the argument
+%
+%[$(x=1)\Longrightarrow (x+1=2)$] is a tautology.
+
+
+
+
+\snippet{88}
+Let $A_1,A_2,\ldots$ be statements, and let $B$ be a statement that depends on $A_1,A_2,\ldots$   Then, $B$ is a {\it contradiction} if $B$ is false whether or not $A_1,A_2,\ldots$ are true.
+%
+\index{contradiction!definition}%
+%
+\snippet{89}
+For example, let $B$ denote the statement $(A\mbox{ and not } A).$  Then,
+%
+\begin{align}
+%
+\truth(A\mbox{ and not } A) = 0,
+%
+\end{align}
+%
+and thus the statement $(A\mbox{ and not } A)$ is false whether or not $A$ is true.    Hence, $(A\mbox{ and not } A)$ is a contradiction.
+\snippet{90i}
+%
+%
+
+
+
+
+
+
+%This is just a false statement-----its truth is zero----but it is not structurally false
+%As another example, for each real number $x,$ the argument $[(x=1)\mbox{ and }(x=2)]$ is a contradiction.
+%
+%
+%
+%%%%%%%%%%%%%  too complicated
+%Likewise, if $A'$ is a statement, then
+%
+%
+%
+%\begin{align}
+%
+%\truth([A\mbox{ or not }A]\Longrightarrow [A'\mbox{ and not }A'])=0,
+%
+%\end{align}
+%
+%and thus $B=([A\mbox{ or not }A]\Longrightarrow [A'\mbox{ and not }A'])$ is a contradiction.
+%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%
+%
+%As a final example, for each real number $x,$  $\truth[(x=x)\Longrightarrow (x<x)]=0,$ and thus the argument
+%
+%[$(x=x)\Longrightarrow (x<x)$] is a contradiction.
+%
+
+
+
+
+\snippet{91}
+Let $A$ and $B$ be statements.  If the implication $(A\Longrightarrow B)$ is neither a tautology nor a contradiction, then $\truth(A\Longrightarrow B)$ depends on the truth of the statements that comprise $A$ and $B\mspace{-1mu}.$
+\snippet{92}
+For example, $\truth(A\Longrightarrow \mbox{not }A)=\truth(A)+1,$ and thus the statement $(A\Longrightarrow \mbox{not }A)$ is true if and only if $A$ is false, and false if and only if $A$ is true.  Hence, $(A\Longrightarrow \mbox{not }A)$ is neither a tautology nor a contradiction.
+\snippet{93}
+A statement that is neither a tautology nor a contradiction is a {\it contingency}.
+\index{contingency!definition}%
+%
+\snippet{94}
+For example, the implication $[A\Longrightarrow (A\mbox{ and }B)]$ is a contingency.  Likewise, for each real number $x,$
+%
+$\truth[(x=1)\Longrightarrow (x=2)]=\truth(x\ne1),$ and thus the statement
+%
+[$(x=1)\Longrightarrow (x=2)$] is a contingency.
+%
+
+
+
+
+
+
+\snippet{95}
+An argument that is a contingency is a {\it theorem}, {\it proposition}, {\it corollary}, or {\it lemma}.
+%
+\snippet{96}
+A theorem is a significant result; a proposition is a theorem of less significance.  The primary role of
+a lemma is to support the proof of a theorem or a proposition.
+\index{theorem!definition}%
+\index{proposition!definition}%
+\index{lemma!definition}%
+\index{corollary!definition}%
+\index{fact!definition}%
+A {\it corollary} is a consequence of a theorem or a proposition.
+A {\it fact} is either a theorem, proposition, lemma, or
+corollary.
+
+
+
+
+
+
+
+
+
+
+\snippet{97}
+In order to visualize logic operations on predicates, it is helpful to replace statements with sets and logic operations by set operations; the truth of a statement can then be visualized in terms of Venn diagrams.
+%
+%represent the statement $A$ as a set $\SA,$ where the elements of $\SA$ correspond to ${\rm truth}(A)=1$ and the elements of $\SA^\sim$ correspond to ${\rm truth}(A)=0.$
+%
+\snippet{98}
+To do this, let $\SX$ be a set, for all $x\in\SX,$ let $A(x)$ and $B(x)$ be predicates, and
+%
+define $\SA\isdef \{x\in\SX\colon {\rm truth}[A(x)] = 1\}$ and $\SB\isdef \{x\in\SX\colon {\rm truth}[B(x)] = 1\}.$
+%
+%
+Then, the logic operations ``and,'' ``or,'' ``xor,'' and ``not'' are equivalent to ``$\cap$,'' ``$\cup$,'' ``$\ominus$,'' and
+``${}^\sim$,'' respectively.
+%
+%
+%
+%For example, let $A$ and $B$ be statements with corresponding sets $\SA$ and $\SB,$ respectively.
+%
+\snippet{99}
+For example, $\{x\in\SX\colon {\rm truth}[(\mbox{not }A(x)) \mbox{ and }B(x)]=1\} = \SA^\sim \cap\SB.$
+%
+Furthermore, since $[A(x) \Longrightarrow B(x)]$ is equivalent to $[(\mbox{not }A(x))\mbox{ or }B(x)],$ it follows that $\{x\in\SX\colon {\rm truth}[A(x) \Longrightarrow B(x)]=1\} = \SA^\sim\cup\SB.$
+%
+Similarly, since $[A(x) \Longleftrightarrow B(x)]$ is equivalent to $[(A(x) \mbox{ or } \mbox{not } B(x)) \mbox{ and } ( [\mbox{not }A(x)]  \mbox{ or }  B(x) )],$ it follows that
+%
+$\{x\in\SX\colon A(x) \Longleftrightarrow B(x)\} = (\SA \cup\SB^\sim)\cap (\SA^\sim\cup  \SB) = (\SA\cap\SB)\cup(\SA\cup\SB)^\sim.$
+
+
+
+
+
+
+
+\snippet{100}
+Now, define $\SX,$ $A(x),$ $B(x)$, $\SA,$ and $\SB$ as in the previous paragraph, and assume that, for all $x\in\SX,$ $A(x)\Longrightarrow B(x).$
+%
+Therefore, $\SA^\sim\cup\SB= \{x\in\SX\colon{\rm truth}[(\mbox{not }A(x))\mbox{ or }B(x)] = 1\} = \SX,$ and thus
+%
+$\SA\backslash\SB = (\SA^\sim\cup\SB)^\sim = \{x\in\SX\colon {\rm truth}[(\mbox{not }A(x))\mbox{ or }B(x)] = 0\} = \varnothing.$
+%
+Consequently, $\SA \subseteq \SB.$
+\snippet{101i}
+%
+%
+%Therefore, $\SX = \{x\in\SX\colon {\rm truth}[A(x)\Longrightarrow B(x)] = 1\}.$
+%
+%$ = \SA^\sim\cup\SB
+%
+%Now, define $\SX_0\isdef\{x\in\SX\colon {\rm truth}[A(x)] = 1\}.$
+%
+%Then, $\{x\in\SX_0\colon {\rm truth}[A(x)] = 1\}$ is empty.
+%
+%Consequently,
+%
+%Then, ${\rm truth}[(\mbox{not }A)\mbox{ or }B)]=1$ if and only if $\SA\backslash\SB=\varnothing,$ which, in turn, is equivalent to $\SA\subseteq\SB.$
+%
+%
+%
+%
+\snippet{102}
+This means that the logic operator ``$\Longrightarrow$'' is represented by ``$\subseteq$.''
+%
+\snippet{103}
+For example, for all $x\in\SX,$ let $C(x)$ be a predicate, and define $\SC\isdef \{x\in\SX\colon {\rm truth}[C(x)] = 1\}.$
+%
+Then, for all $x\in\SX,$
+%
+${\rm truth}[( A(x) \mbox{ and }B(x))\Longrightarrow C(x)]=1$
+%
+if and only if $\SA\cap\SB \subseteq \SC.$
+%
+\snippet{104}
+Likewise, for all $x\in\SX,$
+%
+\begin{align}{\rm truth}([\mbox{$A(x)$ and ($B(x)$ or $C(x)$)] $\Longleftrightarrow$ [($A(x)$ and $B(x)$) or ($A(x)$ and $C(x)$)}])=1\end{align}
+%
+if and only if
+%
+\begin{align}\SA \cap(\SB \cup \SC )=(\SA \cap \SB )\cup(\SA \cap \SC ).\label{seteq234}\end{align}
+%
+Note that \eqref{seteq234} represents a tautology.
+\snippet{105i}
+
+
+%Finally, $A$ is a tautology if and only if the set $\SA$ representing $A$ is the universal set; $A$ is a contradiction if and only if $\SA$ is the empty set; and $A$ is a contingency if and only if $\SA$ is neither the universal set nor the empty set.
+
+
+
+
+
+
+
+
+
+\snippet{106}
+\section{Relations and Orderings}

@@ -164,6 +164,16 @@ For simplicity some information is not represented by the above statements:
 
 ---
 
+## General Modelling Questions
+
+- how to model examples?
+- how to model repetitions of already established knowledge (but phrased in different words). Examples:
+- how to model equations with multiple equality signs? E.g. which demonstrate stepwise simplification?
+    - Therefore, $A$ and $B$ are equivalent if and only if either both $A$ and $B$
+are true or both $A$ and $B$ are false.
+- how to model prose explanations? Example:
+    - In order to visualize logic operations on predicates, it is helpful to replace statements with sets and logic operations by set operations; the truth of a statement can then be visualized in terms of Venn diagrams.
+
 ## Mathematical (Modelling) Questions
 
 Is there just *one* empty set? In other words: Are all empty sets identical or just equivalent?
