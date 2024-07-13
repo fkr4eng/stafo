@@ -23,8 +23,14 @@ def main():
 
     parser.add_argument(
         "-i", "--interactive-mode",
-        help=f"start interactive mode", metavar=("TEX_FILE", "STATEMENT_FILE"),
+        help=f"start interactive mode", metavar=("SOURCE_FILE", "STATEMENT_FILE"),
         nargs=2,
+    )
+
+
+    parser.add_argument(
+        "-c", "--convert-statements-to-kg",
+        help=f"convert markdown statements to pyirk code", metavar="STATEMENT_FILE",
     )
 
     parser.add_argument(
@@ -52,5 +58,8 @@ def main():
     elif args.interactive_mode:
         tex_fpath, statement_fpath = args.interactive_mode
         core.interactive_mode(dev_mode, tex_fpath, statement_fpath)
+    elif (statement_file := args.convert_statements_to_kg) is not None:
+        from . import statement_to_kg
+        statement_to_kg.main(statement_file)
     else:
         core.main(dev_mode=dev_mode)

@@ -7,7 +7,6 @@ import subprocess
 from .utils import BASE_DIR, CONFIG_PATH, render_template
 
 
-
 def get_md_lines(fpath) -> list[str]:
     with open(fpath, "rt") as f:
         raw = f.read()
@@ -16,12 +15,12 @@ def get_md_lines(fpath) -> list[str]:
 
 
 class ConversionManager:
-    def __init__(self):
-        pass
+    def __init__(self, statements_fpath: str):
+        self.statements_fpath = statements_fpath
+        self.lines = get_md_lines(statements_fpath)
 
     def step1(self):
 
-        self.lines = get_md_lines("tmp.md")
         self.applicable_to_key = "R3041"
         # {items:
             # {"set":
@@ -97,15 +96,21 @@ class ConversionManager:
         else:
             print(f"label {label} already existed")
 
-    def step2(self):
+    def get_keys(self):
+        """
+        Get pyirk keys from a file to avoid key collisions with existing entities
+        """
         # res = subprocess.run(["pyirk", "-l", os.path.join(BASE_DIR, 'control_theory1.py'), "ct", "--new-keys", "100"], capture_output=True)
 
         # item_keys = re.findall(r"I\d\d\d\d", res.stdout.decode())
         # relation_keys = re.findall(r"R\d\d\d\d", res.stdout.decode())
-        with open("keys.txt", "rt") as f:
+        with open(os.path.join(BASE_DIR, "keys.txt"), "rt") as f:
             keys = f.read()
         self.item_keys = re.findall(r"I\d\d\d\d", keys)
         self.relation_keys = re.findall(r"R\d\d\d\d", keys)
+
+    def step2(self):
+        self.get_keys()
 
         for i, line in enumerate(self.lines):
             new_class = re.findall(self.class_pattern, line)
@@ -206,7 +211,7 @@ class ConversionManager:
         IPS()
 
 
-def main():
-    convm = ConversionManager()
+def main(statements_fpath: str):
+    convm = ConversionManager(statements_fpath)
     convm.step1()
     convm.step2()

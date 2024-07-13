@@ -17,6 +17,8 @@
     - `stafo -i data/chunk_full_source.tex data/formalized_statements0.md`
     - after running this command the user is expected to review the changes to the statement-file
 
+- Convert formalized snippets to pyirk (still experimental):
+    - `stafo -c tmp.md`
 
 
 ## Next Development Steps:
