@@ -3,6 +3,7 @@
 _git_bundle*zip
 tmp*
 _token_tracking.txt
+_token_tracking.png
 final_response_list.md
 *_backup*.md
 *_backup*.tex

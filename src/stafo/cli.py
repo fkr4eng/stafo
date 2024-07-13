@@ -27,6 +27,11 @@ def main():
         nargs=2,
     )
 
+    parser.add_argument(
+        "-tt", "--evaluate-token-tracking",
+        help=f"evaluate the token-tracking csv file", metavar="TRACKING_FILE",
+    )
+
     args = parser.parse_args()
 
     dev_mode = (args.dev_mode == "true")
@@ -40,6 +45,9 @@ def main():
         else:
             msg = f"unexpected file extension of {src_fpath}"
             raise ValueError(msg)
+
+    elif (tracking_file := args.evaluate_token_tracking) is not None:
+        core.evaluate_token_tracking(fpath=tracking_file)
 
     elif args.interactive_mode:
         tex_fpath, statement_fpath = args.interactive_mode

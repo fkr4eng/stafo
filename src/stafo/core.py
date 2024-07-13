@@ -399,3 +399,27 @@ def interactive_mode(dev_mode, tex_fpath, statement_fpath):
 
     mm = MainManager(dev_mode, tex_fpath, statement_fpath, interactive_mode=True)
     mm.do_next_query_iteration()
+
+
+def evaluate_token_tracking(fpath: str):
+    try:
+        import pandas as pd
+    except ImportError:
+        print("Error: This function needs pandas to be installed.")
+        exit()
+    df = pd.read_csv(fpath, names=["timestamp", "tokens"])
+
+    token_sum = sum(df["tokens"])
+    print(f"Cumulated query tokens: {token_sum}")
+
+    try:
+        from matplotlib import pyplot as plt
+    except ImportError:
+        print("Error: This function needs matplotlib to be installed.")
+        exit()
+
+    plt.plot(df["tokens"])
+    plt.xlabel("query index")
+    plt.ylabel("query size (tokens)")
+    plt.savefig("_token_tracking.png")
+    plt.show()
