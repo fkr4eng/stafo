@@ -7,11 +7,24 @@ import subprocess
 BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 
-with open("tmp.md", "rt") as f:
-    raw = f.read()
-lines = raw.split("\n")
 
-applicable_to_key = "R3041"
+
+def get_md_lines(fpath) -> list[str]:
+    with open(fpath, "rt") as f:
+        raw = f.read()
+    lines = raw.split("\n")
+    return lines
+
+
+class ConversionManager:
+    def __init__(self):
+        pass
+
+    def step1(self):
+        pass
+
+self__lines = get_md_lines("tmp.md")
+self__applicable_to_key = "R3041"
 # {items:
     # {"set":
     #   {"key": I1234, "R2": ..., "R4": ...},
@@ -20,39 +33,40 @@ applicable_to_key = "R3041"
     # },
 # relations: {}
 # }
-d = {"items": {},
-     "relations": {
-         "is applicable to": {
-             "key": applicable_to_key, # todo
-             "R1": "is applicable to"
-         },
-         "is a subproperty of": {           # this is the dict key the way it occurs in document
-             "key": "R17",                  # this is the irk key
-             "R1": "is subproperty of"      # this is the label in irk
-         },
-         "is an instance of": {
-             "key": "R4",
-             "R1": "is instance of"
-         },
-         "is a subclass of": {
-             "key": "R3",
-             "R1": "is subclass of"
-         },
-         "has the definition": {
-             "key": "R37",
-             "R1": "has definition"
-         }
+self__d = {"items": {},
+    "relations": {
+        "is applicable to": {
+            "key": self__applicable_to_key, # todo
+            "R1": "is applicable to"
+        },
+        "is a subproperty of": {           # this is the dict key the way it occurs in document
+            "key": "R17",                  # this is the irk key
+            "R1": "is subproperty of"      # this is the label in irk
+        },
+        "is an instance of": {
+            "key": "R4",
+            "R1": "is instance of"
+        },
+        "is a subclass of": {
+            "key": "R3",
+            "R1": "is subclass of"
+        },
+        "has the definition": {
+            "key": "R37",
+            "R1": "has definition"
+        }
 
-     }}
-items = []
-relations = []
-existing_relations = ["is applicable to", "is a subproperty of", "is an instance of", "is a subclass of"]
+    }}
+self__items = []
+self__relations = []
+self__existing_relations = ["is applicable to", "is a subproperty of", "is an instance of", "is a subclass of"]
 
 
-comment_pattern = re.compile(r"- //")
-class_pattern = re.compile(r"(?<=There is a class: ).+?(?=\.)")
-property_pattern = re.compile(r"(?<=There is a property: ).+?(?=\.)")
-relation_pattern = re.compile(r"(?<=There is a relation: ).+?(?=\.)")
+self__comment_pattern = re.compile(r"- //")
+self__class_pattern = re.compile(r"(?<=There is a class: ).+?(?=\.)")
+self__property_pattern = re.compile(r"(?<=There is a property: ).+?(?=\.)")
+self__relation_pattern = re.compile(r"(?<=There is a relation: ).+?(?=\.)")
+
 
 def strip(s):
     if isinstance(s, list):
@@ -68,6 +82,7 @@ def strip(s):
         return s.replace("'", "").replace('"', '')
     else:
         raise TypeError(s)
+
 
 def render_template(template: str, context: dict):
     """
@@ -85,18 +100,18 @@ def render_template(template: str, context: dict):
     return res
 
 def add_item(label, additional_relations:dict={}):
-    if label not in d["items"].keys():
-        d["items"][label] = {"key": item_keys.pop(), "R1": label}
+    if label not in self__d["items"].keys():
+        self__d["items"][label] = {"key": self__item_keys.pop(), "R1": label}
         for k, v in additional_relations.items():
-            d["items"][label][k] = v
+            self__d["items"][label][k] = v
     else:
         print(f"label {label} already existed")
 
 def add_rel(label, additional_relations:dict={}):
-    if label not in d["relations"].keys():
-        d["relations"][label] = {"key": relation_keys.pop(), "R1": label}
+    if label not in self__d["relations"].keys():
+        self__d["relations"][label] = {"key": self__relation_keys.pop(), "R1": label}
         for k, v in additional_relations.items():
-            d["items"][label][k] = v
+            self__d["items"][label][k] = v
     else:
         print(f"label {label} already existed")
 
@@ -106,33 +121,33 @@ def add_rel(label, additional_relations:dict={}):
 # relation_keys = re.findall(r"R\d\d\d\d", res.stdout.decode())
 with open("keys.txt", "rt") as f:
     keys = f.read()
-item_keys = re.findall(r"I\d\d\d\d", keys)
-relation_keys = re.findall(r"R\d\d\d\d", keys)
+self__item_keys = re.findall(r"I\d\d\d\d", keys)
+self__relation_keys = re.findall(r"R\d\d\d\d", keys)
 
-for i, line in enumerate(lines):
-    new_class = re.findall(class_pattern, line)
-    new_property = re.findall(property_pattern, line)
-    new_relation = re.findall(relation_pattern, line)
+for i, line in enumerate(self__lines):
+    new_class = re.findall(self__class_pattern, line)
+    new_property = re.findall(self__property_pattern, line)
+    new_relation = re.findall(self__relation_pattern, line)
     # continue on comment
-    if re.findall(comment_pattern, line):
+    if re.findall(self__comment_pattern, line):
         continue
     elif line == "":
         continue
     # new class?
     elif len(new_class) > 0:
-        items.append(strip(new_class[0]))
+        self__items.append(strip(new_class[0]))
         add_item(strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
     # new property?
     elif len(new_property) > 0:
-        items.append(strip(new_property[0]))
+        self__items.append(strip(new_property[0]))
         add_item(strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'})
     # new relation?
     elif len(new_relation) > 0:
-        relations.append(strip(new_relation[0]))
+        self__relations.append(strip(new_relation[0]))
         add_rel(strip(new_relation[0]))
     # existing relations
     else:
-        for k, v in d["relations"].items():
+        for k, v in self__d["relations"].items():
             # relations of structure: arg1 rel arg2
             res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\.)", line)
             if len(res) > 0:
@@ -144,9 +159,9 @@ for i, line in enumerate(lines):
                 elif v["key"] == "R3":
                     add_item(arg1, {"R3": arg2})
                 else:
-                    assert arg1 in d["items"].keys(), f"missing item {arg1}"
-                    assert arg2 in d["items"].keys(), f"missing item {arg2}"
-                    d["items"][arg1][v["key"]] = arg2
+                    assert arg1 in self__d["items"].keys(), f"missing item {arg1}"
+                    assert arg2 in self__d["items"].keys(), f"missing item {arg2}"
+                    self__d["items"][arg1][v["key"]] = arg2
                 break
             res = re.findall(f"(?<=- )(.+?)(?: {k})", line)
             if len(res) > 0:
@@ -161,17 +176,17 @@ for i, line in enumerate(lines):
                     additional_context = {"R4": 'p.I20["mathematical definition"]'}
                     while process_next_line:
                         k += 1
-                        if lines[k].startswith(" ") and "-" in lines[k]:
-                            additional_content.append(lines[k])
+                        if self__lines[k].startswith(" ") and "-" in self__lines[k]:
+                            additional_content.append(self__lines[k])
                         else:
                             process_next_line = False
                             #todo this could result in problem, if definition is last in file with no new line at end
                     # setting
                     try:
-                        obj_type = d["items"][arg1][applicable_to_key]
+                        obj_type = self__d["items"][arg1][self__applicable_to_key]
                         s = obj_type
                         p = "p.uq_instance_of"
-                        o = f'{d["items"][obj_type]["key"]}["{obj_type}"]'
+                        o = f'{self__d["items"][obj_type]["key"]}["{obj_type}"]'
                     except:
                         s = "obj"
                         p = p.instance_of
@@ -181,12 +196,12 @@ for i, line in enumerate(lines):
                     # premise
                     # todo
                     # assertion
-                    if d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
+                    if self__d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
                         p = 'p.R16["has property"]'
                     else:
                         p = 'p.R30["is secondary instance of"]'
                         print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
-                    o = f'{d["items"][arg1]["key"]}["{arg1}"]'
+                    o = f'{self__d["items"][arg1]["key"]}["{arg1}"]'
                     additional_context["assertion"] = {"s": s, "p": p, "o": o}
 
 
@@ -206,5 +221,3 @@ for i, line in enumerate(lines):
 #     res = render_template("new_item__template.py", context)
 #     print(res)
 IPS()
-
-
