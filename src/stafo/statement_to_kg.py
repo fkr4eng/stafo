@@ -124,7 +124,7 @@ class ConversionManager:
             # new class?
             elif len(new_class) > 0:
                 self.items.append(self.strip(new_class[0]))
-                self.add_item(self.self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
+                self.add_item(self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
             # new property?
             elif len(new_property) > 0:
                 self.items.append(self.strip(new_property[0]))
@@ -132,7 +132,7 @@ class ConversionManager:
             # new relation?
             elif len(new_relation) > 0:
                 self.relations.append(self.strip(new_relation[0]))
-                self.self.add_rel(self.strip(new_relation[0]))
+                self.add_rel(self.strip(new_relation[0]))
             # existing relations
             else:
                 for k, v in self.d["relations"].items():
@@ -195,7 +195,7 @@ class ConversionManager:
 
 
 
-                            self.self.add_item(f"definition of {arg1}", additional_context)
+                            self.add_item(f"definition of {arg1}", additional_context)
                         else:
                             print(f"not processed line: {line}")
 
