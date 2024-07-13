@@ -137,7 +137,7 @@ class ConversionManager:
             else:
                 for k, v in self.d["relations"].items():
                     # relations of structure: arg1 rel arg2
-                    res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\.)", line)
+                    res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\\.)", line)
                     if len(res) > 0:
                         arg1, arg2 = self.strip(res[0])
                         # instance of
@@ -191,9 +191,6 @@ class ConversionManager:
                                 print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
                             o = f'{self.d["items"][arg1]["key"]}["{arg1}"]'
                             additional_context["assertion"] = {"s": s, "p": p, "o": o}
-
-
-
 
                             self.add_item(f"definition of {arg1}", additional_context)
                         else:

@@ -1,6 +1,7 @@
 
 try:
     from .core import *
+    from . import statement_to_kg
 except ImportError as ex:
     # ignoring import errors might be relevant during the installation process
     # where we need the version but requirements might not yet be installed.

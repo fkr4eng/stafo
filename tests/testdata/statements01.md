@@ -1,0 +1,6 @@
+- // snippet(4)
+- There is a class: 'set'.
+- There is a property: 'finite'.
+- 'finite' is applicable to 'set'.
+- There is a property: 'infinite'.
+- 'infinite' is applicable to 'set'.
