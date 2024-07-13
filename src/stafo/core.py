@@ -11,22 +11,16 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 import time
-from jinja2 import Environment, FileSystemLoader
 
 #! pip install google-generativeai
 import google.generativeai as genai
+
+from .utils import BASE_DIR, CONFIG_PATH, render_template
 
 from ipydex import IPS, activate_ips_on_exception
 
 activate_ips_on_exception()
 
-
-# TODO: this assumes package to be installed with pip install -e .
-BASE_DIR = Path(__file__).parents[2].as_posix()
-TEMPLATE_DIR = os.path.join(BASE_DIR, "data")
-
-# config file starts with .git_config to prevent nextcloud synchronizing it to (unencrypted) cloud
-CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
 
 SNIPPET_LATEX_MACRO_PATTERN = r"\\snippet{(.*?)}"
 SNIPPET_MD_COMMENT_PATTERN = r"- // snippet\((.*?)\)"
@@ -42,21 +36,6 @@ genai.configure(api_key=config_dict["gemeni_api_key"])
 model = genai.GenerativeModel('gemini-1.5-pro-latest')
 
 # - It would be useful if you also would generate comments to explain your "chain of thought".
-
-def render_template(template: str, context: dict):
-    """
-    :param template:    path to template file relative to TEMPLATE_DIR
-    :param context:     dict containing the data which should be inserted into the template
-    """
-    jin_env = Environment(
-        loader=FileSystemLoader(TEMPLATE_DIR),
-    )
-
-    template_doc = jin_env.get_template(template)
-
-    res = template_doc.render(context=context)
-
-    return res
 
 
 class MainManager:

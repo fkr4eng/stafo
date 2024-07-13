@@ -4,8 +4,7 @@ from ipydex import IPS
 from jinja2 import Environment, FileSystemLoader
 import subprocess
 
-BASE_DIR = os.path.dirname(__file__)
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+from .utils import BASE_DIR, CONFIG_PATH, render_template
 
 
 
@@ -81,22 +80,6 @@ class ConversionManager:
             return s.replace("'", "").replace('"', '')
         else:
             raise TypeError(s)
-
-
-    def render_template(self, template: str, context: dict):
-        """
-        :param template:    path to template file relative to TEMPLATE_DIR
-        :param context:     dict containing the data which should be inserted into the template
-        """
-        jin_env = Environment(
-            loader=FileSystemLoader(TEMPLATE_DIR),
-        )
-
-        template_doc = jin_env.get_template(template)
-
-        res = template_doc.render(context=context)
-
-        return res
 
     def add_item(self, label, additional_relations:dict={}):
         if label not in self.d["items"].keys():
