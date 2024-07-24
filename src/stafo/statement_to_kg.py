@@ -163,7 +163,7 @@ class ConversionManager:
 
     def add_item(self, d, label, additional_relations:dict={}):
         if label not in d["items"].keys():
-            d["items"][label] = {"key": self.item_keys.pop(), "R1": label}
+            d["items"][label] = {"key": self.item_keys.pop(), "R1": label, "snip": self.current_snippet}
             for k, v in additional_relations.items():
                 d["items"][label][k] = v
         else:
@@ -176,7 +176,8 @@ class ConversionManager:
             d["relations"][label] = {
                 "key": key,
                 "R1": label,
-                "render": f"""{key}__{self.sp_to_us(label)}"""}
+                "render": f"""{key}__{self.sp_to_us(label)}""",
+                "snip": self.current_snippet}
             for k, v in additional_relations.items():
                 d["items"][label][k] = v
         else:
@@ -242,9 +243,9 @@ class ConversionManager:
                 else:
                     # l.append(line)
                     if temp_dict is not None:
-                        l.append(self.process_relations(copy.deepcopy(temp_dict), None, line))
+                        l.append(self.process_line(copy.deepcopy(temp_dict), None, line))
                     else:
-                        l.append(self.process_relations({}, None, line))
+                        l.append(self.process_line({}, None, line))
 
             else:
                 # print(f"skipping: {line}")
@@ -257,110 +258,23 @@ class ConversionManager:
         """iterate lines, add items and relations to dictionary
         first process lines that add items and some with special patterns, later process general relations (s p o)"""
         self.get_keys()
-
+        self.current_snippet = ""
         for i, line in enumerate(self.lines):
 
-            new_class = re.findall(self.class_pattern, line)
-            new_property = re.findall(self.property_pattern, line)
-            new_relation = re.findall(self.relation_pattern, line)
-            new_unary_operator = re.findall(self.unary_operator_pattern, line)
-            new_binary_operator = re.findall(self.binary_operator_pattern, line)
-            type_of_arg_1 = re.findall(self.type_of_arg_1_pattern, line)
-            type_of_arg_2 = re.findall(self.type_of_arg_2_pattern, line)
-            type_of_result = re.findall(self.type_of_result_pattern, line)
-            amend_definition = re.findall(self.amend_definition_pattern, line)
-            equation = re.findall(self.equation_pattern, line)
-
             # continue on comment
-            if re.findall(self.comment_pattern, line):
-                continue
+            comment = re.findall(self.comment_pattern, line)
+            if len(comment) > 0:
+                snippet = re.findall(r"snippet\(\d+\)", line)
+                if len(snippet) > 0:
+                    self.current_snippet = snippet[0]
             elif line == "":
                 continue
             # indeted lines should be processed somewhere down below
             elif line.startswith(" "):
                 print(f"line {i} skipped: {line}")
-            # new class?
-            elif len(new_class) > 0:
-                # self.items.append(self.strip(new_class[0]))
-                self.add_item(self.d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
-            # new property?
-            elif len(new_property) > 0:
-                # self.items.append(self.strip(new_property[0]))
-                self.add_item(self.d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'})
-            # new relation?
-            elif len(new_relation) > 0:
-                # self.relations.append(self.strip(new_relation[0]))
-                self.add_rel(self.d, self.strip(new_relation[0]))
-            elif len(new_unary_operator) > 0:
-                self.add_item(self.d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'})
-            elif len(new_binary_operator) > 0:
-                self.add_item(self.d, self.strip(new_binary_operator[0]), {"R4": 'p.I8["mathematical operation with arity 2"]'})
-            elif len(type_of_arg_1) > 0:
-                arg1, arg2 = self.strip(type_of_arg_1[0])
-                if arg2 not in self.d["items"].keys():
-                    print(f"unknown type: {arg2}")
-                if arg1 in self.d["items"].keys():
-                    self.d["items"][arg1]["R8"] = self.build_reference(arg2)
-                elif arg1 in self.d["relations"].keys():
-                    self.d["relations"][arg1]["R8"] = self.build_reference(arg2)
-                else:
-                    raise KeyError()
-            elif len(type_of_arg_2) > 0:
-                arg1, arg2 = self.strip(type_of_arg_2[0])
-                if arg2 not in self.d["items"].keys():
-                    print(f"unknown type: {arg2}")
-                if arg1 in self.d["items"].keys():
-                    self.d["items"][arg1]["R9"] = self.build_reference(arg2)
-                elif arg1 in self.d["relations"].keys():
-                    self.d["relations"][arg1]["R9"] = self.build_reference(arg2)
-                else:
-                    raise KeyError()
-            elif len(type_of_result) > 0:
-                arg1, arg2 = self.strip(type_of_result[0])
-                if arg2 not in self.d["items"].keys():
-                    print(f"unknown type: {arg2}")
-                if arg1 in self.d["items"].keys():
-                    self.d["items"][arg1]["R11"] = self.build_reference(arg2)
-                elif arg1 in self.d["relations"].keys():
-                    self.d["relations"][arg1]["R11"] = self.build_reference(arg2)
-                else:
-                    raise KeyError()
-            elif len(amend_definition) > 0:
-                arg1 = self.strip(amend_definition[0])
-                process_next_line = True
-                i_plus = 1
-                while process_next_line:
-                    rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i+i_plus])[0])
-                    for k, v in self.d["items"][arg1].items():
-                        if v == self.build_reference(rarg1):
-                            self.d["items"][arg1][k] = self.build_reference(rarg2)
-                    i_plus += 1
-                    if not self.lines[i+i_plus].startswith(" "):
-                        # indentation ended
-                        process_next_line = False
-            elif len(equation) > 0:
-                process_next_line = True
-                i_plus = 1
-                text_block = ""
-                while process_next_line:
-                    text_block += self.lines[i+i_plus]
-                    i_plus += 1
-                    if not self.lines[i+i_plus].startswith(" "):
-                        # indentation ended
-                        process_next_line = False
-                eq_dict = {
-                    "type": "equation",
-                    "key": self.item_keys.pop(),
-                    "full_source": re.findall(self.full_source_code_pattern, text_block),
-                    "lhs_source": re.findall(self.source_lhs_pattern, text_block),
-                    "rhs_source": re.findall(self.source_rhs_pattern, text_block),
-                    "lhs_formal": re.findall(self.formalized_lhs_pattern, text_block),
-                    "rhs_formal": re.findall(self.formalized_rhs_pattern, text_block),
-                    }
-                self.d["items"]["other"].append(eq_dict)
             # existing relations
             else:
-                self.d = self.process_relations(self.d, i, line)
+                self.d = self.process_line(self.d, i, line)
         # IPS()
 
     def build_reference(self, arg2):
@@ -381,87 +295,178 @@ class ConversionManager:
                 arg2 = f"""{key}["{arg2v['R1']}"]"""
         return arg2
 
-    def process_relations(self, d, i, line, *args, **kwargs):
-        for k, v in self.d["relations"].items():
-            # relations of structure: arg1 rel arg2
-            res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\.$|$)", line)
-            if len(res) > 0:
-                arg1, arg2 = self.strip(res[0])
-                arg2 = self.build_reference(arg2)
-                # instance of
-                if v["key"] == "R4":
-                    self.add_item(d, arg1, {"R4": arg2})
-                # subclass of
-                elif v["key"] == "R3":
-                    self.add_item(d, arg1, {"R3": arg2})
-                else:
-                    # if "temp_dict" in kwargs.keys():
-                    assert arg1 in self.d["items"].keys() or \
-                        arg1 in d["items"].keys() or \
-                        arg1 in self.d["relations"], f"missing item {arg1}"
-                    # next line is wrong since object might be literal
-                    try:
-                        d["items"][arg1][v["key"]] = arg2
-                    except KeyError:
-                        d["relations"][arg1][v["key"]] = arg2
-
-                break
-            # relations of structure arg1 rel.
-            res = re.findall(f"(?<=- )(.+?)(?: {k})", line)
-            if len(res) > 0:
-                arg1 = self.strip(res[0])
-                # definition
-                if v["key"] == "R37":
-                    # resolve if this is def for property or concept or something else?
-
-                    process_next_line = True
-                    additional_content = []
-                    k = i
-                    additional_context = {"R4": 'p.I20["mathematical definition"]'}
-                    while process_next_line:
-                        k += 1
-                        if self.lines[k].startswith(" ") and "-" in self.lines[k]:
-                            additional_content.append(self.lines[k])
-                        else:
-                            process_next_line = False
-                            #todo this could result in problem, if definition is last in file with no new line at end
-                    # setting
-                    # todo this data structure should be a list rather than dict for if there are multiple lines in scope
-                    try:
-                        obj_type = self.d["items"][arg1][self.applicable_to_key]
-                        s = obj_type.split('"')[1]
-                        p = "p.uq_instance_of"
-                        o = obj_type
-                    except KeyError:
-                        s = "obj"
-                        p = "p.instance_of"
-                        o = 'p.I12["mathematical object"]'
-                        print(f"pls check def: {i, line, additional_content, additional_context}")
-                    additional_context["setting"] = {"s": s, "p": p, "o": o}
-                    # premise
-                    ## with this temp dict, we cover the non existing subject 'arg1' that refers to the subject in setting
-                    temp_dict = None
-                    if any(["arg1" in s for s in additional_content]):
-                        temp_dict = {"items": {"arg1": {}}, "relations": {}}
-                    additional_context["premise"] = self.recurse_nested_statements(additional_content, temp_dict)
-                    # assertion
-                    if self.d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
-                        p = 'p.R16["has property"]'
+    def process_line(self, d, i, line, *args, **kwargs):
+        new_class = re.findall(self.class_pattern, line)
+        new_property = re.findall(self.property_pattern, line)
+        new_relation = re.findall(self.relation_pattern, line)
+        new_unary_operator = re.findall(self.unary_operator_pattern, line)
+        new_binary_operator = re.findall(self.binary_operator_pattern, line)
+        type_of_arg_1 = re.findall(self.type_of_arg_1_pattern, line)
+        type_of_arg_2 = re.findall(self.type_of_arg_2_pattern, line)
+        type_of_result = re.findall(self.type_of_result_pattern, line)
+        amend_definition = re.findall(self.amend_definition_pattern, line)
+        equation = re.findall(self.equation_pattern, line)
+        # new class?
+        if len(new_class) > 0:
+            # self.items.append(self.strip(new_class[0]))
+            self.add_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
+        # new property?
+        elif len(new_property) > 0:
+            # self.items.append(self.strip(new_property[0]))
+            self.add_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'})
+        # new relation?
+        elif len(new_relation) > 0:
+            # self.relations.append(self.strip(new_relation[0]))
+            self.add_rel(d, self.strip(new_relation[0]))
+        elif len(new_unary_operator) > 0:
+            self.add_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'})
+        elif len(new_binary_operator) > 0:
+            self.add_item(d, self.strip(new_binary_operator[0]), {"R4": 'p.I8["mathematical operation with arity 2"]'})
+        elif len(type_of_arg_1) > 0:
+            # todo R8, R9, R11 should just be in general relation parsing instead of here
+            arg1, arg2 = self.strip(type_of_arg_1[0])
+            if arg2 not in self.d["items"].keys():
+                print(f"unknown type: {arg2}")
+            if arg1 in self.d["items"].keys():
+                d["items"][arg1]["R8"] = self.build_reference(arg2)
+            elif arg1 in self.d["relations"].keys():
+                d["relations"][arg1]["R8"] = self.build_reference(arg2)
+            else:
+                raise KeyError()
+        elif len(type_of_arg_2) > 0:
+            arg1, arg2 = self.strip(type_of_arg_2[0])
+            if arg2 not in self.d["items"].keys():
+                print(f"unknown type: {arg2}")
+            if arg1 in self.d["items"].keys():
+                d["items"][arg1]["R9"] = self.build_reference(arg2)
+            elif arg1 in self.d["relations"].keys():
+                d["relations"][arg1]["R9"] = self.build_reference(arg2)
+            else:
+                raise KeyError()
+        elif len(type_of_result) > 0:
+            arg1, arg2 = self.strip(type_of_result[0])
+            if arg2 not in self.d["items"].keys():
+                print(f"unknown type: {arg2}")
+            if arg1 in self.d["items"].keys():
+                d["items"][arg1]["R11"] = self.build_reference(arg2)
+            elif arg1 in self.d["relations"].keys():
+                d["relations"][arg1]["R11"] = self.build_reference(arg2)
+            else:
+                raise KeyError()
+        elif len(amend_definition) > 0:
+            arg1 = self.strip(amend_definition[0])
+            process_next_line = True
+            i_plus = 1
+            while process_next_line:
+                rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i+i_plus])[0])
+                for k, v in self.d["items"][arg1].items():
+                    if v == self.build_reference(rarg1):
+                        d["items"][arg1][k] = self.build_reference(rarg2)
+                i_plus += 1
+                if not self.lines[i+i_plus].startswith(" "):
+                    # indentation ended
+                    process_next_line = False
+        elif len(equation) > 0:
+            process_next_line = True
+            i_plus = 1
+            text_block = ""
+            while process_next_line:
+                text_block += self.lines[i+i_plus]
+                i_plus += 1
+                if not self.lines[i+i_plus].startswith(" "):
+                    # indentation ended
+                    process_next_line = False
+            eq_dict = {
+                "type": "equation",
+                "key": self.item_keys.pop(),
+                "full_source": re.findall(self.full_source_code_pattern, text_block),
+                "lhs_source": re.findall(self.source_lhs_pattern, text_block),
+                "rhs_source": re.findall(self.source_rhs_pattern, text_block),
+                "lhs_formal": re.findall(self.formalized_lhs_pattern, text_block),
+                "rhs_formal": re.findall(self.formalized_rhs_pattern, text_block),
+                }
+            d["items"]["other"].append(eq_dict)
+        else:
+            for k, v in self.d["relations"].items():
+                # relations of structure: arg1 rel arg2
+                res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\.$|$)", line)
+                if len(res) > 0:
+                    arg1, arg2 = self.strip(res[0])
+                    arg2 = self.build_reference(arg2)
+                    # instance of
+                    if v["key"] == "R4":
+                        self.add_item(d, arg1, {"R4": arg2})
+                    # subclass of
+                    elif v["key"] == "R3":
+                        self.add_item(d, arg1, {"R3": arg2})
                     else:
-                        p = 'p.R30["is secondary instance of"]'
-                        print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
-                    o = f'{self.d["items"][arg1]["key"]}["{arg1}"]'
-                    additional_context["assertion"] = {"s": s, "p": p, "o": o}
+                        # if "temp_dict" in kwargs.keys():
+                        assert arg1 in self.d["items"].keys() or \
+                            arg1 in d["items"].keys() or \
+                            arg1 in self.d["relations"], f"missing item {arg1}"
+                        # next line is wrong since object might be literal
+                        try:
+                            d["items"][arg1][v["key"]] = arg2
+                        except KeyError:
+                            d["relations"][arg1][v["key"]] = arg2
 
-                    new_item_name = f"definition of {arg1}"
-                    d = self.add_item(d, new_item_name, additional_context)
-                    d["items"][arg1][v["key"]] = self.build_reference(new_item_name)
-                else:
-                    print(f"not processed line {i}: {line}")
+                    break
+                # relations of structure arg1 rel.
+                res = re.findall(f"(?<=- )(.+?)(?: {k})", line)
+                if len(res) > 0:
+                    arg1 = self.strip(res[0])
+                    # definition
+                    if v["key"] == "R37":
+                        # resolve if this is def for property or concept or something else?
 
+                        process_next_line = True
+                        additional_content = []
+                        k = i
+                        additional_context = {"R4": 'p.I20["mathematical definition"]'}
+                        while process_next_line:
+                            k += 1
+                            if self.lines[k].startswith(" ") and "-" in self.lines[k]:
+                                additional_content.append(self.lines[k])
+                            else:
+                                process_next_line = False
+                                #todo this could result in problem, if definition is last in file with no new line at end
+                        # setting
+                        # todo this data structure should be a list rather than dict for if there are multiple lines in scope
+                        try:
+                            obj_type = self.d["items"][arg1][self.applicable_to_key]
+                            s = obj_type.split('"')[1]
+                            p = "p.uq_instance_of"
+                            o = obj_type
+                        except KeyError:
+                            s = "obj"
+                            p = "p.instance_of"
+                            o = 'p.I12["mathematical object"]'
+                            print(f"pls check def: {i, line, additional_content, additional_context}")
+                        additional_context["setting"] = {"s": s, "p": p, "o": o}
+                        # premise
+                        ## with this temp dict, we cover the non existing subject 'arg1' that refers to the subject in setting
+                        temp_dict = None
+                        if any(["arg1" in s for s in additional_content]):
+                            temp_dict = {"items": {"arg1": {}}, "relations": {}}
+                        additional_context["premise"] = self.recurse_nested_statements(additional_content, temp_dict)
+                        # assertion
+                        if self.d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
+                            p = 'p.R16["has property"]'
+                        else:
+                            p = 'p.R30["is secondary instance of"]'
+                            print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
+                        o = f'{self.d["items"][arg1]["key"]}["{arg1}"]'
+                        additional_context["assertion"] = {"s": s, "p": p, "o": o}
 
-        if len(res) == 0:
-            print(f"not processed line {i}: {line}")
+                        new_item_name = f"definition of {arg1}"
+                        d = self.add_item(d, new_item_name, additional_context)
+                        d["items"][arg1][v["key"]] = self.build_reference(new_item_name)
+                        break
+                    else:
+                        print(f"not processed line {i}: {line}")
+
+            else:
+                print(f"not processed line {i}: {line}")
 
         return d
 
@@ -481,6 +486,9 @@ class ConversionManager:
         keys_that_want_literals = ["R1", "R2", "R24"]
 
         context = {"key": value_dict["key"], "rel": [], "prerequisites": []}
+        if "snip" in value_dict.keys():
+            context["snip"] = value_dict["snip"]
+        else: context["snip"] = ""
         for key, value in value_dict.items():
             if key.startswith("R"):
                 # first some exceptions, then the general case

@@ -1,3 +1,4 @@
+{% if context.snip %}# {{context.snip}} {% endif %}
 {% for line in context.prerequisites%}{{line}}
     {% endfor %}
 {{context.key}} = p.create_item(
