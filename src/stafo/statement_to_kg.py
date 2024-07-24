@@ -111,18 +111,14 @@ class ConversionManager:
 
             }}
         """
-            "is applicable to",
-            "is a subproperty of",
-            "is an instance of",
-            "is a subclass of",
-            "has the associated LaTeX notation",
-            "has the alternative associated LaTeX notation", # todo
-            "has defining formula",
-            "has the verbal description",
-            "has the alternative label",
-            "is associate with",# todo
-            "has the property",
-            "is associated to",# todo
+            # todo:
+            "has the alternative associated LaTeX notation",
+            "is associate with",
+            "is associated to",
+            "There is an example:",
+            "There is an explanation:",
+            "There is special terminology:"
+            "alternative verbal description?
         """
 
 
@@ -218,7 +214,7 @@ class ConversionManager:
                 return content[:i]
         return content
 
-    def recurse_nested_statements(self, content, temp_dict=None):
+    def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.
         Goal format:
         [{"OR": [
@@ -240,7 +236,7 @@ class ConversionManager:
                 operator = re.findall(op_pattern, line)
                 if operator:
                     sub_content = self.get_sub_content(content[i+1:])
-                    res = self.recurse_nested_statements(sub_content, temp_dict=temp_dict)
+                    res = self.recurse_nested_statements(sub_content, line_no+i, temp_dict=temp_dict)
                     # skip next lines that were processed in subroutine
                     # not really necessary anymore
                     i += len(res)
@@ -250,10 +246,14 @@ class ConversionManager:
                 else:
                     # l.append(line)
                     if temp_dict is not None:
-                        l.append(self.process_line(copy.deepcopy(temp_dict), None, line))
+                        l.append(self.process_line(copy.deepcopy(temp_dict), line_no+i, line))
                     else:
-                        l.append(self.process_line({}, None, line))
+                        # l.append(self.process_line({}, None, line))
+                        raise ValueError()
 
+            elif self.get_indent(line) < indent:
+                # this means that the context was chose too large
+                break
             else:
                 # print(f"skipping: {line}")
                 pass
@@ -397,8 +397,11 @@ class ConversionManager:
                     res = re.findall(pattern, l)
                     if res: eq_dict[name] = res[0]
             d["items"]["other"].append(eq_dict)
-        elif len(equivalence) > 0:
-            additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
+        elif len(equivalence) > 0 or len(if_then) > 0:
+            if len(equivalence) > 0:
+                additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
+            else:
+                additional_context = {"R4": 'p.I15["implication proposition"]', "comments": []}
             additional_content = self.get_sub_content(self.lines[i+1:])
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
@@ -408,20 +411,10 @@ class ConversionManager:
                 source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
                 if source_pre: additional_context["source_pre"] = source_pre[0]
                 if source_ass: additional_context["source_ass"] = source_ass[0]
-                if "formalized premise" in l:
-                    # index explanation: i: overall pos of line, ii: pos in subcontent,
-                    # +2: i+ii= "equivalence statement", i+ii+1 = "formalized ..", i+ii+2 = actual content
-                    if len(self.get_sub_content(additional_content[ii+1:])) > 1:
-                        temp_dict = {"items": {"other":[]}, "relations": {}}
-                        additional_context["formal_pre"] = self.process_line(temp_dict,i+ii+2,additional_content[ii+1])
-                    else:
-                        additional_context["formal_pre"] = additional_content[ii+1] # todo this should be  = self.process_line(...)
-                if "formalized assertion" in l:
-                    if len(self.get_sub_content(additional_content[ii+1:])) > 1:
-                        temp_dict = {"items": {"other":[]}, "relations": {}}
-                        additional_context["formal_ass"] = self.process_line(temp_dict,i+ii+2,additional_content[ii+1])
-                    else:
-                        additional_context["formal_ass"] = additional_content[ii+1] # todo this should be  = self.process_line(...)
+                formal = re.findall(r"(?<=formalized )(pre|ass)", l)
+                if formal:
+                    temp_dict = {"items": {"other":[]}, "relations": {}}
+                    additional_context[f"formal_{formal[0]}"] = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i, temp_dict)[0]
             new_item_name = f"equivalence-statement_{i}"
             d = self.add_item(d, new_item_name, additional_context)
         else:
@@ -438,9 +431,11 @@ class ConversionManager:
                     elif v["key"] == "R3":
                         self.add_item(d, arg1, {"R3": arg2})
                     else:
-                        assert arg1 in self.d["items"].keys() or \
+                        if not (arg1 in self.d["items"].keys() or \
                             arg1 in d["items"].keys() or \
-                            arg1 in self.d["relations"], f"missing item {arg1}"
+                            arg1 in self.d["relations"]):
+                            self.add_item(d, arg1)
+                            print(f"dummy item {arg1} added")
                         try:
                             d["items"][arg1][v["key"]] = arg2
                         except KeyError:
@@ -484,7 +479,7 @@ class ConversionManager:
                         temp_dict = None
                         if any(["arg1" in s for s in additional_content]):
                             temp_dict = {"items": {"arg1": {}}, "relations": {}}
-                        additional_context["premise"] = self.recurse_nested_statements(additional_content, temp_dict)
+                        additional_context["premise"] = self.recurse_nested_statements(additional_content, i, temp_dict)
                         # assertion
                         if self.d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
                             p = 'p.R16["has property"]'
