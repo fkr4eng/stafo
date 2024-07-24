@@ -395,7 +395,7 @@ class ConversionManager:
             for l in lines:
                 for name, pattern in self.equation_pattern_dict.items():
                     res = re.findall(pattern, l)
-                    if res: eq_dict[name] = res[0]
+                    if res: eq_dict[name] = self.strip(res[0])
             d["items"]["other"].append(eq_dict)
         elif len(equivalence) > 0 or len(if_then) > 0:
             if len(equivalence) > 0:
