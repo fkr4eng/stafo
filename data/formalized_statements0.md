@@ -163,8 +163,8 @@
 - // snippet(20)
 - There is an equation:
     - full source code: '$\{x,x\}=\{x\}.$'
-    - left hand side: '$\{x,x\}$'
-    - right hand side: '$\{x\}$'
+    - source code of left hand side: '$\{x,x\}$'
+    - source code of right hand side: '$\{x\}$'
     - // explanation: From the context can be taken that `\{x,x\}` and \{x\} are instances of 'set'. This statement expresses that a set with twice the element x is equal to the set with element x. This implicitly expresses that a set cannot have repeated elements. However, this information is not given explicitly.
 
 - // snippet(21)
