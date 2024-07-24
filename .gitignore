@@ -9,3 +9,4 @@ final_response_list.md
 *_backup*.tex
 src/*.egg-info/*
 __pycache__
+output.py
