@@ -161,6 +161,21 @@ class ConversionManager:
         else:
             raise TypeError(s)
 
+    def strip_math(self, s):
+        if isinstance(s, list):
+            for i, v in enumerate(s):
+                s[i] = self.strip(v)
+            return s
+        elif isinstance(s, tuple):
+            new = []
+            for i, v in enumerate(s):
+                new.append(self.strip(v))
+            return tuple(new)
+        elif isinstance(s, str):
+            return s.replace("\\", "").replace('$', '')
+        else:
+            raise TypeError(s)
+
     def add_item(self, d, label, additional_relations:dict={}):
         if label not in d["items"].keys():
             d["items"][label] = {"key": self.item_keys.pop(), "R1": label, "snip": self.current_snippet}
@@ -598,41 +613,28 @@ class ConversionManager:
                     res = render_template("definition_template.py", context)
                     output += res + "\n\n"
 
-                elif "equivalence-statement" in item:
+                elif "equivalence-statement" in item or "if-then" in item:
                     context = {"id": self.build_reference(item)}
+                    context["setting"] = []
                     if "setting" in v.keys():
-                        context["setting"] = v["setting"]
+                        context["setting"].append(v["setting"])
+
                     if "formal_pre" in v.keys():
-                        context["premise"] = v["formal_pre"]
+                        context = self.render_equivalence(context, v, "premise")
                     elif "source_pre" in v.keys():
-                        context["premise"] = v["source_pre"]
+                        context["premise"] = f'cm.create_expression({v["source_pre"]})'
+
                     if "formal_ass" in v.keys():
-                        context["assertion"] = v["formal_ass"]
+                        context = self.render_equivalence(context, v, "assertion")
                     elif "source_ass" in v.keys():
-                        context["assertion"] = v["source_ass"]
+                        context["assertion"] = f'cm.create_expression({v["source_ass"]})'
                     res = render_template("equivalence_template.py", context)
                     output += res + "\n\n"
 
             else:
-                for other_dicts in v:
-                    if other_dicts["type"] == "equation":
-                        context = {"key": other_dicts["key"], "rel": [], "prerequisites": []}
-                        if "snip" in other_dicts.keys():
-                            context["snip"] = other_dicts["snip"]
-                        else: context["snip"] = ""
-                        if "comments" in other_dicts.keys():
-                            context["comments"] = other_dicts["comments"]
-
-                        if "lhs_formal" in other_dicts.keys():
-                            context["lhs_formal"] = other_dicts["lhs_formal"]
-                        elif "lhs_source" in other_dicts.keys():
-                            context["lhs_source"] = other_dicts["lhs_source"]
-                        if "rhs_formal" in other_dicts.keys():
-                            context["rhs_formal"] = other_dicts["rhs_formal"]
-                        elif "rhs_source" in other_dicts.keys():
-                            context["rhs_source"] = other_dicts["rhs_source"]
-                        # todo: unclear how to automate formal lhs/ rhs
-                        res = render_template("equation_template.py", context)
+                for other_dict in v:
+                    if other_dict["type"] == "equation":
+                        res = self.render_equation(other_dict)
                         output += res + "\n\n"
                     else:
                         raise TypeError()
@@ -641,6 +643,46 @@ class ConversionManager:
             f.write(output)
         print(f"{count} new entities written.")
 
+    def render_equivalence(self, context:dict, v:dict, part:str):
+        context[part] = []
+        for key, value in v[f"formal_{part[:3]}"]["items"].items():
+            if key == "other":
+                # iterate over list of dicts
+                for d in value:
+                    if d["type"] == "equation":
+                        res = self.render_equation(d)
+                        # adapt equation to context manager
+                        context[part].append(re.sub(r".+? = p.", r"cm.", res))
+                    else:
+                        raise TypeError()
+            else:
+                if "R4" in value.keys():
+                    context["setting"].append(f'cm.new_var({self.strip_math(key)}=p.uq_instance_of({value["R4"]}))')
+                else:
+                    context["setting"].append(f'cm.new_var({self.strip_math(key)}=p.uq_instance_of(p.I12["mathematical object"]))')
+                for kk, vv in value.items():
+                    number = re.findall(r"(?<=R)\d+", kk)
+                    if number and int(number[0]) > 4: # just exclude R1-R4 here
+                        context[part].append(f'cm.new_relation({self.strip_math(key)}, {self.build_reference(self.interpr[kk])}, {self.strip_math(vv)})')
+        return context
+
+    def render_equation(self, eq_dict):
+        context = {"key": eq_dict["key"], "rel": [], "prerequisites": []}
+        if "snip" in eq_dict.keys():
+            context["snip"] = eq_dict["snip"]
+        else: context["snip"] = ""
+        if "comments" in eq_dict.keys():
+            context["comments"] = eq_dict["comments"]
+        if "lhs_formal" in eq_dict.keys():
+            context["lhs_formal"] = eq_dict["lhs_formal"]
+        elif "lhs_source" in eq_dict.keys():
+            context["lhs_source"] = eq_dict["lhs_source"]
+        if "rhs_formal" in eq_dict.keys():
+            context["rhs_formal"] = eq_dict["rhs_formal"]
+        elif "rhs_source" in eq_dict.keys():
+            context["rhs_source"] = eq_dict["rhs_source"]
+        res = render_template("equation_template.py", context)
+        return res
 
 
 

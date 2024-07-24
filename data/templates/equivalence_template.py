@@ -1,11 +1,9 @@
 with {{context.id}}.scope("setting") as cm:
-    {% if context.setting %}cm.new_var({{context.setting.s}}={{context.setting.p}}({{context.setting.o}}))
+    {% if context.setting %}{% for line in context.setting%}{{line}}{% endfor %}
     {% else %}pass{% endif %}
 
 with {{context.id}}.scope("premise") as cm:
-    # {{context.premise}}
-    pass
+    {% if context.premise %}{% for line in context.premise%}{{line}}{% endfor %} {% endif %}
 
 with {{context.id}}.scope("assertion") as cm:
-    # {{context.assertion}}
-    pass
+    {% if context.assertion %}{% for line in context.assertion%}{{line}}{% endfor %} {% endif %}
