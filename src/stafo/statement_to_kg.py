@@ -136,15 +136,19 @@ class ConversionManager:
         self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+?)(?=\.)")
         self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+?)(?=\.)")
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+?)(?=:)")
-        self.equation_pattern = re.compile(r"There is an equation:")
+        self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
+        self.equivalence_pattern = re.compile(r"There is an equivalence-statement")
+        self.if_then_pattern = re.compile(r"There is an if-then-statement")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
-        self.full_source_code_pattern = re.compile(r"(?<=full source code: )(.+?)(?=\.$|$)")
-        self.source_lhs_pattern = re.compile(r"(?<=source code of left hand side: )(.+?)(?=\.$|$)")
-        self.source_rhs_pattern = re.compile(r"(?<=source code of right hand side: )(.+?)(?=\.$|$)")
-        self.formalized_lhs_pattern = re.compile(r"(?<=formalized left hand side: )(.+?)(?=\.$|$)")
-        self.formalized_rhs_pattern = re.compile(r"(?<=formalized right hand side: )(.+?)(?=\.$|$)")
 
+        self.equation_pattern_dict = {
+            "full_source": re.compile(r"(?<=full source code)(?::? )(.+?)(?=\.$|$)"),
+            "lhs_source": re.compile(r"(?<=source code of left hand side)(?::? )(.+?)(?=\.$|$)"),
+            "rhs_source": re.compile(r"(?<=source code of right hand side)(?::? )(.+?)(?=\.$|$)"),
+            "lhs_formal": re.compile(r"(?<=formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
+            "rhs_formal": re.compile(r"(?<=formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
+        }
 
     def strip(self, s):
         if isinstance(s, list):
@@ -199,12 +203,15 @@ class ConversionManager:
 
     def get_indent(self, line:str):
         """get indentation (number of spaces) of string"""
+        if line == "":
+            return 0
         indent_pattern = re.compile(r" +?(?=-)")
         indent = len(re.findall(indent_pattern, line)[0])
         return indent
 
     def get_sub_content(self, content):
         """return the lines that have the same (or more) indentation as the first line in content"""
+        assert isinstance(content, list), f"content has to be list of str"
         og_indent = self.get_indent(content[0])
         for i, line in enumerate(content):
             if self.get_indent(line) < og_indent:
@@ -295,7 +302,17 @@ class ConversionManager:
                 arg2 = f"""{key}["{arg2v['R1']}"]"""
         return arg2
 
-    def process_line(self, d, i, line, *args, **kwargs):
+    def process_line(self, d:dict, i:int, line:str, *args, **kwargs):
+        """process the line given
+
+        Args:
+            d (dict): current dictionary to add entries to
+            i (int): line_number
+            line (str): line
+
+        Returns:
+            dict: current dict d
+        """
         new_class = re.findall(self.class_pattern, line)
         new_property = re.findall(self.property_pattern, line)
         new_relation = re.findall(self.relation_pattern, line)
@@ -306,6 +323,9 @@ class ConversionManager:
         type_of_result = re.findall(self.type_of_result_pattern, line)
         amend_definition = re.findall(self.amend_definition_pattern, line)
         equation = re.findall(self.equation_pattern, line)
+        equivalence = re.findall(self.equivalence_pattern, line)
+        if_then = re.findall(self.if_then_pattern, line)
+
         # new class?
         if len(new_class) > 0:
             # self.items.append(self.strip(new_class[0]))
@@ -367,25 +387,43 @@ class ConversionManager:
                     # indentation ended
                     process_next_line = False
         elif len(equation) > 0:
-            process_next_line = True
-            i_plus = 1
-            text_block = ""
-            while process_next_line:
-                text_block += self.lines[i+i_plus]
-                i_plus += 1
-                if not self.lines[i+i_plus].startswith(" "):
-                    # indentation ended
-                    process_next_line = False
+            lines = self.get_sub_content(self.lines[i+1:])
             eq_dict = {
                 "type": "equation",
                 "key": self.item_keys.pop(),
-                "full_source": re.findall(self.full_source_code_pattern, text_block),
-                "lhs_source": re.findall(self.source_lhs_pattern, text_block),
-                "rhs_source": re.findall(self.source_rhs_pattern, text_block),
-                "lhs_formal": re.findall(self.formalized_lhs_pattern, text_block),
-                "rhs_formal": re.findall(self.formalized_rhs_pattern, text_block),
                 }
+            for l in lines:
+                for name, pattern in self.equation_pattern_dict.items():
+                    res = re.findall(pattern, l)
+                    if res: eq_dict[name] = res[0]
             d["items"]["other"].append(eq_dict)
+        elif len(equivalence) > 0:
+            additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
+            additional_content = self.get_sub_content(self.lines[i+1:])
+            for ii, l in enumerate(additional_content):
+                full_source = re.findall(self.equation_pattern_dict["full_source"], l)
+                if len(full_source) > 0:
+                    additional_context["comments"].append(full_source[0])
+                source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
+                source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
+                if source_pre: additional_context["source_pre"] = source_pre[0]
+                if source_ass: additional_context["source_ass"] = source_ass[0]
+                if "formalized premise" in l:
+                    # index explanation: i: overall pos of line, ii: pos in subcontent,
+                    # +2: i+ii= "equivalence statement", i+ii+1 = "formalized ..", i+ii+2 = actual content
+                    if len(self.get_sub_content(additional_content[ii+1:])) > 1:
+                        temp_dict = {"items": {"other":[]}, "relations": {}}
+                        additional_context["formal_pre"] = self.process_line(temp_dict,i+ii+2,additional_content[ii+1])
+                    else:
+                        additional_context["formal_pre"] = additional_content[ii+1] # todo this should be  = self.process_line(...)
+                if "formalized assertion" in l:
+                    if len(self.get_sub_content(additional_content[ii+1:])) > 1:
+                        temp_dict = {"items": {"other":[]}, "relations": {}}
+                        additional_context["formal_ass"] = self.process_line(temp_dict,i+ii+2,additional_content[ii+1])
+                    else:
+                        additional_context["formal_ass"] = additional_content[ii+1] # todo this should be  = self.process_line(...)
+            new_item_name = f"equivalence-statement_{i}"
+            d = self.add_item(d, new_item_name, additional_context)
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
@@ -400,11 +438,9 @@ class ConversionManager:
                     elif v["key"] == "R3":
                         self.add_item(d, arg1, {"R3": arg2})
                     else:
-                        # if "temp_dict" in kwargs.keys():
                         assert arg1 in self.d["items"].keys() or \
                             arg1 in d["items"].keys() or \
                             arg1 in self.d["relations"], f"missing item {arg1}"
-                        # next line is wrong since object might be literal
                         try:
                             d["items"][arg1][v["key"]] = arg2
                         except KeyError:
@@ -453,8 +489,9 @@ class ConversionManager:
                         if self.d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
                             p = 'p.R16["has property"]'
                         else:
-                            p = 'p.R30["is secondary instance of"]'
-                            print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
+                            raise NotImplementedError()
+                            # p = 'p.R30["is secondary instance of"]'
+                            # print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
                         o = f'{self.d["items"][arg1]["key"]}["{arg1}"]'
                         additional_context["assertion"] = {"s": s, "p": p, "o": o}
 
@@ -489,6 +526,9 @@ class ConversionManager:
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
         else: context["snip"] = ""
+        if "comments" in value_dict.keys():
+            context["comments"] = value_dict["comments"]
+        else: context["comments"] = ""
         for key, value in value_dict.items():
             if key.startswith("R"):
                 # first some exceptions, then the general case
@@ -562,11 +602,43 @@ class ConversionManager:
                         context["assertion"] = v["assertion"]
                     res = render_template("definition_template.py", context)
                     output += res + "\n\n"
+
+                elif "equivalence-statement" in item:
+                    context = {"id": self.build_reference(item)}
+                    if "setting" in v.keys():
+                        context["setting"] = v["setting"]
+                    if "formal_pre" in v.keys():
+                        context["premise"] = v["formal_pre"]
+                    elif "source_pre" in v.keys():
+                        context["premise"] = v["source_pre"]
+                    if "formal_ass" in v.keys():
+                        context["assertion"] = v["formal_ass"]
+                    elif "source_ass" in v.keys():
+                        context["assertion"] = v["source_ass"]
+                    res = render_template("equivalence_template.py", context)
+                    output += res + "\n\n"
+
             else:
                 for other_dicts in v:
                     if other_dicts["type"] == "equation":
+                        context = {"key": other_dicts["key"], "rel": [], "prerequisites": []}
+                        if "snip" in other_dicts.keys():
+                            context["snip"] = other_dicts["snip"]
+                        else: context["snip"] = ""
+                        if "comments" in other_dicts.keys():
+                            context["comments"] = other_dicts["comments"]
+
+                        if "lhs_formal" in other_dicts.keys():
+                            context["lhs_formal"] = other_dicts["lhs_formal"]
+                        elif "lhs_source" in other_dicts.keys():
+                            context["lhs_source"] = other_dicts["lhs_source"]
+                        if "rhs_formal" in other_dicts.keys():
+                            context["rhs_formal"] = other_dicts["rhs_formal"]
+                        elif "rhs_source" in other_dicts.keys():
+                            context["rhs_source"] = other_dicts["rhs_source"]
                         # todo: unclear how to automate formal lhs/ rhs
-                        pass
+                        res = render_template("equation_template.py", context)
+                        output += res + "\n\n"
                     else:
                         raise TypeError()
 
