@@ -95,8 +95,8 @@
 
 - // snippet(13)
 - There is a relation: 'is subset of'.
-- The type of argument1 of 'subset' is 'set'.
-- The type of argument2 of 'subset' is 'set'.
+- The type of argument1 of 'is subset of' is 'set'.
+- The type of argument2 of 'is subset of' is 'set'.
 - 'is subset of' has the associated LaTeX notation `$arg1 \subseteq arg2$`.
 - 'is subset of' has the alternative associated LaTeX notation `$arg2 \supseteq arg1$`.
 - // for 'subset' no defining formula is given
@@ -133,9 +133,9 @@
 - 'proper subset' has the verbal description "If $\SX \subseteq \SY $ and $\SX \not= \SY $, then $\SX$ is a {\it proper subset} of $\SY$ and we write $\SX \subset \SY $".
 
 - // snippet(17)
-- There is a relation: 'is disjont to'.
-- The type of argument1 of 'is disjont to' is 'set'.
-- The type of argument2 of 'is disjont to' is 'set'.
+- There is a relation: 'is disjoint to'.
+- The type of argument1 of 'is disjoint to' is 'set'.
+- The type of argument2 of 'is disjoint to' is 'set'.
 - 'is disjoint to' has the verbal description "The sets $\SX$ and $\SY$ are {\it disjoint} if $\SX \cap \SY =\varnothing\mspace{-1mu}.$".
 
 - // snippet(18)
@@ -143,7 +143,7 @@
 - 'partition' is a subclass of 'set'.
 - 'partition' has the verbal description "A partition of X is a set of pairwise-disjoint and nonempty subsets of X whose union is equal to X".
 - // the following association statements are a supplement for not having a semantical definition yet
-- 'partition' is associated with 'is disjont to'.
+- 'partition' is associated with 'is disjoint to'.
 - 'partition' is associated with 'nonempty'.
 - 'partition' is associated with 'subset'.
 - 'partition' is associated with 'union'.
