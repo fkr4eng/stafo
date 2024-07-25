@@ -569,7 +569,7 @@ class ConversionManager:
                     s += r[:-1] + ", " # remove \n from r
                 op = key.split("_")[0]
                 out += f"cm.{op}({s[:-2]})\n" # remove last ", "
-            elif "items" == key:
+            elif key == "items":
                 for k, v in value.items():
                     if k == "arg1":
                         s = setting_subj
@@ -636,12 +636,12 @@ class ConversionManager:
                     if "formal_pre" in v.keys():
                         context = self.get_equiv_context(context, v, "premise")
                     elif "source_pre" in v.keys():
-                        context["premise"] = f'cm.create_expression({v["source_pre"]})'
+                        context["premise"] = [f'cm.create_expression({v["source_pre"]})']
 
                     if "formal_ass" in v.keys():
                         context = self.get_equiv_context(context, v, "assertion")
                     elif "source_ass" in v.keys():
-                        context["assertion"] = f'cm.create_expression({v["source_ass"]})'
+                        context["assertion"] = [f'cm.create_expression({v["source_ass"]})']
                     res = render_template("equivalence_template.py", context)
                     output += res + "\n\n"
 
@@ -665,8 +665,10 @@ class ConversionManager:
                 for d in value:
                     if d["type"] == "equation":
                         res = self.render_equation(d)
-                        # adapt equation to context manager
-                        context[part].append(re.sub(r".+? = p.", r"cm.", res))
+                        for l in res.split("\n"):
+                            # adapt equation to context manager
+                            l = re.sub(r".+? = p.new_equation", r"cm.new_equation", l)
+                            context[part].append(l)
                     else:
                         raise TypeError()
             else:
