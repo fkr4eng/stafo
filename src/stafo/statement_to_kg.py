@@ -406,6 +406,7 @@ class ConversionManager:
             eq_dict = {
                 "type": "equation",
                 "key": self.item_keys.pop(),
+                "snip": self.current_snippet
                 }
             for l in lines:
                 for name, pattern in self.equation_pattern_dict.items():
@@ -588,6 +589,7 @@ class ConversionManager:
         self.interpr = self.get_rel_dict_key_interpreter()
         output = ""
         count = 0
+        # render new relations
         for rel, v in self.d["relations"].items():
             # check for new relations and discard small numbered keys (builtins)
             if int(v["key"].split("R")[1]) >= 1000:
@@ -595,6 +597,7 @@ class ConversionManager:
                 res = render_template("basic_relation_template.py", context)
                 output += res + "\n\n"
                 count += 1
+        # render new items
         for item, v in self.d["items"].items():
             if item != "other":
                 context = self.built_simple_context(v)
@@ -602,8 +605,14 @@ class ConversionManager:
                 output += res + "\n\n"
                 count += 1
 
+                # handle more exitic concepts
                 if "definition" in item:
                     context = {"id": self.build_reference(item)}
+                    if "snip" in v.keys():
+                        context["snip"] = v["snip"]
+                    else: context["snip"] = ""
+                    if "comments" in v.keys():
+                        context["comments"] = v["comments"]
                     if "setting" in v.keys():
                         context["setting"] = v["setting"]
                     if "premise" in v.keys():
@@ -615,17 +624,22 @@ class ConversionManager:
 
                 elif "equivalence-statement" in item or "if-then" in item:
                     context = {"id": self.build_reference(item)}
+                    if "snip" in v.keys():
+                        context["snip"] = v["snip"]
+                    else: context["snip"] = ""
+                    if "comments" in v.keys():
+                        context["comments"] = v["comments"]
                     context["setting"] = []
                     if "setting" in v.keys():
                         context["setting"].append(v["setting"])
 
                     if "formal_pre" in v.keys():
-                        context = self.render_equivalence(context, v, "premise")
+                        context = self.get_equiv_context(context, v, "premise")
                     elif "source_pre" in v.keys():
                         context["premise"] = f'cm.create_expression({v["source_pre"]})'
 
                     if "formal_ass" in v.keys():
-                        context = self.render_equivalence(context, v, "assertion")
+                        context = self.get_equiv_context(context, v, "assertion")
                     elif "source_ass" in v.keys():
                         context["assertion"] = f'cm.create_expression({v["source_ass"]})'
                     res = render_template("equivalence_template.py", context)
@@ -643,7 +657,7 @@ class ConversionManager:
             f.write(output)
         print(f"{count} new entities written.")
 
-    def render_equivalence(self, context:dict, v:dict, part:str):
+    def get_equiv_context(self, context:dict, v:dict, part:str):
         context[part] = []
         for key, value in v[f"formal_{part[:3]}"]["items"].items():
             if key == "other":

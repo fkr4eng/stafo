@@ -1,3 +1,4 @@
+{% if context.snip %}# {{context.snip}} {% endif %}
 with {{context.id}}.scope("setting") as cm:
     {% if context.setting %}{% for line in context.setting%}{{line}}{% endfor %}
     {% else %}pass{% endif %}

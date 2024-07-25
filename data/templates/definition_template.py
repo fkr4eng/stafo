@@ -1,3 +1,4 @@
+{% if context.snip %}# {{context.snip}} {% endif %}
 with {{context.id}}.scope("setting") as cm:
     cm.new_var({{context.setting.s}}={{context.setting.p}}({{context.setting.o}}))
 
