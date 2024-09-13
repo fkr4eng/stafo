@@ -48,6 +48,7 @@ class MainManager:
             dev_mode: bool,
             tex_fpath: str = None,
             statement_fpath: str = None,
+            snapshot_fpath: str = None,
             interactive_mode: bool = False,
         ) -> None:
 
@@ -55,6 +56,7 @@ class MainManager:
         self.interactive_mode = interactive_mode
         self.tex_source = None
         self.statement_source = None
+        self.snapshot_fpath = None
 
         self.processed_latex_source = None
         self.last_llm_result = None
@@ -71,15 +73,18 @@ class MainManager:
         self.tex_fpath = os.path.join(BASE_DIR, "data", "chunk_full_source.tex") if tex_fpath is None else tex_fpath
         self.statement_fpath = \
             os.path.join(BASE_DIR, "data", "formalized_statements0.md") if statement_fpath is None else statement_fpath
+        self.snapshot_fpath = \
+            os.path.join(BASE_DIR, "snapshots", "math") if snapshot_fpath is None else snapshot_fpath
+        os.makedirs(self.snapshot_fpath, exist_ok=True)
 
         self.get_data()
 
     def get_data(self):
 
-        with open(self.tex_fpath) as fp:
+        with open(self.tex_fpath, "rt", encoding="utf-8") as fp:
             self.tex_source = fp.read()
 
-        with open(self.statement_fpath) as fp:
+        with open(self.statement_fpath, "rt", encoding="utf-8") as fp:
             self.statement_source = fp.read()
 
         # note: first snippet should be empty and last snippet is irrelevant (thus excluded)
@@ -96,6 +101,23 @@ class MainManager:
         # initialize iteration process:
         self.start_snippet_idx = len(self.statement_snippet_list)  # the first snippet which is not included
         self.processed_latex_source = "".join(self.tex_snippet_list[:self.start_snippet_idx])
+
+
+    def make_snapshot(self, source, snippet_number):
+        snapshot_file_names = os.listdir(self.snapshot_fpath)
+        if len(snapshot_file_names) == 0:
+            fname = f"sn{snippet_number}_0.md"
+        else:
+            if f"sn{snippet_number}" in snapshot_file_names[-1]:
+                n = int(snapshot_file_names[-1].split("_")[-1].split(".")[0]) + 1
+                fname = f"sn{snippet_number}_{n}.md"
+            else:
+                fname = f"sn{snippet_number}_0.md"
+
+        fullpath = os.path.join(self.snapshot_fpath, fname)
+        with open(fullpath, "wt", encoding="utf-8") as fp:
+            fp.write(self.statement_source)
+        print(f"Snapshot {fullpath} written")
 
     def do_next_query_iteration(self):
         self.continue_mode = False
@@ -133,20 +155,30 @@ class MainManager:
             print(new_latex_source)
 
         response = self.tracked_model_response(message, generation_config=self.llm_config)
+
+        # make snapshot before and after response
+        self.make_snapshot(self.statement_source, self.start_snippet_idx-1)
         self.statement_source = "\n".join((self.statement_source, response.text))
+        self.make_snapshot(self.statement_source, self.start_snippet_idx)
 
         if self.interactive_mode:
             print(f"Response:\n\n{response.text}")
-            with open(self.statement_fpath, "w") as fp:
+            with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
                 fp.write(self.statement_source)
-                print(f"{self.statement_fpath} written")
+            print(f"{self.statement_fpath} written")
+
+            with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
+                fp.write(self.statement_source)
+            print(f"{self.statement_fpath} written")
+
+
 
         # this should be joined via the empty string to recreate the original latex code
         self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
         # write the message for debugging
 
         tmp_fname = f"tmp{i:02d}.md"
-        with open(tmp_fname, "w") as fp:
+        with open(tmp_fname, "wt", encoding="utf-8") as fp:
             fp.write(message)
             print(f"{tmp_fname} written")
 
@@ -161,7 +193,7 @@ class MainManager:
                 break
             self.iteration_step(i)
 
-        with open(f"final_response_list.md", "w") as fp:
+        with open(f"final_response_list.md", "wt", encoding="utf-8") as fp:
             fp.write(self.statement_source)
             fp.write(f"\n\n- // {self.token_counter} tokens were transmitted")
 
@@ -307,7 +339,7 @@ def auto_md_snippet_numbering(src_fpath):
     Process a markdown source file and enumerate all snippets consecutively.
     """
 
-    with open(src_fpath, "r") as fp:
+    with open(src_fpath, "rt", encoding="utf-8") as fp:
         src = fp.read()
 
     parts: List[str] = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, src)
@@ -324,7 +356,7 @@ def auto_tex_snippet_numbering(src_fpath):
     e.g.
     \snippet{XX} -> \snippet{123}
     """
-    with open(src_fpath, "r") as fp:
+    with open(src_fpath, "rt", encoding="utf-8") as fp:
         src = fp.read()
 
     parts: List[str] = nonconsuming_regex_split(SNIPPET_LATEX_MACRO_PATTERN, src)
@@ -361,22 +393,22 @@ def save_result(src_fpath: str, old_src: str, new_source: str):
     basepath, ext = os.path.splitext(src_fpath)
 
     backup_fpath = f"{basepath}_backup{ext}"
-    with open(backup_fpath, "w") as fp:
+    with open(backup_fpath, "wt", encoding="utf-8") as fp:
         fp.write(old_src)
     print(f"\nFile written: {backup_fpath}")
 
-    with open(src_fpath, "w") as fp:
+    with open(src_fpath, "wt", encoding="utf-8") as fp:
         fp.write(new_source)
     print(f"\nFile written: {src_fpath}")
 
 
-def interactive_mode(dev_mode, tex_fpath, statement_fpath):
+def interactive_mode(dev_mode, tex_fpath, statement_fpath, snapshot_fpath):
     """
     In this mode the user is assumend to review the new statements from the currently
     processed snippet.
     """
 
-    mm = MainManager(dev_mode, tex_fpath, statement_fpath, interactive_mode=True)
+    mm = MainManager(dev_mode, tex_fpath, statement_fpath, snapshot_fpath, interactive_mode=True)
     mm.do_next_query_iteration()
 
 

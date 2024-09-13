@@ -23,8 +23,8 @@ def main():
 
     parser.add_argument(
         "-i", "--interactive-mode",
-        help=f"start interactive mode", metavar=("SOURCE_FILE", "STATEMENT_FILE"),
-        nargs=2,
+        help=f"start interactive mode", metavar=("SOURCE_FILE", "STATEMENT_FILE", "SNAPSHOT_FOLDER"),
+        nargs=3,
     )
 
 
@@ -56,8 +56,8 @@ def main():
         core.evaluate_token_tracking(fpath=tracking_file)
 
     elif args.interactive_mode:
-        tex_fpath, statement_fpath = args.interactive_mode
-        core.interactive_mode(dev_mode, tex_fpath, statement_fpath)
+        tex_fpath, statement_fpath, snapshot_path = args.interactive_mode
+        core.interactive_mode(dev_mode, tex_fpath, statement_fpath, snapshot_path)
     elif (statement_file := args.convert_statements_to_kg) is not None:
         from . import statement_to_kg
         statement_to_kg.main(statement_file)
