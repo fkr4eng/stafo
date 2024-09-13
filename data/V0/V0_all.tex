@@ -1,0 +1,2546 @@
+\snippet{1}
+\section{Elementare Grundbegriffe}\label{sec:elem-grundb}
+\subsection{Das Grundanliegen der Regelungstechnik}
+
+\snippet{2i}
+Eine der wesentlichen Aufgaben der Regelungstechnik besteht darin, technische Prozesse gezielt so zu beeinflussen, dass diese ein bestimmtes, vom Anwender vorgegebenes Verhalten aufweisen. Typischerweise wird man für bestimmte Größen eines technischen Prozesses, beispielsweise die Temperatur einer Heizung oder die Drehzahl eines Motors, einen festen Wert oder aber einen zeitlichen Verlauf vorgeben. Diese Größen bezeichnet man als \emph{Regelgrößen}, die Vorgaben als \emph{Sollgrößen} oder \emph{Führungsgrößen}. Es muss dann dafür gesorgt werden, dass die auf den Prozess einwirkenden und durch den Anwender direkt beeinflussbaren Größen (die sog.~\emph{Stellgrößen}) so nachgeführt werden, dass der Verlauf der Regelgrößen (i.d.R.~asymptotisch) dem Verlauf der Sollgrößen entspricht, und zwar auch dann, wenn Störungen auf den Prozess ein- und dem Wunschverhalten entgegenwirken. Hierfür kommen Steuerungen und Regelungen zum Einsatz, vergl.~Abbildung \ref{fig:GrundelementeRegelkreis}.
+
+
+\snippet{3}
+\paragraph{Steuerung} Unter einer Steuerung versteht man eine Einrichtung, die aus dem Verlauf der Sollgrößen den erforderlichen Verlauf der Stellgrößen a priori berechnet. Die Berechnung kann auf Basis eines mathematischen Modells des Prozesses oder empirisch aus Versuchsdaten erfolgen.
+\snippet{4}
+\paragraph{Regelung} Unter einer Regelung versteht man eine Einrichtung, in die die Regelgrößen (durch Messung oder Zustandsrekonstruktion mittels eines sog.~Beobachters) zurückgeführt und in geeigneter Art und Weise ausgewertet werden (z.B.~durch Vergleich mit den Sollgrößen). Auf Basis dieses Vergleiches erfolgt eine Korrektur der Stellgrößen, die darauf abzieht, den Verlauf der Regelgrößen dem Verlauf der Sollgrößen anzugleichen. Regler können von vorgegebener Struktur mit einzustellenden Parametern sein (z.B.~PID-Regler, vergl.~Abschnitt \ref{sec:PID_Regler}) oder aber auf einem mathematischen Modell beruhen (sog.~modellbasierte Regler).
+\snippet{5}
+\paragraph{Regelstrecke} Unter der Regelstrecke versteht man den gezielt zu beeinflussenden Prozess.
+\snippet{6i}
+\begin{RstWichtigBox}
+  In den Entwurf der Steuerung kann alles a priori bekannte Wissen über den Prozess und den Verfahrensverlauf eingehen. Das sollte man, sofern möglich, großzügig nutzen, um den Regler zu entlasten. Der Regler sollte im Idealfall nur für das Ausregeln von Störungen und die Kompensation von Ungenauigkeiten im Steuerungsentwurf genutzt werden und nicht für Überführungsvorgänge zwischen verschiedenen Prozesszuständen, für die schon im voraus bekannt ist, wie der Stellgrößenverlauf ungefähr auszusehen hat.
+\end{RstWichtigBox}
+
+\snippet{7}
+\subsection{Signal und Übertragungsglied}\label{sec:gro3e-signal-und}
+\snippet{8}
+\subsubsection{Begriffsbestimmungen}\label{sec:begriffsbestimmungen}
+\snippet{9}
+Um Regler und Steuerungen entwerfen und parametrieren zu können, ist es erforderlich, das Verhalten der Regelstrecke, des Reglers und der Steuerung geeignet zu modellieren. Eine Strukturierung des zu untersuchenden Systems ist dabei unerlässlich. Zu diesem Zweck hat sich das Abstraktionsmittel \emph{Übertragungsglied} bewährt.
+
+\snippet{10}
+Unter einem Übertragungsglied versteht man eine Anordnung, die aus einem Eingangssignal ein Ausgangssignal erzeugt.
+\snippet{11}
+Unter einem \emph{Signal} versteht man den \emph{zeitlichen Verlauf} einer Größe. Eine \emph{Größe} (z.B.~Temperatur, Drehzahl, Füllstand, etc.) wird in der Regel durch eine \emph{Variable} repräsentiert.
+\snippet{12i}
+Beispielsweise kann vereinbart werden, die Variable $T$ als Repräsentanz der Größe Temperatur zu verwenden. Alternativ könnte man auch $\vartheta$ oder ein anderes Symbol als Variable für die Temperatur verwenden. Allgemein kann eine Größe auch vektorwertig sein, z.B.~die Position $x$ des Massenmittelpunktes eines Körpers im dreidimensionalen Raum. Allgemein gilt also: $x \in \mathbb{R}^n$.
+
+\snippet{13i}
+\begin{RstHinweisBox}
+  In diesem Dokument wird für die Ausgangsgröße eines Systems das Symbol $\nu$ verwendet. Dies ist in der Norm IEC 60050-351 für Regelungssysteme so festgelegt. Das in der Systemtheorie häufig verwendete Symbol $y$ für den Ausgang wird der Norm entsprechend für die Stellgröße genutzt, siehe Abschnitt \ref{sec:Regelkreis}.
+\end{RstHinweisBox}
+\snippet{14}
+Der zeitliche Verlauf einer Größe $x$, also deren \emph{Signal}, lässt sich durch eine Funktion $f_x$ mit $f_x : \mathbb{R} \to \mathbb{R}^n$ beschreiben.
+\snippet{15}
+Diese Funktion bildet vom \emph{Definitionsbereich} $\mathbb{R}$ auf den \emph{Wertebereich} $\mathbb{R}^n$ ab.
+\snippet{16i}
+Das bedeutet, dass die Funktion $f_x$ jedem Zeitpunkt $t \in \mathbb{R}$ einen Wert $f_x(t) \in \mathbb{R}^n$ zuordnet. Man schreibt für diese Abbildung auch $t \mapsto f_x(t)$.
+\snippet{17}
+Mit diesen Begrifflichkeiten lässt sich nun genauer definieren, was unter einem \emph{Übertragungsglied} zu verstehen ist, nämlich eine Anordnung, die aus einem Eingangssignal $t \mapsto f_u(t)$ ein Ausgangssignal $t \mapsto f_\nu(t)$ erzeugt:
+\begin{equation} \label{eq:OperatorGenau}
+  t \mapsto f_\nu(t) = \varphi(t \mapsto f_u(t)) \qquad \text{bzw.} \qquad f_\nu = \varphi(f_u)
+\end{equation}
+mit dem Operator $\varphi$.
+\snippet{18}
+Ein \emph{Operator} ist eine Abbildung von einem Funktionenraum in einen anderen Funktionenraum. Im Falle eines Übertragungsgliedes wird also die Funktion $f_u$ auf die Funktion $f_\nu$ abgebildet.
+\snippet{19}
+
+Es ist sehr umständlich, den Verlauf einer Größe $x$, also deren Signal, durch Konstrukte wie $t \mapsto f_x(t)$ darzustellen und somit erst eine Funktion $f_x$ definieren zu müssen. Häufig schreibt man daher für die Funktion einfach $x=f_x(t)$, obwohl diese Notation streng genommen nur den Wert der Funktion an der Stelle $t$ bezeichnet.
+\snippet{20}
+In den Ingenieurdisziplinen hat sich weiterhin die abkürzende Schreibweise $x(t)$ anstelle von $x = f_x(t)$ eingebürgert, obwohl $x$ eigentlich nur eine Variable und keine Funktion ist. Diese Konvention soll auch in diesem Praktikum verwendet werden.
+\snippet{21}
+\textbf{Man sagt auch $x$ sei die \emph{abhängige Variable} und $t$ die \emph{unabhängige Variable} und symbolisiert dies durch $x(t)$. Implizit geht man dann davon aus, dass es einen funktionalen Zusammenhang zwischen $t$ und $x$ gibt.}
+
+\snippet{22i}
+
+\begin{alignat*}{2}
+  \nu(t) &= \int\limits_0^t u(\tau) \mathrm{d}\tau &\qquad &\text{Operator $\varphi$: Ausführung bestimmte Integration}\\
+  \nu(t) &= \diff{}{t}u(t) &\qquad &\text{Operator $\varphi$: Ausführung Differentiation}
+\end{alignat*}
+
+\snippet{23}
+\subsection{Lineare Übertragungsglieder} \label{sec:line-ubertr}
+
+\snippet{24}
+\subsubsection{Definition linearer zeitinvarianter Übertragungsglieder}\label{sec:defin-line-ubertr}
+\snippet{25}
+Man bezeichnet ein Übertragungsglied als \emph{linear}, wenn für zwei beliebige Eingangssignale $u(t), u^\ast(t)$ und beliebige reelle Konstanten $c, c^\ast$ gilt:
+
+\begin{subequations}
+\begin{align}
+\varphi(u(t) + u^\ast(t)) &= \varphi(u(t)) + \varphi(u^\ast(t)) \label{eq:UebPrinzip}\\[2ex]
+\varphi (cu^\ast(t)) &= c\varphi (u^\ast(t)) \label{eq:VerstPrinzip}.
+\end{align}
+\end{subequations}
+\snippet{26i}
+Dabei handelt es sich um das \emph{Überlagerungs- und Verstärkungsprinzip}.
+\snippet{27}
+Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt:
+\begin{equation} \label{eq:VerschPrinzip}
+  \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)).
+\end{equation}
+\snippet{28i}
+Ein zeitinvariantes Übertragungsglied ist nicht notwendigerweise linear.
+
+\snippet{29}
+\subsubsection{Gewichts- und Übergangsfunktion}\label{sec:gewichts-und-uberg}
+\snippet{30}
+Das Übertragungsverhalten linearer Übertragungsglieder lässt sich eindeutig durch die sogenannte \emph{Gewichtsfunktion} charakterisieren. Ist diese bekannt, so lässt sich der Verlauf der Ausgangsgröße aus dem Verlauf der Eingangsgröße berechnen.
+\snippet{31}
+\textbf{Gewichtsfunktion.} Die Gewichtsfunktion $g(t)$ beschreibt die Reaktion eines Systems auf einen DIRAC-Impuls und wird daher häufig auch \emph{Impulsantwort} genannt.
+\snippet{32}
+Die Faltung der Gewichtsfunktion $g(t)$ mit einem gegebenen Eingangssignal $u(t)$ ergibt das Ausgangssignal $\nu(t)$:
+\begin{equation} \label{eq:GewichtsFunktion}
+  \nu(t) = \int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau.
+\end{equation}
+\snippet{33}
+Etwas anschaulicher ist die \emph{Übergangsfunktion} des Übertragungsgliedes, auch \emph{Einheitssprungantwort} des Übertragungsgliedes als Reaktion auf einen Sprung des Eingangs von 0 auf 1 zum Zeitpunkt $t = 0$ (sog.\,\emph{Einheitssprung}) genannt.
+\snippet{34i}
+\textbf{Übergangsfunktion.} Reaktion des Systems auf einen Einheitssprung der Eingangsgröße.
+\snippet{35}
+Die Übergangsfunktion $h(t)$ lässt sich aus der Gewichtsfunktion $g(t)$ wie folgt berechnen:
+\begin{equation} \label{eq:Uebergangsfunktion}
+  h(t) = \int_0^t g(\tau) \mathrm{d}\tau.
+\end{equation}
+\snippet{36}
+
+\subsubsection{Beschreibung durch gewöhnliche Differenzialgleichungen} \label{sec:beschr-durch-gewohnl}
+\snippet{37i}
+Die Bestimmung des Ausgangssignals aus einem gegebenen Eingangssignal mithilfe von Gl.~\eqref{eq:GewichtsFunktion} setzt die Kenntnis der Gewichtsfunktion voraus. Diese ist jedoch nur in wenigen Fällen explizit bekannt und die Ausdrücke werden schnell unhandlich.
+\snippet{38i}
+Eine alternative Formulierung des dynamischen Verhaltens von Übertragungsgliedern findet sich u.a.~in der Beschreibung durch gewöhnliche Differenzialgleichungen. Diese ergeben sich meistens auch ganz natürlich bei der theoretischen Modellbildung für ein zu untersuchendes System.
+\snippet{39}
+Bei dieser Beschreibungsform sind die Ausgangsgröße $\nu$ und die Eingangsgröße $u$ allgemein wie folgt verknüpft:
+\begin{equation} \label{eq:DlgAllgemein}
+  F(\nu^{(n)}, \nu^{(n-1)}, \ldots, \ddot \nu, \dot \nu, \nu, u^{(m)}, u^{(m-1)}, \ldots, \ddot u, \dot u, u) = 0
+\end{equation}
+mit $n, m \in \mathbb{N}$, $F : \mathbb{R}^{n+m+2} \to \mathbb{R}$ und den Anfangsbedingungen $\nu(0) =: V_{00}$, $\dot \nu(0) =: V_{01}$, $\ldots$, $\nu^{(n-1)}(0) =: V_{0n-1}$. Den Parameter $n$ bezeichnet man dabei als \emph{Ordnung} der Differenzialgleichung.
+\snippet{40}
+
+Im Falle von linearen Übertragungsgliedern vereinfacht sich Gl.~\eqref{eq:DlgAllgemein} zu
+\begin{equation} \label{eq:DglAllgemeinLinear}
+  a_n \nu^{(n)} + a_{n-1} \nu^{(n-1)} + \ldots + a_2 \ddot \nu + a_1 \dot \nu + a_0 \nu =  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u
+\end{equation}
+mit $a_0, \ldots, a_n, b_0, \ldots b_m \in \mathbb{R}$.
+\snippet{41}
+
+Mithilfe der Substitution $x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}$ lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von $n$ gewöhnlichen Differenzialgleichungen erster Ordnung überführen:
+\begin{align}\label{eq:DglSysAllgemein}
+  \begin{split}
+    \dot x_1 &= x_2 \\
+    \dot x_2 &= x_3 \\
+            &\vdots \\
+    \dot x_{n-1} &= x_n\\
+    \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)
+  \end{split}
+\end{align}
+mit den Anfangsbedingungen $x_1(0) = V_{00}$, $x_2(0)=V_{01}$, $\ldots$, $x_n(0) =V_{0n-1}$.
+
+
+
+\snippet{42}
+\subsection{Laplace-Transformation}\label{sec:lapl-transf}
+\snippet{43}
+
+\subsubsection{Motivation und Definition} \label{sec:motiv-und-defin}
+\snippet{44i}
+Betrachtet man Systeme, die aus mehreren Übertragungsgliedern zusammengesetzt sind (vergl.~Abbildung \ref{fig:Uebertragungsglieder-Reihenschaltung}), und möchte den Zusammenhang zwischen dem Eingangs- und dem Ausgangssignal des Gesamtsystems beschreiben, so ist der erforderliche Umformungsaufwand typischerweise hoch. Das hängt vor allem damit zusammen, dass nicht nur die inneren Ein- und Ausgangsgrößen, sondern auch deren Ableitungen eliminiert werden müssen, in Abbildung \ref{fig:Uebertragungsglieder-Reihenschaltung} also die Größen $\nu_1$ und $u_2$ und deren Ableitungen.
+\snippet{45i}
+
+
+\begin{RstBeispielBox}
+  \begin{small}
+  Gegeben seien zwei Übertragungsglieder mit folgender Beschreibung:
+
+  \begin{subequations}
+  \begin{minipage}[t]{0.5\linewidth}
+  \begin{equation}
+  \ddot \nu_1 + a_1 \dot \nu_1 + a_0 \nu_1 = b_0 u_1 \label{eq:LaplaceeBsp1}
+  \end{equation}
+  \end{minipage}
+  \begin{minipage}[t]{0.5\linewidth}
+  \begin{equation}
+    \dot \nu_2 + c_0 \nu_2 = d_0 \dot u_2\label{eq:LaplaceBsp2}
+  \end{equation}
+  \end{minipage}
+  \end{subequations}
+
+  \vspace{2ex}
+
+  Gesucht ist der Zusammenhang zwischen $u_1$ und $\nu_2$ der Reihenschaltung beider Übertragungsglieder. Hierzu müssen $\nu_1$ und $u_2$ eliminiert werden, wobei gilt: $u_2 = \nu_1$. Man differenziert also Gl.~\eqref{eq:LaplaceeBsp1} einmal und Gl.~\eqref{eq:LaplaceBsp2} zweimal:
+  \begin{equation*}
+    \nu_1^{(3)} + a_1 \ddot \nu_1 + a_0 \dot \nu_1 = b_0 \dot u_1 \quad (\ast) \qquad \qquad
+  \ddot \nu_2 + c_0 \dot \nu_2 = d_0 \ddot u_2 \qquad \qquad \nu_2^{(3)} + c_0 \ddot \nu_2 = d_0 u_2^{(3)}
+  \end{equation*}
+  und setzt die Ausdrücke für $\dot u_2$, $\ddot u_2$ und $u_3^{(3)}$ in die entsprechenden $\nu_1$-Ausdrücke in $(\ast)$ ein. Es ergibt sich (nach Zusammenfassen):
+  \begin{equation*}
+  \frac{1}{d_0}\nu_2^{(3)} + \left(\frac{c_0}{d_0} + \frac{a_1}{d_0}\right)\ddot \nu_2 + \left(\frac{a_1 c_0}{d_0} + \frac{a_0}{d_0}\right) \dot \nu_2 + \frac{a_0 c_0}{d_0}\nu_2 = b_0 \dot u_1.
+  \end{equation*}
+  Um das Ziel zu erreichen, waren drei Ableitungsoperationen, drei Substitutionen und eine Zusammenfassung durchzuführen.
+  \end{small}
+\end{RstBeispielBox}
+\snippet{46i}
+
+Für Untersuchungen, die auf dem Eingangs-Ausgangsverhalten des Gesamtsystems basieren, ist das direkte Arbeiten mit gewöhnlichen Differenzialgleichungen also weniger geeignet. Wünschenswert ist eine Transformation, die dazu führt, dass aufwändige Umformungen vermieden werden.
+\snippet{47}
+An dieser Stelle kommt die \emph{Laplace-Transformation} ins Spiel. Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen $f : \mathbb{R} \to \mathbb{R}$ in den Raum der komplexwertigen Funktionen $F : \mathbb{C} \to \mathbb{C}$, die wie folgt definiert ist:
+\begin{equation} \label{eq:LaplaceHin}
+  F(s) = \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t.
+\end{equation}
+\snippet{48}
+Die Variable $s$ ist dabei komplexwertig und es gilt $s = \sigma + j \omega$ mit $\sigma, \omega \in \mathbb{R}$.
+\snippet{49}
+Abkürzend schreibt man für die Transformation auch $F(s) = \mathcal{L}\left\{f(t)\right\}$.
+\snippet{50}
+Arbeitet man mit den reellwertigen Funktionen $f(t)$, so sagt man, man befinde sich im \emph{Zeitbereich}, wohingegen man vom \emph{Bildbereich} spricht, wenn man mit den aus der Transformation \eqref{eq:LaplaceHin} entstandenen komplexwertigen Funktionen $F(s)$ operiert.
+\snippet{51}
+
+% Es wird im Nachfolgenden schnell klar werden, warum eine so kompliziert anmutende und zunächst wenig anschauliche Transformation für das Arbeiten mit Übertragungsgliedern von großem Vorteil ist. Dazu wird zunächst eine besonders praktische Eigenschaft der Laplace-Transformation betrachtet, nämlich die "`Auswirkung"' auf die Zeitableitung $\dot f$ einer Funktion $f$. Für die Laplace-Transformierte der Zeitableitung von $f$ gilt:
+% \begin{align*}
+%   F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t.
+%   \intertext{Partielle Integration liefert}
+%   F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t.
+%   \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus}
+%   F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0).
+% \end{align*}
+% Um Schwierigkeiten durch etwaige Unstetigkeiten in $t=0$ aus dem Wege zu gehen, verwendet man anstelle von $f(0)$ den rechtsseitigen Grenzwert $f(+0)$, d.h., man erhält endgültig
+% \begin{equation}
+%   F^\ast(s)= \mathcal{L}(\dot f(t)) = -f(+0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(+0). \label{eq:LaplaceDiff}
+% \end{equation}
+
+% \RstBox{Diese Gleichung lässt sich für höhere Ableitungen von $f$ verallgemeinern:
+% \begin{equation}
+%   \mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0). \label{eq:LaplaceDiffAllgemein}
+% \end{equation}}
+
+% Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man:
+% \begin{multline} \label{eq:DglAllgemeinLinearBildbereich}
+%   a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s).
+% \end{multline}
+% Formal ist also die $i$te Ableitung der Funktion $y(t)$ durch $s^i Y(s)$ zu ersetzen und die $j$te Ableitung der Funktion $u(t)$ durch $s^j U(s)$. Man kann dann zusammenfassen:
+% \begin{multline} \label{eq:DglAllgemeinLinearBildbereichZusammengefasst}
+%   (a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s) = \\ (b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s).
+% \end{multline}
+
+% Wendet man dieses Verfahren nun auf die Reihenschaltung der beiden Systeme aus dem Beispiel auf Seite \pageref{eq:LaplaceeBsp1} an, so erkennt man, dass im Bildbereich nur noch eine einzige Substitution, nämlich $V_1(s) = U_2(s)$ durchzuführen ist. Dies führt zum Konzept der Übertragungsfunktion, das im nachfolgenden Abschnitt erläutert wird.
+
+% \begin{RstAufgabeBox}
+%   \begin{small}
+%     Wiederholen Sie die Umformung des Beispiels auf Seite \pageref{eq:LaplaceeBsp1} im Bildbereich!
+%   \end{small}
+% \end{RstAufgabeBox}
+
+% \begin{RstWichtigBox}
+%   Die getätigten Ausführungen setzen voraus, dass alle Anfangswerte in Gl.~\eqref{eq:DglAllgemeinLinear} Null sind. Wenn dies nicht der Fall ist, sind die entsprechenden Anfangswert-Terme in Gl.~\eqref{eq:LaplaceDiffAllgemein} mitzuberücksichtigen!
+% \end{RstWichtigBox}
+
+% Weitere für regelungstechnische Belange wichtige Rechenregeln finden sich in Tabelle \ref{tab:LapalceRegeln}.
+
+% \begin{table}[ht!]
+%   \centering
+%   \begin{tabular}{|l|p{3.5cm}|l|l|} \hline
+%   \rowcolor{lightgray}&\textbf{Zeitbereich} & \textbf{Bildbereich} &\textbf{Bedeutung}\\ \hline
+%   1 &$f(t)$    &$F(s)$   &Transformation gemäß Gl.~\eqref{eq:LaplaceHin}\\ \hline
+%   2 &$f^{(i)}(t)$ &$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$ &Ableitung im Zeitbereich \\ \hline
+%   3 &$\int\limits_0^t f(\tau)\df\tau$ &$\frac{1}{s}F(s)$ &Integration im Zeitbereich\\\hline
+%   4 &$f(t-\tau)$,\newline \small $\tau > 0$, $f(t) = 0$ f.~$t < 0$ &$F(s) \mathrm{e}^{-s\tau}$ &Verschiebung nach rechts \\ \hline
+%   5 &$\int\limits_0^t f(\tau) g(t - \tau) \df\tau$ &$F(s) \cdot G(s)$ &Faltung im Zeitbereich\\\hline
+%   \end{tabular}
+%   \caption{Zusammenstellung der allerwichtigsten Rechenregeln der Laplace-Transformation.}
+%   \label{tab:LapalceRegeln}
+% \end{table}
+
+% Eine  tiefergehende Diskussion der Laplace Transformation findet sich in \cite{FoellingerLapl}. Rechenregeln und Korrespondenztabellen finden sich in allen gängigen Werken der Regelungstheorie, bspw.~in \cite{Foellinger}, \cite{Wendt} oder der \emph{Formelsammlung Systemtheorie}.
+
+
+
+% \subsubsection{Übertragungsfunktion}\label{sec:gewichts-ubertr-und}
+% Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in $s$ umformen:
+% \begin{equation} \label{eq:UebertragungsfunktionAllgemein}
+%   G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}.
+% \end{equation}
+% Diesen Ausdruck bezeichnet man als \emph{Übertragungsfunktion} des durch die Dgl.~\eqref{eq:DglAllgemeinLinear} beschriebenen linearen Übertragungsgliedes. Offensichtlich gilt:
+% \begin{equation*}
+%   V(s) = G(s) U(s).
+% \end{equation*}
+
+% \begin{RstWichtigBox}
+%   Wegen Regel 5 in Tabelle \ref{tab:LapalceRegeln} folgt daraus: Die Übertragungsfunktion $G(s)$ ist die Laplace-Transformierte der Gewichtsfunktion $g(t)$ (siehe Gl.~\eqref{eq:GewichtsFunktion}). Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}:
+%   \begin{equation*}
+%     H(s) = \frac{1}{s}G(s).
+%   \end{equation*}
+% \end{RstWichtigBox}
+
+% \begin{RstWichtigBox}
+%   Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}. Die Nullstellen des Zählers von $G(s)$ werden als \emph{Nullstellen} der Übertragungsfunktion bezeichnet, die Nullstellen des Nenners von $G(s)$ (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.
+
+%   Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch $G(s)$ repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.
+
+%   Die Differenz zwischen Nenner- und Zählergrad der Übertragungsfunktion bezeichnet man allgemein als \emph{Polüberschuss} oder \emph{relativer Grad}. Ist der Nennergrad der Übertragungsfunktion größer als der Zählergrad, so bezeichnet man die Übertragungsfunktion als \emph{streng proper}. Sind Nenner- und Zählergrad identisch, so ist die Übertragungsfunktion nur \emph{proper}. Übertragungsfunktionen, die nicht proper sind, haben differenzierenden Charakter.
+% \end{RstWichtigBox}
+
+% \begin{RstWichtigBox}
+%   An dieser Stelle sei noch einmal betont, dass die Formulierung der Übertragungsfunktion entsprechend Gl.~\eqref{eq:UebertragungsfunktionAllgemein} davon ausgeht, dass für $t=0$ alle Anfangswerte gleich null sind. Ist dies nicht der Fall, sind entsprechende Anpassungen vorzunehmen!
+% \end{RstWichtigBox}
+
+
+% \subsubsection{Anfangs- und Endwertsatz} \label{sec:endwertsatze}
+% Häufig interessiert der stationäre Anfangs- oder Endwert in einem geregelten System. Ist man an dem Anfangswert $x_0$ einer Zeitfunktion interessiert, so kann dieser mittels des
+% Anfangswertsatzes der Laplace-Transformation bestimmt werden. Hat man die Bildfunktion $X(s) = \mathcal{L}\{x(t)\}$ der zu untersuchenden Zeitfunktion, so gilt:
+% \begin{equation} \label{eq:Anfangswertsatz}
+%   x_0 = \lim_{t \to 0} x(t) = \lim_{s \to \infty} s X(s).
+% \end{equation}
+
+% Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der LAPLACE-Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:
+% \begin{equation}\label{eq:Endwertsatz}
+%   e_\infty = \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s).
+% \end{equation}
+
+
+% \begin{RstWichtigBox}
+%   Dieser Satz gilt nur, wenn das System stabil ist und der Grenzwert damit auch existiert. Er eignet sich insbesondere \emph{nicht} dazu, Instabilität eines Systems nachzuweisen.
+% \end{RstWichtigBox}
+
+% \subsubsection{Frequenzgang}
+% \label{sec:frequenzgang}
+% Der Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes mit der Übertragungs\-funktion $G(s)$ ist die Übertragungsfunktion dieses Gliedes ausgewertet auf der imaginären Achse der komplexen Zahlenebene. Das heißt, man setzt in $s = \sigma + j\omega$ den Realteil $\sigma = 0$. Wenn man mit dem Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes arbeitet, schreibt man dementsprechend $G(j\omega)$. Der Frequenzgang charakterisiert die Reaktion des Übertragungsgliedes auf eine harmonische Erregung.
+
+% Interessanterweise reicht es für regelungstechnische Betrachtungen aus, mit dem Frequenzgang zu arbeiten, die Übertragungsfunktion also nur auf der imaginären Achse auszuwerten. Mehr dazu findet sich in \cite[Kapitel 5]{ReinschkeAlt} und \cite[Kapitel 5]{Reinschke}.
+
+
+% % Sprungantwort
+% \section{Die Sprungantwort}
+% \label{sec:sprungantwort}
+% Der Verlauf der Ausgangsgröße $\nu$ eines Systems als Reaktion auf eine sprungförmige Änderung des Eingangs $u$ wird \emph{Sprungantwort} genannt. Dabei wird davon ausgegangen, dass sich das Übertragungsglied zunächst im Gleichgewichtszustand (in einer Ruhelage) befindet, der Ausgang also den konstanten Wert $V_0$ und der Eingang den konstanten Wert $U_0$ habe. Zum Zeitpunkt $t_0$ springt der Eingang dann um $U_S$ auf den Wert $U_\infty$, siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, links. Das System reagiert dann auf eine charakteristische Art und Weise, siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, rechts.
+
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Prinzip.pdf}
+%     \caption{Prinzip der Sprungantwort.}
+%     \label{fig:Sprungantwort-Prinzip}
+% \end{figure}
+
+% Aus der Sprungantwort können auch ohne Kenntnis des Systemaufbaus wichtige Eigenschaften des Übertra\-gungsverhaltens des Systems ermittelt werden. Daher ist die Sprungantwort eines der wichtigsten Hilfsmittel zur Analyse und Synthese von Regelungssystemen. Für die Wahl der korrekten Kenngrößen einer Sprungantwort ist wichtig, ob diese an einem Übertragungsglied (System) alleine (Abschnitte \ref{sec:sprung-eines-ubertr} bis \ref{sec:pt_2-glied-nicht}) oder aber am geschlossenen Regelkreis (Abschnitt \ref{sec:SprungantwortRegelkreis}) aufgenommen wurde.
+
+% \begin{RstWichtigBox}
+%     In Nachschlagewerken zur Regelungstechnik und Systemtheorie wird häufig die sog. \emph{Einheitssprungantwort} verwendet (siehe auch Abschnitt \ref{sec:elem-grundb}). Auf einen Einheitssprung reagieren lineare zeitinvariante Systeme mit der \emph{Übergangsfunktion} $h$. Die Einheitssprungantwort ist ein Spezialfall der allgemeinen Sprungantwort mit $U_0 = 0$, $U_S = 1$, $t_0 = \qty{0}{\second}$ und $V_0 = 0$. Im nachfolgenden wird die allgemeine Sprungantwort verwendet.
+% \end{RstWichtigBox}
+
+
+% \subsection{Systemklassifizierung anhand ihrer Sprungantworten}
+% Lineare, zeitinvariante Systeme lassen sich anhand Ihrer Sprungantwort grob in drei Klassen einteilen (vergl.\,auch Abbildung \ref{fig:Streckentypen}):
+
+% \minisec{Integrierend wirkende Strecken}
+% Erreicht das Ausgangssignal eines Übertragungsgliedes nach Aufschalten einer sprungförmigen Eingangsgröße keinen stationären Endwert, so wird die durch das Übertragungsglied bezeichnete Strecke als \emph{Strecke ohne Ausgleich} oder \emph{Integrale Strecke} beziehungsweise Strecke mit \emph{I-Verhalten} oder \emph{I-Strecke} bezeichnet. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:i-glied}{I-Glied}!
+
+% \minisec{Proportional wirkende Strecken}
+% Wird hingegen ein stationärer Endwert erreicht, so bezeichnet man die Strecke als \emph{Strecke mit Ausgleich} oder \emph{Proportionalstrecke} beziehungsweise Strecke mit \emph{P-Verhalten} oder \emph{P-Strecke}. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:p-glied}{P-Glied}!
+
+% \minisec{Allpasshaltige Strecken}
+% Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.
+
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\linewidth]{Inkscape/Streckentypen.pdf}
+%     \caption{Prinzipielles Aussehen der Sprungantwort (rote durchgezogene Linie) einer integrierend wirkenden Strecke (links), einer proportional wirkenden Strecke (mitte) und einer allpasshaltigen Strecke (rechts). Das Eingangssignal ist grün gestrichelt dargestellt.}
+%     \label{fig:Streckentypen}
+% \end{figure}
+
+
+% \begin{figure}[ht]
+%     \begin{center}
+%         \includegraphics[width=0.85\textwidth]{Inkscape/Typische_Sprungantwort.pdf}
+%         \begin{small}
+%             % LTeX: enabled=false
+%             \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
+%                 \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
+%                 $u$ & Eingangsgröße & \textit{input variable}\\
+%                 $\nu$ & Ausgangsgröße & \textit{output variable}\\
+%                 $U_0$ & Anfangswert der Eingangsgröße & \textit{initial value of the input variable}\\
+%                 $U_S$ & Sprunghöhe der Eingangsgröße & \textit{step height of the input variable}\\
+%                 $V_0, V_{\infty}$ & \raggedright Werte der Ausgangsgröße im Behar- rungszustand vor und nach dem Sprung & \textit{steady state values of the output variable before and after application of the step}\\
+%                 $\nu_m$ & \raggedright Überschwingweite (größte vorüberge- hende Abweichung vom Wert im Beharrungszustand) & \textit{overshoot (maximum transient deviation from the steady-state value)}\\
+%                 $2\cdot\Delta\nu_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
+%                 $T_t$ & Totzeit & \textit{dead-time}\\
+%                 $T_{sr}$ & Anschwingzeit & \textit{step response time}\\
+%                 $T_s$ & Einschwingzeit & \textit{settling time}\\\hline
+%             \end{tabular}
+%             % LTeX: enabled=true  language=de-DE
+%         \end{small}
+%     \end{center}
+% \caption{Typische Sprungantwort eines linearen Übertragungsgliedes mit P-Verhalten auf einen Sprung der Höhe $U_S$ und zugehörige Symbole und Bezeichnungen nach DIN IEC 60050-351 (45-27). Die gestrichelte Linie zeigt die Reaktion eines nicht schwingungsfähigen Übertragungsgliedes, die durchgezogene Linie die eines schwingungsfähigen Übertragungsgliedes an. \textbf{Achtung!} Für die Sprungantwort eines \emph{geregelten Systems} (geschlossener Regelkreis) siehe Abbildung \ref{fig:typ_Sprungantwort_Regelkreis}.}
+% \label{fig:typ_Sprungantwort}
+% \end{figure}
+
+% \FloatBarrier
+
+
+
+% \subsection{Sprungantwort eines einzelnen Übertragungsglieds} \label{sec:sprung-eines-ubertr}
+% Abbildung~\ref{fig:typ_Sprungantwort} zeigt eine typische Sprungantwort eines stabilen Systems mit den genormten Bezeichnungen und Abkürzungen nach DIN IEC 60050-351. Dabei sind zunächst zwei unterschiedliche Formen zu unterscheiden:
+
+
+% \begin{enumerate}
+%     \item Es kommt zu einem Überschwingen der Ausgangsgröße, danach pendelt sich der stationäre Endwert langsam ein. Es handelt sich um ein sogenanntes \emph{schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der durchgezogenen Linie dargestellt.
+%     \item Die Ausgangsgröße nähert sich asymptotisch dem stationären Endwert an, ohne diesen jemals zu überschreiten (bzw.\,zu unterschreiten bei Reaktionen in negative Richtung). Es handelt sich um ein \emph{nicht schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der gestrichelten Linie dargestellt.
+% \end{enumerate}
+
+% \begin{RstHinweisBox}
+%     Systeme erster Ordnung sind nie schwingungsfähig. Systeme zweiter Ordnung und höher sind schwingungsfähig, wenn mindestens ein Polpaar der Übertragungsfunktion konjugiert komplex ist.
+% \end{RstHinweisBox}
+
+% Des Weiteren ist nach der Art des Anstieges der Sprungantwort zum Zeitpunkt des Eingangssprunges zu unterscheiden:
+% \begin{enumerate}
+%     \item Bei einem System mit Polüberschuss 1 ist der Anstieg zu Beginn ungleich 0, vergl.~Abbildung \ref{fig:ermittlung_zeitkonstante}.
+%     \item Bei Systemen mit einem Polüberschuss von 2 und größer ist der Anstieg zu Beginn gleich null. Sie beginnen also deutlich \glqq langsamer\grqq~mit dem Anstieg, vergl.~Abbildung \ref{fig:ermittlung_verzugszeit}.
+% \end{enumerate}
+
+% Die Erläuterung und Ermittlung wichtiger Kenngrößen für diese Fälle wird in den nachfolgenden Abschnitten kurz erläutert.
+
+% %\FloatBarrier
+
+% \begin{figure}[hbtp]
+%     \begin{center}
+%         \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Zeiten_PT1.pdf}
+%         \vspace{2ex}
+%         \begin{small}
+%             % LTeX: enabled=false language=de-DE
+%             \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
+%                 \rowcolor{lightgray}\textbf{Symbol} & \textbf{deutsche Bezeichnung}   & \textbf{englische Bezeichnung} \\
+%                 \hline
+%                 $\tau$                              & Verzögerungszeit, Zeitkonstante & \textit{time constant}         \\
+%                 \hline
+%             \end{tabular}
+%             % LTeX: enabled=true language=de-DE
+%         \end{small}
+%     \end{center}
+%     \caption{Ermittlung der Zeitkonstanten aus der Sprungantwort eines Systems mit Polüberschuss 1 (erster Ordnung nach DIN IEC 60050-351 (45-32)).}
+%     \label{fig:ermittlung_zeitkonstante}
+% \end{figure}
+
+
+
+% \subsection{Sprungantwort von proportional wirkenden Strecken erster Ordnung} \label{sec:pt_1-glied}
+% Zeigt die Sprungantwort das in Abbildung \ref{fig:ermittlung_zeitkonstante} gezeigte Verhalten (Anstieg ungleich Null zum Sprungzeitpunkt, asymptotische Annäherung an einen stationären Endwert mit wachsender Zeit, sog.\,\PT-Verhalten), so ist neben der stationären Verstärkung $(V_\infty - V_0)/U_S$ die Verzögerungzeit $\tau$ von Interesse. Sie lässt sich auf drei unterschiedlichen Wegen bestimmen:
+% \begin{itemize}
+%     \item Eine Tangente wird an beliebiger Stelle der Sprungantwort angelegt. Der Berührungspunkt dieser Tangente und der Schnittpunkt mit der durch den stationären Endwert gehenden Parallelen zur Zeitachse werden auf die Zeitachse projiziert. Die Differenz zwischen den sich so ergebenden Zeitpunkten ist die Zeitkonstante. Am besten legt man die Tangente zum Beginn der Sprungantwortbei $t_0$ an.
+%     \item Die Zeit, nach der die Sprungantwort 63.2\,\% der stationären Ausgangsänderung ($V_\infty - V_0$) erreicht hat, ist die Zeitkonstante $\tau$. Die Zahl 63.2\,\% entspricht dem $1-\mathrm{e}^{-1}$ fachen der stationären Ausgangsänderung.
+%     \item Die Zeitkonstante ergibt sich aus der Fläche, die durch den Grafen der auf den stationären Endwert normierten Sprungantwort, der Geraden, die parallel zur $t$-Achse durch den stationären Endwert läuft und die $y$-Achse begrenzt wird:
+%     \begin{equation*}
+%         \tau = \int_0^\infty(1-h(\tau)/h(\infty))\text{d}\tau.
+%     \end{equation*}
+% \end{itemize}
+
+
+% \subsection{Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung} \label{sec:pt_2-glied-schw}
+% Zeigt die Sprungantwort abklingend-schwingendes Verhalten mit einem stationären Endwert, so gilt für die Pole der Übertragungsfunktion des Übertragungsgliedes folgendes: Es gibt mindestens zwei Pole, alle haben einen negativen Realteil und mindestens ein Polpaar ist konjugiert komplex\footnote{Bei Systemen mit Nullstellen kann es auch zum Überschwingen kommen, wenn alle Pole rein reell sind und die Nullstellen eine spezielle Lage zu den Polen haben. Dieser Fall wird hier nicht weiter betrachtet.}. Folgende Kenngrößen sind in diesem Fall von Interesse (vergl.~auch Abbildung \ref{fig:typ_Sprungantwort}, durchgezogene Linie):
+% \begin{itemize}
+%     \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
+%     \item \textbf{Anschwingzeitzeit:} Die Zeit $T_{sr}$, bei der die Sprungantwort zum ersten Male  den Wert $V_\infty - \Delta \nu_s$ erreicht.
+%     %\item \textbf{t-max-Zeit:} Die Zeit $t_{max}$, bei der die Sprungantwort ihren Maximalwert erreicht.
+%     \item \textbf{Überschwingweite:} Der Wert $\nu_m$, um den die Sprungantwort maximal über dem stationären Endwert hinausgeht. Sie wird normiert auf die Differenz zwischen stationären Anfangs- und Endwert angegeben.
+%     \item \textbf{Einschwingzeit:} Die Zeit $T_{s}$, bei der die Sprungantwort bis auf den Wert $\Delta \nu_s$ an den stationären Endwert herangekommen ist und von da an im Bereich $V_\infty \pm \Delta \nu_s$ verweilt (üblich ist $\Delta \nu_s = 2\,\%$ oder $\Delta \nu_s = 5\,\%$).
+% \end{itemize}
+% Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+
+% \begin{figure}[hbtp]
+%     \begin{center}
+%         \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Ausgleichs_Verzugzeit.pdf}
+%         \vspace{2ex}
+%             \begin{small}
+%                 % LTeX: enabled=false language=de-DE
+%                 \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
+%                 \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\
+%                 \hline
+%                 $T_e$ & Verzugszeit & \textit{equivalent dead time}\\
+%                 $T_b$ & Ausgleichszeit & \textit{equivalent time constant; balancing time}\\
+%                 $P$ & Wendepunkt & \textit{inflection point}\\
+%                 $T_w$ & Wendezeit & \textit{inflection time}\\
+%                 \hline
+%                 \end{tabular}
+%                 % LTeX: enabled=true language=de-DE
+%             \end{small}
+%     \end{center}
+%     \caption{Ermittlung von Ausgleichszeit und Verzugszeit aus der Sprungantwort eines Systems zweiter Ordnung und höher (nach DIN IEC 60050-351 (45-34)).}
+%     \label{fig:ermittlung_verzugszeit}
+% \end{figure}
+
+% \subsection{Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung}
+% \label{sec:pt_2-glied-nicht}
+% Für den Fall eines Übertragungsgliedes, dessen Übertragungsfunktion nur negativ reelle Pole hat, kommt es zu keinem Überschwingen. Der Wendepunkt im Anstieg bleibt jedoch erhalten. Es sind daher nur folgende Kenngrößen von Interesse (vergl.\,Abbildung \ref{fig:ermittlung_verzugszeit}):
+% \begin{itemize}
+%     \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
+%     \item \textbf{Verzugszeit:} Die Zeit $T_e$ vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse.
+%     \item \textbf{Ausgleichszeit:} Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit $T_b$.
+% \end{itemize}
+% Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+
+% \begin{RstWichtigBox}
+%     Solche nicht schwingungsfähigen Strecken lassen sich stets
+%     durch Hintereinanderschaltung mehrerer Strecken erster Ordnung
+%     realisieren!
+% \end{RstWichtigBox}
+
+% \subsection{Sprungantwort eines geschlossenen Regelkreises} \label{sec:SprungantwortRegelkreis}
+% Für den Fall eines geregelten Systems interessiert die Reaktion der Regelgröße $x$ ausgehend vom Gleichgewichtswert $X_0$ auf eine sprungförmige Änderung der Führungsgröße $w$ vom Gleichgewichtswert $W_0$ auf den Sollwert $X_d$, die sog.\,Führungssprungantwort, siehe Abbildung \ref{fig:Sprungantwort-RK-Prinzip}. Alternativ wird das Störverhalten über die Störsprungantwort untersucht.
+
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Regelkreis-Prinzip.pdf}
+%     \caption{Führungssprungantwort eines geschlossenen Regelkreises.}
+%     \label{fig:Sprungantwort-RK-Prinzip}
+% \end{figure}
+
+% Die Abbildungen \ref{fig:typ_Sprungantwort_Regelkreis} und \ref{fig:typ_Sprungantwort_Stoerung} zeigen die typische Führungs- und Störsprungantwort mit den genormten Bezeichnungen und Abkürzungen, welche in Tabelle \ref{tab:SprungantwortRegelkreis} aufgeführt sind.
+
+% \begin{figure}[hbtp]
+%     \begin{center}
+%         \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort-Regelkreis.pdf}
+%         \end{center}
+%         \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Führungsgröße $w$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}. Achtung! Für die Sprungantwort eines Übertragungsgliedes alleine siehe Abbildung \ref{fig:typ_Sprungantwort}.}
+%         \label{fig:typ_Sprungantwort_Regelkreis}
+% \end{figure}
+
+% \begin{figure}[hbtp]
+%     \begin{center}
+%         \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort_Stoerung.pdf}\\
+%     \end{center}
+%     \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Störgröße $z$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}.}
+%     \label{fig:typ_Sprungantwort_Stoerung}
+% \end{figure}
+
+% \begin{table}[hbtp]
+%     \centering
+%         \begin{small}
+%         % LTeX: enabled=false language=de-DE
+%         \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
+%         \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
+%         $w$ & Führungsgröße & \textit{reference variable}\\
+%         $z$ & Störgröße & \textit{disturbance variable}\\
+%         $x$ & Regelgröße & \textit{controlled variable}\\
+%         $X_0, X_{\infty}$ & \raggedright Werte der Regelgröße im Behar\-rungszustand vor und nach dem Sprung & \textit{steady state values of the controlled variable before and after application of the step}\\
+%         $X_{d}$ & \raggedright Sollwert & \textit{desired value}\\
+%         $W_0$ & \raggedright Wert der Führungsgröße im Behar\-rungszustand vor dem Sprung & \textit{steady state values of the reference variable before application of the step}\\
+%         $\Delta X_\infty$ & \raggedright Abweichung im Beharrungszustand & \textit{steady state deviation}\\
+%         $x_{m}$ & \raggedright Überschwingweite & \textit{overshoot}\\
+%         $2\cdot\Delta x_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
+%         $T_t$ & Totzeit & \textit{dead-time}\\
+%         $T_{cr}$ & Anregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) wieder in das Toleranzband einläuft) & \textit{control rise time}\\
+%         $T_{cs}$ & Ausregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) dauerhaft im Toleranzband verbleibt)& \textit{control settling time}\\\hline
+%         \end{tabular}
+%         % LTeX: enabled=true language=de-DE
+%         \end{small}
+%     \caption{Abkürzungen und Bezeichnungen einer Sprungantwort im geschlossenen Regelkreis DIN IEC 60050-351.}
+%     \label{tab:SprungantwortRegelkreis}
+% \end{table}
+
+% \FloatBarrier
+
+
+% % Bodediagramm
+% \section{Bode-Diagramm}
+% \label{sec:das-bodediagramm}
+
+% \begin{RstHinweisBox}
+%     Der Inhalt dieses Abschnittes muss für \underline{\textbf{alle}} Praktika beherrscht werden.
+% \end{RstHinweisBox}
+
+
+
+% \subsection{Grundlagen des Bodediagramms} \label{sec:grundlagen:bode}
+% Im Bode-Diagramm (auch: Frequenzkennliniendiagramm) werden \emph{Betrag} $|G(j \omega)|$ und \emph{Phase} $\text{arg}(G(j\omega))$ des Frequenzgangs eines Übertragungsgliedes mit der Übertragungsfunktion $G(s)$ in Abhängigkeit von der Kreisfrequenz $\omega$ dargestellt. Dabei sind folgende Bezeichnungen üblich:
+% \begin{itemize}
+%     \item $|G(j \omega)|$: Amplitudengang, Amplitudenkennlinie, Amplituden(dichte)spektrum
+%     \item $\text{arg}(G(j\omega))$: Phasengang, Phasenkennlinie, Phasen(dichte)spektrum
+% \end{itemize}
+
+% Da der Amplitudengang betragsmäßig häufig große Wertebereiche über einem großen Frequenzintervall abdeckt, wird er im Bodediagramm grafisch wie folgt dargestellt: Auf der Abszisse wird die Kreisfrequenz $\omega$ mit dekadisch logarithmischer Skala aufgetragen. Die Ordinate wird linear geteilt und auf ihr der Amplitudengang $|G(j\omega)|_{\text{dB}}$ in Dezibel (dB) aufgetragen. Dabei gilt:
+% \begin{equation} \label{eq:Dezibel}
+%     |G(j\omega)|_{\text{dB}} = 20 \lg |G(j\omega)|
+% \end{equation}
+% mit dem dakadischen Logarithmus $\lg$. In der nachfolgenden Tabelle \ref{tab:Wertebereich_G} finden sich einige technisch relevante Entsprechungen:
+
+% \begin{table}[ht]
+%     \centering
+%     \begin{tabular}[c]{|C{1.5cm}|C{1.5cm}|p{2cm}|C{1.5cm}|C{1.5cm}|}
+%         \hline
+%         \rowcolor{lightgray}$|G|$ & $|G|_{dB}$ &&$|G|$ & $|G|_{dB}$\\
+%         \hline
+%         100 &40 &&4 & 12\\
+%         \hline
+%         10 &20 && 2 & 6\\
+%         \hline
+%         1 &0 && 1 &0\\
+%         \hline
+%         1/$\sqrt{2}$ & -3 &&0.5 &-6\\
+%         \hline
+%         0.1 & -20 &&0.25 &-12\\
+%         \hline
+%         0.01 & -40 &&0.125 &-18\\
+%         \hline
+%         0.001 & -60 &&0.0625 &-24\\
+%         \hline
+%     \end{tabular}
+%     \caption{Darstellung technisch relevanter Werte von $|G|$.}
+%     \label{tab:Wertebereich_G}
+% \end{table}
+
+
+% \begin{RstWichtigBox}
+%     Eine Verdopplung der Amplitude bedeutet stets eine Erhöhung um 6\,dB, eine Halbierung der Amplitude entspricht stets einer Reduktion um 6\,dB der Amplitudenkennlinie im Bodediagramm.
+% \end{RstWichtigBox}
+
+% Die Phasenkennline ist die Darstellung der Phase $\varphi = \text{arg}(G(j\omega))$ in Abhängig vom dekadischen Logarithmus der Kreisfrequenz $\omega$. Abbildung~\ref{fig:typ_Bode_Dia} zeigt ein typisches Bode-Diagramm, die dazugehörige Größen sind in Tabelle~\ref{tab:typ_kenn_bode} zusammengefasst und werden in Abschnitt \ref{sec:stab-im-boded} näher erläutert.
+
+% \begin{figure}[ht]
+%     \begin{center}
+%         \includegraphics[width=0.87\textwidth]{Inkscape/Allg_Bode_Diagramm.pdf}
+%     \end{center}
+%     \caption{Skizze eines typischen Bode-Diagrammes.}
+%     \label{fig:typ_Bode_Dia}
+% \end{figure}
+
+% \begin{table}[hbtp]
+%     \centering
+%     \begin{tabular}{|C{0.1\linewidth}|C{0.4\linewidth}|C{0.4\linewidth}|} \hline
+%         \rowcolor{lightgray}\textbf{Symbol} &\textbf{Deutsche Bezeichnung} &\textbf{Englische Bezeichnung} \\ \hline
+%         $G_0$ & Frequenzgang des
+%         aufgeschnittenen Regelkreises &\textit{frequency response}\\
+%         \hline
+%         $|G_0|$ & Amplitudengang des aufgeschnittenen Regelkreises & \textit{gain response; amplitude response}\\
+%         \hline
+%         $\varphi$& Phasengang des
+%         aufgeschnittenen Regelkreises & \textit{phase response}\\
+%         \hline
+%         $\omega$ & Kreisfrequenz & \textit{angular frequency}\\
+%         \hline
+%         $\omega_c$& Durchtrittskreisfrequenz &\textit{gain crossover angular frequency}\\
+%         \hline
+%         $\varphi_m$ & Phasenreserve & \textit{phase margin}\\
+%         \hline
+%         $\omega_{\pi}$& Phasenschnittkreisfrequenz &\textit{phase crossover angular frequency}\\
+%         \hline
+%         $G_m$ & Betragsreserve &\textit{gain margin}\\
+%         \hline
+%     \end{tabular}
+%     \caption{Typische Kenngrößen eines Bode-Diagramms.}
+%     \label{tab:typ_kenn_bode}
+% \end{table}
+
+
+% \textbf{Näherungsweise Konstruktion:} Für bestimmte Übertragungsglieder lässt sich das Bodediagramm näherungsweise recht einfach konstruieren. So kann der Verlauf des Amplitudengangs häufig durch Geraden approximiert werden. Ähnliches gilt für den Phasengang. Näheres dazu wird in Abschnitt~\ref{sec:char-wicht-line} zu den jeweiligen Übertragungsgliedern diskutiert.
+
+
+% \subsection{Stabilitätsaussagen im Bodediagramm}
+% \label{sec:stab-im-boded}
+% % Für die kritische Kreisfrequenz $\omega_k$, bei der der \emph{geschlossene} Regelkreis die Stbilitätsgrenze erreicht, gilt im Bode-Diagramm
+% % \begin{itemize}
+% % \item Amplitudengang: $|G(j\omega_k)|_\text{dB} = 0$
+% % \item Phasengang: $\text{arg} G(j\omega_k) = -180^\circ$
+% % \end{itemize}
+% % wobei $G(s)$ die Übertragungsfunktion des \emph{offenen} und \emph{stabilen} Regelkreises ist.
+
+% Hierzu zunächst einige Begriffsdefinitionen:
+
+% \textbf{Durchtrittskreisfrequenz $\omega_c$:} Diejenige Kreisfrequenz, bei der der Amplitudengang im Bodediagramm die $\omega$-Achse schneidet. Das bedeutet: $|G(j\omega_c)| = 1$.
+
+% \textbf{Phasenschnittkreisfrequenz $\omega_\pi$:} Diejenige Kreisfrequenz, bei der der Phasengang den Wert -180$^\circ$ annimmt.
+
+% Es lässt sich nun folgendes Stabilitätskriterium ableiten (vereinfachtes Nyquist-Kriterium):
+
+% \RstBox{
+%     Wenn die Pole der Übertragungsfunktion des offenen Regelkreises alle links der imaginären Achse liegen, wobei maximal ein Pole in $s=0$ die Ausnahme machen darf, so ist der geschlossene Regelkreis stabil, wenn bei der Durchtrittsfrequenz $\omega_c$ der Phasengang des offenen Regelkreises oberhalb von -180$^\circ$ Grad verläuft.
+% }
+
+% Eine erweiterte Formulierung lautet wie folgt (nicht relevant für das Praktikum) \cite{Foellinger}:
+
+% \RstBox{
+%     Wenn die Pole der Übertragungsfunktion des offenen Regelkreises alle links der imaginären Achse liegen, wobei maximal zwei Pole in $s=0$ die Ausnahme machen dürfen, und die Phase im Bereich $\omega < \omega_c$ zwischen +180$^\circ$ und -540$^\circ$ liegt, so ist der geschlossene Regelkreis stabil, wenn bei der Durchtrittsfrequenz $\omega_c$ der Phasengang des offenen Regelkreises oberhalb von -180$^\circ$ Grad verläuft.
+% }
+
+% \begin{RstWichtigBox}
+%     Diese Versionen des Nyquist-Kriteriums sind für Übertragungsglieder, die Pole in der rechten Halbebene haben, \emph{nicht anwendbar}. In einem solchen Fall ist auf das verallgemeinerte Nyquist-Kriterium zurückzugreifen, vergl.~Abschnitt \ref{sec:allg-nyqu-krit}.
+% \end{RstWichtigBox}
+
+% Es ist sinnvoll, den geschlossenen Regelkreis so auszulegen, dass er nicht direkt an der Stabilitätgrenze betrieben wird, sondern ein gewisser "`Sicherheitsabstand"' zu dieser gewahrt bleibt. Hierzu wurden die beiden folgenden Begriffe eingeführt
+% \textbf{Amplitudenreserve (Amplitudenrand, Betragsreserve) $|G_m|_\text{dB}$:
+% } Ist der Betrag des Amplitudenganges, der bei einem Phasenwinkel von -180$^\circ$ angenommen wird:
+% \begin{equation} \label{eq:Ampl-Reserve}
+%     |G_m|_\text{dB} = 20 \lg\left(\frac{1}{G(j\omega_\pi)}\right) \qquad \text{für} \; \text{arg~}G(j\omega_\pi) = -180^\circ.
+% \end{equation}
+% Im Bodediagramm sollte die Amplitudenreserve natürlich stets positiv sein.
+
+% \textbf{Phasenreserve (Phasenrand) $\varphi_m$:}  Ist der Abstand der Phase zu dem Winkel -180$^\circ$ für $\omega = \omega_c$, also für die Frequenz, bei der die Amplitudenkennlinie des Bodediagramms die $\omega$-Achse schneidet:
+% \begin{equation} \label{eq:Phas-Reserve}
+%     \varphi_m = 180^\circ +  \text{arg~}G(j\omega) \qquad \text{für} \; |G(j\omega)|_\text{dB} = 0.
+% \end{equation}
+
+
+% % Übertragungseigenschaften linearer Übertragungsglieder
+% %Übertragungseigenschaften ausgewählter linearer zeitinvarianter Übertragungsglieder
+
+% \section[Übertragungseigenschaften linearer zeitinvarianter Übertragungsglieder]{Übertragungseigenschaften ausgewählter linearer zeitinvarianter Übertragungsglieder}
+% \label{sec:char-wicht-line}
+
+% \begin{RstHinweisBox}
+%     Das Aussehen der Frequenzgänge und Sprungantworten der in diesem Abschnitt besprochenen Übertragungsglieder sowie deren Verhalten in Abhängigkeit von der Lage von Polen und Nullstellen sollten Sie für alle Praktika beherrschen!
+% \end{RstHinweisBox}
+
+% \minisec{Linearität und Zeitinvarianz}
+% Übertragungslieder werden als \emph{linear} bezeichnet, wenn für Sie das Superpositions- und das Verschiebungsprinzip erfüllt sind. Wird das Übertragungsverhalten zwischen einem Eingangssignal $u(t)$ und einem Ausgangssignal $\nu(t)$ durch den Operator $\phi$ beschrieben, so gilt für verschiedene Eingangssignale $u, u_1, u_2$ und reelle Zahlen $k_1, k_2$ sowie $\tau > 0$:
+% \begin{align*}
+% \text{Linearität:}& &\phi(k_1 u_1 + k_2 u_2) &= k_1 \phi(u_1) + k_2 \phi(u_2)\\
+% \text{Zeitinvarianz:}& &\nu(t) &= \phi(u)(t) \quad \Rightarrow \quad \phi(u)(t-\tau) = \nu(t-\tau)
+% \end{align*}
+
+
+% Nachfolgend werden die Eigenschaften einiger wichtiger Übertragungsglieder diskutiert.
+
+% \subsection{Das P-Glied} \label{sec:p-glied}
+% Das P-Glied wird auch als Verstärkungsglied bezeichnet und ist durch folgenden Zusammenhang zwischen Eingangssignal $u(t)$ und Ausgangssignale $\nu(t)$ mit dem Verstärkungsfaktor $K_P$ charakterisiert:
+% \begin{equation} \label{eq:P}
+%     \nu(t) = K_P u(t).
+% \end{equation}
+% Die Übertragungsfunktion lautet;
+% \begin{equation} \label{eq:UTF:P}
+%     G(s) = K_P.
+% \end{equation}
+
+
+% \subsection{Das PT\texorpdfstring{$_1$}{1}-Glied}
+% \label{sec:das-pt_1-glied}
+% Ein Proportional wirkendes Verzögerungsglied erster Ordnung, zugehörige Differenzialgleichung mit der Zeitkonstanten $T_1 > 0$ und dem Verstärkungsfaktor (statische Verstärkung) $K_p \in \mathbb{R}$:
+% \begin{equation}
+% \label{eq:DGL-PT1}
+% T_1 \dot \nu(t) + \nu(t) = K_p u(t), \qquad \nu(0) = V_0.
+% \end{equation}
+% Reaktion aus der Ruhelage $V_0, U_0$ auf einen Sprung des Eingangs der Höhe $U_S$ zum Zeitpunkt $t_0$:
+% \begin{equation}
+% \label{eq:SprAntw-PT1}
+% h_S(t) =
+% \begin{cases}
+%     V_0 &\text{für} \, t < t_0\\
+%     K_p U_S (1 - \mathrm{e}^{-\frac{t-t_0}{T_1}}) + V_0 &\text{für} \, t \geq t_0.
+% \end{cases}
+% \end{equation}
+
+% Die Übertragungsfunktion des \PT-Gliedes lautet:
+% \begin{equation}
+% \label{eq:TF:PT1}
+% G(s) = \frac{K_p}{1 + T_1 s}.
+% \end{equation}
+
+% Für den Amplituden- und Phasengang ergibt sich:
+% \begin{equation}
+% \label{eq:FG-PT1}
+% |G(j\omega)| = |K_p|\frac{1}{\sqrt{\omega^2T_1^2+1}} \qquad \text{arg}(G(j\omega)) = -\arctan(\omega T_1).
+% \end{equation}
+
+% \begin{RstHinweisBox}
+%      Die Bezeichnung \PT-Glied bezieht sich im Allgemeinen auf ein \emph{stabiles} System erster Ordnung, d.h., die Übertragungsfunktion~\ref{eq:TF:PT1} hat einen negativen Pol $s_1 = -\frac{1}{T_1}$. Im Falle eines instabilen Systems bleibt der Amplitudengang unverändert, wohingegen der Phasengang an der $\omega$-Achse gespiegelt wird.
+% \end{RstHinweisBox}
+
+
+% \minisec{Approximation des Bodediagramms}
+% \label{sec:das-pt_1-glied-1}
+% Die Darstellung des Frequenzganges des \PT-Gliedes im Bodediagramm lässt sich einfach durch zwei Geraden approximieren:
+% \begin{align*}
+% |G(j\omega)|_\text{dB} &= 20 \lg\left(|K_p|\frac{1}{\sqrt{\omega^2T_1^2+1}}\right)\\
+% &=20 \lg|K_p| - 20 \lg \sqrt{\omega^2 T_1^2 +1}\\
+% &= 20 \lg |K_p| - 20 \lg\sqrt{\left(\frac{\omega}{\omega_e}\right)^2 + 1}
+% \end{align*}
+% mit $\omega_e = \frac{1}{T_1}$. Analog erhält man für den Phasengang
+% \begin{equation*}
+% \text{arg}(G(j\omega)) = - \arctan\frac{\omega}{\omega_e}.
+% \end{equation*}
+
+% Damit erhält man folgende Abschätzungen:
+% \begin{itemize}
+% \item Für $\frac{\omega}{\omega_e} \ll 1$ gilt:
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} \approx 20 \lg |K_p| = |K_p|_\text{dB}, \qquad \text{arg~}G(j\omega) \approx 0
+% \end{equation*}
+% \item Für $\frac{\omega}{\omega_e} \gg 1$ gilt:
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} \approx 20 \lg |K_p| - 20 \lg \frac{\omega}{\omega_e}, \qquad \text{arg}(G(j\omega)) \approx -90^\circ,
+% \end{equation*}
+% das bedeutet, der Amplitudengang fällt um 20\,dB, wenn man die Frequenz verzehnfacht. Man sagt auch, er fällt linear mit -20\,dB pro Dekade.
+% \end{itemize}
+
+
+% \begin{figure}[htbp]
+% \subcaptionbox{Bodediagramm des \PT-Glieds \label{fig:PT1_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_PT1.pdf}}
+% \subcaptionbox{Sprungantwort des \PT-Gliedes\label{fig:PT1_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_PT1.pdf}}
+% \caption{}
+% \end{figure}
+
+
+
+% \textbf{Knickfrequenz $\omega_e$:} Die Frequenz $\omega_e$ wird auch \emph{Knickfrequenz} genannt. Beim \PT-Glied beträgt die Phasenverschiebung für $\omega=\omega_e$ genau 45 Grad.
+
+% \textbf{Grenzfrequenz $\omega_g$:} Die Frequenz, bei der die Amplitude auf das $\frac{\sqrt{2}}{2}$-fache\footnote{Dieser Wert resultiert aus Energiebetrachtungen der Signale, siehe~\cite{LunzeA}, Abschnitt 6.7.} des statischen Wertes abgefallen ist (das heißt um 3\,dB):
+% \begin{equation*}
+% |G(j\omega_g)| = \frac{1}{\sqrt{2}}|G(0)|,
+% \end{equation*}
+% also
+% \begin{equation*}
+% |G(j\omega_g)|_\text{dB} \approx |G(0)| - 3\text{dB}.
+% \end{equation*}
+
+% Beim \PT-Glied fallen Grenz- und Knickfrequenz zusammen!
+
+% \textbf{Bandbreite:} Das Intervall $0\ldots\omega_g$.
+
+% \textbf{Bedeutung der Zeitkonstanten $T_1$:}
+% \begin{itemize}
+% \item Die Zeit, bei der die Übergangsfunktion auf 63\,\% des stationären Wertes angestiegen ist (siehe Abschnitt~\ref{sec:sprungantwort}).
+% \item Der umgekehrte Wert definiert die Knickfrequenz.
+% \item Je kleiner $T_1$, desto weiter links liegt der Pol in der linken offenen Halbebene und desto größer ist die Bandbreite des Systems. Je weiter links die Pole in der linken offenen Halbebene liegen, desto schneller ist das Übergangsverhalten.
+% \end{itemize}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Das PT\texorpdfstring{$_2$}{2}-Glied}
+% \label{sec:das-pt_2-glied}
+% Hier bei handelt es sich um ein proportional wirkendes, gegebenenfalls schwingungsfähiges Verzögerungsglied zweiter Ordnung. Die Differenzialgleichung lässt sich in zwei Varianten notieren:
+
+% \begin{subequations}
+%     \begin{minipage}[t]{0.5\textwidth}
+%         \textbf{Variante 1 (nicht schwingungsfähig):}
+%         \begin{multline}
+%             \label{eq:DGL-PT2b}
+%             T_1 T_2 \ddot \nu(t) + (T_1 + T_2) \dot \nu(t) + \nu(t) = K_p u(t)\\ \dot \nu(0) = 0, \; \nu(0) = V_0.
+%         \end{multline}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.45\textwidth}
+%         \textbf{Variante 2 (schwingungsfähig):}
+%         \begin{multline}
+%             \label{eq:DGL-PT2}
+%             T^2\ddot \nu(t) + 2 \vartheta T \dot \nu(t) + \nu(t) = K_p u(t) \\ \dot \nu(0) = 0, \; \nu(0) = V_0.
+%         \end{multline}
+%     \end{minipage}
+% \end{subequations}
+
+% Hierin bezeichnen $T_1, T_2, T \in \mathbb{R}$ Zeitkonstanten und $\vartheta \in \mathbb{R}$ den Dämpfungsfaktor. Die Übertragungsfunktionen  lauten dementsprechend
+
+% \begin{subequations}
+%     \begin{minipage}[t]{0.5\textwidth}
+%         \textbf{Variante 1 (nicht schwingungsfähig):}
+%         \begin{equation}
+%             \label{eq:TF_PT2b}
+%             G(s) = \frac{K_p}{(1 + T_1 s)(1 + T_2 s)}.
+%         \end{equation}
+%         $\Rightarrow$: Nur reelle Pole möglich.
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[t]{0.45\textwidth}
+%         \textbf{Variante 2 (schwingungsfähig):}
+%         \begin{equation}
+%             \label{eq:TF_PT2}
+%             G(s) = \frac{K_p}{T^2s^2 + 2\vartheta Ts + 1}.
+%         \end{equation}
+%         $\Rightarrow$: Konjugiert komplexe Pole möglich.
+%     \end{minipage}
+% \end{subequations}
+
+% Die Variante \eqref{eq:DGL-PT2b}, \eqref{eq:TF_PT2b} ist ein Spezialfall der Variante \eqref{eq:DGL-PT2}, \eqref{eq:TF_PT2}, siehe Ausführungen unten. Bei diesem Übertragungsglied wird in der Variante \eqref{eq:DGL-PT2}, \eqref{eq:TF_PT2} häufig auch mit der \emph{Eigenfrequenz} $\omega_0 = \frac{1}{T}$ gearbeitet.
+
+% Die charakteristische Gleichung des \PTT-Gliedes in der Variante \eqref{eq:DGL-PT2}, \eqref{eq:TF_PT2} ergibt sich zu
+% \begin{equation}
+% \label{eq:CharGl-PT2}
+% \frac{1}{\omega_0^2}s^2 + \frac{2\vartheta}{\omega_0}s + 1 = 0
+% \end{equation}
+% mit den Polen
+% \begin{equation}
+% \label{eq:Pole-PT2}
+% s_{1,2} = -\omega_0 \vartheta \pm \omega_0\sqrt{\vartheta^2-1}.
+% \end{equation}
+
+% \minisec{Verhalten in Abhängigkeit von der Dämpfung $\vartheta$}
+% In Abhängigkeit von der Lage der Pole in der komplexen Zahlenebene verhält sich das \PTT-Glied unterschiedlich:
+% \begin{itemize}
+% \item \textbf{Zwei negative reelle Pole} ($\vartheta > 1$, sogenannter Kriechfall)
+
+% Einführung zweier Zeitkonstanten $T_1=\frac{1}{s_1}, T_2 = \frac{1}{s_2}$, sodass das Verhalten dem zweier in Reihe geschalteter \PT-Glieder entspricht, vergl.\,\eqref{eq:TF_PT2b}:
+% \begin{equation*}
+% G(s) = \frac{K_p}{(1+T_1 s)(1+T_2 s)}.
+% \end{equation*}
+
+% Für steigende Frequenzen fällt der Amplitudengang nach der ersten Knickfrequenz bei $\frac{1}{T_1}$ mit -20 dB/Dekade und nach der zweiten Knickfrequenz bei $\frac{1}{T_2}$ mit -40 dB/Dekade. Die Phasenverschiebung beträgt für hohe Frequenzen 180$^\circ$.
+
+% \item \textbf{Negativer Doppelpol} ($\vartheta = 1$, sogenannter aperiodischer Grenzfall)
+
+% Dies entspricht einer Reihenschaltung zweier \PT-Glieder mit identischer Zeitkonstanten $T_1$. Die Knickfrequenz ergibt sich zu $\omega_e = \frac{1}{T} = \omega_0$.
+
+% Verschiebt man ausgehend von diesem negativen Doppelpol die Pole in entgegengesetzter Richtung auf der reellen Achse, so weist die Doppelpolkonfiguration in jedem Fall die geringste Verzugszeit im Vergleich zu der durch die Verschiebung entstandenen auf.
+
+
+% \item \textbf{Konjugiert komplexes Polpaar mit negativem Realteil} ($0 < \vartheta < 1$, sogenannter Schwingfall)
+
+% Die Pole ergeben sich zu
+% \begin{equation*}
+% s_{1,2} = -\omega_0 \vartheta \pm j\omega_0 \sqrt{1-\vartheta^2},
+% \end{equation*}
+% sodass die Reaktion aus der Ruhelage $V_0, U_0$ für einen Sprung des Eingangs der Höhe $U_S$ zum Zeitpunkt $t_0$ lautet:
+% \begin{equation*}
+%     h_S(t) =
+%     \begin{cases}
+%         V_0 &\text{für} \,  t < t_0\\
+%         \begin{aligned}
+%             K_p U_S &\left(1 - \frac{1}{\sqrt{1-\vartheta^2}}\mathrm{e}^{-\vartheta\omega_0 (t - T_0)} \cdot \right.\\
+%         &\left.\quad\sin(\omega_0 \sqrt{1-\vartheta^2}(t - t_0) + \arccos \vartheta)\right) + V_0.
+%         \end{aligned} &\text{für} \, t \geq 0.
+%     \end{cases}
+% \end{equation*}
+% Dies beschreibt im Wesentlichen eine aufgrund der e-Funktion abklingende Sinusschwingung. Für Dämpfungen größer 0.5 kommt es dabei nur noch zum einmaligen Überschwingen über den stationären Endwert.
+
+% \paragraph{Resonanzüberhöhung}
+
+% \item \textbf{Rein imaginäres Polpaar} ($\vartheta=0$, ungedämpfte Schwingung)
+
+% Die Reaktion aus der Ruhelage $V_0, U_0$ für einen Sprung des Eingangs der Höhe $U_S$ zum Zeitpunkt $t_0$ lautet dann
+% \begin{equation*}
+%     h_S(t) =
+%     \begin{cases}
+%         V_0 &\text{für}\,  t < 0\\
+%         K_p U_S (1-\cos\omega_0 (t - t_0)) &\text{für}\,  t \geq t_0.
+%     \end{cases}
+% \end{equation*}
+% Das System schwingt also mit gleichbleibender Amplitude und der Frequenz $\omega_0$, ist also instabil (zählt strenggenommen nicht mehr als \PTT-Glied).
+
+% \item \textbf{Pole mit positivem Realteil} ($\vartheta < 0$, instabile Fälle)
+
+% Das Übertragungsglied ist instabil (zählt strenggenommen nicht mehr als \PTT-Glied). Im Falle konjugiert komplexer Pole mit positivem Realteil stellen sich Schwingungen mit wachsender Amplitude ein, im Falle positiv reeller Pole ist die Übergangsfunktion streng monoton wachsend.
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \subcaptionbox{Bode-Diagramm des \PTT-Gliedes (Kriechfall)\label{fig:PT2Kriech_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_PT2_Kriech.pdf}}
+%     \subcaptionbox{Sprungantwort des \PTT-Gliedes (Kriechfall)\label{fig:PT2Kriech_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_PT2_Kriech.pdf}}
+%     \caption{}
+% \end{figure}
+
+
+% \minisec{Bodediagramm}
+% Für Dämpfungen $\vartheta < \frac{1}{\sqrt{2}}$ kommt es in der Nähe der Eigenfrequenz $\omega_0$ zur Resonanz, d.h., zu einem Anstieg des Amplitudenganges. Dieser Anstieg wird als \emph{Resonanzüberhöhung} bezeichnet, die Frequenz $\omega_r$ als \emph{Resonanzfrequenz}. Sie ergibt sich zu
+% \begin{equation}
+% \label{eq:PT2-Resonanzfreq}
+% \omega_r = \omega_0 \sqrt{1 - 2\vartheta^2}.
+% \end{equation}
+% Die Resonanzüberhöhung beträgt
+% \begin{equation}
+% \label{eq:ResUeberh}
+% |G(j\omega_r)| = \frac{1}{2\vartheta\sqrt{1-\vartheta^2}}.
+% \end{equation}
+
+
+% \begin{RstWichtigBox}
+%     Beachten Sie den Unterschied zwischen Eigenfrequenz $\omega_0$ und Resonanzfrequenz $\omega_r$. Nur für den ungedämpften Fall $\vartheta = 0$ fallen beide Frequenzen zusammen!
+% \end{RstWichtigBox}
+
+
+
+% \minisec{Approximation des Bodediagramms}
+% Auch für das \PTT-Glied ist eine approximative Konstruktion des Frequenzganges im Bodediagramm durch Geraden möglich, denn es gilt
+% \begin{equation}
+% \label{eq:Appr-PT2}
+% |G(j\omega)|_\text{dB} = 20 \lg |K_p| - 20 \lg \sqrt{\left(1 - \frac{\omega^2}{\omega_0^2}\right)^2 + \left(2 \vartheta \frac{\omega}{\omega_0}\right)^2},
+% \end{equation}
+% woraus folgt
+% \begin{itemize}
+% \item für $\frac{\omega}{\omega_0} \ll 1$:
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} \approx 20 \lg|K_p|, \qquad \text{arg}(G(j\omega)) \approx 0^\circ
+% \end{equation*}
+% \item für $\frac{\omega}{\omega_0} \gg 1$:
+% \begin{equation*}
+% |G(j \omega)|_\text{dB} \approx 20 \lg|K_p| - 20 \lg \left(\frac{\omega}{\omega_0}\right)^2 = 20 \lg|K_p| - 40 \lg \frac{\omega}{\omega_0}, \qquad \text{arg}(G(j\omega)) \approx 180^\circ,
+% \end{equation*}
+% das bedeutet, der Amplitudengang fällt mit -40\,dB pro Dekade. Der Schnittpunkt beider\\ Näherungsgeraden liegt bei der Kreisfrequenz $\omega = \omega_0 = \frac{1}{T}$.
+% \end{itemize}
+% Die Approximationsgenauigkeit in der Nähe von $\omega_0$ hängt von der Dämpfung und der damit verbunden Resonanzüberhöhung ab. Für $\omega = \omega_0$ beträgt der Wert des Phasengangs $90^\circ$.
+
+
+% \begin{figure}[htbp]
+% \subcaptionbox{Bode-Diagramm des \PTT-Gliedes (schwingungsfähig)\label{fig:PT2Schw_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_PT2_Schw.pdf}}
+% \hfill
+% \subcaptionbox{Sprungantwort des \PTT-Gliedes (schwingungsfähig)\label{fig:PT2Schw_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_PT2_Schw.pdf}}
+% \caption{}
+% \end{figure}
+
+% \subsection{Das PT\texorpdfstring{$_n$}{n}-Glied}
+% \label{sec:das-pt_n-glied}
+% Proportional wirkende Verzögerungsglieder höherer ($n$.ter) Ordnung. Für den Fall, dass die Pole der zugehörigen Übertragungsfunktion reell sind, kann das Verhalten des \PTn-Gliedes durch die Reihenschaltung von $n$ \PT-Gliedern mit ihren jeweiligen Knickfrequenzen beschrieben werden.
+% \begin{equation}
+% \label{eq:PTn}
+% G(s) = \frac{K_p}{(1+T_1 s)\cdot \ldots \cdot (1+T_n s)}.
+% \end{equation}
+% Das bedeutet:
+% \begin{itemize}
+% \item Der Amplitudengang ist für Frequenzen, die deutlich kleiner als die kleinste Knickfrequenz sind, eine Gerade parallel zur $\omega$-Achse und hat den Wert $|K_p|_\text{dB}$.
+% \item Der Amplitudengang fällt für wachsende Frequenzen nach jeder Knickfrequenz mit -20, -40, -60, \ldots dB pro Dekade.
+% \item Die Phase fällt von 0$^\circ$ auf $-n\,90^\circ$.
+% \end{itemize}
+
+% \begin{figure}[htbp]
+%     \subcaptionbox{Bode-Diagramm des I-Gliedes\label{fig:I_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_I.pdf}}
+%     \subcaptionbox{Sprungantwort des I-Gliedes\label{fig:I_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_I.pdf}}
+%     \caption{}
+% \end{figure}
+
+% \subsection{Das I-Glied}
+% \label{sec:das-i-glied}
+% Beim Integrierglied ist das Ausgangssignal proportional zum Integral der Eingangsgröße. Der Zusammenhang zwischen Ein- und Ausgangssignal genügt der Gleichung
+% \begin{equation}
+% \label{eq:Dgl-I}
+% \dot \nu(t) = K_I u(t), \qquad \nu(0) = V_0
+% \end{equation}
+% mit dem \emph{Integrierbeiwert} $K_I$. Der Kehrwert $1/K_I =: T_I$ wird auch Integrierzeit genannt\footnote{Die Verwendung von $T_I$ macht nur Sinn, wenn $\nu$ und $u$ die gleiche Einheit haben.}. Für das Ausgangssignal gilt
+% \begin{equation}
+% \label{eq:I-y}
+% \nu(t) = K_I \int_{0}^tu(\tau)\text{d}\tau + V_0.
+% \end{equation}
+% Die Reaktion aus der Ruhelage $V_0, U_0$ für einen Eingangssprung der Höhe $U_S$ zum Zeitpunkt $t_0$ lautet:
+% \begin{equation}
+% \label{eq:Ueberg-I}
+%     h_S(t) =
+%     \begin{cases}
+%         V_0 &\text{für}\, t < 0\\
+%         K_I U_S (t - t_0) + V_0 &\text{für} \, t \geq 0,
+%     \end{cases}
+% \end{equation}
+% ist also eine Rampenfunktion mit dem Anstieg $K_I$.
+
+% Die Übertragungsfunktion lautet
+% \begin{equation}
+% \label{eq:TF-I}
+% G(s) = \frac{K_I}{s},
+% \end{equation}
+% sodass sich für den Amplitudengang eine Gerade mit einem negativen Anstieg von -20\,dB pro Dekade ergibt:
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} = -20 \lg T_I - 20 \lg \omega.
+% \end{equation*}
+% Diese schneidet die Frequenzachse bei $\omega = K_I$. Die Phase liegt konstant bei $-90^\circ$.
+
+
+
+% \subsection{Das IT\texorpdfstring{$_1$}{1}-Glied}
+% \label{sec:das-it_1-glied}
+% Integrierglied mit Verzögerung. Es wird durch die Differenzialgleichung
+% \begin{equation}
+% \label{eq:Dgl-IT1}
+% T \ddot \nu(t) + \dot \nu(t) = K_I u(t), \qquad \nu(0) = V(0), \; \dot \nu(0) = 0
+% \end{equation}
+% mit dem Integrierbeiwert $K_I$ und der Verzögerungszeitkonstanten $T$ beschrieben. Es handelt sich um die Reihenschaltung eines Integrierglieds und eines Verzögerungsglieds erster Ordnung. Das Übergangsverhalten des I-Gliedes (Rampenfunktion) wird erst mit einer durch $T$ definierten Verzögerung erreicht.
+
+% Die Reaktion aus der Ruhelage $V_0, U_0$ lautet für einen Eingangssprung der Höhe $U_S$ zum Zeitpunkt $t_0$:
+% \begin{equation}
+% \label{eq:Ueberg-IT1}
+% h_S(t) =
+%     \begin{cases}
+%         V_0 &\text{für}\, t < t_0\\
+%         U_S K_I (t - t_0) - U_S K_I T \left(1 - \mathrm{e}^{-\frac{t - t_0}{T}}\right) &\text{für} \, t \geq t_0.
+%     \end{cases}
+% \end{equation}
+
+% \begin{figure}[ht]
+%     \subcaptionbox{Bode-Diagramm des \IT-Gliedes\label{fig:IT1_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_IT1.pdf}}
+%     \subcaptionbox{Sprungantwort des \IT-Gliedes\label{fig:IT1_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_IT1.pdf}}
+%     \caption{}
+% \end{figure}
+
+
+% Die Übertragungsfunktion lautet
+% \begin{equation}
+% \label{eq:TF-IT1}
+% G(s) = \frac{K_I}{(T s + 1) s}.
+% \end{equation}
+% Die Darstellung des Frequenzganges im Bodediagramm findet sich in Abbildung \ref{fig:IT1_Bode}
+
+
+% \subsection{Das D-Glied}
+% \label{sec:das-d-glied}
+% Das verzögerungsfreie Differenzierglied wird durch die Gleichung
+% \begin{equation}
+% \label{eq:D}
+% \nu(t) = K_D \frac{\text{d}u(t)}{\text{d}t}
+% \end{equation}
+% beschrieben, d.h., seine Ausgangsgröße hängt nur von \emph{Änderungen} der Eingangsgröße ab und wird bei konstanter Eingangsgröße Null. Der Parameter $K_D$ wird \emph{Differenzierbeiwert} genannt. Gelegentlich wird auch das Symbol $T_D$ verwendet, welches als \emph{Differenzierzeit} bezeichnet wird\footnote{Das macht natürlich nur dann Sinn, wenn $\nu$ und $u$ die gleiche Einheit haben!}.
+
+% Die Reaktion auf einen Eingangssprung der Höhe $U_S$ zum Zeitpunkt $t_0$ wird durch den DIRAC-Impuls $\delta(t)$ beschrieben und lautet
+% \begin{equation}
+% \label{eq:Ueberg-D}
+% h_S(t) = K_D U_S \delta(t - t_0).
+% \end{equation}
+
+% \begin{figure}[htbp]
+%     \subcaptionbox{Bode-Diagramm des D-Gliedes\label{fig:D_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_D.pdf}}
+%     \subcaptionbox{Sprungantwort des D-Gliedes\label{fig:D_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_D.pdf}}
+%     \caption{}
+% \end{figure}
+
+% Die Übertragungsfunktion lautet
+% \begin{equation}
+% \label{eq:TF-D}
+% G(s) = K_D s,
+% \end{equation}
+% sodass sich für den Amplitudengang eine Gerade mit einem positiven Anstieg von 20\,dB pro Dekade ergibt:
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} = 20 \lg K_D + 20 \lg \omega.
+% \end{equation*}
+% Diese schneidet die Frequenzachse bei $\omega = \frac{1}{K_D}$. Die Phase liegt konstant bei $90^\circ$.
+
+
+% \begin{figure}[htbp]
+%     \subcaptionbox{Bode-Diagramm des \DT-Gliedes\label{fig:DT1_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_DT1.pdf}}
+%     \subcaptionbox{Sprungantwort des \DT-Gliedes\label{fig:DT1_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_DT1.pdf}}
+%     \caption{}
+% \end{figure}
+
+
+% \subsection{Das DT\texorpdfstring{$_1$}{1}-Glied}
+% \label{sec:das-dt_1-glied}
+% Verzögerungsbehaftetes Differenzierglied (auch \emph{Vorhalteglied}), bei dem der differenzierende Charakter \glqq gedämpft\grqq wird. Die Differenzialgleichung lautet
+% \begin{equation}
+% \label{eq:Dgl-DT1}
+% T \dot \nu(t) + \nu(t) = K_D \dot u(t), \qquad \nu(0) = 0.
+% \end{equation}
+% Die Ruhelage bei diesem Übertragungsglied ist stets $\nu = 0$ bei beliebigem $u$.
+
+% Die Reaktion des \DT-Gliedes bei einem Eingangssprung der Höhe $U_S$ zum Zeitpunkt $t_0$ lautet:
+% \begin{equation} \label{eq:Ueberg:DT1}
+%     h_S(t) =
+%     \begin{cases}
+%         0 &\text{für} \,  t < 0\\
+%         \frac{K_D U_S}{T} \mathrm{e}^{-\frac{t - t_0}{T}} &\text{für} t \geq 0.
+%     \end{cases}
+% \end{equation}
+% Sie steigt zunächst sprungförmig auf den Wert $\frac{K_D U_S}{T}$ an und klingt dann exponentiell gegen null ab.
+
+% Die Übertragungsfunktion lautet
+% \begin{equation}
+% \label{eq:TF-DT1}
+% G(s) = \frac{K_D s}{T s + 1}.
+% \end{equation}
+% Die Darstellung des Frequenzganges im Bodediagramm findet sich in Abbildung~\ref{fig:DT1_Bode}. Es wird deutlich, dass es sich um einen Hochpass handelt.
+
+
+
+% \subsection{Der Allpass erster Ordnung}
+% \label{sec:der-allpass-erster}
+% Allpassglieder sind Übertragungsglieder, die alle Frequenzen in gleicher Weise verstärken und bei sinusförmigen Signalen nur die Phasenlage verändern. Für den Frequenzgang gilt damit
+% \begin{equation}
+% \label{eq:FG-Allpass}
+% |G(j \omega)| = 1 \qquad \forall\, \omega.
+% \end{equation}
+% Allgemein gilt für Allpassglieder, dass es zu jedem Pol in der linken offenen Halbebene eine Nullstelle mit entgegengesetztem Realteil gibt, das heißt Pole und Nullstellen liegen symmetrisch zur imaginären Achse.
+
+% Die Differenzialgleichung eines Allpassgliedes erster Ordnung lautet:
+% \begin{equation}
+% \label{eq:Dgl-Allp}
+% T\dot \nu(t) + (t) =  T\dot u(t) - u(t), \qquad \dot \nu(0) = \dot u(0) = 0.
+% \end{equation}
+% Die zugehörige Übertragungsfunktion ist
+% \begin{equation}
+% \label{eq:TF-Allp}
+% G(s) = \frac{Ts-1}{Ts+1}.
+% \end{equation}
+
+% Der Amplitudengang ergibt sich zu
+% \begin{equation*}
+% |G(j\omega)| = \sqrt{\frac{\omega^2 T^2 + 1}{\omega^2 T^2 + 1}} = 1
+% \end{equation*}
+% und für den Phasengang erhält man
+% \begin{equation*}
+% \text{arg}(G(j \omega)) = \arctan\left(\frac{2 \omega T}{\omega^2 T^2 -1}\right) \approx \left\{
+% \begin{array}{ll}
+% -\arctan(2 \omega T) & \text{für}\; \omega T \ll 1 \\
+% \arctan(\frac{2}{\omega T}) & \text{für} \; \omega T \gg 1
+% \end{array}
+% \right.
+% \end{equation*}
+% Das Allpassglied wirkt verzögernd und reagiert für ein sprungförmiges Eingangssignal zunächst in die falsche Richtung.
+
+% \begin{figure}[htbp]
+%     \subcaptionbox{Bode-Diagramm des Allpasses nach Gl.\,\eqref{eq:TF-Allp}\label{fig:Allpass_Bode}}{\includegraphics[width=0.49\textwidth]{Inkscape/Bode_Allpass.pdf}}
+%     \subcaptionbox{Sprungantwort des Allpasses nach Gl.\,\eqref{eq:TF-Allp}\label{fig:Allpass_Sprung}}{\includegraphics[width=0.49\textwidth]{Inkscape/Sprungantw_Allpass.pdf}}
+%     \caption{}
+%     \end{figure}
+
+
+% \subsection{Das Totzeitglied}
+% \label{sec:das-totzeitglied}
+% Das Totzeitglied gehört zur Klasse der allpasshaltigen Übertragungsglieder und verschiebt das Eingangssignal auf der Zeitachse um die Zeit $\Theta$ nach rechts:
+% \begin{equation}
+% \label{eq:Tz}
+% \nu(t) = K_p u(t-\Theta).
+% \end{equation}
+
+% \begin{figure}[htbp]
+% \subcaptionbox{Bode-Diagramm des T$_t$-Gliedes\label{fig:T_t_Bode}}{\includegraphics[width=0.5\textwidth]{Inkscape/Bode_Tz.pdf}}
+% \subcaptionbox{Sprungantwort des T$_t$-Gliedes\label{fig:T_t_Sprung}}{\includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_Tz.pdf}}
+% \caption{}
+% \end{figure}
+
+% Die Übertragungsfunktion ergibt sich zu
+% \begin{equation}
+% \label{eq:TF-Tz}
+% G(s) = K_p \mathrm{e}^{-s\Theta}
+% \end{equation}
+% mit dem Amplitudengang
+% \begin{equation*}
+% |G(j\omega)|_\text{dB} = 20 \lg K_p
+% \end{equation*}
+% und dem Phasengang
+% \begin{equation*}
+% \text{arg}(G(j\omega)) = -\omega \Theta.
+% \end{equation*}
+% Die Phase ist also proportional zur Kreisfrequenz.
+
+
+% % Der Regelkreis
+% %Der Regelkreis
+
+% \section{Der Regelkreis} \label{sec:Regelkreis}
+
+% \begin{RstHinweisBox}
+%     Der Inhalt dieses Abschnittes muss für \underline{\textbf{alle}} Praktika beherrscht werden.
+% \end{RstHinweisBox}
+
+
+
+% \subsection{Aufbau des Regelkreises} \label{sec:aufb_regelkr}
+% Abbildung~\ref{fig:wirkungsplan_regelungssys} zeigt den vollständigen Wirkungsplan eines geregelten Systems mit den genormten Bezeichnungen und Abkürzungen entsprechend DIN IEC 60050-531.
+
+% \begin{figure}[ht]
+%     \begin{center}
+%     \includegraphics[width=\textwidth]{Inkscape/Wirkungsplan_ger_Sys.pdf}
+
+%     \vspace{2ex}
+%     \begin{small}
+%     % LTeX: enabled=false
+%     \begin{tabular}{|l|l|l|} \hline
+%         \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
+%         $c$&Zielgröße&\textit{command variable}\\
+
+%         $w$&Führungsgröße&\textit{reference variable}\\
+
+%         $e=w-r$&Regeldifferenz&\textit{closed-loop error}\\
+
+%         $m$&Reglerausgangsgröße&\textit{closed-loop control output}\\
+
+%         $y$&Stellgröße&\textit{manipulated variable}\\
+
+%         $z$&Störgröße&\textit{disturbance variable}\\
+
+%         $x$&Regelgröße&\textit{controlled variable}\\
+
+%         $q$&Aufgabengröße&\textit{final controlled variable}\\
+
+%         $r$&Rückführgröße&\textit{feedback variable}\\
+%         \hline
+%     \end{tabular}
+%     % LTeX: enabled=true language=de-DE
+%     \end{small}
+%     \end{center}
+%     \caption{Genormter Wirkungsplan und genormte Bezeichnungen eines Regelungssystems (nach DIN IEC 60050-351 (44-01)).}
+%     \label{fig:wirkungsplan_regelungssys}
+% \end{figure}
+
+% Eine vereinfachte und für die Analyse häufig zweckmäßige Darstellung des geschlossenen Regelkreises ist in Abbildung~\ref{fig:Std_Rk} dargestellt. Hierin beschreibt $K(s)$ die Übertragungsfunktion des \emph{Reglers} und $P(s)$ die Übertragungsfunktion der \emph{Regelstrecke}. In der Regel beinhaltet $P(s)$ auch das Übertragungsverhalten der Stelleinrichtung. Bei Analyseaufgaben wird häufig die Übertragungsfunktion $G_0$ des \emph{offenen Regelkreises}/ der \emph{offenen Kette}/ des \emph{aufgeschnittenen Kreises}\footnote{Die drei Begriffe sind äquivalent.} benötigt. Diese ergibt sich nach Abbildung \ref{fig:Std_Rk} zu $G_0(s) = K(s) P(s)$.
+
+
+% \begin{RstTippBox}
+%     Prägen Sie sich den Unterschied zwischen \emph{Regler}, \emph{Regelstrecke}, \emph{Offener Kreis}/ \emph{Offene Kette}/ \emph{Aufgeschnittener Kreis} und \emph{Geschlossener Kreis} gut ein!
+% \end{RstTippBox}
+
+% \begin{figure}[hbtp]
+%     \centering
+%     \includegraphics[width=0.6\textwidth]{Inkscape/Standardregelkreis.pdf}
+%     \caption{Signalflussplan des Standardregelkreises.}
+%     \label{fig:Std_Rk}
+% \end{figure}
+
+
+
+% \subsection{Wichtige Übertragungsfunktionen}
+% \label{sec:wicht-ubertr}
+% Die \emph{Führungsübertragungsfunktion} $G_W^X$ beschreibt das Führungsverhalten des Regelkreises, also das Verhalten der Regelgröße $x$ in Abhängigkeit von der Führungsgröße $w$ unter der Annahme, dass keine Störungen $z$ auf den Regelkreis einwirken ($z \equiv 0$). Sie ergibt sich nach Gleichung~\ref{eq:Fuehrung_UTF} zu (siehe Abbildung ~\ref{fig:Std_Rk})
+% \begin{equation} \label{eq:Fuehrung_UTF}
+%     G_W^X(s) := \frac{X(s)}{W(s)} = \frac{G_0(s)}{1 \pm G_0(s)} = \frac{K(s) P(s)}{1 \pm K(s) P(s)}.
+% \end{equation}
+% Dabei ist zu beachten, dass bei negativer Rückkopplung (d.h.\,$e=w-x$) im Nenner das positive Zeichen zu wählen ist, bei positiver Rückkopplung (d.h.\,$e = w+x$) hingegen das negative Zeichen.
+
+% Die \emph{Störübertragungsfunktion} $G_Z^X$ beschreibt das Störverhalten des Regelkreises, das heißt das Verhalten der Regelgröße $x$ in Abhängigkeit von der Störgröße $z$ unter der Annahme, dass die Führungsgröße $w$ verschwindet ($w \equiv 0$). Sie ergibt sich nach Gleichung~\ref{eq:Stoerung_UTF} zu (siehe Abbildung~\ref{fig:Std_Rk})
+% \begin{equation} \label{eq:Stoerung_UTF}
+%     G_Z^X(s) := \frac{X(s)}{Z(s)} = \frac{P(s)}{1 \pm G_0(s)}  = \frac{P(s)}{1 \pm K(s) P(s)}.
+% \end{equation}
+
+% Ist allgemein die Übertragungsfunktion zwischen zwei Größen in einem Regelkreis gesucht, so kann man sich diese schnell wie folgt herleiten: Im Regelkreis nach Abbildung \ref{fig:Std_Rk} sei beispielsweise die Übertragungsfunktion $G_W^M(s)$ von der Führungsgröße $W$ zur Reglerausgangsgröße $M$ gesucht. Man setzt an:
+% \begin{align*}
+%     M(s) &= K(s) E(s) \\
+%     \intertext{und substituiert nun so lange, bis man wieder bei $M$ angekommen ist:}
+%     M(s)&=K(s)\left(W(s) \mp X(s)\right)\\
+%     &=K(s)\left(W(s) \mp P(s) Y(s)\right)\\
+%     &=K(s)\left(W(s) \mp P(s) M(s)\right).\\
+%     \intertext{Nun sortiert man nach den verbleibenden beiden Größen:}
+%     (1 \pm K(s) P(s)) M(s) &= K(s) W(s)\\
+%     \intertext{und löst nach dem Quotienten $\frac{M(s)}{W(s)}$ auf:}
+%     \frac{M(s)}{W(s)} &= \frac{K(s)}{1 \pm K(s)P(s)} =: G_W^M(s).
+% \end{align*}
+
+
+% % Der PID-Regler
+% \newpage
+% \section{PID-Regler} \label{sec:PID_Regler}
+
+% \begin{RstHinweisBox}
+%     Den Inhalt dieses Abschnittes müssen Sie für alle Praktika beherrschen!
+% \end{RstHinweisBox}
+
+
+% \subsection{Grundlegendes} \label{sec:grundlegendes}
+% Der PID-Regler berechnet aus der Regelabweichung $e$ einen Wert für die Reglerausgangsgröße $m$ welche im einschleifigen Regelkreis gleich der Stellgröße ist. Er realisiert auf einfache Art und Weise die folgende menschlich-intuitive Herangehensweise:
+% \begin{itemize}
+%     \item Je \emph{größer} die momentane Regelabweichung, desto stärker muss der Regler dieser entgegenwirken. Dies wird durch ein P-Übertragungsglied realisiert.
+%     \item Je \emph{länger} eine Regelabweichung anliegt, desto stärker muss offensichtlich der Regler auf die Regelstrecke einwirken, damit sich diese endlich reduziert. Dies wird durch ein I-Übertragungsglied realisiert.
+%     \item Je \emph{schneller} sich die Regelabweichung ändert, desto stärker und schneller muss der Regler im Moment der Änderung dieser entgegenwirken. Dies wird durch ein D-Übertragungsglied realisiert.
+% \end{itemize}
+% Dank dieser Einfachheit ist der PID-Regler mit Abstand am weitesten verbreitet und wird oft komplexeren Regelalgorithmen vorgezogen. Es gibt nun verschiedene Ausbildungsformen dieser Gesetzmäßigkeiten, die im Folgenden dargestellt werden.
+
+% \subsection{Idealer PID-Regler} \label{sec:idealer-pid-regler}
+% Das Übertragungsverhalten eines idealen PID-Reglers wird im Zeitbereich durch folgende Gleichung beschrieben:
+% \begin{subequations} \label{eq:PIDZeit}
+% \begin{align}
+%     m(t) &= K_P\left(e(t) + \frac{1}{T_i}\int_{t_0}^te(\tau)\df\tau + T_d\diff{e(t)}{t}\right)\label{eq:PIDTimeConstant}\\
+%     &= K_Pe(t) + K_I\int_{t_0}^te(\tau)\df\tau + K_D \diff{e(t)}{t}.\label{eq:PIDParallel}
+% \end{align}
+% \end{subequations}
+
+% Die Darstellung in Gl.~\eqref{eq:PIDTimeConstant} nennt man die Zeitkonstantendarstellung, diejenige in Gl.~\eqref{eq:PIDParallel} einfach Paralleldarstellung. Im ersteren Fall sind die Parameter des Reglers durch die Proportionalverstärkung $K_P$, die Nachstellzeit $T_i$ (alternatives, veraltetes Symbol: $T_N$) und die Vorhaltezeit $T_d$ (alternatives, veraltetes Symbol: $T_V$) bestimmt. Im zweiten Fall durch die P-Verstärkung $K_P$, die I-Verstärkung $K_I$ und die D-Verstärkung $K_D$.
+
+% Die Übertragungsfunktion des PID-Reglers in Zeitkonstantendarstellung lautet
+% \begin{equation} \label{eq:PID:UETF}
+%     K(s)=\frac{M(s)}{E(s)}=K_P\left(1+\frac{1}{sT_i}+sT_d\right)\,.
+% \end{equation}
+
+% Der Signalflussplan sieht wie folgt aus, wobei in diesem noch eine Begrenzung am Reglerausgang eingefügt wurde:
+% \begin{center}
+%     \includegraphics[width=0.8\textwidth]{Inkscape/PID_Regler_additiv.pdf}
+% \end{center}
+
+% Die Einheitssprungantwort und das Bodediagramm sind Abbildung \ref{fig:PIDIdeal} zu entnehmen.
+
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=0.49\textwidth]{Inkscape/Bode_PID.pdf} \hfill \includegraphics[width=0.49\textwidth]{Inkscape/Sprungantw_PID.pdf}
+%     \caption{Bodediagramm und Einheitssprungantwort des idealen PID-Reglers.} \label{fig:PIDIdeal}
+% \end{figure}
+
+
+
+% %\subsection{Grundlegendes}
+% %Viele Prozesse sind nichtlinear und mathematisch kompliziert zu beschreiben, jedoch können sehr viele dieser Prozesse durch PID-Regler ausreichend geregelt werden, vorausgesetzt die Parametrierung ist gut abgestimmt. Daher wird er in industriellen Anwendungen oft eingesetzt. Der PID-Regler setzt sich aus den Übertragungselementen P-Glied, I-Glied und D-Glied zusammen und dank dieser Einfachheit wird er oft komplexeren Regelalgorithmen vorgezogen. Mittels der genannten Komponenten können zwei wesentliche Reglerstrukturen erzeugt werden, dazu gibt Tabelle~\ref{tab:Tabelle_ubersichtPID} gibt eine Übersicht.
+
+% % Im Gegensatz zu den anderen Standardreglern wie PI- und PD-Regler erfordern unterschiedliche PID-Reglerstrukturen ein unterschiedliche Parametrierung. Beispielsweise können für die serielle Form ermittelte Reglerparameter nicht ohne weiteres für die parallele Form verwendet werden können. Diese müssen vorher durch entsprechende Transformation von der seriellen Form in die parallele Form überführt werden (siehe Hinweis). In~\ref{tab:Tabelle_transformation_parameter} sind die entsprechenden Transformationen angeben.
+% % \begin{table}[!h]
+% % \centering
+% % \begin{tabular}[c]{|C{1.5cm}|C{2cm}||C{1.5cm}|C{4cm}|}
+% % \hline
+% % parallel &  $\Leftarrow \mathrm{seriell} $
+% %  & seriell &  $\Leftarrow \mathrm{parallel} $ \\
+% % \hline
+% % $K_p$  & $K_p\frac{T_i+T_d}{T_i}$ &$K_p$ & $\frac{K_p}{2} \left( 1 + \sqrt{1 - 4 \frac{T_d}{T_i}} \right)$\\
+% % \hline
+% % $T_i$ &$ T_i+T_d$ & $T_i$ & $\frac{T_i}{2} \left( 1 + \sqrt{1 - 4 \frac{T_d}{T_i}} \right)$\\
+% % \hline
+% % $ T_d $ & $ \frac{T_iT_d}{T_i + T_d}$ &$T_d$ & $\frac{T_d}{2} \left( 1 - \sqrt{1 - 4 \frac{T_d}{T_i}} \right)$\\
+% % \hline
+% % \end{tabular}
+% % \captionof{table}{Transformation der Reglerparameter}
+% % \label{tab:Tabelle_transformation_parameter}
+% % \end{table}
+
+% % \begin{balken}
+% % \hinweis
+% % Zur Umwandlung von der parallelen in die serielle Form muss die Bedingung  $T_i \geq 4T_d$ erfüllt sein, ansonsten werden die transformierten Werte für $K_p, T_d, T_i$ nicht reel. In den meisten Fällen ist diese Bedingungen aber erfüllt.
+% % \end{balken}
+
+
+% % \begin{center}
+% % \begin{table}[p]
+% % \centering
+% % \begin{tabular}[c]{|C{2.7cm}|C{6cm}|C{6cm}|}
+% % \hline
+% %  &  parallele(additive) Form &  serielle(multiplikative) Form \\
+% % \hline
+% % Signalflussplan & \vspace{0.3cm} \includegraphics[width=6cm]{Inkscape/PID_Regler_additiv.pdf}  & \includegraphics[width=6cm]{Inkscape/PID_Regler_multiplikativ.pdf}  \\
+% %   \hline
+% % Zeitbereich &  $ \scriptstyle{ m(t)= K_p \left( e(t) + \frac{1}{T_i}\int{e(\tau)\mathrm{d}\tau} + T_d \frac{\mathrm{d}e(t)}{\mathrm{d}t} \right)}$ \vspace{0.1cm}
+% % &
+% % $\scriptstyle{ m(t)= K_p \left( \frac{T_i + T_d}{T_d}e(t) + \frac{1}{T_i}\int{e(\tau)\mathrm{d}\tau} + T_d \frac{\mathrm{d}e(t)}{\mathrm{d}t} \right)}$
+% %   \\
+% % \hline
+% % \mbox{Frequenzbereich} & \vspace{-0.5cm} \begin{equation*}
+% % \begin{split}
+% % G(s) = K_p (1+\frac{1}{sT_i}+sT_d )\\  = K_p\frac{1+sT_i+s^2 T_iT_d}{sT_i}
+% % \end{split}
+% % \end{equation*} & \vspace{-0.5cm} \begin{equation*}
+% % G(s)=\frac{K_p \left(1 + sT_i \right)\left(1 + sT_d \right)}{sT_i}
+% % \end{equation*}   \\
+% % \hline
+% % \mbox{Sprungantwort} & \includegraphics[width=6cm]{Inkscape/Sprungantw_PID_additiv.pdf} &
+% % \includegraphics[width=6cm]{Inkscape/Sprungantw_PID_multiplikativ.pdf} \\
+% % \hline
+% % \vspace{-8cm}
+% % \begin{center}
+% % Bode-Diagramm
+% % \end{center}
+% %   & \multicolumn{2}{c|}{\includegraphics[width=12cm]{Inkscape/Bode_PID.pdf}} \\
+% % \hline
+% % \end{tabular}
+% % \caption{Übersicht der Strukturformen des PID-Reglers}
+% % \label{tab:Tabelle_ubersichtPID}
+% % \end{table}
+% % \end{center}
+% % %%____________________________________________
+
+% % %
+% % \vspace{-2.5cm}
+% % \minisec{Parallele Form}
+% % \label{sec:PID_parallel}
+% % Die parallele Verbindung eines P-, I- und D-Anteiles wird parallele Form genannt. In der Fachliteratur wird diese Form auch als additive oder auch nicht-interaktive Form bezeichnet. In Tabelle~\ref{tab:Tabelle_ubersichtPID}
+% % sind die wichtigsten Daten dieser Topologie aufgeführt.
+% % \abb
+% % Das besondere an dieser Struktur ist, dass P-, I- und D-Anteil unabhängig von einander auf das gleiche Fehlersignal reagieren. Dies hat vor allem für die experimentelle Ermittlung der Reglerparameter Vorteile, da die Kennwerte der Glieder direkt und unabhängig von einander ermittelt werden können.
+
+% % \minisec{Serielle Form}
+% % \label{sec:PID_seriell}
+% % \begin{balken}
+% % \hinweis Die serielle Form ist \underline{\textbf{nicht}} relevant für die Eingangstests
+% % \end{balken}
+% % Die serielle Form wird durch die Reihenschaltung eines PD- und eines PI-Gliedes erzeugt. Auf einem Kanal werden sowohl das Fehlersignal $e(t)$, als auch die Ableitung des Fehlersignals $\dot{e}(t)$ genutzt.
+
+
+
+% \subsection{Realer PID-Regler} \label{sec:PID_real}
+% Eine Schwierigkeit des in Abschnitt \ref{sec:idealer-pid-regler} vorgestellten idealen PID-Reglers besteht darin, dass die Regelabweichung $e$ im D-Anteil des Reglers direkt differenziert wird. Etwaiges Messrauschen wird somit verstärkt. Darum wird der PID-Regler meist mit einem zusätzlichen \PT-Glied (Tiefpass) realisiert. Hier gibt es zwei Möglichkeiten:
+% \begin{enumerate}
+%     \item Der PID-Regler wird als ganzes mit einem \PT-Glied umgesetzt.
+%     \item Nur der D-Anteil wird durch ein $DT_1$-Glied ersetzt.
+% \end{enumerate}
+
+% \subsubsection{Realisierung mit \texorpdfstring{\PT}{PT1}-Glied (Vorfilter)} \label{sec:real-mit-pt_1}
+% Der PID-Regler wird in Reihe mit einem \PT-Glied mit der Zeitkonstanten $T_{f}$ realisiert. Das bedeutet, die Regelabweichung wird zunächst gefiltert, bevor sie auf den Regler trifft. Man erhält dann die Übertragungsfunktion:
+% \begin{equation} \label{eq:PID_PT1_1}
+%     G(s) = K_P \left( 1 + \frac{1}{sT_i} + sT_d \right)\frac{1}{sT_{f} +1}.
+% \end{equation}
+% Dies lässt sich umformen zu
+% \begin{equation}\label{eq:PID_PT1_2}
+%     K(s) = K_P \frac{(1 + sT_A)(1+ sT_B)}{sT_i(1 + sT_{f})}
+% \end{equation}
+% mit $T_i = T_A + T_B$ und $T_d = \frac{T_A T_B}{T_A + T_B}$. Mittels $T_A$ und $T_B$ besteht die Möglichkeit, die beiden größten Zeitkonstanten $T_1$ und $T_2$ der Regelstrecke zu kompensieren, siehe Abschnitt \ref{sec:PID:Einstell:Kompensation}.
+
+% Die Äquivalenz der Darstellungen \eqref{eq:PID_PT1_1} und \eqref{eq:PID_PT1_2} wird ersichtlich, indem \eqref{eq:PID_PT1_2} umgeformt wird zu
+% \begin{equation*}
+%     G(s) = K_P \frac{T_A + T_B}{T_i}\left( 1 + \frac{1}{s(T_A + T_B)} + s\frac{T_A T_B}{T_A + T_B} \right)\frac{1}{sT_{f} +1}
+% \end{equation*}
+% mit $T_i = T_A + T_B$ und $T_d = \frac{T_A T_B}{T_A + T_B}$ erhält man
+% \begin{equation*}
+%     G(s) = K_P \left( 1 + \frac{1}{s(T_A + T_B)} + s\frac{T_A T_B}{T_A + T_B} \right)\frac{1}{sT_{f} +1}
+% \end{equation*}
+
+% Die Verzögerung $T_{f}$ des \PT-Gliedes kann nach verschiedenen Kriterien ausgewählt werden. Beispielsweise kann diese so gewählt werden, dass bei einem sprungförmigen Eingangssignal $e(t)$ des Reglers das Ausgangssignal $m$ zu Beginn nicht übersteuert: Wendet man den Anfangswertsatz der LAPLACE-Transformation an, so erhält man mit $W(s) = \frac{w_0}{s}$ und $e(0) = w(0)$
+% \begin{eqnarray*}
+%     m(0) = \lim_{s\to\infty}s G(s)E(s) = K_P \frac{T_A T_B}{(T_A + T_B)T_{f}}w_0
+% \end{eqnarray*}
+% als Anfangsstellwert. Es ist ersichtlich, das die Wahl von $T_{f}$ somit auch von der Reglerverstärkung sowie der Führungsgröße $w(t)$ abhängig ist. Wie beim $PI$-Regler bestimmt die Verstärkung $K_P$ die Überschwingweite maßgeblich.
+
+% Im Zeitbereich lässt sich diese Form des PID-Reglers mit der gefilterten Regelabweichung $e_f$ wie folgt notieren:
+% \begin{subequations}
+%     \begin{align}
+%        \dot e_f(t) &= \frac{1}{T_f} \left(e(t) - e_f(t)\right)\\
+%        m(t) &= K_P \left(e_f(t) + \frac{1}{T_i} \int_0^t e_f(\tau) \mathrm{d}\tau + T_d \diff{e_f(t)}{t}\right) \nonumber \\
+%        &=K_P \left(e_f(t) + \frac{1}{T_i} \int_0^t e_f(\tau) \mathrm{d}\tau + \frac{T_d}{T_f} \left(e(t) - e_f(t)\right)\right)
+%     \end{align}
+% \end{subequations}
+% woraus sich die Übergangsfunktion
+% \begin{equation}
+%     m(t) = K_P \left(1 - \mathrm{e}^{-\frac{t}{T_f}} + \frac{t}{T_i} - \frac{T_f}{T_i}\left(1 - \mathrm{e}^{-\frac{t}{T_f}}\right)   + \frac{T_d}{T_f}\mathrm{e}^{-\frac{t}{T_f}}\right)
+% \end{equation}
+% ergibt. Aus dieser lässt sich die in Abbildung \ref{fig:PID_PT1} dargestellte Einheitssprungantwort konstruieren.
+
+% \begin{figure}[hbtp]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_PID_PT1.pdf}
+%     \caption{Einheitssprungantwort des PID-Reglers mit \PT-Vorfilter (Annahme: $T_i \gg T_f$).}
+%     \label{fig:PID_PT1}
+% \end{figure}
+
+% \begin{RstWichtigBox}
+%     Beim Reglerentwurf ist zu beachten, dass die Filterzeitkonstante $T_f$ der Regelstrecke zuzuordnen ist. Will man beispielsweise eine \PTTT-Strecke regeln, so ist die Ordnung für den Reglerentwurf als 4 zu wählen und $T_f$ im Entwurfsprozess als vierte Zeitkonstante zu berücksichtigen!
+% \end{RstWichtigBox}
+
+
+% \subsubsection{Realisierung mit \texorpdfstring{\DT}{1}-Glied}
+% Ersetzt man den D-Anteil des idealen PID-Reglers aus Gleichung (\ref{eq:PID:UETF}) durch ein $DT_1$-Glied, so wird nur die zu differenzierende Komponente der Regelabweichung vor der Differentiation gefiltert. So erreicht man durch geeignete Wahl der Parameter eine Begrenzung der Signalverstärkung. Anstelle von (\ref{eq:PID:UETF}) erhält man einen neuen PID-Regler der Form
+% \begin{eqnarray} \label{eq:PID:DT1Filter}
+%     G(s) = K_p \left( 1 + \frac{1}{T_i s} + \frac{T_ds}{T_{f} s +1} \right).
+% \end{eqnarray}
+
+% Die Filterzeitkonstante $T_{f}$ wird meist zu $T_{f} = \frac{T_d}{n_f}$ gewählt, wobei $n_f$ im Bereich $5\leq n_f\leq 20$ gewählt wird. Der Parameter $T_{f}$ kann aber auch dazu verwendet werden, die Anfangsreaktion des Reglers bei einer sprungförmigen Erregung zu beschränken, denn es gilt:
+% \begin{eqnarray*}
+%     m(0) = \lim_{s\to\infty}sK_P\left(1+\frac{1}{sT_i}+\frac{T_d s}{T_{f} s +1}\right)\frac{w_0}{s} = K_P\left(1 + \frac{T_d}{T_{f}}\right)w_0.
+% \end{eqnarray*}
+
+% Im Zeitbereich lässt sich diese Form des PID-Reglers mit der gefilterten Regelabweichung $e_f$ wie folgt notieren:
+% \begin{subequations}
+%     \begin{align}
+%        \dot e_f(t) &= \frac{1}{T_f} \left(e(t) - e_f(t)\right)\\
+%        m(t) &= K_P \left(e(t) + \frac{1}{T_i} \int_0^t e(\tau) \mathrm{d}\tau + T_d \diff{e_f(t)}{t}\right) \nonumber \\
+%        &=K_P \left(e(t) + \frac{1}{T_i} \int_0^t e(\tau) \mathrm{d}\tau + \frac{T_d}{T_f} \left(e(t) - e_f(t)\right)\right)
+%     \end{align}
+% \end{subequations}
+% mit der Übergangsfunktion
+% \begin{equation}
+%     h(t) = K_P \left(1 + \frac{1}{T_i} t + \frac{T_d}{T_f} \mathrm{e}^{-\frac{t}{T_f}}\right)
+% \end{equation}
+% welche in Abbildung \ref{fig:PID_DT1} skizziert ist.
+
+% \begin{figure}[hbtp]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Inkscape/Sprungantw_PID_DT1.pdf}
+%     \caption{Einheitssprungantwort des PID-Reglers mit \DT-Glied (Annahme: $T_i \gg T_f$).}
+%     \label{fig:PID_DT1}
+% \end{figure}
+
+
+% % Überarbeiten!
+% % \subsubsection{Praktische Hinweise} \label{sec:praktische-hinweise}
+% % Bei der Implementierung eines Reglers in den realen Prozess treten häufig Probleme auf. In Tabelle~\ref{tab:Tabelle_prozessregelungsprobleme} sind einige häufige Prozessregelungsprobleme und die dazugehörigen Lösungen für PID-Regler dargestellt.
+
+% % %%Tabelle Prozessregelungsprobleme + Lösungen
+% % \begin{center}
+% % \begin{table}
+% % \centering
+% % \begin{tabular}{|C{7.5cm}|C{7.5cm}|}
+% % \hline
+% % \textbf{Prozessregelungsproblem} & \textbf{PID-Regler Lösung} \\
+% % \hline  \rule{0pt}{-4ex}
+% % \textbf{Messrauschen}
+% % \begin{itemize}
+% % \item {signifikantes Messrauschen im Rückführungszweig}
+% % \item {Rauschen wird durch D-Anteil verstärkt}
+% % \item {Rauschsignal ist häufig ein Hochfrequenzsignal}
+% % \end{itemize}
+% % &
+% % \begin{itemize}
+% % \item {Ersetzen des reinen D-Anteils durch ein $DT_1$-Glied}
+% % \item {Alternativ: Realisieren des PID-Reglers mit einem \PT-Glied}
+% % \item {dies verhindert die Verstärkung des Messrauschens}
+% % \end{itemize}
+% %  \\
+% % \hline \rule{0pt}{-4ex}
+% % \textbf{Proportional und Derivat Kick}
+% % \begin{itemize}
+% % \item {P- und D-Anteil werden im Vorwärtszweig benutzt}
+% % \item {Sprung führt zu schnellen Wechseln und Spitzen im Reglersignal}
+% % \item {Reglersignal verursacht Probleme oder Ausfälle der Aktoren}
+% % \end{itemize} & \vspace{-2ex} \begin{itemize}
+% % \item {P- und D-Anteil in den Rückwärtszweig verschieben}
+% % \item {führt zu anderen Formen des PID-Reglers, welche in industriellen Anwendung gefunden werden}
+
+% % \end{itemize} \\
+% % \hline  \rule{0pt}{-4ex}
+% % \textbf{Nichtlineare Effekte in der realen Strecke}
+% % \begin{itemize}
+% % \item {Sättigungseffekte in der Aktoren vorhanden}
+% % \item {führt zu Windup-Effekt und bewirkt großes Überschwingen}
+% % \end{itemize}
+
+% %  & \vspace{8ex} \begin{itemize}
+% %  \item {Anti-Windup-Schaltung im Integralteil einfügen}
+% %  \item {solch eine Schaltung wird meist genutzt, ohne dass der Anwender davon weiß}
+% %  \end{itemize}
+% %    \\
+% % \hline \rule{0pt}{-4ex}
+% % \textbf{Negative Streckenverstärkung }
+% % \begin{itemize}
+% % \item {Positiver Sprung führt zu einer gänzlich negativen Systemantwort}
+% % \item {negative Rückführung führt hier zur Instabilität des geschlossenen Kreises}
+% % \end{itemize} & \begin{itemize}
+% % \item {positive Rückführung realisieren}
+% % \item {$K_p$ entsprechend anpassen}
+% % \end{itemize} \\
+% % \hline
+% % \end{tabular}
+
+% % \caption{Häufige Prozessregelungsprobleme und Lösung für PID-Regler}
+% % \label{tab:Tabelle_prozessregelungsprobleme}
+% % \end{table}
+% % \end{center}
+
+% % \vspace{-1.5cm}
+% % \begin{balkeng}
+% % \tip
+% % Zusätzliche Informationen zu PID-Reglern sind in \cite{PIDControl} und~\cite{LecturePID}  zu finden.
+% % \end{balkeng}
+
+% % Im Folgenden werden das Problem des Messrauschens und der Windup-Effekt näher erläutert.
+
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \subsection{Das Windup-Problem} \label{sec:PID_Anti-Windup}
+% Häufig ist es so, dass das Stellglied (vergl.~Abbildung \ref{fig:wirkungsplan_regelungssys}) nur einen begrenzten Bereich der vom Regler geforderten Reglerausgangsgröße $m$ im Prozess umsetzen kann. Man stelle sich hierzu ein Wasserventil vor, welches eine vollständig geöffnete Stellung, eine vollständig geschlossene Stellung und eine Durchflusscharakteristik für Stellungen des Ventils zwischen diesen zwei Extrempositionen hat. In Abbildung~\ref{fig:Aktorsaettigung} ist solch eine typische Charakteristik dargestellt.
+
+% \begin{figure}[hbtp]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{Inkscape/aktorsaettigung.pdf}
+%     \caption{Typische Aktorsättigungcharakteristik}
+%     \label{fig:Aktorsaettigung}
+% \end{figure}
+
+% Die vollständig offene Position stellt eine ernsthafte Begrenzung der Effektivität der Regelung dar, denn sobald der Ausgang des Stellgliedes in den Sättigungsbereich $u_A^{max}$ gelangt, wird das System zu einem offenen Regelkreis degradiert, da der tatsächlich umgesetzte und zu $u_A^{max}$ gehörige Reglerausgangswert $m^{max}$ konstant und kleiner als der geforderte Reglerausgangswert $m$ ist. Das hat zur Folge, dass weitere Erhöhungen der Reglerausgangsgröße keinen Einfluss mehr auf das Verhalten des Prozesses haben. Der Regler mit Begrenzung ist in Abbildung~\ref{fig:PID_Begrenzung} dargestellt.
+
+% \begin{figure}[hbtp]
+%     \centering
+%     \includegraphics[width=0.6\textwidth]{Inkscape/PID_Regler_mit_Begrenzung.pdf}
+%     \caption{PID-Regler mit Begrenzung}
+%     \label{fig:PID_Begrenzung}
+% \end{figure}
+
+% Angenommen, die Regeldifferenz $e(t)$ ist positiv bei einer bereits wirksamen Begrenzung der Stellgröße, dann wird diese Regeldifferenz im I-Anteil des Reglers weiter aufintegriert, ohne dass sich dies auf die am Prozess anliegende Stellgröße und damit auf die Regelgröße auswirkt. Je nach Dauer der anliegenden Begrenzung kann der Integralanteil des PID-Reglers einen sehr hohen Wert annehmen. Dieser muss, sobald die Regeldifferenz wieder negativ wird, zunächst abintegriert werden, bevor überhaupt auf diese negative Regeldifferenz eine wirksame Reaktion im I-Anteil erfolgen kann. Als Konsequenz aus diesem sogenannten \emph{Windup-Effekt} kann es zu andauernden, größeren Schwingungen in der Regelgröße kommen.
+
+% \begin{figure}[!hb]
+%     \centering
+%     \includegraphics[width=0.6\textwidth]{Inkscape/PID_Regler_mit_Anti-Windup.pdf}
+%     \caption{PID-Regler mit Anti-Windup}
+%     \label{fig:PID_Anti-Windup}
+% \end{figure}
+
+% Zur Vermeidung des Windup-Effekts wird im Allgemeinen der Integrator gestoppt, sobald $m(t)$ in die Begrenzung geht. Hierfür gibt es vielfältige Anti-Windup Schaltungen, die auf der Rückführung, der Anpassung und der Subtraktion des Stellfehlers von der Regelabweichung am Eingang des Integralanteils basieren. Eine mögliche und intuitive Schaltung ist in Abbildung~\ref{fig:PID_Anti-Windup} dargestellt.
+
+% Sobald es zur Begrenzung kommt, wird der rot dargestellte Rückführzweig mit der Differenz aus gefordertem und tatsächlich anliegendem Stellwert beaufschlagt. Über einen geeignet einstellbaren Faktor $K_{p,arw}$ wird diese Differenz negiert dem Eingang des I-Anteils beaufschlagt, sodass ein weiteres Aufintegrierten verhindert wird. Sobald das Stellglied aus der Begrenzung hinausläuft, erfolgt wieder eine normale Integration im I-Anteil des Reglers, sodass keine zeitraubende Abintegration nötig ist. Das dynamische Verhalten des Regelkreises wird dadurch signifikant verbessert.
+
+% In Abbildung \ref{fig:arw:prinzip} ist der Effekt skizziert.
+
+% \begin{figure}[ht!]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{Inkscape/arw-prinzip.pdf}
+%     \caption{Verlauf von Stellgröße, Regelabweichung und Regelgröße bei einem Regelkreis mit PID-Regler ohne (blau) und mit Anti-Windup-Schaltung (rot, gestrichelt).}
+%     \label{fig:arw:prinzip}
+% \end{figure}
+
+% % Muss gründlich überarbeitet und verbessert werden!
+% % \minisec{Realisierung}
+% % In diesem Abschnitt wird die Realisierung eine Anti-Reset-Windup-Schaltung am Beispiel eines PI-Reglers gezeigt (in der Literatur auch Back-Calculation Method). Die Schaltung ist in Abbildung~\ref{fig:PI_Anti-Windup} dargestellt.
+
+% % \begin{figure}[hbtp]
+% % \centering
+% % \includegraphics[width=0.6\textwidth]{Inkscape/PI_Regler_mit_Anti-Windup.pdf}
+% % \caption{PI-Regler mit Anti-Windup}
+% % \label{fig:PI_Anti-Windup}
+% % \end{figure}
+
+% % Beim Anti-Reset-Windup wird der I-Anteil neu berechnet wenn der Ausgang über die Begrenzung hinaus geht. Es ist von Vorteil den I-Anteil nicht sofort zurückzusetzen, sondern dynamisch über eine Verstärkung $K_{p,arw}$. Wie in Abbildung~\ref{fig:PI_Anti-Windup} besitzt das System einen weiteren Rückführungszweig, der durch die Bildung eines weiteren Fehlersignals $e_s(t)$ als Differenz des aktuellen Aktorausganges $m^{soll}(t)$ und des Reglerausganges $m(t)$ gebildet wird. Das Signal $e_s(t)$ wird nun durch $K_{p,arw}$ verstärkt und mit dem Integratoreingang summiert. Durch diesen einfach Aufbau erzielt man eine gute Beeinflussung des I-Anteils im Sättigungsfall. Ist $e_s(t)$ Null, also keine Sättigung vorhanden hat der Anti-Windup-Teil keinen Einfluss auf den Regler. Im Fall der Sättigung ist der Rückführungszweig der Reglerstrecke nicht sinnvoll, da das Eingangssignal konstant bleibt und weiter aufintegriert wird. Der Rückführungszweig um den Integrator führt nun dazu, dass der Ausgang des Integrators zu Null wird. Dadurch wird der Integratoreingang durch die Gleichung~\ref{eq:Inteing} beschrieben
+% % \begin{equation}\label{eq:Inteing}
+% % \frac{1}{T_i} e(t) - K_{p,arw} e_s(t)
+% % \end{equation}
+% % Daraus folgt
+% % \begin{equation*}
+% % e_s(t) = \frac{1}{T_i K_{p,arw}}
+% % \end{equation*}
+% % Für $e_s(t) = m(t) - m^{soll}(t)$ folgt
+% % \begin{equation}\label{eq:Begrenzungsausgang}
+% % m(t) =  \frac{1}{T_i K_{p,arw}} + m^{soll}_{lim}(t)
+% % \end{equation}
+% % Dabei ist $ m^{soll}_{lim}(t)$ der gesättigte Wert des Reglerausgangs. Aus Gleichung~\ref{eq:Begrenzungsausgang} erkennt man, dass $m(t)$ sich leicht außerhalb der Begrenzung befindet und somit der Regler schneller reagieren kann, wenn sich der Regelfehler $e(t)$ ändert. Dies verhindert den Windup des Integrators. Die Rate mit welcher der Reglerausgang zurückgesetzt wird ist durch die Rückführungsverstärkung des Anti-Windup $K_{p,arw}$ bestimmt.
+% % Im Fall von Reglern die einen I-Anteil haben gilt zur Bestimmung von $K_{p,arw}$ eine Faustregel
+% % \[K_{p,arw} \leq \frac{1}{T_i}\].
+% % Enthält der Regler sowohl einen I-, als auch einen D-Anteil muss $K_{p,arw}$ anders gewählt werden. Wird in diesem Fall $K_{p,arw}$ zu klein gewählt, können kleine Störungen eine Sättigung zur Folge haben, welche versehentlich den Integrator zurücksetzten. Also sollte  $K_{p,arw}$ größer als $T_d$, aber kleiner als $T_i$ sein. Hier gilt die Faustregel
+% % \[K_{p,arw} = \frac{1}{\sqrt{T_d T_i}}\].
+
+
+% % Einstellregeln
+% \section{Einstellverfahren für PID-Regler} \label{sec:PID_Einstellverfahren}
+
+
+% \begin{RstHinweisBox}
+%   Dieser Abschnitt dient als Informationsquelle für die Versuchsvorbereitung.
+% \end{RstHinweisBox}
+
+% In der Regelungstechnik wurden im Laufe der Zeit eine Vielzahl von Verfahren zur Dimensionierung von Reglern entwickelt. Dabei liegen den Verfahren in der Regel zwei Forderungen zugrunde: Auf der einen Seite soll die Regelgröße den Wert der Führungsgröße möglichst schnell erreichen. Auf der anderen Seite sollen auf den Regelkreis einwirkende Störungen möglichst schnell ausgeregelt werden. Dabei ist auch das jeweilige Verhalten der Stellgröße zu beachten. Diese beiden Forderungen führen zu sich widersprechenden Auslegungen des Reglers, sodass ein Kompromiss gefunden oder aber der Fokus nur auf das Führungs- oder das Störverhalten gelegt werden muss. Die Dimensionierung kann grob unterteilt werden in
+% \begin{enumerate}
+%   \item Dimensionierung durch Probieren (empirisches Einstellen, "`Handeinstellung"', siehe Abschnitt \ref{sec:PID:Handeinstellung}),
+%   \item Dimensionierung mit Einstellverfahren auf Basis von Sprungantworten (siehe Abschnitt \ref{sec:PID:Zeitbereicheinstellung}),
+%   \item Dimensionierung mit Einstellverfahren auf Basis der Übertragungsfunktion (siehe Abschnitt \ref{sec:PID:UTFEinstellung}),
+%   \item Dimensionierung auf Basis des Bode-Diagramms (siehe Abschnitt \ref{sec:PID:Frequenzbereicheinstellung}).
+% \end{enumerate}
+
+% In Tabelle \ref{tab:Tabelle_ubersichtEinstellverfahren} werden ausgewählte und im Praktikum angewandte Verfahren vorgestellt, die zur Parametrierung von {P-,} PI- und PID-Reglern verwendet werden können.
+
+% \begin{small}
+
+% \begin{longtable}{|l|P{2.5cm}|P{4cm}|P{6.8cm}|}
+%   \hline \rowcolor{lightgray} \textbf{Typ} &\textbf{Verfahren} & \textbf{Strecke}  &\textbf{Anmerkung}\endfirsthead\hline
+%   \rowcolor{lightgray} \textbf{Typ} &\textbf{Verfahren} & \textbf{Strecke}  &\textbf{Anmerkung}\endhead\hline
+%   \cellcolor{lightgray}\rotatebox[origin=c]{90}{\textbf{empirisch}\hphantom{x}}  &Handeinstellung &beliebig &\vspace{-6ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item zeitaufwändig
+%     \item häufig Probieren im falschen Parameterbereich
+%   \end{itemize}\\
+%   \hline
+
+%   \cellcolor{lightgray} &Chien, Hrones, Reswick & für Strecken mit Verzögerung und ohne Überschwingverhalten &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item Anwendbar, wenn Ausgleichszeit ca.\,dreimal größer ist als die Verzugszeit,
+%     \item kann auch für Strecken mit I-Anteil verwendet werden $\rightarrow$ \textbf{Beachte:} I-Anteil in Strecke kann zu strukturinstabilem Verhalten beim Einsatz von PI, bzw. PID Reglern führen (Symmetrisches Optimum kann dann bessere Ergebnisse liefern)
+%   \end{itemize} \\
+%   \cline{2-4}
+%   \cellcolor{lightgray} &Ziegler und Nichols (experimentell) &für stabile Strecken, die als $PT_{1}-T_{t}$-Strecke approximiert werden können; geht mitunter auch bei $I$-Strecken  &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item mit P-Regler geschlossener Kreis muss zum Schwingen gebracht werden $\rightarrow$ bei vielen Strecken aus technischen Gründen nicht möglich/ erlaubt
+%     \item Regler wird hauptsächlich gutes Störverhalten aufweisen
+%     \end{itemize} \\
+%   \cline{2-4}
+%   \multirow{-3}{*}[10ex]{\cellcolor{lightgray}\rotatebox[origin=c]{90}{\textbf{Sprungantwort}}} &Ziegler und Nichols (mit Modell) &für Strecken, die als $PT_{1}-T_{t}$-Strecke approximiert werden können  &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item Streckenverstärkung $K_S$, Zeitkonstante $T_1$ und Totzeit $T_t$ der Strecke müssen bekannt sein
+%     \item Regler wird hauptsächlich gutes Störverhalten aufweisen
+%   \end{itemize} \\
+%   \hline
+
+
+%   \cellcolor{lightgray} &Kompensation von Zeitkonstanten &für stabile P-Strecken mit 1 oder 2 (dominierenden) Zeitkonstanten sowie \IT- und \ITT-Strecken &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item $K_P$ für Polplatzierung nutzen
+%     \item darauf achten, dass kein intrinsisch instabiler Regelkreis generiert wird
+%   \end{itemize}\\
+%   \cline{2-4}
+%   \multirow{-2}{*}[8ex]{\cellcolor{lightgray}\rotatebox[origin=c]{90}{\textbf{Übertragungsfunktion}}} &Reinisch & für P-Strecken mit rein reellen Polen/Nullstellen; ein zusätzlicher Integrator und Totzeit möglich\footnotemark &  \vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item sehr fein justierbar,
+%     \item vergleichsweise hoher Rechenaufwand
+%   \end{itemize}\\
+%   \cline{2-4}
+%   % Sponer & {\color{red}{TODO}} &  \\
+%   % \hline
+%   \cellcolor{lightgray} &Integralkriterien & für jegliche Art von Strecke & \vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item Bemessung der Reglerparameter durch numerische Minimierung eines Gütefunktionals,
+%     \item geht auch für Zustandsraummodelle.
+%   \end{itemize} \\
+%   \hline
+
+
+%   \cellcolor{lightgray}&Betragsoptimum & für nicht schwingungsfähige P-Strecken &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item Betrag des Frequenzgangs des geschlossenen Regelkreises ist für einen möglichst großen Frequenzbereich gleich 1
+%     \item gutes Führungsverhalten, schlechtes Störverhalten
+%   \end{itemize}\\
+%   \cline{2-4}
+%   \multirow{-2}{*}[5ex]{\cellcolor{lightgray} \rotatebox[origin=c]{90}{\textbf{Bodediagramm}}} &Symmetrisches Optimum & für P- und I-Strecken &\vspace{-2ex}
+%   \begin{itemize}[leftmargin=*]
+%     \item geschickte Wahl der Durchtrittsfrequenz
+%     \item Führungsverhalten mit starkem Überschwingen, gutes Störverhalten
+%   \end{itemize} \\
+%   \hline
+%   \caption{Übersicht ausgewählter Einstellverfahren. \label{tab:Tabelle_ubersichtEinstellverfahren} }
+% \end{longtable}
+
+% \end{small}
+
+% \footnotetext{Es ist zu beachten, dass Regelstrecken, deren Übertragungsfunktion neben rein reellen Polen auch rein reelle Nullstellen aufweist, sehr wohl überschwingen können!}
+
+
+% \subsection{Handeinstellung eines PID-Reglers} \label{sec:PID:Handeinstellung}
+
+% In der Praxis werden Regelkreise häufig ohne Verwendung eines Modells realisiert. Dabei wird der Regler durch Wahl von Erfahrungswerten und anschließender Variation der Reglerparameter dimensioniert. Als Hilfsmittel dient hierbei die Sprungantwort des geschlossenen Regelkreises.
+
+% \begin{RstHinweisBox}
+%   Wir betrachten hier den PID-Regler in der Form \eqref{eq:PIDParallel}:
+%   \begin{equation*}
+%     m(t) = K_Pe(t) + K_I\int_{t_0}^te(\tau)\df\tau + K_D \diff{e(t)}{t}
+%   \end{equation*}
+% \end{RstHinweisBox}
+
+% In Abhängigkeit vom Charakter der Regelstrecke gibt es grundsätzliche Anforderungen an die Vorauswahl des Reglers:
+% \begin{enumerate}
+%   \item \textbf{P-Strecken (Regelstrecken mit Ausgleich)}: In diesem Fall muss auf jeden Fall ein I-Anteil verwendet werden, d.h. $K_I \neq 0$. Näheres siehe Abschnitt \ref{eq:PIDHandPStrecken}.
+%   \item \textbf{I-Strecken (Regelstrecken ohne Ausgleich)}: Hier wird prinzipiell klein I-Anteil benötigt, d.h.\,$K_I = 0$. Um bestimmte Anforderungen zu erfüllen, kann es im Einstellprozess dennoch erforderlich sein, den I-Anteil wieder zu aktivieren. Näheres siehe Abschnitt \ref{eq:PIDHandIStrecken}.
+% \end{enumerate}
+
+
+% \subsubsection{Handeinstellung an P-Strecken} \label{eq:PIDHandPStrecken}
+
+% Grundlegend kann man sich folgende Reihenfolge für die Einstellung eines PID-Reglers merken.
+% \begin{enumerate}
+%   \item $K_P$ bei deaktiviertem I- und D-Anteil ($K_I=K_D=0$) so einstellen, dass die Sprungantwort des geschlossenen Regelkreises gegen einen stationären Endwert geht und dabei nicht überschwingt. Diese stationäre Endwert ist in diesem Schritt ungleich dem Sollwert, da es sich ja um eine Strecke ohne Ausgleich handelt.
+%   \item $K_I$ bei deaktiviertem D-Anteil so einstellen, dass keine bleibende Regelabweichung verbleibt. Anschließend können $K_P$ und $K_I$ noch etwas variiert werden, um den Regelkreis noch schneller zu machen, was allerdings i.d.R.\,Überschwingen zur Folge hat.
+%   \item Sollte der geschlossene Kreis noch inakzeptables Überschwingen oder langanhaltendes Ausschwingen aufweisen oder einfach zu langsam sein, so ist $K_D$ so einzustellen, dass dieses Verhalten reduziert oder unterdrückt wird (Stellaufwand im Auge behalten). Zu beachten ist hier, dass die Hinzunahme des D-Anteils das Stellsignal deutlich unruhiger macht.
+%   \item Optional: Einstellung der Filterzeitkonstanten $T_f$ in \eqref{eq:PID:DT1Filter}. Diese sollte $\frac{1}{5} \ldots \frac{1}{20}$tel von $T_d = \frac{K_P}{K_D}$ sein.
+%   \item Feineinstellung: Durch Justage der Parameter kann probiert werden, das Ergebnis weiter zu verbessern, z.B.\,das Überschwingen zu erhöhen und dabei den Regelkreis schneller zu machen oder umgekehrt.
+% \end{enumerate}
+
+% \begin{RstWichtigBox}
+% Häufig liegen PID-Regler in der Implementierung \eqref{eq:PIDTimeConstant}
+% \begin{equation*}
+%   m(t) = K_P\left(e(t) + \frac{1}{T_i}\int_{t_0}^te(\tau)\df\tau + T_d\diff{e(t)}{t}\right)
+% \end{equation*}
+% vor. In diesem Fall ist zu beachten, dass eine Variation von $K_P$ auch den I- und den D-Anteil beeinflusst!
+% \end{RstWichtigBox}
+
+% \begin{RstBeispielBox}
+%   Am Beispiel einer P-Strecke sei das Vorgehen erläutert: Zunächst beginnt man mit einer unkritischen Einstellung des PID-Reglers, indem $K_P$ sehr klein gewählt wird und sowohl $K_I$ als auch $K_D$ zu 0 gesetzt werden (vergl.~Abbildung~\ref{fig:PID_Hand_P_schwach}). Nun erhöht man $K_P$ solange, bis eine Schwingungsneigung erkennbar wird (Abbildung~\ref{fig:PID_Hand_P_stark}), anschließend wird $K_P$ soweit verringert, dass keine Schwingungen beobachtet werden können (Abbildung~\ref{fig:PID_P_Hand}). Damit ist der P-Anteil grob eingestellt. Zu beachten ist hierbei, dass der gewünschte stationäre Endwert mit einem P-Regler nicht erreicht wird, wenn es sich bei der zu regelnden Strecke um eine P-Strecke handelt (vergl.~Abschnitt \ref{sec:char-wicht-line}). Anschließend erhöht man $K_I$ solange, bis sich die Sprungantwort dem Endwert annähert ohne, dass sich eine Schwingung ausbildet.  Oft kann hier von der weiteren Einstellung mittels des Parameters $K_D$ abgesehen werden, da ein gut eingestellter PI-Regler (Abbildung~\ref{fig:PI_Hand}) für viele Anwendungen ausreichend ist.
+
+%   Möchte man eine schnellere Regelung erreichen oder lässt sich mittels PI-Regler kein schwingungsfreier Betrieb realisieren, so ist es nötig, den D-Anteil durch Verwendung des Parameters $K_D$ zu aktivieren. Dieser wird nun ebenfalls erhöht (Abbildung~\ref{fig:PID_Hand_D}) bis das Ergebnis den Vorgaben entspricht. Ist der D-Anteil zu schwach, verbleiben oft Schwingungen im System (Abbildung \ref{fig:PID_Hand_I_stark_D_schwach}), ist er zu stark gewählt, wird das System stärker gedämpft und kann den Endwert oft nicht mehr schnell genug erreichen (Abbildung~\ref{fig:PID_Hand_I_schwach_D_stark}). Oft ist auch eine nachträgliche Anpassung von $K_P$ und $K_I$ empfehlenswert. Ein zu dominanter P-Anteil ist in Abbildung~\ref{fig:PID_Hand_P_stark_I_D} dargestellt. Die Sprungantwort des geschlossenen Regelkreises mit einem gut eingestellten PID-Regler ist in Abbildung~\ref{fig:PID_Hand} dargestellt.
+% \end{RstBeispielBox}
+
+
+% \begin{figure}[htbp]
+%   \subcaptionbox{P zu schwach\label{fig:PID_Hand_P_schwach}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_kp_schwach.pdf}}
+%   \subcaptionbox{P zu stark\label{fig:PID_Hand_P_stark}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_kp_stark.pdf}}
+%   \subcaptionbox{P gut eingestellt\label{fig:PID_P_Hand}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_kp_gut.pdf}}
+%   \subcaptionbox{I zu stark\label{fig:PID_Hand_I_stark}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_ki_stark.pdf}}
+%   \subcaptionbox{I zu schwach\label{fig:PID_Hand_I_schwach}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_ki_schwach.pdf}}\hfill
+%   \subcaptionbox{P und I gut eingestellt\label{fig:PI_Hand}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_kpki_gut.pdf}}
+%   \caption{Sprungantworten der Handeinstellung eines PI-Reglers am Beispiel einer P-Strecke.}
+% \end{figure}
+
+
+% \begin{figure}[htbp]
+%   \subcaptionbox{I zu stark, D zu schwach\label{fig:PID_Hand_I_stark_D_schwach}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_ki_stark_kd_schwach.pdf}}
+%   \subcaptionbox{I zu schwach, D zu stark\label{fig:PID_Hand_I_schwach_D_stark}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_ki_schwach_kd_stark.pdf}}
+%   \subcaptionbox{P zu stark\label{fig:PID_Hand_P_stark_I_D}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_kp_stark_kikd_gut.pdf}}\hfill
+%   \subcaptionbox{PID gut eingestellt\label{fig:PID_Hand}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/pt3_optimal.pdf}}
+%   \caption{Sprungantworten der Handeinstellung eines PID-Reglers am Beispiel einer P-Strecke.}
+%   \label{fig:PID_Hand_D}
+% \end{figure}
+
+
+% \subsubsection{Handeinstellung an I-Strecken} \label{eq:PIDHandIStrecken}
+
+% Hier ist prinzipiell kein I-Anteil nötig. Man geht wie folgt vor:
+% \begin{enumerate}
+%   \item $K_P$ bei deaktiviertem I- und D-Anteil ($K_I=K_D=0$) so einstellen, dass die Sprungantwort des geschlossenen Regelkreises gegen den Sollwert geht und dabei nicht überschwingt.
+%   \item Meistens ist der Regelkreis jetzt noch zu langsam. Durch Hinzunahme des D-Anteils kann das Verhalten beschleunigt werden. Dabei kann gleichzeitig $K_P$ auch noch deutlich erhöht werden. Hier ist geduldiges Probieren nötig.
+%   \item Optional: Einstellung der Filterzeitkonstanten $T_f$ in \eqref{eq:PID:DT1Filter}. Diese sollte $\frac{1}{5} \ldots \frac{1}{20}$tel von $T_d = \frac{K_P}{K_D}$ sein.
+%   \item Optional: Hinzunahme des I-Anteils. Es kann erforderlich sein, einen I-Anteil hinzuzunehmen, um die Dynamik des Regelkreises weiter zu verbessern. Z.B. weil der Arbeitspunkt driftet oder nur ungenau bekannt ist und der Ausgleich über den internen I-Anteil der Strecke zu langsam ist.
+% \end{enumerate}
+
+% \begin{RstBeispielBox}
+%   Der Einstellprozess ist in Abbildung \ref{fig:PIDHand:IT2} auf Seite \pageref{fig:PIDHand:IT2} beispielhaft an einer \ITT-Strecke erläutert.
+% \end{RstBeispielBox}
+
+
+% \begin{figure}[htbp]
+%   \subcaptionbox{P zu schwach\label{fig:PID_Hand_P_schwach_IT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_kp_schwach.pdf}}
+%   \subcaptionbox{P zu stark\label{fig:PID_Hand_P_starkIT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_kp_stark.pdf}}
+%   \subcaptionbox{P gut eingestellt\label{fig:PID_P_HandIT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_kp_gut.pdf}}
+%   \subcaptionbox{D zu schwach\label{fig:PID_Hand_I_starkIT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_kd_schwach.pdf}}
+%   \subcaptionbox{D zu stark (im Vergl.\,zu $K_P$)\label{fig:PID_Hand_I_schwachIT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_kd_stark.pdf}}\hfill
+%   \subcaptionbox{P und D gut eingestellt\label{fig:PI_HandIT2}}{\includegraphics[width=0.49\textwidth]{Python/PID_Handeinstellung/it2_optimal.pdf}}
+%   \caption{Sprungantworten der Handeinstellung eines PD-Reglers am Beispiel einer \ITT-Strecke. \label{fig:PIDHand:IT2}}
+% \end{figure}
+
+% \FloatBarrier
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Einstellverfahren auf Basis der Sprungantwort} \label{sec:PID:Zeitbereicheinstellung}
+% In diesem Abschnitt werden Einstellverfahren vorgestellt, die auf der Analyse der Sprungantwort des zu regelnden Systems bzw.\,der Kenntnis von Streckenparametern wie Zeitkonstanten und Verstärkungen beruhen.
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Chien, Hrones und Reswick} \label{sec:chien-hrones-und}
+% Auch bei diesem Einstellverfahren \cite{CHR52} wird mit einem beschränkten experimentellen Aufwand versucht, eine gewisse Information über die Regelstrecke zu ermitteln. Betrachtet werden Regelstrecken mit Verzögerung und ohne Überschwingen. Aus der Sprungantwort der Regelstrecke ermittelt man hier die erforderlichen Parameter:
+% \begin{itemize}
+%   \item Verzugszeit $T_e$, %T_u
+%   \item Ausgleichszeit $T_b$, %T_g
+%   \item Streckenverstärkung $K_S$.
+% \end{itemize}
+
+% Für die genannten Streckentypen und mit den bestimmten Parametern lassen sich nach Tabelle~\ref{tab:Tabelle_Chien_Hrones_Reswick} Parameter für P-, PI- und PID-Regler ermitteln, und zwar einmal für gutes Führungsverhalten (Spalte \emph{Fü}) und einmal für gutes Störverhalten (Spalte \emph{St}). Die berechneten Einstellwerte sind für den aperiodischen Regelverlauf (Spalten $\nu_{m} \approx 0 \%$) und für den Regelverlauf mit Überschwingen (Spalten $\nu_{m} =20\%$) angegeben und liefern gute Ergebnisse für $\frac{T_b}{T_e} > 3$.
+
+
+% \begin{table}[htbp]
+%   \centering
+%   \begin{tabular}[c]{|C{1.5cm}|C{2cm}|C{1.5cm}|C{1.5cm}|C{1.5cm}|C{1.5cm}|}
+%   \hline
+%   \rowcolor{lightgray} &  & \multicolumn{2}{|c|}{$\nu_{m} \approx 0\%$} &
+%   \multicolumn{2}{|c|}{$\nu_{m}\approx 20\%$}\\
+%   \cline{3-6}
+%   \rowcolor{lightgray}\multirow{-2}{*}{\textbf{Regler}} &\multirow{-2}{*}{\textbf{Parameter}} & \textbf{Fü} & \textbf{St} & \textbf{Fü} & \textbf{St}\\
+%   \hline \rule{0pt}{4ex}
+%   P & $K_P$ & $0.3\frac{T_b}{T_eK_S}$ & $0.3\frac{T_b}{T_eK_S}$ & $0.7\frac{T_b}{T_eK_S}$ & $0.7\frac{T_b}{T_eK_S}$\\
+%   \hline \rule{0pt}{4ex}
+%   \multirow{2}{*}{PI} & $K_P$ & $0.35\frac{T_b}{T_eK_S}$ & $0.6\frac{T_b}{T_eK_S}$ & $0.6\frac{T_b}{T_eK_S}$ & $0.7\frac{T_b}{T_eK_S}$\\
+%   \cline{2-6} \rule{0pt}{4ex}
+%   & $T_i$ & $1.2T_b$ & $4.0T_e$ & $1.0T_b$ & $2.3T_e$\\
+%   \hline \rule{0pt}{4ex}
+%   \multirow{3}{*}{PID} & $K_P$ & $0.6\frac{T_b}{T_eK_S}$ & $0.95\frac{T_b}{T_eK_S}$ & $0.95\frac{T_b}{T_eK_S}$ & $1.2\frac{T_b}{TeK_S}$\\
+%   \cline{2-6} \rule{0pt}{4ex}
+%   & $T_i$ & $1.0T_b$ & $2.4T_e$ & $1.35T_b$ & $2.0T_e$\\
+%   \cline{2-6} \rule{0pt}{4ex}
+%   & $T_d$ & $0.5T_e$ & $0.42T_e$ & $0.47T_e$ & $0.42T_e$\\
+%   \hline
+% \end{tabular}
+% \caption{Reglerparameter nach Chien, Hrones und Reswick, optimiert für gutes Führungsverhalten (\emph{Fü}) und gutes Störverhalten (\emph{St}) sowie für ein Überschwingen von 0 und 20\,\%.}
+% \label{tab:Tabelle_Chien_Hrones_Reswick}
+% \end{table}
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Ziegler und Nichols} \label{sec:ziegler-und-nichols}
+% Das Einstellverfahren nach Ziegler und Nichols \cite{ZN42} geht davon aus, dass sich die Regelstrecke näherungsweise als $PT_{1}T_{t}$-Glied modellieren lässt:
+% \begin{equation}
+%   G(s) = \frac{K_S}{Ts + 1}e^{-sT_{t}}. \label{eq:ZNStrecke}
+% \end{equation}
+
+% Die nachfolgenden beiden Kriterien bestimmen die Parameter so, dass der geschlossene Kreis ein möglichst gutes \emph{Störverhalten} aufweist.
+
+% \begin{RstWichtigBox}
+%   Das Verfahren wurde bereits in den 40er Jahren des 20.\,Jahrhunderts publiziert, als die moderne Regelungstechnik sich zu entwickeln begann. Obwohl es in jedem Buch der Regelungstechnik als Verfahren erster Wahl vorgestellt wird, liefert es doch selten gute Ergebnisse, wie in diesem Praktikum auch gezeigt werden wird. Des Weiteren gibt es diverse Einschränkungen in der praktischen Anwendbarkeit, siehe unten. Von der Anwendung wird daher abgeraten.
+% \end{RstWichtigBox}
+
+% \paragraph{Reglerparameter bei bekannten Streckenparametern} Ist die Regelstrecke bekannt, also die Parameter $K_S$, $T$ und $T_t$ in \eqref{eq:ZNStrecke}, so ergeben sich nach Ziegler-Nichols die Reglerparameter nach Tabelle~\ref{tab:Tabelle_Ziegler-Nichols_bekannte_Strecke}. Häufig lassen sich die Parameter näherungsweise aus einer Sprungantwort ermitteln. Ist ein direktes Experimentieren mit der Regelstrecke nicht möglich, kann auf das nachfolgend erläuterte experimentelle Verfahren zurückgegriffen werden, das direkt im geschlossenen Regelkreis arbeitet.
+
+% \paragraph{Reglerparameter bei unbekannten Streckenparametern}
+% Sind die Streckenparameter unbekannt, so werden die Reglerparameter empirisch bestimmt. Die nach Ziegler-Nichols ermittelten Parameter sind als Richtwerte zur Realisierung von gutem Störverhalten anzusehen. Sie sind grob und manchmal unbrauchbar, sind in der Praxis jedoch schnell zu ermitteln. Das zugrunde liegende Verfahren ist der Schwingversuch. Das Verfahren setzt voraus, dass die Strecke mindestens dritter Ordnung ist. Es lässt sich manchmal auch bei I-Strecken anwenden, sofern im Schwingungsversuch die Betriebsgrenzen nicht überschritten werden.
+
+% \begin{table}[ht]
+%   \centering
+%   \begin{tabular}[c]{|C{2.5cm}|C{1.5cm}|C{1.5cm}|C{1.5cm}|}
+%   \hline %\rule{0pt}{4ex}
+%   \rowcolor{lightgray} \textbf{Regler} & $\mathbf{K_P}$ & $\mathbf{T_i}$ & $\mathbf{T_d}$\\
+%   \hline \rule{0pt}{4ex}
+%   P-Regler & $\frac{T}{K_S T_t}$ & - & -\\
+%   \hline \rule{0pt}{4ex}
+%   PI-Regler & $0.9\frac{T}{K_S T_t}$ & $3,33T_t$ & -\\
+%   \hline \rule{0pt}{4ex}
+%   PID-Regler & $1.2\frac{T}{K_S T_t}$ & $2T_t$ & $0,5T_t$\\
+%   \hline
+%   \end{tabular}
+%   \caption{Reglerparameter nach Ziegler und Nichols bei bekannter Strecke.}
+%   \label{tab:Tabelle_Ziegler-Nichols_bekannte_Strecke}
+% \end{table}
+
+% Bei diesem Versuch wird die Regelstrecke im geschlossenen Regelkreis mit einem P-Regler betrieben. Als Führungsgröße schaltet man wiederholt Sprungfunktionen auf und erhöht mit jedem Mal langsam die Reglerverstärkung $K_P$ bis die Stabilitätsgrenze des Systems erreicht wird, das heißt derjenige Einstellwert, bei dem die Regelgröße $y(t)$ und alle anderen Systemgrößen ungedämpft schwingen (sich dabei aber nicht aufschwingen). An der Stabilitätsgrenze ermittelt man den Wert der kritischen Reglerverstärkung $K_{krit}$ ($K_P=K_{krit}$) und die kritische Periodendauer $T_{krit}$ der sich einstellenden Schwingung. Die Reglerparameter ergeben sich dann wie in Tabelle~\ref{tab:Tabelle_Ziegler-Nichols_unbekannte_Strecke} beschrieben.
+
+% \begin{RstHinweisBox}
+%   Nachteil dieses Verfahrens ist, dass der Regelkreis an seiner Stabilitätsgrenze betrieben werden muss, dies ist jedoch technisch nicht immer möglich oder erlaubt. Bei praktischen Anwendungen genügt es, wenn die gemessene Ausgangsgröße 2 bis 3 feststellbare Schwingungsperioden durchläuft. Bei manchen Prozessen ist dies jedoch auch nicht möglich, weil der Prozess zu schnell beendet ist. Im Falle einer Simulation kann man den Schwingungsversuch natürlich bis zur Stabilitätsgrenze durchführen.
+
+%   Zu beachten ist auch, dass dieses Verfahren bei \textbf{\PT- und \PTT-Strecken nicht anwendbar} ist, da die Pole des geschlossenen Kreises bei diesen Strecken \textbf{immer} in der linken Halbebene liegen, egal wie groß man die Reglerverstärkung $K_P$ wählt (nachrechnen!).
+% \end{RstHinweisBox}
+
+% \begin{table}[ht]
+%   \centering
+%   \begin{tabular}[c]{|C{2.5cm}|C{1.5cm}|C{1.5cm}|C{2cm}|}
+%   \hline
+%   \rowcolor{lightgray} \textbf{Regler} & $\mathbf{K_P}$ & $\mathbf{T_i}$ & $\mathbf{T_d}$\\
+%   \hline
+%   P-Regler & $0.5K_{krit}$ & - & -\\
+%   \hline
+%   PI-Regler & $0.45K_{krit}$ & $0.83T_{krit}$ & -\\
+%   \hline
+%   PID-Regler & $0.6K_{krit}$ & $0.5T_{krit}$ & $0.125T_{krit}$\\
+%   \hline
+%   \end{tabular}
+%   \caption{Reglerparameter nach Ziegler und Nichols bei unbekannter Strecke.}
+%   \label{tab:Tabelle_Ziegler-Nichols_unbekannte_Strecke}
+% \end{table}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Einstellverfahren auf Basis der Übertragungsfunktion der Regelstrecke} \label{sec:PID:UTFEinstellung}
+% Liegt ein Streckenmodell in Form einer Übertragungsfunktion vor, so bieten sich die in diesem Abschnitt vorgestellten Verfahren zur PID-Reglerparametrierung an.
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Polplatzierung ("`Kompensation von Zeitkonstanten"')} \label{sec:PID:Einstell:Kompensation}
+% Mithilfe eines PID-Reglers lassen sich für Strecken niedriger Ordnung die Pole des geschlossenen Kreises gezielt platzieren. Die Dynamik des Regelkreises lässt so im Idealfall exakt einstellen. Ausgangspunkt ist hier die Darstellung des PID-Reglers je nach Konfiguration in den folgenden Formen:
+% \begin{subequations}
+%   \begin{align}
+%     \text{PI-Regler:} \quad R(s) &= K_P \left( 1 + \frac{1}{sT_i}\right) =  K_P \frac{(1 + sT_i)}{sT_i}\\
+%     \text{PD-Regler:} \quad R(s) &= K_P \left( 1 + sT_d \right)\\
+%     \text{PID-Regler:} \quad R(s) &= K_P \left( 1 + \frac{1}{sT_i} + sT_d \right) = K_P \frac{(1 + sT_A)(1+ sT_B)}{sT_i}
+%   \end{align}
+% \end{subequations}
+% mit $T_i = T_A + T_B$ und $T_d = \frac{T_A T_B}{T_A + T_B}$, vergl.\,Abschnitt \ref{sec:real-mit-pt_1}.
+
+% Die Zeitkonstanten in den jeweiligen Zählern (also die Nullstellen) können nun genutzt werden, um die Zeitkonstanten im Nenner der Regelstrecke zu kompensieren (also eine Pol-Nullstellen-Kürzung herbeizuführen). Der verbleibende Reglerparameter $K_P$ kann dann genutzt werden, um das charakteristische Polynom des geschlossenen Kreises gezielt zu beeinflussen. In speziellen Fällen lassen sich die Pole des geschlossenen Kreises auch exakt zu platzieren. Dies funktioniert allerdings nur bis zu Strecken zweiter Ordnung.
+
+% \begin{RstBeispielBox}
+%   Betrachtet wird eine \PTT-Regelstrecke mit der Übertragungsfunktion
+%   \begin{equation*}
+%     P(s) = \frac{K_s}{(1 + T_1s)(1 + T_2s)}.
+%   \end{equation*}
+%   Mithilfe eines PID-Reglers soll die Strecke so geregelt werden, dass der geschlossene Kreis die Zeitkonstante $T^\ast$ hat, d.h.\,der Pol der Übertragungsfunktion des geschlossenen Kreises bei $-\frac{1}{T^\ast}$ liegt.
+
+%   Ansatz PID-Regler:
+%   \begin{equation*}
+%     R(s) = K_P \left( 1 + \frac{1}{sT_i} + sT_d \right) = K_P \frac{(1 + sT_A)(1+ sT_B)}{sT_i}.
+%   \end{equation*}
+
+%   Übertragungsfunktion des offenen Kreises:
+%   \begin{equation*}
+%     G_0(s) = R(s) \cdot P(s) = \frac{K_s K_P }{(1 + T_1s)(1 + T_2s)}\frac{(1 + sT_A)(1+ sT_B)}{sT_i}.
+%   \end{equation*}
+
+%   Wahl zur Kompensation der Zeitkonstanten (Pol-Nullstellen-Kürzung): $T_A = T_1$, $T_B = T_2$, d.h.\,$T_i = T_1 + T_2$, $T_d = \frac{T_1 T_2}{T_1 + T_2}$. Resultierende Übertragungsfunktion des offenen Kreises:
+%   \begin{equation*}
+%     G_0(s) = \frac{K_s K_P}{(T_1 + T_2)s}.
+%   \end{equation*}
+
+%   Übertragungsfunktion des geschlossenen Kreises:
+%   \begin{equation*}
+%     G(s) = \frac{G_0(s)}{1 + G_0(s)} = \frac{1}{1 + \frac{T_1 + T_2}{K_s K_P}s}.
+%   \end{equation*}
+
+%   Es soll gelten:
+%   \begin{equation*}
+%     \frac{T_1 + T_2}{K_s K_P} \stackrel{!}{=} T^\ast \qquad \Leftrightarrow \qquad K_P = \frac{T_1 + T_2}{T^\ast K_s}.
+%   \end{equation*}
+% \end{RstBeispielBox}
+
+% \begin{RstAufgabeBox}
+%   Wenden Sie die Methode zur Kompensation der Zeitkonstanten auf folgende Konfigurationen an:
+%   \begin{enumerate}
+%     \item PI-Regler an \PT-Strecke
+%     \begin{equation*}
+%       P(s) = \frac{K_s}{1 + T_1 s}.
+%     \end{equation*}
+%     Gewünschte Zeitkonstante geschlossener Kreis: $T^\ast$.
+%     \item PD-Regler an \ITT-Strecke
+%     \begin{equation*}
+%       P(s) = \frac{K_s}{T_0 s (1 + T_1s) (1 + T_2s)}.
+%     \end{equation*}
+%     Das charakteristische Polynom des geschlossenen Kreises soll einen reellen Doppelpol haben.
+%   \end{enumerate}
+% \end{RstAufgabeBox}
+
+
+
+% \begin{RstWichtigBox}
+%   Nicht immer ist es sinnvoll, alle Zeitkonstanten einer Regelstrecke zu kompensieren. Dies kann nämlich zu instabilen geschlossenen Kreisen führen.
+
+%   Zeigen Sie dies anhand folgender Konfigurationen:
+%   \begin{enumerate}
+%     \item PI-Regler an \IT-Strecke und Kompensation von $T_1$,
+%     \item PID-Regler an \ITT-Strecke und Kompensation von $T_1$ und $T_2$.
+%   \end{enumerate}
+% \end{RstWichtigBox}
+
+% Weist die Regelstrecke mehr Zeitkonstanten auf, so kompensiert man in der Regel die beiden größten, um die Dynamik des geschlossenen Kreises möglichst schnell machen zu können. Eine exakte Platzierung der Pole ist dann aber nicht mehr möglich.
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Verfahren nach Reinisch} \label{sec:verf-nach-rein}
+% Bei diesem Verfahren wird die Nachstellzeit $T_i$ des PI-Reglers gleich der größten Zeitkonstante $T_1$ der Regelstrecke gesetzt (Pol-Nullstellen-Kompensation) und die sich so ergebende Übertragungsfunktion der offenen Ketten durch \IT-Verhalten approximiert. Die Reglerverstärkung $K_P$ wird dann so bemessen, dass die Führungssprungantwort des Regelkreises eine gewünschte Überschwingweite $\nu_m$ zeigt. Die Fehler, die durch die \IT- Approximation auftreten, werden durch Wahl eines weiteren Entwurfsparameters $a$ berücksichtigt \cite{Reinisch64}.
+
+% Das Verfahren geht von Regelstrecken des Typs
+% \begin{equation}
+%   P(s)=K_S\frac{1+sT_Z}{\prod\limits _{k=1}^n\left(1+sT_k\right)}e^{-sT_t}
+% \end{equation}
+% mit $T_1\geq T_2\geq T_3\dots\geq T_n>0,\;T_t\geq 0$, reell und $T_Z<T_3$ bzw. $T_Z<T_4$ bei Verwendung eines PID-Reglers aus.
+
+% Beim Einsatz eines PID-Reglers kann man die zwei größten Zeitkonstanten $T_1$ und $T_2$ der Regelstrecke kompensieren.
+
+% \minisec{Zusammenfassung des Verfahrens}
+
+% \begin{enumerate}
+%   \item \textbf{Bestimmung der Regler-Kennzahlen}
+%   \begin{itemize}
+%     \item PI-Regler:
+%     \begin{equation*}
+%       K_{R1}(s)=K_P\left(1+\frac{1}{sT_i}\right)=K_P\frac{1+sT_i}{sT_i} \qquad \qquad \Rightarrow \boxed{\nu=2, \mu=n}
+%     \end{equation*}
+
+%     \item PID-Regler:
+%     \begin{equation*}
+%       K_{R2}(s) =K_P\frac{\left(1+sT_A\right)\left(1+sT_B\right)}{sT_i}\frac{1}{1+sT_{n+1}} \qquad \qquad \Rightarrow \boxed{\nu=3, \mu=n+1}
+%     \end{equation*}
+%   \end{itemize}
+
+%   \item \textbf{Sortierung der Zeitkonstanten}:
+%   \begin{equation*}
+%     T_1 \geq T_2 \geq T_3 \geq \cdots \geq T_n, \qquad T_Z < T_{\nu+1}, \qquad T_t \geq 0
+%   \end{equation*}
+
+%   \item \textbf{Überschwingverhalten:}
+
+%   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\hline
+%   \rowcolor{lightgray} $\nu_m$ in \% &0 & 5 & 10 &15 &20 &30 &40 &50 &60\\
+%   \hline
+%   $a$ &	4&	1.9&	1.4&	1.0&0.83&	0.51&0.31&	0.18&	0.11\\
+%   \hline
+%   $c$ &	0&	0&	1&	1&	1.4&	1.4&	1.4&	1.4&	1.4\\
+%   \hline
+%   \end{tabular}
+
+%   \item \textbf{Zwischenwerte}:
+%   \begin{align*}
+%   T_\Sigma&=\left(\sum\limits_{k=\nu}^\mu T_k\right)-T_Z+T_t \\[2ex]
+%   b&=\left(\sum\limits_{k=\nu}^{\mu-1}\sum\limits_{j=k+1}^\mu T_kT_j\right)+ \left(T_t-T_Z\right)\left(\sum\limits_{k=\nu}^\mu T_k-T_Z\right)+\frac{T_t^2}{2}\\[2ex]
+%   a_K&=a+c\frac{b}{T_\Sigma ^2}
+%   \end{align*}
+
+%   \item \textbf{Reglerparameter}:
+%   \begin{itemize}
+%     \item Verstärkung:
+%     \[
+%       K_P =\frac{T_i}{a_K K_S T_\Sigma}
+%     \]
+
+%     \item Nachstellzeit PI-Regler:
+%     \[
+%       T_i = T_1
+%     \]
+
+%     \item Nachstell- und Vorhaltezeit PID-Regler:
+%     \begin{align*}
+%       T_i&=T_1+T_2\\
+%       T_d &= \frac{T_1 T_2}{T_1 + T_2}
+%     \end{align*}
+%   \end{itemize}
+
+% \end{enumerate}
+
+
+% \subsubsection{Integralkriterien}\label{sec:integralkriterien}
+% Das Vorhandensein eines Streckenmodells erlaubt die numerische Simulation der Führungs-, Stör und Reglerausgangssprungantworten des geschlossenen Regelkreises. Die so ermittelten Signalverläufe können zur Berechnung eines Kostenfunktionals verwendet werden. Der Wert des Kostenfunktionals wird in Abhängigkeit von den Reglerparametern minimiert. Diejenigen Reglerparameter, für die das Funktional  minimal ist, werden schließlich am Regelkreis eingestellt.
+
+% Im nachfolgenden werden einige häufig verwendete Integralkriterien vorgestellt.
+
+% \textbf{Lineare Regelfläche}:\\
+% \begin{equation} \label{eq:IntKritLinRegFlaeche}
+% J = \int  \limits_{0}^{\infty} \left(e(t) - e_\infty\right) \mathrm{d}t.
+% \end{equation}
+% Nachteil: Bei schwingungsfähigem geschlossenen Kreis können sich die positiven und negativen Regelflächen aufheben und das Kriterium versagt.
+
+% \textbf{Betragsregelfläche}:\\
+% \begin{equation}  \label{eq:IntKritBetragsRegFlaeche}
+% J = \int  \limits_{0}^{\infty} \left|e(t) - e_\infty\right| \mathrm{d}t.
+% \end{equation}
+% Der Nachteil der sich aufhebenden Regelflächen existiert hier nicht. Dieses Kriterium wird auch \textbf{IAE-Kriterium} genannt (integral absolute error).
+
+% \textbf{Quadratische Regelfläche}:\\
+% \begin{equation}  \label{eq:IntKritQuadRegFlaeche}
+% J = \int  \limits_{0}^{\infty} \left(e(t) - e_\infty\right)^2 \mathrm{d}t.
+% \end{equation}
+% Größere Regelabweichungen werden stärker bestraft. Damit wird der Regelkreis sehr schnell, zeigt dafür aber häufig ein stärkeres Überschwingen. Das Kriterium ist auch unter der Bezeichnung \textbf{ISE-Kriterium} (integral squared error) bekannt.
+
+% \textbf{Zeitgewichtete Betragsregelfläche/ quadratische Regelfläche}:\\
+% Möchte man lang anhaltende Schwingungen unterdrücken, so ist es sinnvoll, die Regelfläche mit der Zeit zu gewichten. Dann werden Regelabweichungen für größere Zeiten "`teuer"' und die Reglerparameter werden durch das Minimierungskriterium so bestimmt, dass das Überschwingen unterdrückt/ reduziert wird:
+% \begin{align}
+% J &= \int  \limits_{0}^{\infty} t\cdot\left|e(t) - e_\infty\right| \; \mathrm{d}t.  \label{eq:IntKritBetragRegFlaecheZeit}\\
+% J &= \int  \limits_{0}^{\infty} t\cdot\left(e(t) - e_\infty\right)^2 \;\mathrm{d}t.  \label{eq:IntKritQuadRegFlaecheZeit}
+% \end{align}
+% Gleichung \eqref{eq:IntKritBetragRegFlaecheZeit} wird auch als \textbf{ITAE-Kriterium} (integral time-multiplied absolute error) bezeichnet, Gleichung \eqref{eq:IntKritQuadRegFlaecheZeit} als \textbf{ITSE-Kriterium} (integral time-multiplied squared error).
+
+% \textbf{Zeitquadratisch gewichtete Betragsregelfläche/ quadratische Regelfläche}:\\
+% Schwingungen können noch stärker unterdrückt werden, indem man die Regelfläche mit der Zeit quadratisch gewichtet:
+% \begin{align}
+% J &= \int  \limits_{0}^{\infty} t^2\cdot\left|e(t) - e_\infty\right| \; \mathrm{d}t. \label{eq:IntKritBetragRegFlaecheQuadZeit}\\
+% J &= \int  \limits_{0}^{\infty} t^2\cdot\left(e(t) - e_\infty\right)^2 \;\mathrm{d}t. \label{eq:IntKritQuadRegFlaecheQuadZeit}
+% \end{align}
+% Gleichung \eqref{eq:IntKritQuadRegFlaecheQuadZeit} ist auch unter dem Namen \textbf{ISTSE-Kriterium} (integral squared time-multiplied squared error).
+
+% \textbf{Quadratische Regelfläche mit Stellgrößenwichtung}\\
+% Durch Mitbetrachtung des Reglerausgangs $m(t)$ und der Wichtung mit der Streckenverstärkung $K_S$ und dem Faktor $r$ wird der Stellaufwand bewertet und je nach Wahl von $r$ auch die Überschwingweite beeinflusst:
+% \begin{equation} \label{eq:IntKritQuadRegStell}
+% J = \int  \limits_{0}^{\infty} \left(\left(e(t) - e_\infty\right)^2 + r K_S^2\left(m(t) - m_\infty\right)^2\right) \mathrm{d}t.
+% \end{equation}
+% Selbstverständlich kann \eqref{eq:IntKritQuadRegStell} auch noch mit der Zeit oder dem Zeitquadrat gewichtet werden. Gute Ergebnisse erhält man für Werte von $r$ im Bereich $0,\ldots, 0.1$. Auch die anderen Kriterien können um den Stellaufwand erweitert werden.
+
+
+% \textbf{Berechnung der optimalen Reglerparameter}\\
+% Die Berechnung der optimalen Reglerparameter unter Verwendung der o.g.~Kriterien erfolgt in der Regel numerisch. Hierzu ist in einer geeigneten Programmierumgebung, z.B.\,Matlab oder Python, eine Funktion $J=f(x)$ zu definieren, wobei die Komponenten des Vektors $x$ die Reglerparameter $K_P$, $T_i$ und ggf.~auch $T_d$ repräsentieren. Diese Funktion berechnet in Abhängigkeit von den übergebenen Reglerparametern die Sprungantwort des geschlossenen Kreises und liefert dann den Wert des Gütefunktionals zurück. Diese Funktion wird einem Minimierungsalgorithmus, z.B.\,\texttt{fmin} unter Python, übergeben, die das Minimum des Gütefunktionals in Abhängigkeit von den Reglerparametern bestimmt und die gefundenen optimalen Parameter zurückliefert.
+
+% Alternativ kann man auch eine Menge von Werten für die Reglerparameter vorgeben, für diese alle das Gütefunktional berechnen und dann dasjenige heraussuchen, das den geringsten Wert aufweist. Der Zeitaufwand zum Auffinden der optimalen Parameter wird bei dieser Methode jedoch dramatisch erhöht.
+
+% In einigen Spezialfällen ist auch eine analytische Berechnung der Parameter möglich, siehe \cite{Wendt}.
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Einstellverfahren im Frequenzbereich} \label{sec:PID:Frequenzbereicheinstellung}
+
+% Die hier vorgestellten Verfahren beruhen auf einer Analyse des Frequenzgangs $G_0(j\omega)$ des offenen Kreises (also Regler mit der Übertragungsfunktion $G_R(s)$ und Regelstrecke mit der Übertragungsfunktion $G_S(s)$ in Reihenschaltung ohne Rückführung) bzw.~des geschlossenen Regelkreises $G(j\omega)$.
+
+% Generell lässt sich der Frequenzgang des aufgeschnittenen Kreises in drei typische Bereiche aufteilen, wobei $\omega_D=\omega_s$ die Durchtrittsfrequenz des offenen Kreises darstellt (d.h.~$|G_0(j\omega_s)|=1$, $|G_0(j\omega_s)|_{dB}=0$), siehe Abbildung \ref{va20-A2}:
+
+% \begin{figure}
+% \begin{center}
+% \includegraphics[width=0.75\linewidth]{Inkscape/Frequenzgang-Typisch}
+% \caption{Typischer Frequenzgang eines aufgeschnittenen Kreises.}
+% \label{va20-A2}
+% \end{center}
+% \end{figure}
+
+% \begin{enumerate}
+% \item {\textbf{Abschnitt I}} ist praktisch nur für das stationäre Verhalten des
+% Regelkreises entscheidend.
+% \item {\textbf{Abschnitt II}} ist wesentlich für das dynamische Verhalten des geschlossenen Regelkreises verantwortlich. Die Schnittfrequenz mit der 0\,dB-Achse bestimmt die Einschwingzeit. Eine genügende Dämpfung (ausreichende Phasenreserve) wird bei einer Steigung von $-20$\,dB/Dekade in diesem Bereich garantiert. Je breiter dieser Bereich ist, umso größer wird der Phasenrand.
+% \item {\textbf{Abschnitt III}} ist ohne nennenswerten Einfluss auf das Verhalten des Regelkreises.
+% \end{enumerate}
+
+% Es können nun unterschiedliche Forderungen in den Reglerentwurf Einzug halten. Sinnvoll ist bspw., dass der Amplitudengang $|G(j\omega)|_{dB}$ des geschlossenen Kreises über einen relativ großen Frequenzbereich beginnend bei $\omega = 0$ konstant gleich 1 (entsprechend einer Regelabweichung von null) ist\footnote{Entsprechend einem logarithmischen Amplitudengang von 0.}. Dies ist natürlich technisch nicht vollständig realisierbar, aber zumindest näherungsweise umsetzbar.
+
+% Bei der Dimensionierung des Reglers ist es zur Vereinfachung zweckmäßig, die kleinen Zeitkonstanten der Strecke $T_j$, die im Abschnitt III liegen, zu einer Summenzeitkonstanten $T_{\Sigma}$ zusammenzufassen. Unter "`kleinen"' Zeitkonstanten werden diejenigen Zeitkonstanten verstanden, die klein gegenüber ein bis zwei anderen Zeitkonstanten $T_1$ und $T_2$ sind. Man erhält dann (mit $n=1,2$):
+% \begin{align*}
+% G_S(j\omega)&=\frac{K_S}{\prod\limits_{g=1}^n (1+j\omega T_g)\prod\limits_{k=n+1}^m (1+j\omega T_k)}\\[2ex]
+% &=\frac{K_S}{\prod\limits_{g=1}^n (1+j\omega T_g)\left(1+j\omega\sum\limits_{k=n+1}^m T_k+(j\omega)^2\sum\limits_{k=n+1}^{m-1} \sum\limits_{q=k+1}^m T_k T_q + \dots\right)}\,.
+% \end{align*}
+
+% Bei Vernachlässigung der Terme mit $(j\omega)^2,\;(j\omega)^3,\;\dots$ erhält man den vereinfachten Ausdruck
+% \begin{align*}
+% G_S(j\omega)=\frac{K_S}{\prod\limits_{g=1}^n (1+j\omega T_g)\left(1+j\omega T_\Sigma\right)}\qquad \text{mit} \quad
+% T_\Sigma=\sum\limits_{k=n+1}^m T_k\,.
+% \end{align*}
+% Der gleiche Ansatz kann auch auf Strecken mit I-Anteil übertragen werden.
+
+
+
+% \subsubsection{Betragsoptimum (nur P-Strecken)} \label{sec:betragsoptimum}
+% Dieses Verfahren ist nur für nicht schwingungsfähige P-Strecken anwendbar. Für den Frequenzgang $G(j\omega)$ des geschlossenen Kreises wird gefordert:
+% \begin{equation} \label{eq:ForderungBO}
+% |G(j\omega)| = 1 \quad \Leftrightarrow \quad |G(j\omega)|_\text{dB} = 0 \qquad \forall \omega \geq 0.
+% \end{equation}
+
+% Charakteristisch für das Verfahren ist es, dass mit der Nachstellzeit $T_i$ des Reglers die größte Zeitkonstante der Strecke kompensiert und die Reglerverstärkung $K_P$ dazu verwendet wird, Bedingung (\ref{eq:ForderungBO}) näherungsweise einzuhalten.
+
+% Am Beispiel einer $PT_n$-Strecke mit einer dominierenden Zeitkonstante wird die Herleitung des Verfahrens kurz erläutert. Für die Serienschaltung eines PI-Reglers mit der Übertragungsfunktion $G_R(s)$ und der Regelstrecke mit der Übertragungsfunktion $G_S(s)$ gilt dann:
+% \begin{equation}\label{eq:BOReihenschaltung}
+% G_0(s) = G_R(s) G_S(s) = \frac{K_P(1 + T_i s)}{T_i s} \frac{K_S}{(1+T_1 s) (1 + T_2 s) \ldots (1 + T_n s)}
+% \end{equation}
+% mit $T_1 \gg T_2 + \ldots + T_n$. Kompensiert man mittels $T_i$ die dominierende Zeitkonstante $T_1$, so erhält man eine \ITn-Kette:
+% \begin{equation}\label{eq:BOITnKette}
+% G_0(s) = \frac{K_P K_S}{T_1 s(1 + T_2 s) \ldots (1 + T_n s)}.
+% \end{equation}
+% Wegen $T_1 \gg T_2 + \ldots + T_n$ lässt sich hierfür näherungsweise schreiben
+% \begin{equation}\label{eq:BONaeherung}
+% G_0(s) \approx \frac{K_P K_S}{T_1 s(1 + T_\Sigma s)} \qquad \text{mit}\;T_\Sigma = T_2 + \ldots T_n.
+% \end{equation}
+% Für den Frequenzgang des geschlossenen Kreises gilt dann:
+% \begin{equation}\label{eq:B=FrequGang}
+% G(j\omega) = \frac{G_0(j\omega)}{1+G_0(j\omega)} =  \frac{K_P K_S}{K_P K_S - \omega^2 T_1 T_\Sigma + j\omega T_1}.
+% \end{equation}
+% Es soll gelten: $|G(j\omega)| = 1$. Daraus folgt:
+% \begin{align*}
+% &|K_P K_S - \omega^2 T_1 T_\Sigma + j\omega T_1| = |K_P K_S|\\[2ex]
+% \Leftrightarrow\qquad& (K_P K_S - \omega^2 T_1 T_\Sigma)^2 + \omega^2 T_1^2 = K_P^2 K_S^2\\[2ex]
+% \Leftrightarrow \qquad&-2K_P K_S T_1 T_\Sigma \omega^2 + T_1^2 T_\Sigma^2 \omega^4 + \omega^2 T_1^2 = 0\\[2ex]
+% \Leftrightarrow \qquad&(T_1^2 - 2K_P K_S T_1 T_\Sigma)\omega ^2 + T_1^2 T_\Sigma^2 \omega^4 = 0.
+% \end{align*}
+% Diese Bedingung lässt sich offenbar nur näherungsweise erfüllen, indem der Faktor für $\omega^2$ zu null gesetzt wird:
+% \begin{equation}\label{eq:BOBedingung}
+% T_1 - 2K_P K_S T_\Sigma = 0 \quad \Leftrightarrow \quad K_P = \frac{T_1}{2 K_S T_\Sigma}.
+% \end{equation}
+% Damit ist die Reglerverstärkung $K_P$ auch bestimmt.
+
+% Betragsoptimal eingestellte Regelkreise zeigen gutes Führungsverhalten. Die Phasenreserve lässt sich zu 63$^o$ berechnen. Störungen am Streckeneingang werden allerdings nur langsam ausgeregelt.
+
+% Das Verfahren lässt sich auf verschiedene P-Streckentypen erweitern bzw.~spezialisieren. Es werden folgende Fälle unterschieden:
+
+% \begin{RstTitelBox}{\PTT-Strecke mit einer dominierenden Zeitkonstante ($\rightarrow$ PI-Regler)}
+%   \begin{equation*}
+%   G(s) = \frac{K_S}{(1+T_1 s)(1+T_2 s)} \qquad T_1 > T_2.
+%   \end{equation*}
+%   Für einen PI-Regler gilt dann:
+%   \begin{equation*}
+%   \boxed{T_i = T_1 \qquad K_P = \frac{T_1}{2 K_S T_2}.}
+%   \end{equation*}
+% \end{RstTitelBox}
+
+
+% \begin{RstTitelBox}{\PTn-Strecke mit einer dominierenden Zeitkonstante ($\rightarrow$ PI-Regler)}
+%   \begin{equation*}
+%   G(s) = \frac{K_S}{(1+T_1 s)(1+T_2 s) \ldots (1+T_n s)} \qquad T_1 > T_\Sigma := T_2 + \ldots + T_n.
+%   \end{equation*}
+%   Dann lässt sich die Strecke wie folgt annähern
+%   \begin{equation*}
+%   G(s) \approx \frac{K_S}{(1+T_1 s)(1+T_\Sigma s)}
+%   \end{equation*}
+%   und für die Parameter des PI-Reglers ergibt sich
+%   \begin{equation*}
+%   \boxed{T_i = T_1 \qquad K_P = \frac{T_1}{2 K_S T_\Sigma}.}
+%   \end{equation*}
+% \end{RstTitelBox}
+
+
+% \begin{RstTitelBox}{\PTn-Strecke mit zwei dominierenden Zeitkonstanten ($\rightarrow$ PID-Regler)}
+%   \begin{equation*}
+%   G(s) = \frac{K_S}{(1+T_1 s)(1+T_2 s)(1+T_3 s) \ldots (1+T_n s)} \qquad T_1 > T_2 > T_\Sigma := T_3 + \ldots + T_n.
+%   \end{equation*}
+%   Dann lässt sich die Strecke wie folgt annähern
+%   \begin{equation*}
+%   G(s) \approx \frac{K_S}{(1+T_1 s)(1+T_2 s)(1+T_\Sigma s)}
+%   \end{equation*}
+%   und für die Parameter des PID-Reglers ergibt sich
+%   \begin{equation*}
+%   \boxed{T_i = T_1 \qquad T_d = T_2 \qquad K_P = \frac{T_1}{2 K_S T_\Sigma}.}
+%   \end{equation*}
+% \end{RstTitelBox}
+
+
+
+% \subsubsection{Symmetrisches Optimum für P-Strecken} \label{sec:symm-optim}
+% Dieses Verfahren geht von einer \PTn Regelstrecke aus, bei der eine oder zwei Zeitkonstanten dominierend sind. Die restlichen Zeitkonstanten werden in einer Summenzeitkonstanten $T_\Sigma$ zusammengefasst. Die Nachstellzeit des PI-Reglers wird hier \emph{nicht} dazu verwendet, die größte Zeitkonstante der Strecke zu kompensieren. Stattdessen wird $T_i = a^2T_\Sigma$ mit einem Parameter $a > 1$ gesetzt. Dadurch wird gewährleistet, dass die Durchtrittsfrequenz $\omega_d$ der Übertragungsfunktion des offenen Kreises das geometrische Mittel aus den Kreisfrequenzen $\omega_a = \frac{1}{a^2T_\Sigma}$ und $\omega_\Sigma = \frac{1}{T_\Sigma}$ ist. Mit dem Parameter $a$ kann dann die Phasenreserve an der Durchtrittsfrequenz festgelegt werden, und zwar so, dass diese maximal ist. Daraus ergibt sich dann auch die Reglerverstärkung $K_P$. Fordert man statt einer maximalen Durchtrittsfrequenz wieder einen möglichst großen Bereich, bei dem der Betrag des Amplitudenganges des geschlossenen Kreises gleich 1 ist, so ergibt sich, dass der Parameter $a$ gleich 2 zu setzen ist. Dieses Verfahren eignet sich auch für Strecken mit $I$-Verhalten, siehe nachfolgender Abschnitt \ref{sec:betragsoptimum-an-i}. Eine ausführliche Herleitung findet sich in \cite{Foellinger}.
+
+% Die Phasenreserve verringert sich beim Einsatz eines PI-Reglers, z.B. für $T_i=10\,T_\Sigma$ auf 48$^o$ und für $T_i = 20\,T_\Sigma $ auf 42$^o$. Damit vergrößert sich aber das Überschwingen bei der Führungssprungantwort und kann maximal 43\,\% erreichen. Zur Verringerung dieses Überschwingens sollte man durch Einschalten eines \PT-Gliedes mit $T_V\neq 0$ die Führungsgröße verzögert aufschalten. Empfohlen wird $T_V=T_i$. Das Störverhalten der Regelung verbessert sich im Vergleich zu dem Betragsoptimum deutlich so fern $T_1\gg T_\Sigma$.
+
+
+% \begin{RstTitelBox}{\PTn-Strecke mit einer dominierenden Zeitkonstante ($\rightarrow$ PI-Regler)}
+% \begin{equation*}
+% G(s) = \frac{K_S}{(1+T_1 s)(1+T_2 s) \ldots (1+T_n s)} \qquad T_1 >  a^2 T_\Sigma; \quad T_\Sigma := T_2 + \ldots + T_n.
+% \end{equation*}
+% Dann lässt sich die Strecke wie folgt annähern
+% \begin{equation*}
+% G(s) \approx \frac{K_S}{(1+T_1 s)(1+T_\Sigma s)}
+% \end{equation*}
+% und für die Parameter des PI-Reglers ergibt sich
+% \begin{equation*}
+% \boxed{T_i = a^2T_\Sigma \qquad K_P = \frac{T_1}{a K_S T_\Sigma} \qquad \text{(in der Regel wird $a=2$ gesetzt)}.}
+% \end{equation*}
+% \end{RstTitelBox}
+
+% \vspace{4ex}
+
+% \begin{RstTitelBox}{\PTn-Strecke mit zwei dominierenden Zeitkonstante ($\rightarrow$ PID-Regler)}
+% \begin{align*}
+% G(s) &= \frac{K_S}{(1+T_1 s)(1+T_2 s) (1+T_3 s) \ldots (1+T_n s)}\\[2ex]
+% T_1 &> T_2 \gg a^2 T_\Sigma;  \quad T_\Sigma := T_3 + \ldots + T_n.
+% \end{align*}
+% Dann lässt sich die Strecke wie folgt annähern
+% \begin{equation*}
+% G(s) \approx \frac{K_S}{(1+T_1 s)(1 + T_2 s)(1+T_\Sigma s)}
+% \end{equation*}
+% und für die Parameter des PID-Reglers ergibt sich
+% \begin{equation*}
+% \boxed{T_i = a^2T_\Sigma \qquad T_d = T_2 \qquad K_P = \frac{T_1}{a K_S T_\Sigma} \qquad \text{(in der Regel wird $a=2$ gesetzt)}.}
+% \end{equation*}
+% \end{RstTitelBox}
+
+% \subsubsection{Symmetrisches Optimum für I-Strecken}\label{sec:betragsoptimum-an-i}
+% Die Überlegungen aus dem vorherigen Abschnitt lassen sich auch auf \ITn-Strecken übertragen. Die maximale Phasenreserve beträgt bei mit $a=2$ symmetrisch optimierten Regelkreisen nur 37$^o$. Das daraus resultierende große Überschwingen der Führungssprungantwort kann hier ebenfalls durch Verwendung eines Verzögerungsglieds mit $T_V=T_i$ für die Führungsgröße verringert werden.
+
+% \begin{RstTitelBox}{\ITn-Strecke ohne dominierende Zeitkonstante ($\rightarrow$ PI-Regler)}
+% \begin{equation*}
+% G(s) = \frac{K_S}{T_0 s(1+T_1 s) \ldots (1+T_n s)} \qquad  T_\Sigma := T_1 + \ldots + T_n.
+% \end{equation*}
+% Dann lässt sich die Strecke wie folgt annähern
+% \begin{equation*}
+% G(s) \approx \frac{K_S}{T_0 s(1+T_\Sigma s)}
+% \end{equation*}
+% und für die Parameter des PI-Reglers ergibt sich
+% \begin{equation*}
+% \boxed{T_i = a^2T_\Sigma \qquad K_P = \frac{T_0}{a K_S T_\Sigma} \qquad \text{(in der Regel wird $a=2$ gesetzt)}.}
+% \end{equation*}
+% \end{RstTitelBox}
+
+% \begin{RstTitelBox}{\ITn-Strecke mit einer dominierender Zeitkonstante ($\rightarrow$ PID-Regler)}
+% \begin{equation*}
+% G(s) = \frac{K_S}{T_0 s(1+T_1 s)(1+T_2 s) \ldots (1+T_n s)} \qquad T_1 >  T_\Sigma; \quad T_\Sigma := T_2 + \ldots + T_n.
+% \end{equation*}
+% Dann lässt sich die Strecke wie folgt annähern
+% \begin{equation*}
+% G(s) \approx \frac{K_S}{T_0 s(1+T_1 s)(1+T_\Sigma s)}
+% \end{equation*}
+% und für die Parameter des PID-Reglers ergibt sich
+% \begin{equation*}
+% \boxed{T_i = a^2T_\Sigma \qquad T_d = T_1 \qquad K_P = \frac{T_0}{a K_S T_\Sigma} \qquad \text{(in der Regel wird $a=2$ gesetzt)}.}
+% \end{equation*}
+% \end{RstTitelBox}
+
+
+% \subsubsection{Zusammenfassung}\label{sec:zusammenfassungFreq}
+
+
+% \begin{RstWichtigBox}
+%   Das Betragsoptimum ist nur an P-Strecken anwendbar. Bei diesem Verfahren werden eine (PI-Regler) oder zwei (PID-Regler) dominierende Zeitkonstante(n) der Regelstrecke kompensiert. Das Symmetrische Optimum ist hingegen sowohl bei P als auch bei I-Strecken anwendbar. Falls hier ein PI-Regler verwendet wird, so wird nicht die größte Zeitkonstante kompensiert, sondern stattdessen die um einen Faktor $a^2$ skalierte Summenzeitkonstante. Im Falle eines PID-Reglers wird nur eine dominierende Zeitkonstante kompensiert.
+% \end{RstWichtigBox}
+
+
+% \begin{RstTippBox}
+%   Merke gut: Man erzielt ein
+%   \begin{enumerate}
+%   \item \textbf{gutes Führungsverhalten} bei Anwendung des Betragsoptimums für unverzögerte Eingangsgrößen (vorgeschalteter Tiefpass mit der Zeitkonstanten $T_V = 0$)
+%   \item \textbf{gutes Störverhalten} bei Anwendung des symmetrischen Optimums
+%   \item \textbf{gutes Stör- \emph{und} Führungsverhalten} bei Einstellung des Regelkreises nach dem symmetrischen Optimum, sofern ein Tiefpass mit der Zeitkonstanten $T_V$ zur Verzögerung der Führungsgröße mit $T_V=T_i$ verwendet wird.
+%   \end{enumerate}
+% \end{RstTippBox}
+
+
+% % Orts-und Wurzelortskurven
+% %%Ort und Wurzelortskurven
+% \section{Orts- und Wurzelortskurven (nur wenn LV RT2 gehört wird)}
+% \label{sec:orts-und-wurz}
+
+% \begin{RstHinweisBox}
+%     Die sichere Kenntnis des Inhaltes dieses Abschnittes ist erst für die ab dem 6. Semester stattfindenden Praktika erforderlich, also nach der Vorlesung~\emph{Regelungstechnik 1}. Das betrifft die Praktika \emph{Regelungstechnik 2} für die Studienrichtung AMR im Studiengang Elektrotechnik, das Praktikum \emph{Regelung und Steuerung} (Versuche V5 und V8) für den Studiengang Mechatronik und das Praktikum \emph{Regelungstechnik} im Studiengang Regenerative Energiesysteme.
+% \end{RstHinweisBox}
+
+% \subsection{Die Ortskurve}
+% \label{sec:hinweis}
+% Neben dem in Abschnitt \ref{sec:das-bodediagramm} vorgestellten Bode-Diagramm bietet sich auch die sogenannte \emph{Ortskurve} als Darstellungsmöglichkeit des Frequenzgangs eines linearen zeitinvarianten Übertragungsgliedes an. Die Ortskurve ist das Bild der imaginären Achse der komplexen $s$-Ebene in der $G(s)$-Ebene (vergl.~Abbildung \ref{fig:OrtskurvePrinzip}). Wegen der Eigenschaften
+% \begin{align*}
+% |G(-j\omega)| &= |G(j\omega)|\\
+% \arg G(j\omega) &= -\arg G(-j\omega)
+% \end{align*}
+% beschränkt man sich dabei in der Regel auf die Darstellung für $\omega = 0\ldots\infty$. In den Abbildungen~\ref{fig:OK1} und~\ref{fig:OK2} sind die Ortskurven einiger wichtiger Übertragungsglieder dargestellt.
+
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=0.9\textwidth]{Inkscape/Ortskurve-Prinzip}
+% \caption{Die Ortskurve ist die Abbildung der positiven imaginären Achse durch die Übertragungsfunktion $G(s)$.}
+% \label{fig:OrtskurvePrinzip}
+% \end{figure}
+
+% \begin{RstWichtigBox}
+%     Die Ortskurve ist nicht mit dem Bild des sogenannten Nyquist-Pfads zu verwechseln. Beim Nyquist-Pfad handelt es sich um eine geschlossene Kurve in der $s$-Ebene, dessen Bild $G(s)$, die Nyquist-Bildkurve, für Stabilitätsuntersuchungen betrachtet wird, siehe Vorlesungsunterlagen \emph{Regelungstechnik}
+% \end{RstWichtigBox}
+
+% \subsection{Stabilitätskriterien auf Basis der Ortskurven- und Nyquist-Bildkurven}
+% Das Nyquist-Stabilitätskriterium basiert auf der Orts- beziehungsweise Nyquist-Bildkurvendarstellung.
+
+% \paragraph{Vereinfachtes Nyquist-Kriterium} \label{sec:vere-nyqu-krit}
+% Ist die Übertragungsfunktion $G_0(s)$ des offenen Regelkreises stabil oder besitzt nur einen instabilen Pol, und zwar bei $s=0$, so ist der geschlossene Regelkreis genau dann stabil, wenn beim Durchlaufen der Ortskurve des Frequenzganges $G_0(j\omega)$ mit wachsendem $\omega$ (für $0 < \omega < \infty$) der kritische Punkt $(-1,j0)$ links von der Ortskurve liegt.
+
+% \paragraph{Allgemeines Nyquist-Kriterium} \label{sec:allg-nyqu-krit}
+% Besitzt der offene Regelkreis mit der rationalen Übertragungsfunktion $G_0(s)$ genau $n_0$ Polstellen mit $\text{Re}(s) = 0$ und $n_+$ Polstellen mit $\text{Re}(s) > 0$, so ist der geschlossene Regelkreis genau dann stabil, wenn die Nyquist-Bildkurve von $G_0(s)$ den Punkt $(-1,j0)$ nicht enthält und genau $(n_0+n_+)$-mal im Gegenuhrzeigersinn umkreist.
+
+% \begin{figure}[hbtp]
+% \centering
+% \includegraphics[width=0.9\textwidth]{Inkscape/WOK_und_Orskurven_T1.pdf}
+% \caption{Wurzelortskurven und Ortskurven einfacher Übertragungsglieder (nach \cite{Oppelt1964}). Es bedeuten: $\times$ Pol, $\circ$ Nullstelle.}
+% \label{fig:OK1}
+% \end{figure}
+
+% \begin{figure}[hbtp]
+% \centering
+% \includegraphics[width=0.95\textwidth]{Inkscape/WOK_und_Orskurven_T2.pdf}
+% \caption{Wurzelortskurven und Ortskurven einfacher Übertragungsglieder (nach \cite{Oppelt1964}). Es bedeuten: $\times$ Pol, $\circ$ Nullstelle.}
+% \label{fig:OK2}
+% \end{figure}
+
+% \subsection{Die Wurzelortskurve}
+% \label{sec:die-wurzelortskurve}
+% Häufig tritt die Fragestellung nach der Stabilität des Standardregelkreises in Abhängigkeit vom Wert eines  Verstärkungsfaktors $k$ auf. Diese lässt sich mithilfe der Wurzelortskurven beantworten. Bei einer Streckenübertragungsfunktion
+% \begin{equation*}
+% P(s) = \frac{Z(s)}{N(s)} = \frac{b_m}{a_n} \frac{\prod_{y=1}^{m}(s-s_y^0)}{\prod_{\nu=1}^n(s-s_\nu^\infty)}
+% \end{equation*}
+% mit $m \leq n$ und $\frac{b_m}{a_n} > 0$ wird der Regelkreis genau dann stabil, wenn alle Nullstellen (=Wurzeln) des charakteristischen Polynoms
+% \begin{equation*}
+% N(s) + k Z(s) = 0
+% \end{equation*}
+% einen negativen Realteil haben.
+
+% Die Wurzelortskurve ist nun der geometrische Ort aller Wurzeln der charakteristischen Gleichung
+% \begin{equation*}
+% N(s) + k Z(s) = 0,
+% \end{equation*}
+% die in Abhängigkeit von $k$ (mit $k>0$) in der $s$-Ebene aufgezeichnet werden können. Die Wurzelortskurven einiger wichtiger Übertragungsglieder finden sich in den Abbildungen~\ref{fig:OK1} und~\ref{fig:OK2}.
+
+% Für die Wurzelortskurven (WOK) gelten folgende wichtige Regeln:
+% \begin{itemize}
+% \item Die Wurzelorte liegen symmetrisch zur reellen Achse.
+% \item Die Wurzelorte beginnen für $k=0$ in den Polen von $P(s)$.
+% \item Die Wurzelorte enden für $k \to \infty$ in den Nullstellen von $P(s)$.
+% \item Hat $P(s)$ $n$ Pole und $m$ Nullstellen im Endlichen, so enden $n-m$-Abschnitte der WOK im Unendlichen.
+% \item Auf der reellen Achse gehören alle Punkte links von einer ungeraden Anzahl an reellen Polen und Nullstellen zu einem WOK-Abschnitt.
+% \item Aus einem $l$-fachen Pol $s_i^\infty$ treten $l$ WOK-Äste aus.
+% \item In einer $l$-fachen Nullstelle $s_i^0$ münden $l$ WOK-Äste.
+% \end{itemize}
+% Weitere Regeln siehe Vorlesungsunterlagen \emph{Regelungstechnik} beziehungsweise in~\cite{Reinschke}, Abschnitt 3.6.2.1.
+
+
+% % Kontrollfragen
+% %%Kontrollfragen
+
+
+% \newpage
+
+% % Anhang
+% \appendix
+
+% %Anhang Änderungen DIN
+
+% \section{Bezeichnungen nach alter und neuer DIN}
+
+% \begin{table}[htbp]
+% \centering
+% \begin{tabular}{|l|c|c|}
+% \hline
+% \rowcolor{lightgray}\textbf{Größe} & \textbf{DIN 19226} & \textbf{DIN IEC 60050-351} \\
+% \hline
+% Reglerausgangsgröße & $y_R$ & $m$ \\
+% \hline
+% Ausgangsgröße (allgemein) & $y$ & $\nu$ \\
+% \hline
+% Regelgröße & $y$ & $x$\\
+% \hline
+% Verzugszeit & $t_u$ & $T_e$ \\
+% \hline
+% Ausgleichszeit & $t_g$ & $T_b$ \\
+% \hline
+% Anregelzeit & $t_{anr}$ & $T_{cr}$ \\
+% \hline
+% Ausregelzeit & $t_{ausr}$ & $T_{cs}$ \\
+% \hline
+% Überschwingweite & ü & $\nu_m$, $x_m$ \\
+% \hline
+% Ansteigszeit & $t_r$ & $T_b$ \\
+% \hline
+% Durchtrittsfrequenz & $\omega_d$ & $\omega_c$ \\
+% \hline
+% Amplitudenreserve & $A_r$ & $G_m$ \\
+% \hline
+% Phasenreserve & $\Phi_R$ & $\varphi_m$ \\
+% \hline
+% Dämpfungsgrad  & d bzw. D & $\vartheta$ \\
+% \hline
+% Integrationszeitkonstante, Nachstellzeit & $T_I$ & $T_i$ \\
+% \hline
+% Vorhaltezeit & $T_D$ & $T_d$ \\
+% \hline
+% Totzeit & $T_t$ & $\Theta$ \\
+% \hline
+% Verstärkungsfakor, proportionale Verstärkung & $K_s$ & $K_p$ \\
+% \hline
+% \end{tabular}
+% \caption{Bezeichnungen von Kenngrößen nach alter DIN 19226 und neuer DIN IEC 60050-351.}
+% \end{table}
+
+% %%% Local Variables:
+% %%% mode: latex
+% %%% TeX-master: "Prakt-Anl-V0.tex"
+% %%% End:
+
+
+% \newpage
+
+
+
+% \end{document}
