@@ -103,7 +103,7 @@ class ConversionManager:
                     "R1": "has property",
                     "render": "R16__has_property"
                 },
-                "has the alternative label": {
+                "has an alternative label": {
                     "key": "R77",
                     "R1": "has alternative label",
                     "render": "R77__has_alternative_label"
