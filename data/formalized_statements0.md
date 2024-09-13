@@ -103,15 +103,19 @@
 - 'is subset of' has the verbal description "If $x \in X$ implies that $x \in Y$, then $X$ is a subset of $Y$".
 - 'is subset of' has the alternative verbal description "$Y$ contains $X$".
 
+
 - // snippet(14)
 - There is an equivalence-statement
     - full source code: "Note that $\SX \subseteq\SY$ if and only if $\SX\backslash\SY=\varnothing.$"
     - // from the context can be taken that X and Y are sets
     - source code of assertion: "$\SX \subseteq\SY$"
     - source code of premise: "$\SX\backslash\SY=\varnothing.$"
+    - formalized setting:
+        - SX is instance of set
+        - SY is instance of set
     - formalized premise:
         - There is an equation:
-            - formalized left hand side 'binary complement'(\SX, \SY)
+            - formalized left hand side: 'binary complement'(\SX, \SY)
             - formalized right hand side: 'empty set'
     - formalized assertion:
         - $\SX$ 'is subset of' $\SY$
@@ -122,7 +126,17 @@
     - // from the context can be taken that X and Y are sets
     - source code of assertion: "$\SX =\SY$"
     - source code of premise: "$\SX \subseteq \SY $ and $\SY \subseteq \SX$"
-    - // in a later processing stage we can determine that the premise consists of two conditions
+    - formalized setting:
+        - SX is instance of set
+        - SY is instance of set
+    - formalized premise:
+        - AND:
+            - SX 'is subset of' SY
+            - SY 'is subset of' SX
+    - formalized assertion:
+        - There is an equation:
+            - formalized left hand side: SX
+            - formalized right hand side: SY
 
 - // snippet(16)
 - There is a binary operator: 'proper subset'.
@@ -161,11 +175,15 @@
 - 'real numbers' has the associated LaTeX notation `$\BBR$`.
 
 - // snippet(20)
-- There is an equation:
-    - full source code: '$\{x,x\}=\{x\}.$'
-    - source code of left hand side: '$\{x,x\}$'
-    - source code of right hand side: '$\{x\}$'
-    - // explanation: From the context can be taken that `\{x,x\}` and \{x\} are instances of 'set'. This statement expresses that a set with twice the element x is equal to the set with element x. This implicitly expresses that a set cannot have repeated elements. However, this information is not given explicitly.
+- There is a general statement
+    - formalized setting:
+        - x is an instance of 'math object'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '$\{x,x\}=\{x\}.$'
+            - formalized left hand side: 'set operator'(x,x)
+            - formalized right hand side: 'set operator'(x)
+            - // explanation: From the context can be taken that `\{x,x\}` and \{x\} are instances of 'set'. This statement expresses that a set with twice the element x is equal to the set with element x. This implicitly expresses that a set cannot have repeated elements. However, this information is not given explicitly.
 
 - // snippet(21)
 - There is a class: 'multiset'.
@@ -195,6 +213,7 @@
     - replace 'set' by 'generalized set'
 - Amend definition of 'proper subset':
     - replace 'set' by 'generalized set'
+
 - // snippet(24)
 - There is an equation:
     - // this is used as example

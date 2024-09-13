@@ -124,13 +124,32 @@ The following types of statements are allowed:
     - source code of assertion: "$\SX \subseteq\SY$"
     - source code of premise: "$\SX\backslash\SY=\varnothing.$"
     - // in a later processing stage we can determine that this statement relates the items 'subset', 'complement' and 'empty set'
+    - formalized setting:
+        - SX is instance of set
+        - SY is instance of set
+    - formalized premise:
+        - There is an equation:
+            - formalized left hand side: 'binary complement'(\SX, \SY)
+            - formalized right hand side: 'empty set'
+    - formalized assertion:
+        - $\SX$ 'is subset of' $\SY$
 
 - There is an equivalence-statement
     - full source code: "Furthermore, $\SX =\SY$ if and only if $\SX \subseteq \SY $ and $\SY \subseteq \SX $."
     - // from the context can be taken that X and Y are sets
     - source code of assertion: "$\SX =\SY$"
     - source code of premise: "$\SX \subseteq \SY $ and $\SY \subseteq \SX$"
-    - // in a later processing stage we can determine that the premise consists of two conditions
+    - formalized setting:
+        - SX is instance of set
+        - SY is instance of set
+    - formalized premise:
+        - AND:
+            - SX 'is subset of' SY
+            - SY 'is subset of' SX
+    - formalized assertion:
+        - There is an equation:
+            - formalized left hand side: SX
+            - formalized right hand side: SY
 
 - There is a binary operator: 'proper subset'.
 - The type of argument1 of 'proper subset' is 'set'.

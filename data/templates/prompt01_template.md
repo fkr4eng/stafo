@@ -31,7 +31,6 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - The result type of <arg1> is <arg2>.
 - <arg1> has the verbal description <arg2>.
 - <arg1> has the alternative label <arg2>.
-- <arg1> is associate with <arg2>.
 - <arg1> has the property <arg2>.
 - <arg1> is associated to <arg2>.
 
@@ -44,11 +43,7 @@ It might be possible that there is not enough infomation to completely generate 
 
 The following Complex Formalized Statements are allowed:
 
-- // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
-- Amend definition of <arg1>:
-    - replace <arg1> by <arg2>
-
-- // The following starts a definition statement which can contain either one OR or one AND block. Such blocks can be nested which is represented by their indentation level
+- // The following starts a definition statement which can contain either one OR or one AND block. Such blocks can be nested which is represented by their indentation level. Each condition may be preceded by NOT to indicate the negation of the following condition.
 - <arg1> has the definition:
     - // the following starts an OR-block, i.e. a block of an arbitrary number of conditions which are linked by logical OR
     - OR
@@ -59,15 +54,30 @@ The following Complex Formalized Statements are allowed:
         - <condition1>
         - <condition2>
 
-- There is an equation:
-    - full source code: <arg1>.
-    - source code of left hand side: <arg2>.
-    - source code of right hand side: <arg3>.
-    - formalized left hand side: <expression1>
-    - formalized right hand side: <expression2>.
+- // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
+- Amend definition of <arg1>:
+    - replace <arg1> by <arg2>
+
+- There is a general statement:
+    - full source code: <arg1>
+    - formalized setting:
+        - <expression1>
+        - // the setting should define all variables that will be used in the following premise and assertion block
+        - // the setting might be empty
+        - formalized premise:
+        - <condition1>
+        - // The condition can consist of (nested) 'OR' and 'AND'-blocks.
+        - // the premise might be empty
+    - formalized assertion:
+        - <condition2>
+        - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
 
 - There is an equivalence-statement:
     - full source code: <arg1>.
+    - formalized setting:
+        - <expression1>
+        - // the setting should define all variables that will be used in the following premise and assertion block
+        - // the setting might be empty
     - // the assertion is the part before "if and only if"
     - source code of assertion: <arg2>.
     - // the premise is the part after "if and only if"
@@ -82,6 +92,10 @@ The following Complex Formalized Statements are allowed:
 
 - There is an if-then-statement:
     - full source code: <arg1>.
+    - formalized setting:
+        - <expression1>
+        - // the setting should define all variables that will be used in the following premise and assertion block
+        - // the setting might be empty
     - source code of premise: <arg1>.
     - source code of assertion: <arg1>.
     - // the following is optional (there might be no enough information)
@@ -91,6 +105,14 @@ The following Complex Formalized Statements are allowed:
     - formalized assertion:
         - <condition2>
         - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
+
+- // The following equation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
+- There is an equation:
+    - full source code: <arg1>.
+    - source code of left hand side: <arg2>.
+    - source code of right hand side: <arg3>.
+    - formalized left hand side: <expression1>
+    - formalized right hand side: <expression2>.
 
 - There is an example:
     - verbal summary: <arg1>.
@@ -112,6 +134,7 @@ The following Complex Formalized Statements are allowed:
 It might be desirable to reference a Complex Formalized Statements in a later statement. This can be done as in the following example:
 
 - There is an equation:
+    - // this can only be used inside a setting, premise or assertion
     - full source code: $a^2 + b^2 = c^2$.
     - reference: 'ref_eq1'
 - 'ref_eq1' is associated to 'Pythagorean theorem'
