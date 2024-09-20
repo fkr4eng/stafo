@@ -10,4 +10,4 @@ final_response_list.md
 src/*.egg-info/*
 __pycache__
 output.py
-snapshots/
+# snapshots/

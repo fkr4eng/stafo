@@ -201,106 +201,117 @@ Abkürzend schreibt man für die Transformation auch $F(s) = \mathcal{L}\left\{f
 Arbeitet man mit den reellwertigen Funktionen $f(t)$, so sagt man, man befinde sich im \emph{Zeitbereich}, wohingegen man vom \emph{Bildbereich} spricht, wenn man mit den aus der Transformation \eqref{eq:LaplaceHin} entstandenen komplexwertigen Funktionen $F(s)$ operiert.
 \snippet{51}
 
-% Es wird im Nachfolgenden schnell klar werden, warum eine so kompliziert anmutende und zunächst wenig anschauliche Transformation für das Arbeiten mit Übertragungsgliedern von großem Vorteil ist. Dazu wird zunächst eine besonders praktische Eigenschaft der Laplace-Transformation betrachtet, nämlich die "`Auswirkung"' auf die Zeitableitung $\dot f$ einer Funktion $f$. Für die Laplace-Transformierte der Zeitableitung von $f$ gilt:
-% \begin{align*}
-%   F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t.
-%   \intertext{Partielle Integration liefert}
-%   F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t.
-%   \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus}
-%   F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0).
-% \end{align*}
-% Um Schwierigkeiten durch etwaige Unstetigkeiten in $t=0$ aus dem Wege zu gehen, verwendet man anstelle von $f(0)$ den rechtsseitigen Grenzwert $f(+0)$, d.h., man erhält endgültig
-% \begin{equation}
-%   F^\ast(s)= \mathcal{L}(\dot f(t)) = -f(+0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(+0). \label{eq:LaplaceDiff}
-% \end{equation}
+Es wird im Nachfolgenden schnell klar werden, warum eine so kompliziert anmutende und zunächst wenig anschauliche Transformation für das Arbeiten mit Übertragungsgliedern von großem Vorteil ist. Dazu wird zunächst eine besonders praktische Eigenschaft der Laplace-Transformation betrachtet, nämlich die "`Auswirkung"' auf die Zeitableitung $\dot f$ einer Funktion $f$.
 
-% \RstBox{Diese Gleichung lässt sich für höhere Ableitungen von $f$ verallgemeinern:
-% \begin{equation}
-%   \mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0). \label{eq:LaplaceDiffAllgemein}
-% \end{equation}}
+Für die Laplace-Transformierte der Zeitableitung von $f$ gilt:
+\begin{align*}
+  F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t.
+  \intertext{Partielle Integration liefert}
+  F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t.
+  \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus}
+  F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0).
+\end{align*}
+\snippet{52}
+Um Schwierigkeiten durch etwaige Unstetigkeiten in $t=0$ aus dem Wege zu gehen, verwendet man anstelle von $f(0)$ den rechtsseitigen Grenzwert $f(+0)$, d.h., man erhält endgültig
+\begin{equation}
+  F^\ast(s)= \mathcal{L}(\dot f(t)) = -f(+0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(+0). \label{eq:LaplaceDiff}
+\end{equation}
+\snippet{53}
+\RstBox{Diese Gleichung lässt sich für höhere Ableitungen von $f$ verallgemeinern:
+\begin{equation}
+  \mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0). \label{eq:LaplaceDiffAllgemein}
+\end{equation}}
+\snippet{54}
+Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man:
+\begin{multline} \label{eq:DglAllgemeinLinearBildbereich}
+  a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s).
+\end{multline}
+\snippet{55}
+Formal ist also die $i$te Ableitung der Funktion $y(t)$ durch $s^i Y(s)$ zu ersetzen und die $j$te Ableitung der Funktion $u(t)$ durch $s^j U(s)$. Man kann dann zusammenfassen:
+\begin{multline} \label{eq:DglAllgemeinLinearBildbereichZusammengefasst}
+  (a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s) = \\ (b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s).
+\end{multline}
+\snippet{56i}
 
-% Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man:
-% \begin{multline} \label{eq:DglAllgemeinLinearBildbereich}
-%   a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s).
-% \end{multline}
-% Formal ist also die $i$te Ableitung der Funktion $y(t)$ durch $s^i Y(s)$ zu ersetzen und die $j$te Ableitung der Funktion $u(t)$ durch $s^j U(s)$. Man kann dann zusammenfassen:
-% \begin{multline} \label{eq:DglAllgemeinLinearBildbereichZusammengefasst}
-%   (a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s) = \\ (b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s).
-% \end{multline}
+Wendet man dieses Verfahren nun auf die Reihenschaltung der beiden Systeme aus dem Beispiel auf Seite \pageref{eq:LaplaceeBsp1} an, so erkennt man, dass im Bildbereich nur noch eine einzige Substitution, nämlich $V_1(s) = U_2(s)$ durchzuführen ist. Dies führt zum Konzept der Übertragungsfunktion, das im nachfolgenden Abschnitt erläutert wird.
 
-% Wendet man dieses Verfahren nun auf die Reihenschaltung der beiden Systeme aus dem Beispiel auf Seite \pageref{eq:LaplaceeBsp1} an, so erkennt man, dass im Bildbereich nur noch eine einzige Substitution, nämlich $V_1(s) = U_2(s)$ durchzuführen ist. Dies führt zum Konzept der Übertragungsfunktion, das im nachfolgenden Abschnitt erläutert wird.
+\begin{RstAufgabeBox}
+  \begin{small}
+    Wiederholen Sie die Umformung des Beispiels auf Seite \pageref{eq:LaplaceeBsp1} im Bildbereich!
+  \end{small}
+\end{RstAufgabeBox}
 
-% \begin{RstAufgabeBox}
-%   \begin{small}
-%     Wiederholen Sie die Umformung des Beispiels auf Seite \pageref{eq:LaplaceeBsp1} im Bildbereich!
-%   \end{small}
-% \end{RstAufgabeBox}
+\begin{RstWichtigBox}
+  Die getätigten Ausführungen setzen voraus, dass alle Anfangswerte in Gl.~\eqref{eq:DglAllgemeinLinear} Null sind. Wenn dies nicht der Fall ist, sind die entsprechenden Anfangswert-Terme in Gl.~\eqref{eq:LaplaceDiffAllgemein} mitzuberücksichtigen!
+\end{RstWichtigBox}
 
-% \begin{RstWichtigBox}
-%   Die getätigten Ausführungen setzen voraus, dass alle Anfangswerte in Gl.~\eqref{eq:DglAllgemeinLinear} Null sind. Wenn dies nicht der Fall ist, sind die entsprechenden Anfangswert-Terme in Gl.~\eqref{eq:LaplaceDiffAllgemein} mitzuberücksichtigen!
-% \end{RstWichtigBox}
+Weitere für regelungstechnische Belange wichtige Rechenregeln finden sich in Tabelle \ref{tab:LapalceRegeln}.
+\snippet{57}
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{|l|p{3.5cm}|l|l|} \hline
+  \rowcolor{lightgray}&\textbf{Zeitbereich} & \textbf{Bildbereich} &\textbf{Bedeutung}\\ \hline
+  1 &$f(t)$    &$F(s)$   &Transformation gemäß Gl.~\eqref{eq:LaplaceHin}\\ \hline
+  2 &$f^{(i)}(t)$ &$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$ &Ableitung im Zeitbereich \\ \hline
+  3 &$\int\limits_0^t f(\tau)\df\tau$ &$\frac{1}{s}F(s)$ &Integration im Zeitbereich\\\hline
+  4 &$f(t-\tau)$,\newline \small $\tau > 0$, $f(t) = 0$ f.~$t < 0$ &$F(s) \mathrm{e}^{-s\tau}$ &Verschiebung nach rechts \\ \hline
+  5 &$\int\limits_0^t f(\tau) g(t - \tau) \df\tau$ &$F(s) \cdot G(s)$ &Faltung im Zeitbereich\\\hline
+  \end{tabular}
+  \caption{Zusammenstellung der allerwichtigsten Rechenregeln der Laplace-Transformation.}
+  \label{tab:LapalceRegeln}
+\end{table}
 
-% Weitere für regelungstechnische Belange wichtige Rechenregeln finden sich in Tabelle \ref{tab:LapalceRegeln}.
+\snippet{58i}
+Eine  tiefergehende Diskussion der Laplace Transformation findet sich in \cite{FoellingerLapl}. Rechenregeln und Korrespondenztabellen finden sich in allen gängigen Werken der Regelungstheorie, bspw.~in \cite{Foellinger}, \cite{Wendt} oder der \emph{Formelsammlung Systemtheorie}.
 
-% \begin{table}[ht!]
-%   \centering
-%   \begin{tabular}{|l|p{3.5cm}|l|l|} \hline
-%   \rowcolor{lightgray}&\textbf{Zeitbereich} & \textbf{Bildbereich} &\textbf{Bedeutung}\\ \hline
-%   1 &$f(t)$    &$F(s)$   &Transformation gemäß Gl.~\eqref{eq:LaplaceHin}\\ \hline
-%   2 &$f^{(i)}(t)$ &$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$ &Ableitung im Zeitbereich \\ \hline
-%   3 &$\int\limits_0^t f(\tau)\df\tau$ &$\frac{1}{s}F(s)$ &Integration im Zeitbereich\\\hline
-%   4 &$f(t-\tau)$,\newline \small $\tau > 0$, $f(t) = 0$ f.~$t < 0$ &$F(s) \mathrm{e}^{-s\tau}$ &Verschiebung nach rechts \\ \hline
-%   5 &$\int\limits_0^t f(\tau) g(t - \tau) \df\tau$ &$F(s) \cdot G(s)$ &Faltung im Zeitbereich\\\hline
-%   \end{tabular}
-%   \caption{Zusammenstellung der allerwichtigsten Rechenregeln der Laplace-Transformation.}
-%   \label{tab:LapalceRegeln}
-% \end{table}
+\snippet{59}
+\subsubsection{Übertragungsfunktion}\label{sec:gewichts-ubertr-und}
+\snippet{60}
+Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in $s$ umformen:
+\begin{equation} \label{eq:UebertragungsfunktionAllgemein}
+  G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}.
+\end{equation}
+\snippet{61}
+Diesen Ausdruck bezeichnet man als \emph{Übertragungsfunktion} des durch die Dgl.~\eqref{eq:DglAllgemeinLinear} beschriebenen linearen Übertragungsgliedes.
+\snippet{62}
+Offensichtlich gilt:
+\begin{equation*}
+  V(s) = G(s) U(s).
+\end{equation*}
+\snippet{63}
+\begin{RstWichtigBox}
+  Wegen Regel 5 in Tabelle \ref{tab:LapalceRegeln} folgt daraus: Die Übertragungsfunktion $G(s)$ ist die Laplace-Transformierte der Gewichtsfunktion $g(t)$ (siehe Gl.~\eqref{eq:GewichtsFunktion}).
+  \snippet{64}
+  Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}:
+  \begin{equation*}
+    H(s) = \frac{1}{s}G(s).
+  \end{equation*}
+\end{RstWichtigBox}
+\snippet{65}
+\begin{RstWichtigBox}
+  Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}. Die Nullstellen des Zählers von $G(s)$ werden als \emph{Nullstellen} der Übertragungsfunktion bezeichnet, die Nullstellen des Nenners von $G(s)$ (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.
 
-% Eine  tiefergehende Diskussion der Laplace Transformation findet sich in \cite{FoellingerLapl}. Rechenregeln und Korrespondenztabellen finden sich in allen gängigen Werken der Regelungstheorie, bspw.~in \cite{Foellinger}, \cite{Wendt} oder der \emph{Formelsammlung Systemtheorie}.
+  Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch $G(s)$ repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.
 
+  Die Differenz zwischen Nenner- und Zählergrad der Übertragungsfunktion bezeichnet man allgemein als \emph{Polüberschuss} oder \emph{relativer Grad}. Ist der Nennergrad der Übertragungsfunktion größer als der Zählergrad, so bezeichnet man die Übertragungsfunktion als \emph{streng proper}. Sind Nenner- und Zählergrad identisch, so ist die Übertragungsfunktion nur \emph{proper}. Übertragungsfunktionen, die nicht proper sind, haben differenzierenden Charakter.
+\end{RstWichtigBox}
 
-
-% \subsubsection{Übertragungsfunktion}\label{sec:gewichts-ubertr-und}
-% Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in $s$ umformen:
-% \begin{equation} \label{eq:UebertragungsfunktionAllgemein}
-%   G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}.
-% \end{equation}
-% Diesen Ausdruck bezeichnet man als \emph{Übertragungsfunktion} des durch die Dgl.~\eqref{eq:DglAllgemeinLinear} beschriebenen linearen Übertragungsgliedes. Offensichtlich gilt:
-% \begin{equation*}
-%   V(s) = G(s) U(s).
-% \end{equation*}
-
-% \begin{RstWichtigBox}
-%   Wegen Regel 5 in Tabelle \ref{tab:LapalceRegeln} folgt daraus: Die Übertragungsfunktion $G(s)$ ist die Laplace-Transformierte der Gewichtsfunktion $g(t)$ (siehe Gl.~\eqref{eq:GewichtsFunktion}). Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}:
-%   \begin{equation*}
-%     H(s) = \frac{1}{s}G(s).
-%   \end{equation*}
-% \end{RstWichtigBox}
-
-% \begin{RstWichtigBox}
-%   Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}. Die Nullstellen des Zählers von $G(s)$ werden als \emph{Nullstellen} der Übertragungsfunktion bezeichnet, die Nullstellen des Nenners von $G(s)$ (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.
-
-%   Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch $G(s)$ repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.
-
-%   Die Differenz zwischen Nenner- und Zählergrad der Übertragungsfunktion bezeichnet man allgemein als \emph{Polüberschuss} oder \emph{relativer Grad}. Ist der Nennergrad der Übertragungsfunktion größer als der Zählergrad, so bezeichnet man die Übertragungsfunktion als \emph{streng proper}. Sind Nenner- und Zählergrad identisch, so ist die Übertragungsfunktion nur \emph{proper}. Übertragungsfunktionen, die nicht proper sind, haben differenzierenden Charakter.
-% \end{RstWichtigBox}
-
-% \begin{RstWichtigBox}
-%   An dieser Stelle sei noch einmal betont, dass die Formulierung der Übertragungsfunktion entsprechend Gl.~\eqref{eq:UebertragungsfunktionAllgemein} davon ausgeht, dass für $t=0$ alle Anfangswerte gleich null sind. Ist dies nicht der Fall, sind entsprechende Anpassungen vorzunehmen!
-% \end{RstWichtigBox}
+\begin{RstWichtigBox}
+  An dieser Stelle sei noch einmal betont, dass die Formulierung der Übertragungsfunktion entsprechend Gl.~\eqref{eq:UebertragungsfunktionAllgemein} davon ausgeht, dass für $t=0$ alle Anfangswerte gleich null sind. Ist dies nicht der Fall, sind entsprechende Anpassungen vorzunehmen!
+\end{RstWichtigBox}
 
 
-% \subsubsection{Anfangs- und Endwertsatz} \label{sec:endwertsatze}
-% Häufig interessiert der stationäre Anfangs- oder Endwert in einem geregelten System. Ist man an dem Anfangswert $x_0$ einer Zeitfunktion interessiert, so kann dieser mittels des
-% Anfangswertsatzes der Laplace-Transformation bestimmt werden. Hat man die Bildfunktion $X(s) = \mathcal{L}\{x(t)\}$ der zu untersuchenden Zeitfunktion, so gilt:
-% \begin{equation} \label{eq:Anfangswertsatz}
-%   x_0 = \lim_{t \to 0} x(t) = \lim_{s \to \infty} s X(s).
-% \end{equation}
+\subsubsection{Anfangs- und Endwertsatz} \label{sec:endwertsatze}
+Häufig interessiert der stationäre Anfangs- oder Endwert in einem geregelten System. Ist man an dem Anfangswert $x_0$ einer Zeitfunktion interessiert, so kann dieser mittels des
+Anfangswertsatzes der Laplace-Transformation bestimmt werden. Hat man die Bildfunktion $X(s) = \mathcal{L}\{x(t)\}$ der zu untersuchenden Zeitfunktion, so gilt:
+\begin{equation} \label{eq:Anfangswertsatz}
+  x_0 = \lim_{t \to 0} x(t) = \lim_{s \to \infty} s X(s).
+\end{equation}
 
-% Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der LAPLACE-Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:
-% \begin{equation}\label{eq:Endwertsatz}
-%   e_\infty = \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s).
-% \end{equation}
+Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der LAPLACE-Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:
+\begin{equation}\label{eq:Endwertsatz}
+  e_\infty = \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s).
+\end{equation}
 
 
 % \begin{RstWichtigBox}

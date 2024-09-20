@@ -117,6 +117,7 @@ The following Complex Formalized Statements are allowed:
     - source code of right hand side: <arg3>.
     - formalized left hand side: <expression1>
     - formalized right hand side: <expression2>.
+    - // for the formalized expression, the following symbols are allowed: + (addition), - (subtraction), * (multiplication), / (division), ^ (power)
 
 - // The following equation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
 - There is a system of equations:
@@ -181,6 +182,7 @@ As arguments to the above statement types the following is allowed:
 - Please generate your output as markdown list. No heading, no delimiter.
 - If you think that a piece of information cannot be represented by one of the above statements, just generate a comment with explanations.
 - If you think that basic mathematical concepts like 'set' or 'integer numbers' are implied from the context but not explicitely named, try to generate statements as described in Input Part 1 but add a comment saying 'infered knowlege'.
+- If you think you need to introduce a new relation that is not explicitely described, please do so.
 - In the LaTeX source code (Input Part 3 and Input Part 5) you can ignore the following:
     - `\label{...}`
     - `\index{...}`
