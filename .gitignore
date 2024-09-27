@@ -11,3 +11,21 @@ src/*.egg-info/*
 __pycache__
 output.py
 # snapshots/
+
+# tex related files
+*.log
+*.toc
+*.nav
+*.tex~
+*.aux
+*.bbl
+*.snm
+*.synctex.gz
+*.blg
+*.bcf
+*.run.xml
+*.out
+*.vrb
+*.tex.backup
+*.clo
+*.idx

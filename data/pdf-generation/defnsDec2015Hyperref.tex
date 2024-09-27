@@ -1,0 +1,568 @@
+%_%_%_%_% new page parameters
+\setlength{\textwidth}{33pc} \setlength{\textheight}{49pc}
+\setlength{\parskip}{1.8pt}  %was 6 then 2
+
+
+\makeatletter
+\def\adots{\mathinner{\mkern2mu\raise\p@\hbox{.}
+\mkern2mu\raise4\p@\hbox{.}\mkern1mu
+\raise7\p@\vbox{\kern7\p@\hbox{.}}\mkern1mu}} \makeatother
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb,latexsym}
+\usepackage[psamsfonts]{eucal}
+\usepackage{amsthm}
+
+\usepackage{graphicx}
+
+\usepackage{authorindex}
+
+\usepackage{url}
+
+\usepackage[geometry]{ifsym}
+
+
+
+\usepackage[final,breaklinks]{hyperref}
+\usepackage[hyperpageref]{backref}
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+\ifcase #1 %
+(Not cited.)%
+\or
+(Cited on p.~#2.)%
+\else
+(Cited on pp.~#2.)%
+\fi}
+
+
+
+%in authorindex, what sets the skip between letters of the alphabet??????
+
+\makeatletter
+\renewenvironment{theauthorindex}
+               {\cleardoublepage\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+                \columnseprule \z@
+                \columnsep 6\p@\premulticols0pt
+                \begin{multicols}{3}[\@makeschapterhead{Author Index}]\fontsize{10}{10pt}\selectfont\raggedright\widowpenalty10000\clubpenalty10000%
+\addcontentsline{toc}{chapter}{Author Index}
+                \@mkboth{AUTHOR INDEX}%
+                        {AUTHOR INDEX}%
+\gdef\rightmark{AUTHOR INDEX}%
+                \thispagestyle{empty}\parindent\z@
+                \parskip\z@ \@plus.2\p@\relax
+                %\let\item\@idxitem\fontsize{10}{12pt}\selectfont\def\item[##1]{\par\hangindent1em\hspace{0mm}\ainame{##1}}}
+\let\item\@idxitem\fontsize{8}{8pt}\selectfont\def\item[##1]{\par\hangindent1em\hspace{0mm}\ainame{##1}}}%modified Jan26 to smaller font
+               {\end{multicols}\if@restonecol\onecolumn\else\clearpage\fi}
+
+
+\makeatother
+
+
+
+\usepackage{makeidx}
+\makeindex
+
+\usepackage{longtable}
+
+
+\let\cite=\aicite
+
+
+\raggedbottom
+
+\allowdisplaybreaks  %added Sept 2012
+
+\renewcommand{\sfdefault}{phv}
+
+%_%_%_%_% customize theorems...
+ \newtheoremstyle{mythm}% name
+   {1.8pt}%      Space above----was 12 then 6 then 2
+   {-.2pt}%      Space below was 0
+   {}%         Body font
+   {\parindent}%         Indent amount (empty = no indent, \parindent = para indent)
+   {\sffamily\bfseries}% Thm head font
+   {.}%        Punctuation after thm head
+   {.4em}%     Space after thm head: " " = normal interword space;
+         %       \newline = linebreak
+   {}%         Thm head spec (can be left empty, meaning `normal')
+
+\theoremstyle{mythm}
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{defin}[theo]{Definition}
+\newtheorem{fac}[theo]{Fact}
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{exa}[theo]{Example}
+
+%\newtheorem*{proof}{Proof}
+
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{section}.\arabic{figure}}
+\setcounter{figure}{1}
+
+
+\long\def\isdef{\mathrel{\mathop{\smash{=}}\limits^{\hbox{\raisebox{.7ex}{\small$\scriptstyle\triangle
+$}}}}}
+
+%\long\def\equivrel{\mathrel{\mathop{\smash{=}}\limits^{\hbox{\raisebox{.7ex}{\small$\scriptstyle
+%\SR $}}}}}
+
+
+\newcommand{\equivrel}{\equiv}
+
+%\long\def\lerel{\mathrel{\mathop{\smash{\le}}\limits^{\hbox{\raisebox{1.1ex}{\small$\scriptstyle
+%\SR $}}}}}
+
+
+\newcommand{\lerel}{\preceq}
+
+
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\benum}{\begin{tenumerate}}
+\newcommand{\eenum}{\end{tenumerate}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\matl}{\left[\mspace{-7mu} \begin{array}}
+\newcommand{\matr}{\end{array}\mspace{-7mu} \right]}
+
+
+
+\newcommand{\matla}{\left[\mspace{-1mu} \begin{array}}
+\newcommand{\matra}{\end{array}\mspace{-1mu} \right]}
+
+
+
+
+\newcommand{\matlStwo}{\left\{\mspace{-7mu} \begin{array}}
+\newcommand{\matrStwo}{\end{array}\mspace{-7mu} \right\}}
+
+
+
+\newcommand{\matlA}{\left\langle\mspace{-7mu} \begin{array}}
+\newcommand{\matrA}{\end{array}\mspace{-7mu} \right\rangle}
+
+
+
+\newcommand{\matls}{\left[\mspace{-2mu} \begin{smallmatrix}}
+\newcommand{\matrs}{\end{smallmatrix}\mspace{-2mu} \right]}
+
+
+\newcommand{\matlc}{\left[\mspace{-7mu} \begin{array}}
+\newcommand{\matrc}{\end{array}\mspace{-7mu} \right]}
+
+
+
+\makeatletter
+\def\tenumerate{\vspace{2.5pt}\par%  %was 6 then 3
+  \ifnum \@enumdepth >\thr@@\@toodeep\else
+    \advance\@enumdepth\@ne
+    \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
+      \expandafter
+      \list
+        \csname label\@enumctr\endcsname
+        {\usecounter\@enumctr%
+\setlength{\topsep}{0pt}%
+\setlength{\rightmargin}{10pt}%was 12
+\setlength{\partopsep}{0pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+\setlength{\itemsep}{2.5pt}%  %was 6 then was 3
+\def\makelabel##1{\hss\llap{##1}}}%
+  \fi}
+\let\endtenumerate =\endlist
+\makeatother
+
+\renewcommand{\labelenumi}{\it\roman{enumi}\rm)}
+
+\DeclareMathOperator{\co}{conv}
+
+\DeclareMathOperator{\cone}{cone}
+
+\DeclareMathOperator{\polar}{polar}
+
+\DeclareMathOperator{\dcone}{d\mspace{-.5mu}cone}
+
+\DeclareMathOperator{\coco}{coco}
+
+\DeclareMathOperator{\Imag}{Im}
+
+\DeclareMathOperator{\Real}{Re}
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\str}{str}  %added this May 2014
+
+\DeclareMathOperator{\rank}{rank}
+
+\DeclareMathOperator{\defect}{def}
+
+\DeclareMathOperator{\spann}{span}
+
+\DeclareMathOperator{\aff}{affin}
+
+\DeclareMathOperator{\ind}{ind}
+
+\DeclareMathOperator{\spec}{spec}
+
+\DeclareMathOperator{\mspec}{mspec}
+
+\DeclareMathOperator{\roots}{roots}
+
+\DeclareMathOperator{\mroots}{mroots}
+
+\DeclareMathOperator{\diag}{diag}
+
+\DeclareMathOperator{\revdiag}{revdiag}
+
+\DeclareMathOperator{\Diag}{Diag}
+
+\DeclareMathOperator{\volume}{volume}
+
+\DeclareMathOperator{\area}{area}
+
+\DeclareMathOperator{\Inert}{In}
+
+\DeclareMathOperator{\vek}{vec}
+
+\DeclareMathOperator{\sign}{sign}
+
+\DeclareMathOperator{\cl}{cl}
+
+\DeclareMathOperator{\relcl}{relcl}
+
+\DeclareMathOperator{\inter}{int}
+
+\DeclareMathOperator{\relint}{relint}
+
+\DeclareMathOperator{\bd}{bd}
+
+\DeclareMathOperator{\relbd}{relbd}
+
+\DeclareMathOperator{\fcone}{fcone}
+
+\DeclareMathOperator{\ad}{ad}
+
+%\DeclareMathOperator{\sprad}{sprad}
+
+%\DeclareMathOperator{\spabs}{spabs}
+
+\DeclareMathOperator{\nrad}{nrad}
+
+\DeclareMathOperator{\reldeg}{reldeg}
+
+\DeclareMathOperator{\sig}{sig}
+
+\DeclareMathOperator{\card}{card}
+
+\DeclareMathOperator{\glb}{glb}
+
+\DeclareMathOperator{\lub}{lub}
+
+\DeclareMathOperator{\essglb}{essglb}  %to be fixed!!!!!!!!!!!!!!
+
+\DeclareMathOperator{\esslub}{esslub}
+
+\DeclareMathOperator{\truth}{truth}
+
+\DeclareMathOperator{\modd}{mod}
+
+\DeclareMathOperator{\rem}{rem}
+
+\DeclareMathOperator{\Arg}{arg}
+
+%\DeclareMathOperator{\gcd}{gcd}
+
+\DeclareMathOperator{\lcm}{lcm}
+
+
+
+
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\csch}{csch}
+
+\DeclareMathOperator{\ecl}{ecl}
+
+\DeclareMathOperator{\iso}{iso}
+
+\DeclareMathOperator{\ebd}{ebd}
+
+
+\DeclareMathOperator{\asin}{asin}
+\DeclareMathOperator{\acos}{acos}
+\DeclareMathOperator{\atan}{atan}
+\DeclareMathOperator{\acsc}{acsc}
+\DeclareMathOperator{\asec}{asec}
+\DeclareMathOperator{\acot}{acot}
+
+\DeclareMathOperator{\asinh}{asinh}
+\DeclareMathOperator{\acosh}{acosh}
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\acsch}{acsch}
+\DeclareMathOperator{\asech}{asech}
+\DeclareMathOperator{\acoth}{acoth}
+
+
+
+
+\DeclareMathOperator{\OLHP}{\rm OLHP}
+
+\DeclareMathOperator{\CLHP}{\rm CLHP}
+
+\DeclareMathOperator{\CRHP}{\rm CRHP}
+
+\DeclareMathOperator{\ORHP}{\rm ORHP}
+
+\DeclareMathOperator{\IA}{\rm IA}
+
+
+
+
+
+
+\DeclareMathOperator{\OIUD}{\rm OIUD}
+
+\DeclareMathOperator{\CIUD}{\rm CIUD}
+
+\DeclareMathOperator{\COUD}{\rm COUD}
+
+\DeclareMathOperator{\OOUD}{\rm OOUD}
+
+\DeclareMathOperator{\UC}{\rm UC}
+
+
+
+
+\renewcommand{\theenumi}{$\roman{enumi})$}
+%\renewcommand{\theenumi}{\roman{enumi})}
+\renewcommand{\labelenumi}{\theenumi}
+%\setcounter{enumi}{2}--------to restart counter after last number
+
+
+%\newcommand{\isdef}{\overset {\text{\tiny$\triangle$}}      {=}    }
+
+%\newcommand{\isdef}{\stackrel{\triangle}{=}}
+\newcommand{\pr}[1]{{#1}^{\prime}}
+\newcommand{\inv}{^{\mspace{-2mu}-\mspace{-1mu}1}}
+\newcommand{\row}[1]{{\rm row}_{#1}}
+\newcommand{\col}[1]{{\rm col}_{#1}}
+\newcommand{\arrowup}[1]{\stackrel{#1}{\leftarrow}}
+\newcommand{\smin}{\stackrel{\min}{\sim}}
+\newcommand{\jw}{\jmath\mspace{1mu}\omega}
+\newcommand{\omegan}{\omega_{\rm n}}
+\newcommand{\omegad}{\omega_{\rm d}}
+\newcommand{\omegar}{\omega_{\rm r}}
+\newcommand{\omegani}{\omega_{{\rm n}i}}
+\newcommand{\omegans}[1]{\omega_{{\rm n}_{#1}}}
+\newcommand{\MSig}{{\mit\Sigma}}
+\newcommand{\MLam}{{\mit\Lambda}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\dhalf}{\dfrac{1}{2}}
+
+\newcommand{\modup}[1]{\stackrel{#1}{\equiv}}
+
+
+
+\newcommand{\HS}{\hat S}
+\newcommand{\HI}{\hat I}
+%\newcommand{\rmThat}{{\hat{\rm T}}}
+\newcommand{\rmThat}{{\hat{\mathsf T}}}
+
+
+\newcommand{\asthat}{{\hat*}}
+
+
+\newcommand{\dpder}[2]{\displaystyle\frac{\partial {#1}}{\partial {#2}}}
+\newcommand{\der}[2]{\mbox{$\frac{d{#1}}{d{#2}}$}}
+\newcommand{\dder}[2]{\displaystyle{\frac{d{#1}}{d{#2}}}}
+\newcommand{\pder}[2]{\mbox{$\frac{\partial {#1}}{\partial {#2}}$}}
+\newcommand{\dt}{{\rm d}t}
+\newcommand{\dx}{{\rm d}x}
+\newcommand{\p}{\partial}
+\newcommand{\pt}{\partial_t}
+\newcommand{\ptt}{\partial^2_t}
+\newcommand{\px}{\partial_x}
+\newcommand{\pxx}{\partial^2_x}
+\newcommand{\pp}{\partial{^2}}
+
+
+
+\newcommand{\lers}{\stackrel{\rm rs}{\le}}
+\newcommand{\lestar}{\stackrel{\rm *}{\le}}
+\newcommand{\leGL}{\stackrel{\rm GL}{\le}}
+\newcommand{\led}{\stackrel{\rm d}{\le}}
+\newcommand{\lec}{\stackrel{\rm c}{\le}}
+\newcommand{\lesharp}{\stackrel{\#}{\le}}
+
+\newcommand{\majw}{\stackrel{\rm w}{\prec}}
+\newcommand{\majs}{\stackrel{\rm s}{\prec}}
+\newcommand{\majwlog}{\stackrel{\rm wlog}{\prec}}
+\newcommand{\majslog}{\stackrel{\rm slog}{\prec}}
+
+
+
+\newcommand{\sprad}{\rho_{\rm max}}
+\newcommand{\spabs}{\alpha_{\rm max}}
+
+
+
+\newcommand{\bulled}{\mspace{-2mu}\circ\mspace{-11mu}\cdot\mspace{6mu}}
+
+
+
+
+%\newcommand{\rmA}{{\rm A}}
+\newcommand{\rmA}{{\mathsf A}}    %needed for adjoint but watch out for alt group!
+
+\newcommand{\rmB}{{\rm B}}
+\newcommand{\rmC}{{\rm C}}
+%\newcommand{\rmD}{{\rm D}}
+\newcommand{\rmD}{{\mathsf D}}
+
+
+\newcommand{\rmE}{{\rm E}}
+\newcommand{\rmF}{{\rm F}}
+\newcommand{\rmG}{{\rm G}}
+\newcommand{\rmH}{{\rm H}}
+\newcommand{\rmI}{{\rm I}}
+\newcommand{\rmJ}{{\rm J}}
+\newcommand{\rmK}{{\rm K}}
+%\newcommand{\rmL}{{\rm L}}
+\newcommand{\rmL}{{\mathsf L}}
+
+\newcommand{\rmM}{{\rm M}}
+\newcommand{\rmN}{{\rm N}}
+\newcommand{\rmO}{{\rm O}}
+\newcommand{\rmP}{{\rm P}}
+\newcommand{\rmQ}{{\rm Q}}
+%\newcommand{\rmR}{{\rm R}}
+\newcommand{\rmR}{{\mathsf R}}
+
+\newcommand{\rmS}{{\rm S}}
+%\newcommand{\rmT}{{\rm T}}
+\newcommand{\rmT}{{\mathsf T}}
+
+\newcommand{\rmU}{{\rm U}}
+\newcommand{\rmV}{{\rm V}}
+\newcommand{\rmW}{{\rm W}}
+\newcommand{\rmX}{{\rm X}}
+\newcommand{\rmY}{{\rm Y}}
+\newcommand{\rmZ}{{\rm Z}}
+
+\newcommand{\rma}{{\rm a}}
+\newcommand{\rmb}{{\rm b}}
+\newcommand{\rmc}{{\rm c}}
+\newcommand{\rmd}{{\rm d}}
+\newcommand{\rme}{{\rm e}}
+\newcommand{\rmf}{{\rm f}}
+\newcommand{\rmg}{{\rm g}}
+\newcommand{\rmh}{{\rm h}}
+\newcommand{\rmi}{{\rm i}}
+\newcommand{\rmj}{{\rm j}}
+\newcommand{\rmk}{{\rm k}}
+\newcommand{\rml}{{\rm l}}
+\newcommand{\rmm}{{\rm m}}
+\newcommand{\rmn}{{\rm n}}
+\newcommand{\rmo}{{\rm o}}
+\newcommand{\rmp}{{\rm p}}
+\newcommand{\rmq}{{\rm q}}
+\newcommand{\rmr}{{\rm r}}
+\newcommand{\rms}{{\rm s}}
+\newcommand{\rmt}{{\rm t}}
+\newcommand{\rmu}{{\rm u}}
+\newcommand{\rmv}{{\rm v}}
+\newcommand{\rmw}{{\rm w}}
+\newcommand{\rmx}{{\rm x}}
+\newcommand{\rmy}{{\rm y}}
+\newcommand{\rmz}{{\rm z}}
+\newcommand{\rmms}{{\rm {ms}}}
+
+\newcommand{\BBA}{{\mathbb A}}
+\newcommand{\BBB}{{\mathbb B}}
+\newcommand{\BBC}{{\mathbb C}}
+\newcommand{\BBD}{{\mathbb D}}
+\newcommand{\BBE}{{\mathbb E}}
+\newcommand{\BBF}{{\mathbb F}}
+\newcommand{\BBG}{{\mathbb G}}
+\newcommand{\BBH}{{\mathbb H}}
+\newcommand{\BBI}{{\mathbb I}}
+\newcommand{\BBJ}{{\mathbb J}}
+\newcommand{\BBK}{{\mathbb K}}
+\newcommand{\BBL}{{\mathbb L}}
+\newcommand{\BBM}{{\mathbb M}}
+\newcommand{\BBN}{{\mathbb N}}
+\newcommand{\BBO}{{\mathbb O}}
+\newcommand{\BBP}{{\mathbb P}}
+\newcommand{\BBQ}{{\mathbb Q}}
+\newcommand{\BBR}{{\mathbb R}}
+\newcommand{\BBS}{{\mathbb S}}
+\newcommand{\BBT}{{\mathbb T}}
+\newcommand{\BBU}{{\mathbb U}}
+\newcommand{\BBV}{{\mathbb V}}
+\newcommand{\BBW}{{\mathbb W}}
+\newcommand{\BBX}{{\mathbb X}}
+\newcommand{\BBY}{{\mathbb Y}}
+\newcommand{\BBZ}{{\mathbb Z}}
+
+\newcommand{\SA}{{\mathcal A}}
+\newcommand{\SB}{{\mathcal B}}
+\newcommand{\SC}{{\mathcal C}}
+\newcommand{\SD}{{\mathcal D}}
+\newcommand{\SE}{{\mathcal E}}
+\newcommand{\SF}{{\mathcal F}}
+\newcommand{\SG}{{\mathcal G}}
+\newcommand{\SH}{{\mathcal H}}
+\newcommand{\SI}{{\mathcal I}}
+\newcommand{\SJ}{{\mathcal J}}
+\newcommand{\SK}{{\mathcal K}}
+\newcommand{\SL}{{\mathcal L}}
+\newcommand{\SM}{{\mathcal M}}
+\newcommand{\SN}{{\mathcal N}}
+\newcommand{\SO}{{\mathcal O}}
+\newcommand{\SP}{{\mathcal P}}
+\newcommand{\SQ}{{\mathcal Q}}
+\newcommand{\SR}{{\mathcal R}}
+\newcommand{\SSS}{{\mathcal S}}
+\newcommand{\ST}{{\mathcal T}}
+\newcommand{\SU}{{\mathcal U}}
+\newcommand{\SV}{{\mathcal V}}
+\newcommand{\SW}{{\mathcal W}}
+\newcommand{\SX}{{\mathcal X}}
+\newcommand{\SY}{{\mathcal Y}}
+\newcommand{\SZ}{{\mathcal Z}}
+
+
+\newcommand{\BFA}{{\bf A}}
+\newcommand{\BFB}{{\bf B}}
+\newcommand{\BFC}{{\bf C}}
+\newcommand{\BFD}{{\bf D}}
+\newcommand{\BFE}{{\bf E}}
+\newcommand{\BFF}{{\bf F}}
+\newcommand{\BFG}{{\bf G}}
+\newcommand{\BFH}{{\bf H}}
+\newcommand{\BFI}{{\bf I}}
+\newcommand{\BFJ}{{\bf J}}
+\newcommand{\BFK}{{\bf K}}
+\newcommand{\BFL}{{\bf L}}
+\newcommand{\BFM}{{\bf M}}
+\newcommand{\BFN}{{\bf N}}
+\newcommand{\BFO}{{\bf O}}
+\newcommand{\BFP}{{\bf P}}
+\newcommand{\BFQ}{{\bf Q}}
+\newcommand{\BFR}{{\bf R}}
+\newcommand{\BFS}{{\bf S}}
+\newcommand{\BFT}{{\bf T}}
+\newcommand{\BFU}{{\bf U}}
+\newcommand{\BFV}{{\bf V}}
+\newcommand{\BFW}{{\bf W}}
+\newcommand{\BFX}{{\bf X}}
+\newcommand{\BFY}{{\bf Y}}
+\newcommand{\BFZ}{{\bf Z}}
+
+\endinput 

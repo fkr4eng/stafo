@@ -1,0 +1,69 @@
+\documentclass{book}
+\usepackage[utf8]{inputenc}
+
+\usepackage{xcolor}
+\usepackage{tikz}
+
+
+%% for introducing snippet markers
+
+\definecolor{darkblue}{rgb}{0.3, 0.3, 0.99}
+\definecolor{darkred}{rgb}{0.99, 0.3, 0.3}
+
+\newcommand{\snippet}[2][darkblue]{%
+  \tikz[remember picture, overlay] \node[anchor=south west, inner sep=0pt, outer sep=0pt] at (0,1.2ex) {\textcolor{#1}{\footnotesize#2}};%
+}
+
+
+% this is used to mark big parts which should be excluded (until the next snippet)
+\newcommand{\exclude}{%
+  \tikz[remember picture, overlay] \node[anchor=south west, inner sep=0pt, outer sep=0pt] at (0,1.2ex) {\textcolor{darkred}{\footnotesize exclude}};%
+}
+
+
+%%
+
+
+% only page numbers in headline, nothing more
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt} % Remove the header rule
+\fancyfoot[C]{\thepage} % Place the page number in the center of the footer
+
+
+%%
+
+\usepackage[margin=1in]{geometry} % Set all margins to 1 inch
+
+% Remove the 'twoside' option if it was previously set
+% \geometry{oneside}
+
+
+% for \varprod
+
+\DeclareSymbolFont{largesymbolsA}{U}{txexa}{m}{n}
+\DeclareMathSymbol{\varprod}{\mathop}{largesymbolsA}{16}
+
+
+\input{defnsDec2015Hyperref.tex}
+
+\title{Matrix Book}
+\author{Dennis Bernstein}
+\date{February 2021}
+
+\renewcommand{\cite}[2][]{[#2, #1]}
+
+\begin{document}
+
+\maketitle
+
+%
+% ABC
+% \cite[pp2]{foo}
+\input{../chunk_full_source.tex}
+
+
+\end{document}

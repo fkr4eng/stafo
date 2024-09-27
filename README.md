@@ -22,6 +22,11 @@
     - `stafo -c tmp.md`
 
 
+## PDF creation (math document)
+
+For manual reviewing the created snippets it is recommended to read the pdf file containing the snippet numbers. This file can be created by `pdflatex data/pdf-generation/main.tex`.
+
+
 ## Next Development Steps:
 
 - deal with (many, consecutive) ignored snippets: do not waste LLM-calls on them
