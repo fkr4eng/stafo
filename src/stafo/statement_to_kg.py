@@ -436,7 +436,7 @@ class ConversionManager:
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
-                res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\.$|$)", line)
+                res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\\.$|$)", line)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2)
@@ -544,7 +544,7 @@ class ConversionManager:
             if key.startswith("R"):
                 # first some exceptions, then the general case
                 if key == "R6":
-                    lhs, rhs = value.split("\isdef")
+                    lhs, rhs = value.split(r"\isdef")
                     lhs = lhs.replace("`", "").replace("$", "")
                     rhs = rhs.replace("`", "").replace("$", "")
                     item_key = self.item_keys.pop()
@@ -653,9 +653,10 @@ class ConversionManager:
                     else:
                         raise TypeError()
 
-        with open("output.py", "wt") as f:
+        fpath = "output.py"
+        with open(fpath, "wt") as f:
             f.write(output)
-        print(f"{count} new entities written.")
+        print(f"{count} new entities written to {fpath}.")
 
     def get_equiv_context(self, context:dict, v:dict, part:str):
         context[part] = []
