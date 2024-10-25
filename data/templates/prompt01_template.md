@@ -32,6 +32,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> has the verbal description <arg2>.
 - <arg1> has the alternative label <arg2>.
 - <arg1> has the property <arg2>.
+- <arg1> does not have the property <arg2>.
 - <arg1> is associated to <arg2>.
 
 
@@ -108,7 +109,15 @@ The following Complex Formalized Statements are allowed:
 
 - // The following equation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
 - There is an equation:
-    - full source code: <arg1>.
+- full source code: <arg1>.
+    - source code of left hand side: <arg2>.
+    - source code of right hand side: <arg3>.
+    - formalized left hand side: <expression1>
+    - formalized right hand side: <expression2>.
+
+- // The following mathematical relation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
+- There is a mathematical relation:
+    - relation sign: <arg1>
     - source code of left hand side: <arg2>.
     - source code of right hand side: <arg3>.
     - formalized left hand side: <expression1>

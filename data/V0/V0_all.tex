@@ -288,272 +288,311 @@ Offensichtlich gilt:
   \end{equation*}
 \end{RstWichtigBox}
 \snippet{65}
-\begin{RstWichtigBox}
+
   Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}. Die Nullstellen des Zählers von $G(s)$ werden als \emph{Nullstellen} der Übertragungsfunktion bezeichnet, die Nullstellen des Nenners von $G(s)$ (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.
-
+\snippet{66}
   Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch $G(s)$ repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.
+\snippet{67}
+  Die Differenz zwischen Nenner- und Zählergrad der Übertragungsfunktion bezeichnet man allgemein als \emph{Polüberschuss} oder \emph{relativer Grad}.
+\snippet{68}
+  Ist der Nennergrad der Übertragungsfunktion größer als der Zählergrad, so bezeichnet man die Übertragungsfunktion als \emph{streng proper}. Sind Nenner- und Zählergrad identisch, so ist die Übertragungsfunktion nur \emph{proper}.
+\snippet{69}
+  Übertragungsfunktionen, die nicht proper sind, haben differenzierenden Charakter.
 
-  Die Differenz zwischen Nenner- und Zählergrad der Übertragungsfunktion bezeichnet man allgemein als \emph{Polüberschuss} oder \emph{relativer Grad}. Ist der Nennergrad der Übertragungsfunktion größer als der Zählergrad, so bezeichnet man die Übertragungsfunktion als \emph{streng proper}. Sind Nenner- und Zählergrad identisch, so ist die Übertragungsfunktion nur \emph{proper}. Übertragungsfunktionen, die nicht proper sind, haben differenzierenden Charakter.
-\end{RstWichtigBox}
-
+  \snippet{70i}
 \begin{RstWichtigBox}
   An dieser Stelle sei noch einmal betont, dass die Formulierung der Übertragungsfunktion entsprechend Gl.~\eqref{eq:UebertragungsfunktionAllgemein} davon ausgeht, dass für $t=0$ alle Anfangswerte gleich null sind. Ist dies nicht der Fall, sind entsprechende Anpassungen vorzunehmen!
 \end{RstWichtigBox}
-
+\snippet{71}
 
 \subsubsection{Anfangs- und Endwertsatz} \label{sec:endwertsatze}
+\snippet{72i}
 Häufig interessiert der stationäre Anfangs- oder Endwert in einem geregelten System. Ist man an dem Anfangswert $x_0$ einer Zeitfunktion interessiert, so kann dieser mittels des
-Anfangswertsatzes der Laplace-Transformation bestimmt werden. Hat man die Bildfunktion $X(s) = \mathcal{L}\{x(t)\}$ der zu untersuchenden Zeitfunktion, so gilt:
+Anfangswertsatzes der Laplace-Transformation bestimmt werden.
+\snippet{73}
+Hat man die Bildfunktion $X(s) = \mathcal{L}\{x(t)\}$ der zu untersuchenden Zeitfunktion, so gilt:
 \begin{equation} \label{eq:Anfangswertsatz}
   x_0 = \lim_{t \to 0} x(t) = \lim_{s \to \infty} s X(s).
 \end{equation}
-
+\snippet{74}
 Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der LAPLACE-Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:
 \begin{equation}\label{eq:Endwertsatz}
   e_\infty = \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s).
 \end{equation}
 
 
-% \begin{RstWichtigBox}
-%   Dieser Satz gilt nur, wenn das System stabil ist und der Grenzwert damit auch existiert. Er eignet sich insbesondere \emph{nicht} dazu, Instabilität eines Systems nachzuweisen.
-% \end{RstWichtigBox}
+\begin{RstWichtigBox}
+  Dieser Satz gilt nur, wenn das System stabil ist und der Grenzwert damit auch existiert. Er eignet sich insbesondere \emph{nicht} dazu, Instabilität eines Systems nachzuweisen.
+\end{RstWichtigBox}
+\snippet{75}
+\subsubsection{Frequenzgang}
+\label{sec:frequenzgang}
+\snippet{76}
+Der Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes mit der Übertragungsfunktion $G(s)$ ist die Übertragungsfunktion dieses Gliedes ausgewertet auf der imaginären Achse der komplexen Zahlenebene. Das heißt, man setzt in $s = \sigma + j\omega$ den Realteil $\sigma = 0$.
+\snippet{77}
+Wenn man mit dem Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes arbeitet, schreibt man dementsprechend $G(j\omega)$. Der Frequenzgang charakterisiert die Reaktion des Übertragungsgliedes auf eine harmonische Erregung.
+\snippet{78i}
+Interessanterweise reicht es für regelungstechnische Betrachtungen aus, mit dem Frequenzgang zu arbeiten, die Übertragungsfunktion also nur auf der imaginären Achse auszuwerten. Mehr dazu findet sich in \cite[Kapitel 5]{ReinschkeAlt} und \cite[Kapitel 5]{Reinschke}.
+\snippet{79}
 
-% \subsubsection{Frequenzgang}
-% \label{sec:frequenzgang}
-% Der Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes mit der Übertragungs\-funktion $G(s)$ ist die Übertragungsfunktion dieses Gliedes ausgewertet auf der imaginären Achse der komplexen Zahlenebene. Das heißt, man setzt in $s = \sigma + j\omega$ den Realteil $\sigma = 0$. Wenn man mit dem Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes arbeitet, schreibt man dementsprechend $G(j\omega)$. Der Frequenzgang charakterisiert die Reaktion des Übertragungsgliedes auf eine harmonische Erregung.
+% Sprungantwort
+\section{Die Sprungantwort}
+\label{sec:sprungantwort}
+\snippet{80}
+Der Verlauf der Ausgangsgröße $\nu$ eines Systems als Reaktion auf eine sprungförmige Änderung des Eingangs $u$ wird \emph{Sprungantwort} genannt.
+\snippet{81}
+Dabei wird davon ausgegangen, dass sich das Übertragungsglied zunächst im Gleichgewichtszustand (in einer Ruhelage) befindet, der Ausgang also den konstanten Wert $V_0$ und der Eingang den konstanten Wert $U_0$ habe. Zum Zeitpunkt $t_0$ springt der Eingang dann um $U_S$ auf den Wert $U_\infty$,
+\snippet{82i}
+siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, links. Das System reagiert dann auf eine charakteristische Art und Weise, siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, rechts.
 
-% Interessanterweise reicht es für regelungstechnische Betrachtungen aus, mit dem Frequenzgang zu arbeiten, die Übertragungsfunktion also nur auf der imaginären Achse auszuwerten. Mehr dazu findet sich in \cite[Kapitel 5]{ReinschkeAlt} und \cite[Kapitel 5]{Reinschke}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Prinzip.pdf}
+    \caption{Prinzip der Sprungantwort.}
+    \label{fig:Sprungantwort-Prinzip}
+\end{figure}
+\snippet{83i}
 
+Aus der Sprungantwort können auch ohne Kenntnis des Systemaufbaus wichtige Eigenschaften des Übertra\-gungsverhaltens des Systems ermittelt werden. Daher ist die Sprungantwort eines der wichtigsten Hilfsmittel zur Analyse und Synthese von Regelungssystemen.
+\snippet{84}
+Für die Wahl der korrekten Kenngrößen einer Sprungantwort ist wichtig, ob diese an einem Übertragungsglied (System) alleine (Abschnitte \ref{sec:sprung-eines-ubertr} bis \ref{sec:pt_2-glied-nicht}) oder aber am geschlossenen Regelkreis (Abschnitt \ref{sec:SprungantwortRegelkreis}) aufgenommen wurde.
+\snippet{85}
+\begin{RstWichtigBox}
+    In Nachschlagewerken zur Regelungstechnik und Systemtheorie wird häufig die sog. \emph{Einheitssprungantwort} verwendet (siehe auch Abschnitt \ref{sec:elem-grundb}). Auf einen Einheitssprung reagieren lineare zeitinvariante Systeme mit der \emph{Übergangsfunktion} $h$. Die Einheitssprungantwort ist ein Spezialfall der allgemeinen Sprungantwort mit $U_0 = 0$, $U_S = 1$, $t_0 = \qty{0}{\second}$ und $V_0 = 0$.
+\snippet{86i}
+    Im nachfolgenden wird die allgemeine Sprungantwort verwendet.
+\end{RstWichtigBox}
+\snippet{87}
 
-% % Sprungantwort
-% \section{Die Sprungantwort}
-% \label{sec:sprungantwort}
-% Der Verlauf der Ausgangsgröße $\nu$ eines Systems als Reaktion auf eine sprungförmige Änderung des Eingangs $u$ wird \emph{Sprungantwort} genannt. Dabei wird davon ausgegangen, dass sich das Übertragungsglied zunächst im Gleichgewichtszustand (in einer Ruhelage) befindet, der Ausgang also den konstanten Wert $V_0$ und der Eingang den konstanten Wert $U_0$ habe. Zum Zeitpunkt $t_0$ springt der Eingang dann um $U_S$ auf den Wert $U_\infty$, siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, links. Das System reagiert dann auf eine charakteristische Art und Weise, siehe Abbildung \ref{fig:Sprungantwort-Prinzip}, rechts.
+\subsection{Systemklassifizierung anhand ihrer Sprungantworten}
+\snippet{88}
+Lineare, zeitinvariante Systeme lassen sich anhand Ihrer Sprungantwort grob in drei Klassen einteilen (vergl.\,auch Abbildung \ref{fig:Streckentypen}):
+\snippet{89}
+\minisec{Integrierend wirkende Strecken}
+Erreicht das Ausgangssignal eines Übertragungsgliedes nach Aufschalten einer sprungförmigen Eingangsgröße keinen stationären Endwert, so wird die durch das Übertragungsglied bezeichnete Strecke als \emph{Strecke ohne Ausgleich} oder \emph{Integrale Strecke} beziehungsweise Strecke mit \emph{I-Verhalten} oder \emph{I-Strecke} bezeichnet. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:i-glied}{I-Glied}!
+\snippet{90}
 
-% \begin{figure}[ht]
-%     \centering
-%     \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Prinzip.pdf}
-%     \caption{Prinzip der Sprungantwort.}
-%     \label{fig:Sprungantwort-Prinzip}
-% \end{figure}
+\minisec{Proportional wirkende Strecken}
+Wird hingegen ein stationärer Endwert erreicht, so bezeichnet man die Strecke als \emph{Strecke mit Ausgleich} oder \emph{Proportionalstrecke} beziehungsweise Strecke mit \emph{P-Verhalten} oder \emph{P-Strecke}. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:p-glied}{P-Glied}!
+\snippet{91}
+\minisec{Allpasshaltige Strecken}
+Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.
+\snippet{92i}
 
-% Aus der Sprungantwort können auch ohne Kenntnis des Systemaufbaus wichtige Eigenschaften des Übertra\-gungsverhaltens des Systems ermittelt werden. Daher ist die Sprungantwort eines der wichtigsten Hilfsmittel zur Analyse und Synthese von Regelungssystemen. Für die Wahl der korrekten Kenngrößen einer Sprungantwort ist wichtig, ob diese an einem Übertragungsglied (System) alleine (Abschnitte \ref{sec:sprung-eines-ubertr} bis \ref{sec:pt_2-glied-nicht}) oder aber am geschlossenen Regelkreis (Abschnitt \ref{sec:SprungantwortRegelkreis}) aufgenommen wurde.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Inkscape/Streckentypen.pdf}
+    \caption{Prinzipielles Aussehen der Sprungantwort (rote durchgezogene Linie) einer integrierend wirkenden Strecke (links), einer proportional wirkenden Strecke (mitte) und einer allpasshaltigen Strecke (rechts). Das Eingangssignal ist grün gestrichelt dargestellt.}
+    \label{fig:Streckentypen}
+\end{figure}
+\snippet{93}
 
-% \begin{RstWichtigBox}
-%     In Nachschlagewerken zur Regelungstechnik und Systemtheorie wird häufig die sog. \emph{Einheitssprungantwort} verwendet (siehe auch Abschnitt \ref{sec:elem-grundb}). Auf einen Einheitssprung reagieren lineare zeitinvariante Systeme mit der \emph{Übergangsfunktion} $h$. Die Einheitssprungantwort ist ein Spezialfall der allgemeinen Sprungantwort mit $U_0 = 0$, $U_S = 1$, $t_0 = \qty{0}{\second}$ und $V_0 = 0$. Im nachfolgenden wird die allgemeine Sprungantwort verwendet.
-% \end{RstWichtigBox}
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=0.85\textwidth]{Inkscape/Typische_Sprungantwort.pdf}
+        \begin{small}
+            % LTeX: enabled=false
+            \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
+                \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
+                $u$ & Eingangsgröße & \textit{input variable}\\
+                $\nu$ & Ausgangsgröße & \textit{output variable}\\
+                $U_0$ & Anfangswert der Eingangsgröße & \textit{initial value of the input variable}\\
+                $U_S$ & Sprunghöhe der Eingangsgröße & \textit{step height of the input variable}\\
+                $V_0, V_{\infty}$ & \raggedright Werte der Ausgangsgröße im Behar- rungszustand vor und nach dem Sprung & \textit{steady state values of the output variable before and after application of the step}\\
+                $\nu_m$ & \raggedright Überschwingweite (größte vorüberge- hende Abweichung vom Wert im Beharrungszustand) & \textit{overshoot (maximum transient deviation from the steady-state value)}\\
+                $2\cdot\Delta\nu_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
+                $T_t$ & Totzeit & \textit{dead-time}\\
+                $T_{sr}$ & Anschwingzeit & \textit{step response time}\\
+                $T_s$ & Einschwingzeit & \textit{settling time}\\\hline
+            \end{tabular}
+            % LTeX: enabled=true  language=de-DE
+        \end{small}
+    \end{center}
+\snippet{94i}
+\caption{Typische Sprungantwort eines linearen Übertragungsgliedes mit P-Verhalten auf einen Sprung der Höhe $U_S$ und zugehörige Symbole und Bezeichnungen nach DIN IEC 60050-351 (45-27). Die gestrichelte Linie zeigt die Reaktion eines nicht schwingungsfähigen Übertragungsgliedes, die durchgezogene Linie die eines schwingungsfähigen Übertragungsgliedes an. \textbf{Achtung!} Für die Sprungantwort eines \emph{geregelten Systems} (geschlossener Regelkreis) siehe Abbildung \ref{fig:typ_Sprungantwort_Regelkreis}.}
+\label{fig:typ_Sprungantwort}
+\end{figure}
 
-
-% \subsection{Systemklassifizierung anhand ihrer Sprungantworten}
-% Lineare, zeitinvariante Systeme lassen sich anhand Ihrer Sprungantwort grob in drei Klassen einteilen (vergl.\,auch Abbildung \ref{fig:Streckentypen}):
-
-% \minisec{Integrierend wirkende Strecken}
-% Erreicht das Ausgangssignal eines Übertragungsgliedes nach Aufschalten einer sprungförmigen Eingangsgröße keinen stationären Endwert, so wird die durch das Übertragungsglied bezeichnete Strecke als \emph{Strecke ohne Ausgleich} oder \emph{Integrale Strecke} beziehungsweise Strecke mit \emph{I-Verhalten} oder \emph{I-Strecke} bezeichnet. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:i-glied}{I-Glied}!
-
-% \minisec{Proportional wirkende Strecken}
-% Wird hingegen ein stationärer Endwert erreicht, so bezeichnet man die Strecke als \emph{Strecke mit Ausgleich} oder \emph{Proportionalstrecke} beziehungsweise Strecke mit \emph{P-Verhalten} oder \emph{P-Strecke}. \textbf{Achtung:} Diese Kategorie umfasst mehr als das reine \href{sec:p-glied}{P-Glied}!
-
-% \minisec{Allpasshaltige Strecken}
-% Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.
-
-
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\linewidth]{Inkscape/Streckentypen.pdf}
-%     \caption{Prinzipielles Aussehen der Sprungantwort (rote durchgezogene Linie) einer integrierend wirkenden Strecke (links), einer proportional wirkenden Strecke (mitte) und einer allpasshaltigen Strecke (rechts). Das Eingangssignal ist grün gestrichelt dargestellt.}
-%     \label{fig:Streckentypen}
-% \end{figure}
-
-
-% \begin{figure}[ht]
-%     \begin{center}
-%         \includegraphics[width=0.85\textwidth]{Inkscape/Typische_Sprungantwort.pdf}
-%         \begin{small}
-%             % LTeX: enabled=false
-%             \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
-%                 \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
-%                 $u$ & Eingangsgröße & \textit{input variable}\\
-%                 $\nu$ & Ausgangsgröße & \textit{output variable}\\
-%                 $U_0$ & Anfangswert der Eingangsgröße & \textit{initial value of the input variable}\\
-%                 $U_S$ & Sprunghöhe der Eingangsgröße & \textit{step height of the input variable}\\
-%                 $V_0, V_{\infty}$ & \raggedright Werte der Ausgangsgröße im Behar- rungszustand vor und nach dem Sprung & \textit{steady state values of the output variable before and after application of the step}\\
-%                 $\nu_m$ & \raggedright Überschwingweite (größte vorüberge- hende Abweichung vom Wert im Beharrungszustand) & \textit{overshoot (maximum transient deviation from the steady-state value)}\\
-%                 $2\cdot\Delta\nu_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
-%                 $T_t$ & Totzeit & \textit{dead-time}\\
-%                 $T_{sr}$ & Anschwingzeit & \textit{step response time}\\
-%                 $T_s$ & Einschwingzeit & \textit{settling time}\\\hline
-%             \end{tabular}
-%             % LTeX: enabled=true  language=de-DE
-%         \end{small}
-%     \end{center}
-% \caption{Typische Sprungantwort eines linearen Übertragungsgliedes mit P-Verhalten auf einen Sprung der Höhe $U_S$ und zugehörige Symbole und Bezeichnungen nach DIN IEC 60050-351 (45-27). Die gestrichelte Linie zeigt die Reaktion eines nicht schwingungsfähigen Übertragungsgliedes, die durchgezogene Linie die eines schwingungsfähigen Übertragungsgliedes an. \textbf{Achtung!} Für die Sprungantwort eines \emph{geregelten Systems} (geschlossener Regelkreis) siehe Abbildung \ref{fig:typ_Sprungantwort_Regelkreis}.}
-% \label{fig:typ_Sprungantwort}
-% \end{figure}
-
-% \FloatBarrier
-
-
-
-% \subsection{Sprungantwort eines einzelnen Übertragungsglieds} \label{sec:sprung-eines-ubertr}
-% Abbildung~\ref{fig:typ_Sprungantwort} zeigt eine typische Sprungantwort eines stabilen Systems mit den genormten Bezeichnungen und Abkürzungen nach DIN IEC 60050-351. Dabei sind zunächst zwei unterschiedliche Formen zu unterscheiden:
-
-
-% \begin{enumerate}
-%     \item Es kommt zu einem Überschwingen der Ausgangsgröße, danach pendelt sich der stationäre Endwert langsam ein. Es handelt sich um ein sogenanntes \emph{schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der durchgezogenen Linie dargestellt.
-%     \item Die Ausgangsgröße nähert sich asymptotisch dem stationären Endwert an, ohne diesen jemals zu überschreiten (bzw.\,zu unterschreiten bei Reaktionen in negative Richtung). Es handelt sich um ein \emph{nicht schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der gestrichelten Linie dargestellt.
-% \end{enumerate}
-
-% \begin{RstHinweisBox}
-%     Systeme erster Ordnung sind nie schwingungsfähig. Systeme zweiter Ordnung und höher sind schwingungsfähig, wenn mindestens ein Polpaar der Übertragungsfunktion konjugiert komplex ist.
-% \end{RstHinweisBox}
-
-% Des Weiteren ist nach der Art des Anstieges der Sprungantwort zum Zeitpunkt des Eingangssprunges zu unterscheiden:
-% \begin{enumerate}
-%     \item Bei einem System mit Polüberschuss 1 ist der Anstieg zu Beginn ungleich 0, vergl.~Abbildung \ref{fig:ermittlung_zeitkonstante}.
-%     \item Bei Systemen mit einem Polüberschuss von 2 und größer ist der Anstieg zu Beginn gleich null. Sie beginnen also deutlich \glqq langsamer\grqq~mit dem Anstieg, vergl.~Abbildung \ref{fig:ermittlung_verzugszeit}.
-% \end{enumerate}
-
-% Die Erläuterung und Ermittlung wichtiger Kenngrößen für diese Fälle wird in den nachfolgenden Abschnitten kurz erläutert.
-
-% %\FloatBarrier
-
-% \begin{figure}[hbtp]
-%     \begin{center}
-%         \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Zeiten_PT1.pdf}
-%         \vspace{2ex}
-%         \begin{small}
-%             % LTeX: enabled=false language=de-DE
-%             \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
-%                 \rowcolor{lightgray}\textbf{Symbol} & \textbf{deutsche Bezeichnung}   & \textbf{englische Bezeichnung} \\
-%                 \hline
-%                 $\tau$                              & Verzögerungszeit, Zeitkonstante & \textit{time constant}         \\
-%                 \hline
-%             \end{tabular}
-%             % LTeX: enabled=true language=de-DE
-%         \end{small}
-%     \end{center}
-%     \caption{Ermittlung der Zeitkonstanten aus der Sprungantwort eines Systems mit Polüberschuss 1 (erster Ordnung nach DIN IEC 60050-351 (45-32)).}
-%     \label{fig:ermittlung_zeitkonstante}
-% \end{figure}
+\FloatBarrier
+\snippet{95}
 
 
-
-% \subsection{Sprungantwort von proportional wirkenden Strecken erster Ordnung} \label{sec:pt_1-glied}
-% Zeigt die Sprungantwort das in Abbildung \ref{fig:ermittlung_zeitkonstante} gezeigte Verhalten (Anstieg ungleich Null zum Sprungzeitpunkt, asymptotische Annäherung an einen stationären Endwert mit wachsender Zeit, sog.\,\PT-Verhalten), so ist neben der stationären Verstärkung $(V_\infty - V_0)/U_S$ die Verzögerungzeit $\tau$ von Interesse. Sie lässt sich auf drei unterschiedlichen Wegen bestimmen:
-% \begin{itemize}
-%     \item Eine Tangente wird an beliebiger Stelle der Sprungantwort angelegt. Der Berührungspunkt dieser Tangente und der Schnittpunkt mit der durch den stationären Endwert gehenden Parallelen zur Zeitachse werden auf die Zeitachse projiziert. Die Differenz zwischen den sich so ergebenden Zeitpunkten ist die Zeitkonstante. Am besten legt man die Tangente zum Beginn der Sprungantwortbei $t_0$ an.
-%     \item Die Zeit, nach der die Sprungantwort 63.2\,\% der stationären Ausgangsänderung ($V_\infty - V_0$) erreicht hat, ist die Zeitkonstante $\tau$. Die Zahl 63.2\,\% entspricht dem $1-\mathrm{e}^{-1}$ fachen der stationären Ausgangsänderung.
-%     \item Die Zeitkonstante ergibt sich aus der Fläche, die durch den Grafen der auf den stationären Endwert normierten Sprungantwort, der Geraden, die parallel zur $t$-Achse durch den stationären Endwert läuft und die $y$-Achse begrenzt wird:
-%     \begin{equation*}
-%         \tau = \int_0^\infty(1-h(\tau)/h(\infty))\text{d}\tau.
-%     \end{equation*}
-% \end{itemize}
+\subsection{Sprungantwort eines einzelnen Übertragungsglieds} \label{sec:sprung-eines-ubertr}
+\snippet{96}
+Abbildung~\ref{fig:typ_Sprungantwort} zeigt eine typische Sprungantwort eines stabilen Systems mit den genormten Bezeichnungen und Abkürzungen nach DIN IEC 60050-351. Dabei sind zunächst zwei unterschiedliche Formen zu unterscheiden:
 
 
-% \subsection{Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung} \label{sec:pt_2-glied-schw}
-% Zeigt die Sprungantwort abklingend-schwingendes Verhalten mit einem stationären Endwert, so gilt für die Pole der Übertragungsfunktion des Übertragungsgliedes folgendes: Es gibt mindestens zwei Pole, alle haben einen negativen Realteil und mindestens ein Polpaar ist konjugiert komplex\footnote{Bei Systemen mit Nullstellen kann es auch zum Überschwingen kommen, wenn alle Pole rein reell sind und die Nullstellen eine spezielle Lage zu den Polen haben. Dieser Fall wird hier nicht weiter betrachtet.}. Folgende Kenngrößen sind in diesem Fall von Interesse (vergl.~auch Abbildung \ref{fig:typ_Sprungantwort}, durchgezogene Linie):
-% \begin{itemize}
-%     \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
-%     \item \textbf{Anschwingzeitzeit:} Die Zeit $T_{sr}$, bei der die Sprungantwort zum ersten Male  den Wert $V_\infty - \Delta \nu_s$ erreicht.
-%     %\item \textbf{t-max-Zeit:} Die Zeit $t_{max}$, bei der die Sprungantwort ihren Maximalwert erreicht.
-%     \item \textbf{Überschwingweite:} Der Wert $\nu_m$, um den die Sprungantwort maximal über dem stationären Endwert hinausgeht. Sie wird normiert auf die Differenz zwischen stationären Anfangs- und Endwert angegeben.
-%     \item \textbf{Einschwingzeit:} Die Zeit $T_{s}$, bei der die Sprungantwort bis auf den Wert $\Delta \nu_s$ an den stationären Endwert herangekommen ist und von da an im Bereich $V_\infty \pm \Delta \nu_s$ verweilt (üblich ist $\Delta \nu_s = 2\,\%$ oder $\Delta \nu_s = 5\,\%$).
-% \end{itemize}
-% Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+\begin{enumerate}
+    \item Es kommt zu einem Überschwingen der Ausgangsgröße, danach pendelt sich der stationäre Endwert langsam ein. Es handelt sich um ein sogenanntes \emph{schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der durchgezogenen Linie dargestellt.
+    \item Die Ausgangsgröße nähert sich asymptotisch dem stationären Endwert an, ohne diesen jemals zu überschreiten (bzw.\,zu unterschreiten bei Reaktionen in negative Richtung). Es handelt sich um ein \emph{nicht schwingungsfähiges} System. In Abbildung \ref{fig:typ_Sprungantwort} ist dieser Fall mit der gestrichelten Linie dargestellt.
+\end{enumerate}
+\snippet{97}
+\begin{RstHinweisBox}
+    Systeme erster Ordnung sind nie schwingungsfähig. Systeme zweiter Ordnung und höher sind schwingungsfähig, wenn mindestens ein Polpaar der Übertragungsfunktion konjugiert komplex ist.
+\end{RstHinweisBox}
+\snippet{98}
+Des Weiteren ist nach der Art des Anstieges der Sprungantwort zum Zeitpunkt des Eingangssprunges zu unterscheiden:
+\begin{enumerate}
+    \item Bei einem System mit Polüberschuss 1 ist der Anstieg zu Beginn ungleich 0, vergl.~Abbildung \ref{fig:ermittlung_zeitkonstante}.
+    \item Bei Systemen mit einem Polüberschuss von 2 und größer ist der Anstieg zu Beginn gleich null. Sie beginnen also deutlich \glqq langsamer\grqq~mit dem Anstieg, vergl.~Abbildung \ref{fig:ermittlung_verzugszeit}.
+\end{enumerate}
+\snippet{99i}
+Die Erläuterung und Ermittlung wichtiger Kenngrößen für diese Fälle wird in den nachfolgenden Abschnitten kurz erläutert.
+\snippet{100i}
+%\FloatBarrier
 
-% \begin{figure}[hbtp]
-%     \begin{center}
-%         \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Ausgleichs_Verzugzeit.pdf}
-%         \vspace{2ex}
-%             \begin{small}
-%                 % LTeX: enabled=false language=de-DE
-%                 \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
-%                 \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\
-%                 \hline
-%                 $T_e$ & Verzugszeit & \textit{equivalent dead time}\\
-%                 $T_b$ & Ausgleichszeit & \textit{equivalent time constant; balancing time}\\
-%                 $P$ & Wendepunkt & \textit{inflection point}\\
-%                 $T_w$ & Wendezeit & \textit{inflection time}\\
-%                 \hline
-%                 \end{tabular}
-%                 % LTeX: enabled=true language=de-DE
-%             \end{small}
-%     \end{center}
-%     \caption{Ermittlung von Ausgleichszeit und Verzugszeit aus der Sprungantwort eines Systems zweiter Ordnung und höher (nach DIN IEC 60050-351 (45-34)).}
-%     \label{fig:ermittlung_verzugszeit}
-% \end{figure}
+\begin{figure}[hbtp]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Zeiten_PT1.pdf}
+        \vspace{2ex}
+        \begin{small}
+            % LTeX: enabled=false language=de-DE
+            \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
+                \rowcolor{lightgray}\textbf{Symbol} & \textbf{deutsche Bezeichnung}   & \textbf{englische Bezeichnung} \\
+                \hline
+                $\tau$                              & Verzögerungszeit, Zeitkonstante & \textit{time constant}         \\
+                \hline
+            \end{tabular}
+            % LTeX: enabled=true language=de-DE
+        \end{small}
+    \end{center}
+    \caption{Ermittlung der Zeitkonstanten aus der Sprungantwort eines Systems mit Polüberschuss 1 (erster Ordnung nach DIN IEC 60050-351 (45-32)).}
+    \label{fig:ermittlung_zeitkonstante}
+\end{figure}
 
-% \subsection{Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung}
-% \label{sec:pt_2-glied-nicht}
-% Für den Fall eines Übertragungsgliedes, dessen Übertragungsfunktion nur negativ reelle Pole hat, kommt es zu keinem Überschwingen. Der Wendepunkt im Anstieg bleibt jedoch erhalten. Es sind daher nur folgende Kenngrößen von Interesse (vergl.\,Abbildung \ref{fig:ermittlung_verzugszeit}):
-% \begin{itemize}
-%     \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
-%     \item \textbf{Verzugszeit:} Die Zeit $T_e$ vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse.
-%     \item \textbf{Ausgleichszeit:} Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit $T_b$.
-% \end{itemize}
-% Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+\snippet{101}
 
-% \begin{RstWichtigBox}
-%     Solche nicht schwingungsfähigen Strecken lassen sich stets
-%     durch Hintereinanderschaltung mehrerer Strecken erster Ordnung
-%     realisieren!
-% \end{RstWichtigBox}
+\subsection{Sprungantwort von proportional wirkenden Strecken erster Ordnung} \label{sec:pt_1-glied}
+\snippet{102}
+Zeigt die Sprungantwort das in Abbildung \ref{fig:ermittlung_zeitkonstante} gezeigte Verhalten (Anstieg ungleich Null zum Sprungzeitpunkt, asymptotische Annäherung an einen stationären Endwert mit wachsender Zeit, sog.\,\PT-Verhalten), so ist neben der stationären Verstärkung $(V_\infty - V_0)/U_S$ die Verzögerungzeit $\tau$ von Interesse.
+\snippet{103}
+Sie lässt sich auf drei unterschiedlichen Wegen bestimmen:
+\begin{itemize}
+    \item Eine Tangente wird an beliebiger Stelle der Sprungantwort angelegt. Der Berührungspunkt dieser Tangente und der Schnittpunkt mit der durch den stationären Endwert gehenden Parallelen zur Zeitachse werden auf die Zeitachse projiziert. Die Differenz zwischen den sich so ergebenden Zeitpunkten ist die Zeitkonstante. Am besten legt man die Tangente zum Beginn der Sprungantwortbei $t_0$ an.
+    \item Die Zeit, nach der die Sprungantwort 63.2\,\% der stationären Ausgangsänderung ($V_\infty - V_0$) erreicht hat, ist die Zeitkonstante $\tau$. Die Zahl 63.2\,\% entspricht dem $1-\mathrm{e}^{-1}$ fachen der stationären Ausgangsänderung.
+    \item Die Zeitkonstante ergibt sich aus der Fläche, die durch den Grafen der auf den stationären Endwert normierten Sprungantwort, der Geraden, die parallel zur $t$-Achse durch den stationären Endwert läuft und die $y$-Achse begrenzt wird:
+    \begin{equation*}
+        \tau = \int_0^\infty(1-h(\tau)/h(\infty))\text{d}\tau.
+    \end{equation*}
+\end{itemize}
+\snippet{104}
 
-% \subsection{Sprungantwort eines geschlossenen Regelkreises} \label{sec:SprungantwortRegelkreis}
-% Für den Fall eines geregelten Systems interessiert die Reaktion der Regelgröße $x$ ausgehend vom Gleichgewichtswert $X_0$ auf eine sprungförmige Änderung der Führungsgröße $w$ vom Gleichgewichtswert $W_0$ auf den Sollwert $X_d$, die sog.\,Führungssprungantwort, siehe Abbildung \ref{fig:Sprungantwort-RK-Prinzip}. Alternativ wird das Störverhalten über die Störsprungantwort untersucht.
+\subsection{Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung} \label{sec:pt_2-glied-schw}
+\snippet{105}
+Zeigt die Sprungantwort abklingend-schwingendes Verhalten mit einem stationären Endwert, so gilt für die Pole der Übertragungsfunktion des Übertragungsgliedes folgendes: Es gibt mindestens zwei Pole, alle haben einen negativen Realteil und mindestens ein Polpaar ist konjugiert komplex
+\snippet{106}
+\footnote{Bei Systemen mit Nullstellen kann es auch zum Überschwingen kommen, wenn alle Pole rein reell sind und die Nullstellen eine spezielle Lage zu den Polen haben. Dieser Fall wird hier nicht weiter betrachtet.}.
+\snippet{107}
+Folgende Kenngrößen sind in diesem Fall von Interesse (vergl.~auch Abbildung \ref{fig:typ_Sprungantwort}, durchgezogene Linie):
+\begin{itemize}
+    \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
+    \item \textbf{Anschwingzeitzeit:} Die Zeit $T_{sr}$, bei der die Sprungantwort zum ersten Male  den Wert $V_\infty - \Delta \nu_s$ erreicht.
+    %\item \textbf{t-max-Zeit:} Die Zeit $t_{max}$, bei der die Sprungantwort ihren Maximalwert erreicht.
+    \item \textbf{Überschwingweite:} Der Wert $\nu_m$, um den die Sprungantwort maximal über dem stationären Endwert hinausgeht. Sie wird normiert auf die Differenz zwischen stationären Anfangs- und Endwert angegeben.
+    \item \textbf{Einschwingzeit:} Die Zeit $T_{s}$, bei der die Sprungantwort bis auf den Wert $\Delta \nu_s$ an den stationären Endwert herangekommen ist und von da an im Bereich $V_\infty \pm \Delta \nu_s$ verweilt (üblich ist $\Delta \nu_s = 2\,\%$ oder $\Delta \nu_s = 5\,\%$).
+\end{itemize}
+\snippet{108}
+Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+\snippet{109}
+\begin{figure}[hbtp]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{Inkscape/Ermittlung_Ausgleichs_Verzugzeit.pdf}
+        \vspace{2ex}
+            \begin{small}
+                % LTeX: enabled=false language=de-DE
+                \begin{tabular}{|l|p{6.4cm}|p{6.4cm}|}\hline
+                \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\
+                \hline
+                $T_e$ & Verzugszeit & \textit{equivalent dead time}\\
+                $T_b$ & Ausgleichszeit & \textit{equivalent time constant; balancing time}\\
+                $P$ & Wendepunkt & \textit{inflection point}\\
+                $T_w$ & Wendezeit & \textit{inflection time}\\
+                \hline
+                \end{tabular}
+                % LTeX: enabled=true language=de-DE
+            \end{small}
+    \end{center}
+    \caption{Ermittlung von Ausgleichszeit und Verzugszeit aus der Sprungantwort eines Systems zweiter Ordnung und höher (nach DIN IEC 60050-351 (45-34)).}
+    \label{fig:ermittlung_verzugszeit}
+\end{figure}
+\snippet{110}
 
-% \begin{figure}[ht]
-%     \centering
-%     \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Regelkreis-Prinzip.pdf}
-%     \caption{Führungssprungantwort eines geschlossenen Regelkreises.}
-%     \label{fig:Sprungantwort-RK-Prinzip}
-% \end{figure}
+\subsection{Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung}
+\label{sec:pt_2-glied-nicht}
+\snippet{111}
+Für den Fall eines Übertragungsgliedes, dessen Übertragungsfunktion nur negativ reelle Pole hat, kommt es zu keinem Überschwingen. Der Wendepunkt im Anstieg bleibt jedoch erhalten.
+\snippet{112}
+Es sind daher nur folgende Kenngrößen von Interesse (vergl.\,Abbildung \ref{fig:ermittlung_verzugszeit}):
+\begin{itemize}
+    \item \textbf{Wendezeit:} Die Zeit $T_w$, bei der die Ableitung der Sprungantwort ein Maximum hat.
+    \item \textbf{Verzugszeit:} Die Zeit $T_e$ vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse.
+    \item \textbf{Ausgleichszeit:} Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit $T_b$.
+\end{itemize}
+\snippet{113}
+Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.
+\snippet{114}
+\begin{RstWichtigBox}
+    Solche nicht schwingungsfähigen Strecken lassen sich stets
+    durch Hintereinanderschaltung mehrerer Strecken erster Ordnung
+    realisieren!
+\end{RstWichtigBox}
+\snippet{115}
+\subsection{Sprungantwort eines geschlossenen Regelkreises} \label{sec:SprungantwortRegelkreis}
+\snippet{116}
+Für den Fall eines geregelten Systems interessiert die Reaktion der Regelgröße $x$ ausgehend vom Gleichgewichtswert $X_0$ auf eine sprungförmige Änderung der Führungsgröße $w$ vom Gleichgewichtswert $W_0$ auf den Sollwert $X_d$, die sog.\,Führungssprungantwort, siehe Abbildung \ref{fig:Sprungantwort-RK-Prinzip}. Alternativ wird das Störverhalten über die Störsprungantwort untersucht.
+\snippet{117i}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{Inkscape/Sprungantwort-Regelkreis-Prinzip.pdf}
+    \caption{Führungssprungantwort eines geschlossenen Regelkreises.}
+    \label{fig:Sprungantwort-RK-Prinzip}
+\end{figure}
 
-% Die Abbildungen \ref{fig:typ_Sprungantwort_Regelkreis} und \ref{fig:typ_Sprungantwort_Stoerung} zeigen die typische Führungs- und Störsprungantwort mit den genormten Bezeichnungen und Abkürzungen, welche in Tabelle \ref{tab:SprungantwortRegelkreis} aufgeführt sind.
+Die Abbildungen \ref{fig:typ_Sprungantwort_Regelkreis} und \ref{fig:typ_Sprungantwort_Stoerung} zeigen die typische Führungs- und Störsprungantwort mit den genormten Bezeichnungen und Abkürzungen, welche in Tabelle \ref{tab:SprungantwortRegelkreis} aufgeführt sind.
 
-% \begin{figure}[hbtp]
-%     \begin{center}
-%         \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort-Regelkreis.pdf}
-%         \end{center}
-%         \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Führungsgröße $w$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}. Achtung! Für die Sprungantwort eines Übertragungsgliedes alleine siehe Abbildung \ref{fig:typ_Sprungantwort}.}
-%         \label{fig:typ_Sprungantwort_Regelkreis}
-% \end{figure}
+\begin{figure}[hbtp]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort-Regelkreis.pdf}
+        \end{center}
+        \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Führungsgröße $w$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}. Achtung! Für die Sprungantwort eines Übertragungsgliedes alleine siehe Abbildung \ref{fig:typ_Sprungantwort}.}
+        \label{fig:typ_Sprungantwort_Regelkreis}
+\end{figure}
 
-% \begin{figure}[hbtp]
-%     \begin{center}
-%         \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort_Stoerung.pdf}\\
-%     \end{center}
-%     \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Störgröße $z$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}.}
-%     \label{fig:typ_Sprungantwort_Stoerung}
-% \end{figure}
+\begin{figure}[hbtp]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{Inkscape/Typische_Sprungantwort_Stoerung.pdf}\\
+    \end{center}
+    \caption{Typische Sprungantwort eines \emph{geschlossenen Regelkreises} als Reaktion auf einen Sprung der Störgröße $z$ und zugehörige Symbole nach DIN IEC 60050-351 (46-01). Für die Bezeichnungen siehe Tabelle \ref{tab:SprungantwortRegelkreis}.}
+    \label{fig:typ_Sprungantwort_Stoerung}
+\end{figure}
+\snippet{118}
+\begin{table}[hbtp]
+    \centering
+        \begin{small}
+        % LTeX: enabled=false language=de-DE
+        \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
+        \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
+        $w$ & Führungsgröße & \textit{reference variable}\\
+        $z$ & Störgröße & \textit{disturbance variable}\\
+        $x$ & Regelgröße & \textit{controlled variable}\\
+        $X_0, X_{\infty}$ & \raggedright Werte der Regelgröße im Behar\-rungszustand vor und nach dem Sprung & \textit{steady state values of the controlled variable before and after application of the step}\\
+        $X_{d}$ & \raggedright Sollwert & \textit{desired value}\\
+        $W_0$ & \raggedright Wert der Führungsgröße im Behar\-rungszustand vor dem Sprung & \textit{steady state values of the reference variable before application of the step}\\
+        $\Delta X_\infty$ & \raggedright Abweichung im Beharrungszustand & \textit{steady state deviation}\\
+        $x_{m}$ & \raggedright Überschwingweite & \textit{overshoot}\\
+        $2\cdot\Delta x_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
+        $T_t$ & Totzeit & \textit{dead-time}\\
+        $T_{cr}$ & Anregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) wieder in das Toleranzband einläuft) & \textit{control rise time}\\
+        $T_{cs}$ & Ausregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) dauerhaft im Toleranzband verbleibt)& \textit{control settling time}\\\hline
+        \end{tabular}
+        % LTeX: enabled=true language=de-DE
+        \end{small}
+    \caption{Abkürzungen und Bezeichnungen einer Sprungantwort im geschlossenen Regelkreis DIN IEC 60050-351.}
+    \label{tab:SprungantwortRegelkreis}
+\end{table}
 
-% \begin{table}[hbtp]
-%     \centering
-%         \begin{small}
-%         % LTeX: enabled=false language=de-DE
-%         \begin{tabular}{|l| p{6.4cm}| p{6.4cm}|} \hline
-%         \rowcolor{lightgray}\textbf{Symbol} &\textbf{deutsche Bezeichnung} &\textbf{englische Bezeichnung} \\ \hline
-%         $w$ & Führungsgröße & \textit{reference variable}\\
-%         $z$ & Störgröße & \textit{disturbance variable}\\
-%         $x$ & Regelgröße & \textit{controlled variable}\\
-%         $X_0, X_{\infty}$ & \raggedright Werte der Regelgröße im Behar\-rungszustand vor und nach dem Sprung & \textit{steady state values of the controlled variable before and after application of the step}\\
-%         $X_{d}$ & \raggedright Sollwert & \textit{desired value}\\
-%         $W_0$ & \raggedright Wert der Führungsgröße im Behar\-rungszustand vor dem Sprung & \textit{steady state values of the reference variable before application of the step}\\
-%         $\Delta X_\infty$ & \raggedright Abweichung im Beharrungszustand & \textit{steady state deviation}\\
-%         $x_{m}$ & \raggedright Überschwingweite & \textit{overshoot}\\
-%         $2\cdot\Delta x_{s}$ & Toleranzbereich & \textit{specified tolerance limit}\\
-%         $T_t$ & Totzeit & \textit{dead-time}\\
-%         $T_{cr}$ & Anregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) wieder in das Toleranzband einläuft) & \textit{control rise time}\\
-%         $T_{cs}$ & Ausregelzeit (Zeit, bis Regelgröße das erste Mal (nach Verlassen) dauerhaft im Toleranzband verbleibt)& \textit{control settling time}\\\hline
-%         \end{tabular}
-%         % LTeX: enabled=true language=de-DE
-%         \end{small}
-%     \caption{Abkürzungen und Bezeichnungen einer Sprungantwort im geschlossenen Regelkreis DIN IEC 60050-351.}
-%     \label{tab:SprungantwortRegelkreis}
-% \end{table}
-
-% \FloatBarrier
-
+\FloatBarrier
+\snippet{119}
 
 % % Bodediagramm
 % \section{Bode-Diagramm}
