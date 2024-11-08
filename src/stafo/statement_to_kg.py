@@ -4,12 +4,13 @@ from ipydex import IPS
 from jinja2 import Environment, FileSystemLoader
 import subprocess
 import copy
+import deepdiff
 
-from .utils import BASE_DIR, CONFIG_PATH, render_template
+from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value
 
 
 def get_md_lines(fpath) -> list[str]:
-    with open(fpath, "rt") as f:
+    with open(fpath, "rt", encoding="utf-8") as f:
         raw = f.read()
     lines = raw.split("\n")
     return lines
@@ -103,11 +104,21 @@ class ConversionManager:
                     "R1": "has property",
                     "render": "R16__has_property"
                 },
-                "has an alternative label": {
+                "has the alternative label": {
                     "key": "R77",
                     "R1": "has alternative label",
                     "render": "R77__has_alternative_label"
-                }
+                },
+                "is associated to": {
+                    "key": "R58",
+                    "R1": "wildcard relation",
+                    "render": "R58__wildcard_relation"
+                },
+                "has explanation": {
+                    "key": "R81",
+                    "R1": "has explanation",
+                    "render": "R81__has_explanation"
+                },
 
             }}
         """
@@ -123,27 +134,38 @@ class ConversionManager:
 
 
         self.comment_pattern = re.compile(r"- //")
-        self.class_pattern = re.compile(r"(?<=There is a class: ).+?(?=\.)")
-        self.property_pattern = re.compile(r"(?<=There is a property: ).+?(?=\.)")
-        self.relation_pattern = re.compile(r"(?<=There is a relation: ).+?(?=\.)")
-        self.unary_operator_pattern = re.compile(r"(?<=There is a unary operator: ).+?(?=\.)")
-        self.binary_operator_pattern = re.compile(r"(?<=There is a binary operator: ).+?(?=\.)")
-        self.type_of_arg_1_pattern = re.compile(r"(?<=The type of argument1 of )(.+?)(?: is )(.+?)(?=\.)")
-        self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+?)(?=\.)")
-        self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+?)(?=\.)")
-        self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+?)(?=:)")
+        self.new_section_pattern = re.compile(r"New.+?section")
+        self.class_pattern = re.compile(r"(?<=There is a class)(?::? )(.+)")                 # sometimes : is forgotten
+        self.property_pattern = re.compile(r"(?<=There is a property)(?::? )(.+)")
+        self.relation_pattern = re.compile(r"(?<=There is a relation)(?::? )(.+)")
+        self.unary_operator_pattern = re.compile(r"(?<=There is a unary operator)(?::? )(.+)")
+        self.binary_operator_pattern = re.compile(r"(?<=There is a binary operator)(?::? )(.+)")
+        self.type_of_arg_1_pattern = re.compile(r"(?<=The type of argument1 of )(.+?)(?: is )(.+)")
+        self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+)")
+        self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+)")
+        self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
         self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
+        self.math_rel_pattern = re.compile(r"There is a mathematical relation")
         self.equivalence_pattern = re.compile(r"There is an equivalence-statement")
         self.if_then_pattern = re.compile(r"There is an if-then-statement")
+        self.general_statement_pattern = re.compile(r"There is a general statement")
+        self.explanation_pattern = re.compile(r"There is an explanation")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
         self.equation_pattern_dict = {
-            "full_source": re.compile(r"(?<=full source code)(?::? )(.+?)(?=\.$|$)"),
-            "lhs_source": re.compile(r"(?<=source code of left hand side)(?::? )(.+?)(?=\.$|$)"),
-            "rhs_source": re.compile(r"(?<=source code of right hand side)(?::? )(.+?)(?=\.$|$)"),
-            "lhs_formal": re.compile(r"(?<=formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
-            "rhs_formal": re.compile(r"(?<=formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
+            "full_source": re.compile(r"(?<=- full source code)(?::? )(.+?)(?=\.$|$)"),
+            "lhs_source": re.compile(r"(?<=- source code of left hand side)(?::? )(.+?)(?=\.$|$)"),
+            "rhs_source": re.compile(r"(?<=- source code of right hand side)(?::? )(.+?)(?=\.$|$)"),
+            "lhs_formal": re.compile(r"(?<=- formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
+            "rhs_formal": re.compile(r"(?<=- formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
+            "reference": re.compile(r"(?<=- reference)(?::? )(.+)")
+        }
+        self.math_rel_pattern_dict = copy.deepcopy(self.equation_pattern_dict)
+        self.math_rel_pattern_dict["rel_sign"] = re.compile(r"(?<=- relation sign)(?::? )(.+?)(?=\.$|$)")
+        self.explanation_pattern_dict = {
+            "related": re.compile(r"(?<=- related to)(?::? )(.+?)(?=\.$|$)"),
+            "verbal": re.compile(r"(?<=- verbal summary)(?::? )(.+?)(?=\.$|$)"),
         }
 
     def strip(self, s):
@@ -157,7 +179,7 @@ class ConversionManager:
                 new.append(self.strip(v))
             return tuple(new)
         elif isinstance(s, str):
-            return s.replace("'", "").replace('"', '')
+            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "")
         else:
             raise TypeError(s)
 
@@ -207,7 +229,7 @@ class ConversionManager:
 
         # item_keys = re.findall(r"I\d\d\d\d", res.stdout.decode())
         # relation_keys = re.findall(r"R\d\d\d\d", res.stdout.decode())
-        with open(os.path.join(BASE_DIR, "keys.txt"), "rt") as f:
+        with open(os.path.join(BASE_DIR, "keys.txt"), "rt", encoding="utf-8") as f:
             keys = f.read()
         self.item_keys = re.findall(r"I\d\d\d\d", keys)
         self.relation_keys = re.findall(r"R\d\d\d\d", keys)
@@ -217,7 +239,11 @@ class ConversionManager:
         if line == "":
             return 0
         indent_pattern = re.compile(r" +?(?=-)")
-        indent = len(re.findall(indent_pattern, line)[0])
+        indent_res = re.findall(indent_pattern, line)
+        if indent_res:
+            indent = len(indent_res[0])
+        else:
+            indent = 0
         return indent
 
     def get_sub_content(self, content):
@@ -247,33 +273,36 @@ class ConversionManager:
             line = content[i]
             # if line is more indented it will be processed in subroutine
             if self.get_indent(line) == indent:
-                op_pattern = re.compile(r"(OR|AND)")
+                op_pattern = re.compile(r"(OR|AND|NOT)")
                 operator = re.findall(op_pattern, line)
                 if operator:
                     sub_content = self.get_sub_content(content[i+1:])
-                    res = self.recurse_nested_statements(sub_content, line_no+i, temp_dict=temp_dict)
+                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=temp_dict)
                     # skip next lines that were processed in subroutine
                     # not really necessary anymore
                     i += len(res)
-                    d= {f"{operator[0]}_{op_count}": res}
-                    l.append(d)
+                    # d= {f"{operator[0]}_{op_count}": res}
+                    # l.append(d)
+                    # temp_dict[f"{operator[0]}_{op_count}"] = res
+
                     op_count += 1
                 else:
                     # l.append(line)
                     if temp_dict is not None:
-                        l.append(self.process_line(copy.deepcopy(temp_dict), line_no+i, line))
+                        # l.append(self.process_line(copy.deepcopy(temp_dict), line_no+i, line))
+                        self.process_line(temp_dict, line_no+i, line)
                     else:
                         # l.append(self.process_line({}, None, line))
                         raise ValueError()
 
             elif self.get_indent(line) < indent:
-                # this means that the context was chose too large
+                # this means that the context was chosen too large
                 break
             else:
                 # print(f"skipping: {line}")
                 pass
             i += 1
-        return l
+        return temp_dict
 
 
     def step2(self):
@@ -293,7 +322,8 @@ class ConversionManager:
                 continue
             # indeted lines should be processed somewhere down below
             elif line.startswith(" "):
-                print(f"line {i} skipped: {line}")
+                # print(f"line {i} skipped: {line}")
+                pass
             # existing relations
             else:
                 self.d = self.process_line(self.d, i, line)
@@ -328,6 +358,8 @@ class ConversionManager:
         Returns:
             dict: current dict d
         """
+        comment = re.findall(self.comment_pattern, line)
+        new_section = re.findall(self.new_section_pattern, line)
         new_class = re.findall(self.class_pattern, line)
         new_property = re.findall(self.property_pattern, line)
         new_relation = re.findall(self.relation_pattern, line)
@@ -338,11 +370,23 @@ class ConversionManager:
         type_of_result = re.findall(self.type_of_result_pattern, line)
         amend_definition = re.findall(self.amend_definition_pattern, line)
         equation = re.findall(self.equation_pattern, line)
+        math_rel = re.findall(self.math_rel_pattern, line)
         equivalence = re.findall(self.equivalence_pattern, line)
         if_then = re.findall(self.if_then_pattern, line)
+        general_statement = re.findall(self.general_statement_pattern, line)
+        explanation = re.findall(self.explanation_pattern, line)
 
+
+        # debug
+        # if i == 41:
+        #     1
+        if len(comment) > 0:
+            return d
+        elif len(new_section) > 0:
+            print(f"skip section mark line {i}, {line}")
+            return d
         # new class?
-        if len(new_class) > 0:
+        elif len(new_class) > 0:
             # self.items.append(self.strip(new_class[0]))
             self.add_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
         # new property?
@@ -413,30 +457,88 @@ class ConversionManager:
                     res = re.findall(pattern, l)
                     if res: eq_dict[name] = self.strip(res[0])
             d["items"]["other"].append(eq_dict)
-        elif len(equivalence) > 0 or len(if_then) > 0:
+        elif len(math_rel) > 0:
+            lines = self.get_sub_content(self.lines[i+1:])
+            math_rel_dict = {
+                "type": "mathematical relation",
+                "key": self.item_keys.pop(),
+                "snip": self.current_snippet
+                }
+            for l in lines:
+                for name, pattern in self.math_rel_pattern_dict.items():
+                    res = re.findall(pattern, l)
+                    if res: math_rel_dict[name] = self.strip(res[0])
+            d["items"]["other"].append(math_rel_dict)
+        elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
-            else:
+                new_item_name = f"equivalence-statement_{i}"
+            elif len(if_then) > 0:
                 additional_context = {"R4": 'p.I15["implication proposition"]', "comments": []}
+                new_item_name = f"if-then-statement_{i}"
+            elif len(general_statement) > 0:
+                additional_context = {"R4": 'p.I14["general mathematical proposition"]', "comments": []}
+                new_item_name = f"general-statement_{i}"
             additional_content = self.get_sub_content(self.lines[i+1:])
+            temp_dict = {"items": {"other":[]}, "relations": {}}
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 if len(full_source) > 0:
                     additional_context["comments"].append(full_source[0])
+                    continue
                 source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
                 source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
                 if source_pre: additional_context["source_pre"] = source_pre[0]
                 if source_ass: additional_context["source_ass"] = source_ass[0]
-                formal = re.findall(r"(?<=formalized )(pre|ass)", l)
+                formal = re.findall(r"(?<=formalized )(set|pre|ass)", l)
                 if formal:
-                    temp_dict = {"items": {"other":[]}, "relations": {}}
-                    additional_context[f"formal_{formal[0]}"] = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i, temp_dict)[0]
-            new_item_name = f"equivalence-statement_{i}"
+                    # in order for new relations in assertion to relate to the subject created in setting, the dict
+                    # is passed from one scope to the next. In order to still differentiate "dict_ass - dict_set",
+                    # the temp_dict is copied
+                    temp_dict = copy.deepcopy(temp_dict)
+                    additional_context[f"formal_{formal[0]}"] = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i+ii+2, temp_dict)
+            # now differentiate between the dicts
+            formal_keys = [key for key in additional_context.keys() if "formal" in key]
+            dict_list = [additional_context[key] for key in formal_keys]
+            if len(dict_list) > 1:
+                diff_list = []
+                for index in range(len(dict_list)-1):
+                    diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1]))
+                for index, diff in enumerate(diff_list):
+                    dbg = 0
+                    current_dict = additional_context[formal_keys[index+1]] = {"items": {"other":[]}, "relations": {}}
+                    if "iterable_item_added" in diff.keys():
+                        for ikey, ivalue in diff["iterable_item_added"].items():
+                            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
+                            res = re.findall(key_pattern, ikey)
+                            prev = get_nested_value(current_dict, res)
+                            prev.append(ivalue)
+                            set_nested_value(current_dict, res, prev)
+                        dbg += 1
+
+                    if "dictionary_item_added" in diff.keys():
+                        for ikey in diff["dictionary_item_added"]:
+                            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
+                            res = re.findall(key_pattern, ikey)
+                            set_nested_value(current_dict, res, get_nested_value(diff.t2, res))
+                        dbg += 1
+                    if dbg != len(diff.keys()):
+                        raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
+
+
             d = self.add_item(d, new_item_name, additional_context)
+        elif len(explanation) > 0:
+            additional_content = self.get_sub_content(self.lines[i+1:])
+            for ii, l in enumerate(additional_content):
+                res = re.findall(self.explanation_pattern_dict["related"], l)
+                if res: related_to = self.strip(res[0])
+                res= re.findall(self.explanation_pattern_dict["verbal"], l)
+                if res: verbal_sum = self.strip(res[0])
+            self.d["items"][related_to][self.d["relations"]["has explanation"]["key"]] = verbal_sum
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
-                res = re.findall(f"(?<=- )(.+?)(?: {k} )(.+?)(?=\\.$|$)", line)
+                res = re.findall(f"(?<=- )(.+?)(?: {k}:? )(.+?)(?=\\.$|$)", self.strip(line))
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2)
@@ -452,10 +554,18 @@ class ConversionManager:
                             arg1 in self.d["relations"]):
                             self.add_item(d, arg1)
                             print(f"dummy item {arg1} added")
-                        try:
+                        if arg1 in d["items"]:
                             d["items"][arg1][v["key"]] = arg2
-                        except KeyError:
+                        elif arg1 in d["relations"]:
                             d["relations"][arg1][v["key"]] = arg2
+                        else:
+                            raise KeyError
+                        # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
+                        # elif arg1 in self.d["items"]:
+                        #     self.d["items"][arg1][v["key"]] = arg2
+                        # elif arg1 in self.d["relations"]:
+                        #     self.d["relations"][arg1][v["key"]] = arg2
+
 
                     break
                 # relations of structure arg1 rel.
@@ -654,7 +764,7 @@ class ConversionManager:
                         raise TypeError()
 
         fpath = "output.py"
-        with open(fpath, "wt") as f:
+        with open(fpath, "wt", encoding="utf-8") as f:
             f.write(output)
         print(f"{count} new entities written to {fpath}.")
 

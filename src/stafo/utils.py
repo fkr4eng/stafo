@@ -26,3 +26,39 @@ def render_template(template: str, context: dict):
     res = template_doc.render(context=context)
 
     return res
+
+def set_nested_value(data, keys, value):
+    """set a given nested dict with given key sequence and value
+
+    Args:
+        data (dict): nested dict
+        keys (list): key list
+        value (any): value
+
+    Returns:
+        dict: nested dict
+    """
+    current = data
+    for key in keys[:-1]:
+        if key not in current:
+            current[key] = {}  # Create a new dict if the key doesn't exist
+        current = current[key]
+    current[keys[-1]] = value
+    return data
+
+def get_nested_value(data, keys):
+    """get a given nested dict with given key sequence
+
+    Args:
+        data (dict): nested dict
+        keys (list): list of keys
+
+    Returns:
+        any: value at the end of key list
+    """
+    try:
+        for key in keys:
+            data = data[key]
+        return data
+    except Exception as e:
+        raise e

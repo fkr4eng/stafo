@@ -7,17 +7,17 @@
 
 - // snippet(3)
 - There is a class: 'Steuerung'.
-- 'Steuerung' has a verbal description 'Unter einer Steuerung versteht man eine Einrichtung, die aus dem Verlauf der Sollgrößen den erforderlichen Verlauf der Stellgrößen a priori berechnet.'
-- 'Steuerung' has an alternative label 'feedforward control'
+- 'Steuerung' has the verbal description 'Unter einer Steuerung versteht man eine Einrichtung, die aus dem Verlauf der Sollgrößen den erforderlichen Verlauf der Stellgrößen a priori berechnet.'
+- 'Steuerung' has the alternative label 'feedforward control'
 
 - // snippet(4)
 - There is a class: 'Regelung'.
-- 'Regelung' has a verbal description 'Unter einer Regelung versteht man eine Einrichtung, in die die Regelgrößen zurückgeführt und in geeigneter Art und Weise ausgewertet werden. Auf Basis dieses Vergleiches erfolgt eine Korrektur der Stellgrößen, die darauf abzieht, den Verlauf der Regelgrößen dem Verlauf der Sollgrößen anzugleichen.'
-- 'Regelung' has an alternative label 'feedback control'
+- 'Regelung' has the verbal description 'Unter einer Regelung versteht man eine Einrichtung, in die die Regelgrößen zurückgeführt und in geeigneter Art und Weise ausgewertet werden. Auf Basis dieses Vergleiches erfolgt eine Korrektur der Stellgrößen, die darauf abzieht, den Verlauf der Regelgrößen dem Verlauf der Sollgrößen anzugleichen.'
+- 'Regelung' has the alternative label 'feedback control'
 
 - // snippet(5)
-- There is class: 'Regelstrecke'.
-- 'Regelstrecke' has an alternative label 'plant'
+- There is a class: 'Regelstrecke'.
+- 'Regelstrecke' has the alternative label 'plant'
 
 - // snippet(6i)
 - // ignored content
@@ -54,12 +54,11 @@
 - 'Größe' has the alternative label 'physical quantity'
 - There is a class: 'Variable'
 - 'Variable' has the alternative label 'mathematical variable'
-- 'Signal' has the definition:
-    - AND
-        - \SX is an instance of 'Zeitlicher Verlauf'
-        - \SY is an instance of 'Größe'
-        - \SX is associated to \SY
-- // I am not sure how to model the last sentence of the LaTeX code. It seems to state that a 'Größe' can be represented by a 'Variable'. However, it is not clear if this representation is unique or if there can be multiple 'Variable's which represent the same 'Größe'.
+- 'Signal' is a subclass of 'Zeitlicher Verlauf'
+- There is a relation: 'beschreibt Größe'
+- The type of argument1 of 'beschreibt Größe' is 'Signal'
+- The result type of 'beschreibt Größe' is 'Größe'
+
 
 - // snippet(12i)
 - // ignored content
@@ -73,6 +72,15 @@
 - There is a class: 'real number'.
 - There is a class: 'integer number'.
 - There is a class: 'complex number'.
+
+- There is a relation: 'is subset of'
+- The type of argument1 of 'is subset of' is 'set'
+- The result type of 'is subset of' is 'set'
+
+- There is a class: 'set of real numbers'
+- 'set of real numbers' 'is subset of' 'set'.
+- There is a class: 'set of complex numbers'
+- 'set of complex numbers' 'is subset of' 'set'.
 
 - // snippet(14)
 - There is a class: 'Funktion'.
@@ -122,7 +130,7 @@
     - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
     - reference: 'eq_übertragungsglied_definition'
 - 'eq_übertragungsglied_definition' is associated to 'Übertragungsglied'
-- There is an operator: '\(\varphi\)'
+- There is a unary operator: '\(\varphi\)'
 - // I am not sure if I should introduce a new statement type 'There is a formula' to model the second part of the equation, i.e.  '\(f_\nu = \varphi(f_u)\)' after 'bzw'.
 
 - // snippet(18)
@@ -169,20 +177,13 @@
 
 - // snippet(25) TODO format
 - There is a property: 'linear'
-- There is an if-then statement:
-    - full source code: 'Man bezeichnet ein Übertragungsglied als \emph{linear}, wenn für zwei beliebige Eingangssignale  \(u(t), u^\ast(t)\) und beliebige reelle Konstanten \(c, c^\ast\) gilt:
-
-    \begin{subequations}
-    \begin{align}
-    \varphi(u(t) + u^\ast(t)) &= \varphi(u(t)) + \varphi(u^\ast(t)) \label{eq:UebPrinzip}\\[2ex]
-    \varphi (cu^\ast(t)) &= c\varphi (u^\ast(t)) \label{eq:VerstPrinzip}.
-    \end{align}
-    \end{subequations}'
+- There is an if-then-statement:
+    - full source code: 'Man bezeichnet ein Übertragungsglied als \emph{linear}, wenn für zwei beliebige Eingangssignale  \(u(t), u^\ast(t)\) und beliebige reelle Konstanten \(c, c^\ast\) gilt: \begin{subequations} \begin{align} \varphi(u(t) + u^\ast(t)) &= \varphi(u(t)) + \varphi(u^\ast(t)) \label{eq:UebPrinzip}\\[2ex] \varphi (cu^\ast(t)) &= c\varphi (u^\ast(t)) \label{eq:VerstPrinzip}. \end{align}  \end{subequations}'
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'.
         - '\(u(t)\)' is an instance of 'Eingangssignal'
         - '\(u^\ast(t)\)' is an instance of 'Eingangssignal'
-        - '\(c\)' is an instance of 'real numbers'.
+        - '\(c\)' is an instance of 'real number'.
     - formalized premise:
         - AND
             - There is an equation:
@@ -205,11 +206,8 @@
 - // snippet(27)
 - There is a property: 'zeitinvariant'
 - 'zeitinvariant' has the alternative label 'time-invariant'
-- There is an if-then statement:
-    - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt:
-    \begin{equation} \label{eq:VerschPrinzip}
-      \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)).
-    \end{equation}'
+- There is an if-then-statement:
+    - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt: \begin{equation} \label{eq:VerschPrinzip} \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)). \end{equation}'
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'
     - formalized premise:
@@ -235,7 +233,7 @@
 - 'Gewichtsfunktion' is associated to 'lineares Übertragungsglied'
 - // I am not sure how to model the term 'Übertragungsverhalten'. It seems to be a property of 'lineares Übertragungsglied'. However, it is not clear to me what this property represents.
 - // I am not sure how to model the statement that the 'Gewichtsfunktion' characterizes the 'Übertragungsverhalten' uniquely.
-- // I am not sure how to model the statement 'Ist diese bekannt, so lässt sich der Verlauf der Ausgangsgröße aus dem Verlauf der Eingangsgröße berechnen.' It seems to be an if-then statement. However, it is not clear to me what the premise and the assertion are.
+- // I am not sure how to model the statement 'Ist diese bekannt, so lässt sich der Verlauf der Ausgangsgröße aus dem Verlauf der Eingangsgröße berechnen.' It seems to be an if-then-statement. However, it is not clear to me what the premise and the assertion are.
 
 - // snippet(31)
 - 'Gewichtsfunktion' has the associated LaTeX notation '\(g(t)\)'
@@ -292,62 +290,76 @@
 - // snippet(38i)
 - // ignored content
 - // snippet(39)
-- There is a class: 'Differentialgleichung'
+- There is a class: 'Differenzialgleichung'
 - There is a relation 'has system order'
-- The type of argument1 of 'has system order' is 'Differentialgleichung'.
+- The type of argument1 of 'has system order' is 'Differenzialgleichung'.
 - The result type of 'has system order' is 'integer number'.
 - There is a general statement:
     - formalized setting:
+        - 'ue1' is an instance of 'Übertragungsglied'
+        - 'df1' is an instance of 'Differenzialgleichung'
+        - 'df1' is associated to 'ue1'
         - '\(n\)' is an instance of 'integer number'
         - '\(m\)' is an instance of 'integer number'
         - '\(F\)' is an instance of 'Funktion'
         - '\(F\)' has domain '\(\mathbb{R}^{n+m+2}\)'
         - '\(F\)' has range '\(\mathbb{R}\)'
+        - 'u' is an instance of 'Eingangssignal'
+        - 'ue1' has input signal 'u'
+        - '\nu' is an instance of 'Ausgangssignal'
+        - 'ue1' has output signal '\nu'
+    - formalized assertion:
         - There is an equation:
             - full source code: '\(F(\nu^{(n)}, \nu^{(n-1)}, \ldots, \ddot \nu, \dot \nu, \nu, u^{(m)}, u^{(m-1)}, \ldots, \ddot u, \dot u, u) = 0\)'
             - source code of left hand side: '\(F(\nu^{(n)}, \nu^{(n-1)}, \ldots, \ddot \nu, \dot \nu, \nu, u^{(m)}, u^{(m-1)}, \ldots, \ddot u, \dot u, u)\)'
             - source code of right hand side: '0'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the function F and its arguments.
             - reference: 'eq:DlgAllgemein'
-    - formalized assertion:
-        - 'Differentialgleichung' has the defining formula 'eq:DlgAllgemein'
-        - 'Differenzialgleichung' has system order '\(n\)'
+        - 'df1' has defining formula 'eq:DlgAllgemein'
+        - 'df1' has system order '\(n\)'
 
+
+- // manuall content
+- There is a class: 'Coefficients'.
+- There is a class: 'set of coefficients'
+- There is a class: 'mathematical expression'
+- There is a relation: 'has coefficient set'
+- The type of argument1 of 'has coefficient set' is 'mathematical expression'
+- The result type of 'has coefficient set' is 'set of coefficients'
 
 - // snippet(40)
-- There is class: 'lineares Übertragungsglied'
-- 'lineares Übertragungsglied' is subclass of 'Übertragungsglied'
+- There is a class: 'lineares Übertragungsglied'
+- 'lineares Übertragungsglied' is a subclass of 'Übertragungsglied'
 - 'lineares Übertragungsglied' has the property 'linear'
 - There is a general statement:
-    - full source code: 'Im Falle von linearen Übertragungsgliedern vereinfacht sich Gl.~\eqref{eq:DlgAllgemein} zu
-    \begin{equation} \label{eq:DglAllgemeinLinear}
-      a_n \nu^{(n)} + a_{n-1} \nu^{(n-1)} + \ldots + a_2 \ddot \nu + a_1 \dot \nu + a_0 \nu =  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u
-    \end{equation}
-    mit  \(a_0, \ldots, a_n, b_0, \ldots b_m \in \mathbb{R}\).'
+    - full source code: 'Im Falle von linearen Übertragungsgliedern vereinfacht sich Gl.~\eqref{eq:DlgAllgemein} zu \begin{equation} \label{eq:DglAllgemeinLinear} a_n \nu^{(n)} + a_{n-1} \nu^{(n-1)} + \ldots + a_2 \ddot \nu + a_1 \dot \nu + a_0 \nu =  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u \end{equation} mit  \(a_0, \ldots, a_n, b_0, \ldots b_m \in \mathbb{R}\).'
     - formalized setting:
-        - '\(a_0\)' is an instance of 'real numbers'
-
+        - 'lue1' is an instance of 'lineares Übertragungsglied'
+        - 'df1' is an instance of 'Differenzialgleichung'
+        - 'df1' is associated to 'lue1'
+        - '\(n\)' is an instance of 'integer number'
+        - '\(m\)' is an instance of 'integer number'
+        - '\(F\)' is an instance of 'Funktion'
+        - '\(F\)' has domain '\(\mathbb{R}^{n+m+2}\)'
+        - '\(F\)' has range '\(\mathbb{R}\)'
+        - 'u' is an instance of 'Eingangssignal'
+        - 'lue1' has input signal 'u'
+        - '\nu' is an instance of 'Ausgangssignal'
+        - 'lue1' has output signal '\nu'
+        - 'soc' is an instance of 'set of coefficients'
+        - 'df1' 'has coefficient set' 'soc'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(a_n \nu^{(n)} + a_{n-1} \nu^{(n-1)} + \ldots + a_2 \ddot \nu + a_1 \dot \nu + a_0 \nu =  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\)'
             - source code of left hand side: '\(a_n \nu^{(n)} + a_{n-1} \nu^{(n-1)} + \ldots + a_2 \ddot \nu + a_1 \dot \nu + a_0 \nu\)'
             - source code of right hand side: '\(b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\)'
             - reference: 'eq:DglAllgemeinLinear'
+        - 'soc' is subset of 'set of real numbers'
 
 
 - // snippet(41)
 - There is a general statement:
-    - full source code: 'Mithilfe der Substitution  \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\) lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von  \(n\) gewöhnlichen Differenzialgleichungen erster Ordnung überführen:
-    \begin{align}\label{eq:DglSysAllgemein}
-      \begin{split}
-        \dot x_1 &= x_2 \\
-        \dot x_2 &= x_3 \\
-                &\vdots \\
-        \dot x_{n-1} &= x_n\\
-        \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)
-      \end{split}
-    \end{align}
-    mit den Anfangsbedingungen  \(x_1(0) = V_{00}\),  \(x_2(0)=V_{01}\),  \(\ldots\),  \(x_n(0) =V_{0n-1}\).'
+    - full source code: 'Mithilfe der Substitution  \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\) lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von  \(n\) gewöhnlichen Differenzialgleichungen erster Ordnung überführen: \begin{align}\label{eq:DglSysAllgemein} \begin{split} \dot x_1 &= x_2 \\ \dot x_2 &= x_3 \\ &\vdots \\ \dot x_{n-1} &= x_n\\ \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right) \end{split} \end{align} mit den Anfangsbedingungen  \(x_1(0) = V_{00}\),  \(x_2(0)=V_{01}\),  \(\ldots\),  \(x_n(0) =V_{0n-1}\).'
     - formalized setting:
         - '\(n\)' is an instance of 'integer number'
         - 'lineares Übertragungsglied 1' is an instance of 'lineares Übertragungsglied'
@@ -388,7 +400,7 @@
     - source code of left hand side: '\(F(s)\)'
     - source code of right hand side: '\(\int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
     - reference: 'eq:LaplaceHin'
-- 'Laplace-Transformation' has the defining equation 'eq:LaplaceHin'.
+- 'Laplace-Transformation' has defining formula 'eq:LaplaceHin'.
 
 
 - // snippet(48)
@@ -400,8 +412,8 @@
     - full source code: '\(s = \sigma + j \omega\)'
     - source code of left hand side: '\(s\)'
     - source code of right hand side: '\(\sigma + j \omega\)'
-- '\(\sigma\)' is an instance of 'real numbers'
-- '\(\omega\)' is an instance of 'real numbers'
+- '\(\sigma\)' is an instance of 'real number'
+- '\(\omega\)' is an instance of 'real number'
 
 - // snippet(49)
 - There is a unary operator 'Laplace-Transformation'
@@ -434,14 +446,7 @@
     - verbal summary: 'It will soon become clear why such a seemingly complicated and initially unintuitive transformation is very advantageous for working with transfer elements. For this purpose, we will first consider a particularly practical property of the Laplace transform, namely the "effect" on the time derivative  \(\dot f\) of a function \(f\).'
     - related to: 'Laplace-Transformation'
 - There is a general statement:
-    - full source code: 'Für die Laplace-Transformierte der Zeitableitung von  \(f\) gilt:
-    \begin{align*}
-      F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t.
-      \intertext{Partielle Integration liefert}
-      F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t.
-      \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus}
-      F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0).
-    \end{align*}'
+    - full source code: 'Für die Laplace-Transformierte der Zeitableitung von  \(f\) gilt: \begin{align*} F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t. \intertext{Partielle Integration liefert} F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t. \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus} F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0). \end{align*}'
     - formalized setting:
         - '\(f\)' is an instance of 'reellwertige Funktion'
         - '\(f\)' is associated to 'Zeitbereich'
@@ -480,13 +485,10 @@
 - The result type of 'höhere Zeitableitung' is 'reellwertige Funktion'
 - 'höhere Zeitableitung' is associated to 'Zeitbereich'
 - There is a general statement:
-    - full source code: '\RstBox{Diese Gleichung lässt sich für höhere Ableitungen von $f$ verallgemeinern:
-    \begin{equation}
-      \mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0). \label{eq:LaplaceDiffAllgemein}
-    \end{equation}}'
+    - full source code: '\RstBox{Diese Gleichung lässt sich für höhere Ableitungen von $f$ verallgemeinern: \begin{equation} \mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0). \label{eq:LaplaceDiffAllgemein} \end{equation}}'
     - formalized setting:
         - // Not sure how to model 'höhere Ableitungen'. It seems to imply that 'i' should be greater than 1 in this case.
-        - 'i' is instance of 'integer number'
+        - 'i' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(\mathcal{L}\left\{f^{(i)}(t)\right\} = s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0)\)'
@@ -499,12 +501,9 @@
 - // snippet(54)
 - There is a relation 'has initial condition'.
 - The type of argument1 of 'has initial condition' is 'Funktion'.
-- The result type of 'has initial condition' is 'real numbers'.
-- There is an if-then statement:
-    - full source code: 'Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man:
-    \begin{multline} \label{eq:DglAllgemeinLinearBildbereich}
-      a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s).
-    \end{multline}'
+- The result type of 'has initial condition' is 'real number'.
+- There is an if-then-statement:
+    - full source code: 'Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man: \begin{multline} \label{eq:DglAllgemeinLinearBildbereich} a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s). \end{multline}'
     - formalized setting:
         - 'v(t)' is an instance of 'reellwertige Funktion'
         - 'u(t)' is an instance of 'reellwertige Funktion'
@@ -587,11 +586,17 @@
     - formalized setting:
         - 'f(t)' is an instance of 'reellwertige Funktion'
         - 'F(s)' is an instance of 'komplexwertige Funktion'
-        - '\(\tau\)' is an instance of 'real numbers'
+        - '\(\tau\)' is an instance of 'real number'
     - formalized premise:
         - AND
-            - '\(\tau\)' > 0
-            - t < 0
+            - There is a mathematical relation:
+                - relation sign: >
+                - formalized left hand side: '\(\tau\)'
+                - formalized right hand side: 0
+            - There is a mathematical relation:
+                - relation sign: <
+                - formalized left hand side: 't'
+                - formalized right hand side: 0
             - There is an equation:
                 - formalized left hand side: 'f(t)'
                 - formalized right hand side: 0
@@ -623,10 +628,7 @@
 
 - // snippet(60)
 - There is a general statement:
-    - full source code: 'Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in  \(s\) umformen:
-    \begin{equation} \label{eq:UebertragungsfunktionAllgemein}
-      G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}.
-    \end{equation}'
+    - full source code: 'Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in  \(s\) umformen: \begin{equation} \label{eq:UebertragungsfunktionAllgemein} G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}. \end{equation}'
     - formalized setting:
         - 'v(t)' is an instance of 'reellwertige Funktion'
         - 'u(t)' is an instance of 'reellwertige Funktion'
@@ -660,10 +662,7 @@
 - // for the formalized expression, the following symbols are allowed: + (addition), - (subtraction), * (multiplication), / (division), ^ (power)
 - // snippet(62)
 - There is a general statement:
-    - full source code: 'Offensichtlich gilt:
-    \begin{equation*}
-      V(s) = G(s) U(s).
-    \end{equation*}'
+    - full source code: 'Offensichtlich gilt: \begin{equation*} V(s) = G(s) U(s). \end{equation*}'
     - formalized setting:
         - 'V(s)' is an instance of 'komplexwertige Funktion'
         - 'V(s)' beschreibt Ausgangssignal
@@ -692,10 +691,7 @@
 
 - // snippet(64)
 - There is a general statement:
-    - full source code: 'Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}:
-      \begin{equation*}
-        H(s) = \frac{1}{s}G(s).
-      \end{equation*}'
+    - full source code: 'Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}: \begin{equation*} H(s) = \frac{1}{s}G(s). \end{equation*}'
     - formalized setting:
         - 'h(t)' is an instance of 'Übergangsfunktion'
         - 'G(s)' is an instance of 'Übertragungsfunktion'
@@ -781,9 +777,10 @@
         - 'p' is an instance of 'Polstelle'
         - 'G(s)' hat Polstelle 'p'
     - formalized premise:
-        - OR
-            - 'Re'('p') > 0
-            - 'Re'('p') = 0
+        - There is a mathematical relation:
+            - relation sign: >=
+            - formalized left hand side: 'Re'('p')
+            - formalized right hand side: 0
     - formalized assertion:
         - 'ÜG1' has the property 'instabil'
 
@@ -821,7 +818,7 @@
 - There is a property: 'streng proper'
 - 'streng proper' has the alternative label 'strictly proper'
 - 'streng proper' is applicable to 'Übertragungsfunktion'
-- There is an if-then statement:
+- There is an if-then-statement:
     - formalized setting:
         - 'G(s)' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
@@ -833,12 +830,15 @@
         - 'N' 'hat Grad' 'n'
         - 'G(s)' 'hat Nenner' 'N'
     - formalized premise:
-        - 'n' > 'm'
+        - There is a mathematical relation:
+            - relation sign: >
+            - formalized left hand side: 'n'
+            - formalized right hand side: 'm'
     - formalized assertion:
         - 'G(s)' has the property 'streng proper'
 - There is a property: 'proper'
 - 'proper' is applicable to 'Übertragungsfunktion'
-- There is an if-then statement:
+- There is an if-then-statement:
     - formalized setting:
         - 'G(s)' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
@@ -859,7 +859,7 @@
 - There is a property: 'differenzierend'
 - 'differenzierend' has the alternative label 'differentiating'
 - 'differenzierend' is applicable to 'Übertragungsfunktion'
-- There is an if-then statement:
+- There is an if-then-statement:
     - formalized setting:
         - 'G(s)' is an instance of 'Übertragungsfunktion'
     - formalized premise:
@@ -953,8 +953,8 @@
         - 'G(s)' is an instance of 'Übertragungsfunktion'
         - 'LTÜG' 'hat Übertragungsfunktion' 'G(s)'
         - '\(s\)' is an instance of 'complex numbers'
-        - '\(\sigma\)' is an instance of 'real numbers'
-        - '\(\omega\)' is an instance of 'real numbers'
+        - '\(\sigma\)' is an instance of 'real number'
+        - '\(\omega\)' is an instance of 'real number'
         - There is an equation:
             - formalized left hand side: 's'
             - formalized right hand side: '\(\sigma\)' + j * '\(\omega\)'
@@ -983,15 +983,15 @@
 - 'Sprung' has associated latex notation: '\(1/s\)'
 - There is a general statement:
     - formalized setting:
-        - 'system1' is instance of Übertragungsglied
-        - 'in1' is instance of 'Eingangssignal'
-        - 'out1' is instance of 'Ausgangssignal'
+        - 'system1' is an instance of Übertragungsglied
+        - 'in1' is an instance of 'Eingangssignal'
+        - 'out1' is an instance of 'Ausgangssignal'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
     - formalized premise:
-        - 'in1' is instance of 'Sprung'
+        - 'in1' is an instance of 'Sprung'
     - formalized assertion:
-        - 'out1' is instance of 'Sprungantwort'
+        - 'out1' is an instance of 'Sprungantwort'
 
 - // snippet(81)
 - There is a class: 'Gleichgewichtszustand'
@@ -1002,12 +1002,12 @@
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
         - 'system1' has the property 'stabil'
-        - 't' is an instance of 'real numbers'
-        - 't0' is an instance of 'real numbers'
-        - 'V0' is an instance of 'real numbers'
-        - 'U0' is an instance of 'real numbers'
-        - 'Us' is an instance of 'real numbers'
-        - 'U_inf' is an instance of 'real numbers'
+        - 't' is an instance of 'real number'
+        - 't0' is an instance of 'real number'
+        - 'V0' is an instance of 'real number'
+        - 'U0' is an instance of 'real number'
+        - 'Us' is an instance of 'real number'
+        - 'U_inf' is an instance of 'real number'
         - 'in1(t)' is an instance of 'Sprung'
         - 'out1(t)' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1(t)'
@@ -1015,7 +1015,10 @@
     - formalized premise:
         - OR
             - AND
-                - t < 't0'
+                - There is a mathematical relation:
+                    - relation sign: <
+                    - formalized left hand side: 't'
+                    - formalized right hand side: 't0'
                 - There is an equation:
                     - formalized left hand side: in1(t)
                     - formalized right hand side: 'U0'
@@ -1023,7 +1026,10 @@
                     - formalized left hand side: out1(t)
                     - formalized right hand side: 'V0'
             - AND
-                - t >= 't0'
+                - There is a mathematical relation:
+                    - relation sign: >=
+                    - formalized left hand side: 't'
+                    - formalized right hand side: 't0'
                 - There is an equation:
                     - formalized left hand side: in1(t)
                     - formalized right hand side: 'U_inf'
@@ -1060,11 +1066,11 @@
     - full source code: 'Die Einheitssprungantwort ist ein Spezialfall der allgemeinen Sprungantwort mit $U_0 = 0$, $U_S = 1$, $t_0 = \qty{0}{\second}$ und $V_0 = 0$.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
-        - 't' is an instance of 'real numbers'
-        - 'V0' is an instance of 'real numbers'
-        - 'U0' is an instance of 'real numbers'
-        - 'Us' is an instance of 'real numbers'
-        - 'U_inf' is an instance of 'real numbers'
+        - 't' is an instance of 'real number'
+        - 'V0' is an instance of 'real number'
+        - 'U0' is an instance of 'real number'
+        - 'Us' is an instance of 'real number'
+        - 'U_inf' is an instance of 'real number'
         - 'in1(t)' is an instance of 'Einheitssprung'
         - 'out1(t)' is an instance of 'Einheitssprungantwort'
         - 'system1' 'has input signal' 'in1(t)'
@@ -1120,7 +1126,7 @@
 
 
 - // snippet(89)
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Erreicht das Ausgangssignal eines Übertragungsgliedes nach Aufschalten einer sprungförmigen Eingangsgröße keinen stationären Endwert, so wird die durch das Übertragungsglied bezeichnete Strecke als \emph{Strecke ohne Ausgleich} oder \emph{Integrale Strecke} beziehungsweise Strecke mit \emph{I-Verhalten} oder \emph{I-Strecke} bezeichnet.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1135,7 +1141,7 @@
 
 
 - // snippet(90)
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Wird hingegen ein stationärer Endwert erreicht, so bezeichnet man die Strecke als \emph{Strecke mit Ausgleich} oder \emph{Proportionalstrecke} beziehungsweise Strecke mit \emph{P-Verhalten} oder \emph{P-Strecke}.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1150,7 +1156,7 @@
 
 - // snippet(91)
 - There is a class: 'allpasshaltige Strecke'
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.'
     - formalized setting:
         - 'strecke1' is an instance of 'Übertragungsglied'
@@ -1165,11 +1171,27 @@
         - // TODO: how to model this correctly? OR seems wrong, inequation?
         - OR
             - AND
-                - 't0' < t < 't1'
-                - 'int(t)' * 'out1(t)' <0
+                - There is a mathematical relation:
+                    - relation sign: <
+                    - formalized left hand side: 't0'
+                    - formalized right hand side: 't'
+                - There is a mathematical relation:
+                    - relation sign: <
+                    - formalized left hand side: 't'
+                    - formalized right hand side: 't1'
+                - There is a mathematical relation:
+                    - relation sign: <
+                    - formalized left hand side: 'int(t)' * 'out1(t)'
+                    - formalized right hand side: 0
             - AND
-                - 't1' < t
-                - 'int(t)' * 'out1(t)' >0
+                - There is a mathematical relation:
+                    - relation sign: <
+                    - formalized left hand side: 't1'
+                    - formalized right hand side: 't'
+                - There is a mathematical relation:
+                    - relation sign: >
+                    - formalized left hand side: 'int(t)' * 'out1(t)'
+                    - formalized right hand side: 0
     - formalized assertion:
         - 'strecke1' is an instance of 'allpasshaltige Strecke'
 
@@ -1232,7 +1254,7 @@
 - There is a property: 'nicht schwingungsfähig'
 - 'nicht schwingungsfähig' has the alternative label 'non-oscillatory'
 - 'nicht schwingungsfähig' is applicable to 'Übertragungsglied'
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Es kommt zu einem Überschwingen der Ausgangsgröße, danach pendelt sich der stationäre Endwert langsam ein. Es handelt sich um ein sogenanntes \emph{schwingungsfähiges} System.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1241,7 +1263,7 @@
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
-        - 'uw1' is instance of 'Überschwingweite'
+        - 'uw1' is an instance of 'Überschwingweite'
         - 'out1' 'hat Überschwingweite' 'uw1'
     - formalized premise:
         - There is a mathematical relation:
@@ -1250,7 +1272,7 @@
             - formalized right hand side: 0
     - formalized assertion:
         - 'system1' has the property 'schwingungsfähig'
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Die Ausgangsgröße nähert sich asymptotisch dem stationären Endwert an, ohne diesen jemals zu überschreiten (bzw.\,zu unterschreiten bei Reaktionen in negative Richtung). Es handelt sich um ein \emph{nicht schwingungsfähiges} System.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1259,7 +1281,7 @@
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
-        - 'uw1' is instance of 'Überschwingweite'
+        - 'uw1' is an instance of 'Überschwingweite'
         - 'out1' 'hat Überschwingweite' 'uw1'
     - formalized premise:
         - There is an equation:
@@ -1270,7 +1292,7 @@
 
 
 - // manually added
-- There is an operator: 'komplexe Konjugation'
+- There is a unary operator: 'komplexe Konjugation'
 - The type of argument1 of 'komplexe Konjugation' is 'complex number'.
 - The result type of 'komplexe Konjugation' is 'complex number'.
 
@@ -1287,14 +1309,17 @@
     - full source code: 'Systeme zweiter Ordnung und höher sind schwingungsfähig, wenn mindestens ein Polpaar der Übertragungsfunktion konjugiert komplex ist.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
-        - 'tf1' is instance of 'Übertragungsfunktion'
+        - 'tf1' is an instance of 'Übertragungsfunktion'
         - 'system1' 'hat Übertragungsfunktion' 'tf1'
         - 'n' is an instance of 'integer number'
-        - 'n' >= 2
+        - There is a mathematical relation:
+            - relation sign: >=
+            - formalized left hand side: 'n'
+            - formalized right hand side: 2
         - 'system1' has system order 'n'
-        - 'p1' is instance of 'complex number'
+        - 'p1' is an instance of 'complex number'
         - 'tf1' 'hat Polstelle' 'p1'
-        - 'p2' is instance of 'complex number'
+        - 'p2' is an instance of 'complex number'
         - 'tf1' 'hat Polstelle' 'p2'
     - formalized premise:
         - There is an equation:
@@ -1308,7 +1333,7 @@
 - There is an explanation:
     - verbal summary: 'Furthermore, a distinction must be made according to the type of rise of the step response at the time of the input step:'
     - related to: 'Sprungantwort'
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Bei einem System mit Polüberschuss 1 ist der Anstieg zu Beginn ungleich 0, vergl.~Abbildung \ref{fig:ermittlung_zeitkonstante}.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1318,7 +1343,7 @@
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
-        - 'dout1' is instance of 'reellwertige Funktion'
+        - 'dout1' is an instance of 'reellwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'dout1'
             - formalized right hand side: 'Zeitableitung'('out1')
@@ -1329,7 +1354,7 @@
             - relation sign: !=
             - formalized left hand side: 'dout1'(0)
             - formalized right hand side: 0
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Bei Systemen mit einem Polüberschuss von 2 und größer ist der Anstieg zu Beginn gleich null. Sie beginnen also deutlich \glqq langsamer\grqq~mit dem Anstieg, vergl.~Abbildung \ref{fig:ermittlung_verzugszeit}.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
@@ -1403,17 +1428,13 @@
 - The type of argument1 of 'has set of poles' is 'Übertragungsfunktion'
 - The result type of 'has set of poles' is 'set of poles'
 
-- There is a relation: 'is subset of'
-- The type of argument1 of 'is subset of' is 'set'
-- The result type of 'is subset of' is 'set'
-
 - There is a class: 'open left half plane'
 - 'open left half plane' is a subclass of 'set'
 
 
 
 - // snippet(105)
-- There is an if-then statement:
+- There is an if-then-statement:
     - full source code: 'Zeigt die Sprungantwort abklingend-schwingendes Verhalten mit einem stationären Endwert, so gilt für die Pole der Übertragungsfunktion des Übertragungsgliedes folgendes: Es gibt mindestens zwei Pole, alle haben einen negativen Realteil und mindestens ein Polpaar ist konjugiert komplex'
     - formalized setting:
         - 'system1' is an instance of 'lineares Übertragungsglied'
@@ -1422,9 +1443,9 @@
         - 'system1' 'hat Übertragungsfunktion' 'tf1'
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has output signal' 'out1'
-        - 'p1' is instance of 'complex number'
+        - 'p1' is an instance of 'complex number'
         - 'tf1' 'hat Polstelle' 'p1'
-        - 'p2' is instance of 'complex number'
+        - 'p2' is an instance of 'complex number'
         - 'tf1' 'hat Polstelle' 'p2'
         - 'sop1' is an instance of 'set of poles'
         - 'tf1' 'has set of poles' 'sop1'
@@ -1455,7 +1476,7 @@
 - There is a general statement:
     - formalized setting:
         - 'sp1' is an instance of 'Sprungantwort'
-        - 't' is an instance of 'real numbers'
+        - 't' is an instance of 'real number'
         - 'dsp1' is an instance of 'reellwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'dsp1(t)'
@@ -1479,13 +1500,49 @@
 - There is a relation: 'hat Wendepunkt'
 - The type of argument1 of 'hat Wendepunkt' is 'Funktion'
 - The result type of 'hat Wendepunkt' is 'Wendepunkt'
+- There is a class: 'Punkt'
+- There is a relation: 'has first coordinate'
+- The type of argument1 of 'has first coordinate' is 'Punkt'
+- The result type of 'has first coordinate' is 'real number'
+- There is a relation: 'has second coordinate'
+- The type of argument1 of 'has second coordinate' is 'Punkt'
+- The result type of 'has second coordinate' is 'real number'
+- 'Wendepunkt' is a subclass of 'Punkt'
+- There is a class: 'Wendestelle'
+- 'Wendestelle' is a subclass of 'real number'
 
+- There is a general statement:
+    - formalized setting:
+        - 'wp1' is an instance of 'Wendepunkt'
+    - formalized assertion:
+        - 'ws1' is an instance of 'Wendestelle'
+        - 'wp1' 'has first coordinate' 'ws1'
+
+- There is an equivalence-statement:
+    - formalized setting:
+        - 'f1' is an instance of 'reellwertige Funktion'
+        - 'df1' is an instance of 'reellwertige Funktion'
+        - 'ddf1' is an instance of 'reellwertige Funktion'
+        - There is an equation:
+            - formalized left hand side: 'df1'
+            - formalized right hand side: 'Zeitableitung'('f1')
+        - There is an equation:
+            - formalized left hand side: 'ddf1'
+            - formalized right hand side: 'Zeitableitung'('df1')
+        - 'n1' is an instance of 'Nullstelle'
+    - formalized premise:
+        - 'ddout1' 'hat Nullstelle' 'n1'
+    - formalized assertion:
+        - 'w1' is an instance of 'Wendepunkt'
+        - 'w1' 'has first coordinate' 'n1'
+        - 'w1' 'has second coordinate' 'f1'('n1')
 
 - // snippet(108)
 - There is a general statement:
     - full source code: 'Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.'
     - formalized setting:
         - 'system1' is an instance of 'lineares Übertragungsglied'
+        - 'system1' has the property 'schwingungsfähig'
         - 'tf1' is an instance of 'Übertragungsfunktion'
         - 'system1' 'hat Übertragungsfunktion' 'tf1'
         - 'system1' has system order 2
@@ -1493,11 +1550,11 @@
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
-        - 'dout1' is instance of 'reellwertige Funktion'
+        - 'dout1' is an instance of 'reellwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'dout1'
             - formalized right hand side: 'Zeitableitung'('out1')
-        - 'ddout1' is instance of 'reellwertige Funktion'
+        - 'ddout1' is an instance of 'reellwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'ddout1'
             - formalized right hand side: 'Zeitableitung'('dout1')
@@ -1508,3 +1565,191 @@
                 - formalized right hand side: 0
             - 'n1' is an instance of 'Nullstelle'
             - 'ddout1' 'hat Nullstelle' 'n1'
+
+- // snippet(109)
+- There is a class: 'Verzugszeit'
+- 'Verzugszeit' has the alternative label 'equivalent dead time'
+- 'Verzugszeit' has the associated LaTeX notation '\(T_e\)'
+- There is a relation: 'hat Verzugszeit'
+- The type of argument1 of 'hat Verzugszeit' is 'Sprungantwort'
+- The result type of 'hat Verzugszeit' is 'Verzugszeit'
+- There is a class: 'Ausgleichszeit'
+- 'Ausgleichszeit' has the alternative label 'equivalent time constant'
+- 'Ausgleichszeit' has the alternative label 'balancing time'
+- 'Ausgleichszeit' has the associated LaTeX notation '\(T_b\)'
+- There is a relation: 'hat Ausgleichszeit'
+- The type of argument1 of 'hat Ausgleichszeit' is 'Sprungantwort'
+- The result type of 'hat Ausgleichszeit' is 'Ausgleichszeit'
+- 'Wendepunkt' has the alternative label 'inflection point'
+- 'Wendepunkt' has the associated LaTeX notation '\(P\)'
+- 'Wendezeit' has the alternative label 'inflection time'
+- 'Wendezeit' has the associated LaTeX notation '\(T_w\)'
+
+- // snippet(110)
+- New subsection: 'Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
+
+- // manually added
+- There is a class: 'set of real numbers'
+- 'set of real numbers' 'is subset of' 'set'.
+- There is a class: 'set of complex numbers'
+- 'set of complex numbers' 'is subset of' 'set'.
+
+- // snippet(111)
+- There is an if-then-statement:
+    - full source code: 'Für den Fall eines Übertragungsgliedes, dessen Übertragungsfunktion nur negativ reelle Pole hat, kommt es zu keinem Überschwingen. Der Wendepunkt im Anstieg bleibt jedoch erhalten.'
+    - formalized setting:
+        - 'system1' is an instance of 'lineares Übertragungsglied'
+        - 'tf1' is an instance of 'Übertragungsfunktion'
+        - 'system1' has system order 2
+        - 'system1' 'hat Übertragungsfunktion' 'tf1'
+        - 'poles1' is an instance of 'set of poles'
+        - 'tf1' 'has set of poles' 'poles1'
+        - 'in1' is an instance of 'Sprung'
+        - 'out1' is an instance of 'Sprungantwort'
+        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has output signal' 'out1'
+    - formalized premise:
+        - 'poles1' 'is subset of' 'open left half plane'
+        - 'poles1' 'is subset of' 'set of real numbers'
+    - formalized assertion:
+        - AND
+            - 'system1' does not have the property 'schwingungsfähig'
+            - 'wp1' is an instance of 'Wendepunkt'
+            - 'out1' 'hat Wendepunkt' 'wp1'
+
+- // snippet(112)
+- There is an explanation:
+    - verbal summary: 'Therefore, only the following parameters are of interest (cf. Figure \ref{fig:ermittlung_verzugszeit}):'
+    - related to: 'Sprungantwort'
+- 'Wendezeit' has the verbal description: 'Die Zeit  \(T_w\), bei der die Ableitung der Sprungantwort ein Maximum hat.'
+- 'Verzugszeit' has the verbal description: 'Die Zeit  \(T_e\) vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse.'
+- // I am unsure how to model 'vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse'. It seems to be a geometrical definition, but it is not clear to me how to represent this.
+- 'Ausgleichszeit' has the verbal description: 'Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit  \(T_b\).'
+- // I am unsure how to model 'Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit \(T_b\)'. It seems to be a geometrical definition, but it is not clear to me how to represent this.
+
+
+- // snippet(113)
+- There is a general statement:
+    - full source code: 'Die Sprungantwort dieser Übertragungsglieder beginnt stets mit dem Anstieg Null und hat im weiteren Verlauf (mindestens) einen Wendepunkt.'
+    - formalized setting:
+        - 'system1' is an instance of 'lineares Übertragungsglied'
+        - 'system1' has the property 'nicht schwingungsfähig'
+        - 'tf1' is an instance of 'Übertragungsfunktion'
+        - 'system1' 'hat Übertragungsfunktion' 'tf1'
+        - 'system1' has system order 2
+        - 'in1' is an instance of 'Sprung'
+        - 'out1' is an instance of 'Sprungantwort'
+        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has output signal' 'out1'
+        - 'dout1' is an instance of 'reellwertige Funktion'
+        - There is an equation:
+            - formalized left hand side: 'dout1'
+            - formalized right hand side: 'Zeitableitung'('out1')
+        - 'ddout1' is an instance of 'reellwertige Funktion'
+        - There is an equation:
+            - formalized left hand side: 'ddout1'
+            - formalized right hand side: 'Zeitableitung'('dout1')
+    - formalized assertion:
+        - AND
+            - There is an equation:
+                - formalized left hand side: 'dout1'(0)
+                - formalized right hand side: 0
+            - 'n1' is an instance of 'Nullstelle'
+            - 'ddout1' 'hat Nullstelle' 'n1'
+
+- // manually added
+- There is a class: 'element'.
+- There is a relation: 'is element of'.
+- 'is element of' has the associated LaTeX notation `$arg1 \in arg2$`.
+- There is a relation: 'is not element of'.
+- 'is not element of' has the associated LaTeX notation `$arg1 \not\in arg2$`.
+- The result type of 'is element of' is 'set'
+- The result type of 'is not element of' is 'set'
+
+
+- // snippet(114)
+- There is a general statement:
+    - full source code: 'Solche nicht schwingungsfähigen Strecken lassen sich stets durch Hintereinanderschaltung mehrerer Strecken erster Ordnung realisieren!'
+    - formalized setting:
+        - 'system1' is an instance of 'lineares Übertragungsglied'
+        - 'system1' has the property 'nicht schwingungsfähig'
+        - 'system1' has system order 2
+        - 'tf1' is an instance of 'Übertragungsfunktion'
+        - 'system1' 'hat Übertragungsfunktion' 'tf1'
+        - 'poles1' is an instance of 'set of poles'
+        - 'p1' is an instance of 'Polstelle'
+        - 'p2' is an instance of 'Polstelle'
+        - 'p1' 'is element of' 'poles1'
+        - 'p2' 'is element of' 'poles1'
+    - formalized assertion:
+        - 'str2' is an instance of 'lineares Übertragungsglied'
+        - 'str2' has system order 1
+        - 'tf2' is an instance of 'Übertragungsfunktion'
+        - 'str2' 'hat Übertragungsfunktion' 'tf2'
+        - 'tf2' 'hat Polstelle' 'p1'
+        - 'str3' is an instance of 'lineares Übertragungsglied'
+        - 'str3' has system order 1
+        - 'tf3' is an instance of 'Übertragungsfunktion'
+        - 'str3' 'hat Übertragungsfunktion' 'tf3'
+        - 'tf3' 'hat Polstelle' 'p2'
+        - There is an equation:
+            - formalized left hand side: 'tf1'
+            - formalized right hand side: 'tf2' * 'tf3'
+- There is a class: 'Hintereinanderschaltung'
+- 'Hintereinanderschaltung' is associated with 'Multiplication'
+
+- // snippet(115)
+- New subsection: 'Sprungantwort eines geschlossenen Regelkreises'
+
+- // snippet(116)
+- There is a class: 'Regelgröße'
+- 'Regelgröße' has the alternative label 'controlled variable'
+- 'Regelgröße' has the associated LaTeX notation '\(x\)'
+- There is a class: 'Gleichgewichtswert der Regelgröße'
+- 'Gleichgewichtswert der Regelgröße' has the associated LaTeX notation '\(X_0\)'
+- There is a class: 'Führungsgröße'
+- 'Führungsgröße' has the alternative label 'reference variable'
+- 'Führungsgröße' has the associated LaTeX notation '\(w\)'
+- There is a class: 'Gleichgewichtswert der Führungsgröße'
+- 'Gleichgewichtswert der Führungsgröße' has the associated LaTeX notation '\(W_0\)'
+- There is a class: 'Sollwert'
+- 'Sollwert' has the alternative label 'desired value'
+- 'Sollwert' has the associated LaTeX notation '\(X_d\)'
+- There is a class: 'Führungssprungantwort'
+- 'Führungssprungantwort' has the verbal description '... die Reaktion der Regelgröße  \(x\) ausgehend vom Gleichgewichtswert  \(X_0\) auf eine sprungförmige Änderung der Führungsgröße  \(w\) vom Gleichgewichtswert  \(W_0\) auf den Sollwert  \(X_d\), die sog.\,Führungssprungantwort'
+- There is a class: 'Störsprungantwort'
+- 'Störsprungantwort' has the verbal description 'Reaktion der Regelgröße auf eine sprungförmige Änderung der Störgröße'
+
+- // snippet(117i)
+- // ignored content
+
+- // snippet(118)
+- There is a class: 'Störgröße'.
+- 'Störgröße' has the alternative label 'disturbance variable'.
+- 'Störgröße' has the associated LaTeX notation '\(z\)'.
+- There is a class: 'Abweichung im Beharrungszustand'.
+- 'Abweichung im Beharrungszustand' has the alternative label 'steady state deviation'.
+- 'Abweichung im Beharrungszustand' has the associated LaTeX notation '\(\Delta X_\infty\)'.
+- There is a relation: 'hat Abweichung im Beharrungszustand'.
+- The type of argument1 of 'hat Abweichung im Beharrungszustand' is 'Regelgröße'.
+- The result type of 'hat Abweichung im Beharrungszustand' is 'Abweichung im Beharrungszustand'.
+- 'Überschwingweite' has the associated LaTeX notation '\(x_{m}\)'.
+- 'Überschwingweite' has the alternative label 'overshoot'.
+- 'Toleranzbereich' has the associated LaTeX notation '\(2\cdot\Delta x_{s}\)'.
+- 'Toleranzbereich' has the alternative label 'specified tolerance limit'.
+- 'Totzeit' has the associated LaTeX notation '\(T_t\)'.
+- 'Totzeit' has the alternative label 'dead-time'.
+- There is a class: 'Anregelzeit'.
+- 'Anregelzeit' has the alternative label 'control rise time'.
+- 'Anregelzeit' has the associated LaTeX notation '\(T_{cr}\)'.
+- 'Anregelzeit' has the verbal description 'Zeit, bis Regelgröße das erste Mal (nach Verlassen) wieder in das Toleranzband einläuft'.
+- There is a relation: 'hat Anregelzeit'.
+- The type of argument1 of 'hat Anregelzeit' is 'Regelgröße'.
+- The result type of 'hat Anregelzeit' is 'Anregelzeit'.
+- There is a class: 'Ausregelzeit'.
+- 'Ausregelzeit' has the alternative label 'control settling time'.
+- 'Ausregelzeit' has the associated LaTeX notation '\(T_{cs}\)'.
+- 'Ausregelzeit' has the verbal description 'Zeit, bis Regelgröße das erste Mal (nach Verlassen) dauerhaft im Toleranzband verbleibt'.
+- There is a relation: 'hat Ausregelzeit'.
+- The type of argument1 of 'hat Ausregelzeit' is 'Regelgröße'.
+- The result type of 'hat Ausregelzeit' is 'Ausregelzeit'.
