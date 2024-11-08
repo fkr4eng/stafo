@@ -67,7 +67,7 @@
 
 
 
-- // external context, manually added
+- // manually added (1)
 - There is a class: 'set'.
 - There is a class: 'real number'.
 - There is a class: 'integer number'.
@@ -319,7 +319,7 @@
         - 'df1' has system order '\(n\)'
 
 
-- // manuall content
+- // manually added (2)
 - There is a class: 'Coefficients'.
 - There is a class: 'set of coefficients'
 - There is a class: 'mathematical expression'
@@ -357,6 +357,25 @@
         - 'soc' is subset of 'set of real numbers'
 
 
+- // manually added (3)
+- There is a class: 'Gleichung'
+- 'Gleichung' has the alternative label 'equation'
+- There is a class: 'Gleichungssystem'
+- 'Gleichungssystem' has the alternative label 'system of equations'
+- There is a relation: 'hat Gleichung'
+- The type of argument1 of 'hat Gleichung' is 'Gleichungssystem'
+- The result type of 'hat Gleichung' is 'Gleichung'
+- There is a relation: 'hat Gleichungsreferenz'
+- The type of argument1 of 'hat Gleichungsreferenz' is 'Gleichungssystem'
+- // The result type of 'hat Gleichungsreferenz' is TODO
+- There is a class: 'lineres Gleichungssystem'
+- 'linerares Gleichungssystem' is a subclass of 'Gleichungssystem'
+- There is a class: 'Matrix'
+- There is a relation: 'hat erweiterte Koeffizientenmatrix'
+- The type of argument1 of 'hat erweiterte Koeffizientenmatrix' is 'lineares Gleichungssystem'
+- The result type of 'hat erweiterte Koeffizientenmatrix' is 'Matrix'
+
+
 - // snippet(41)
 - There is a general statement:
     - full source code: 'Mithilfe der Substitution  \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\) lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von  \(n\) gewöhnlichen Differenzialgleichungen erster Ordnung überführen: \begin{align}\label{eq:DglSysAllgemein} \begin{split} \dot x_1 &= x_2 \\ \dot x_2 &= x_3 \\ &\vdots \\ \dot x_{n-1} &= x_n\\ \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right) \end{split} \end{align} mit den Anfangsbedingungen  \(x_1(0) = V_{00}\),  \(x_2(0)=V_{01}\),  \(\ldots\),  \(x_n(0) =V_{0n-1}\).'
@@ -364,17 +383,27 @@
         - '\(n\)' is an instance of 'integer number'
         - 'lineares Übertragungsglied 1' is an instance of 'lineares Übertragungsglied'
         - 'lineares Übertragungsglied 1' has system order '\(n\)'
+        - 'lineares Übertragungsglied 1' is associated to 'eq:DglAllgemeinLinear'
         - // I am not sure how to model the statement 'Mithilfe der Substitution \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\)'. It seems to introduce a set of variables, but it is not clear to me how to represent this set and how it is related to the other entities.
     - formalized assertion:
-        - There is a system of equations:
-            - There is an equation:
-                - full source code: '\(\dot x_1 = x_2\)'
-            - There is an equation:
-                - full source code: '\(\dot x_2 = x_3\)'
-            - There is an equation:
-                - full source code: '\(\dot x_{n-1} &= x_n\)'
-            - There is an equation:
-                - full source code: '\(\dot x_n = \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)\)'
+        - 'gls1' is an instance of 'lineares Gleichungssystem'
+        - There is an equation:
+            - full source code: '\(\dot x_1 = x_2\)'
+            - reference: 'eq:DglSysAllgemein_1'
+        - There is an equation:
+            - full source code: '\(\dot x_2 = x_3\)'
+            - reference: 'eq:DglSysAllgemein_2'
+        - There is an equation:
+            - full source code: '\(\dot x_{n-1} &= x_n\)'
+            - reference: 'eq:DglSysAllgemein_n_1'
+        - There is an equation:
+            - full source code: '\(\dot x_n = \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)\)'
+            - reference: 'eq:DglSysAllgemein_n'
+        - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_1'
+        - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_2'
+        - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_n_1'
+        - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_n'
+        - 'gls1' is associated to 'lineares Übertragungsglied 1'
 
 
 
@@ -1291,7 +1320,7 @@
         - 'system1' has the property 'nicht schwingungsfähig'
 
 
-- // manually added
+- // manually added (4)
 - There is a unary operator: 'komplexe Konjugation'
 - The type of argument1 of 'komplexe Konjugation' is 'complex number'.
 - The result type of 'komplexe Konjugation' is 'complex number'.
@@ -1421,7 +1450,7 @@
 - // snippet(104)
 - New subsection: 'Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
 
-- //manually added
+- // manually added (5)
 - There is a class: 'set of poles'
 - 'set of poles' is a subclass of 'set'
 - There is a relation: 'has set of poles'
@@ -1495,7 +1524,7 @@
 - // I am unsure how to model 'bis auf den Wert  \(\Delta \nu_s\) an den stationären Endwert herangekommen ist' and 'von da an im Bereich  \(V_\infty \pm \Delta \nu_s\) verweilt'. They seem to be conditions, but it is not clear to me how to represent them.
 - // I am unsure how to model '(üblich ist  \(\Delta \nu_s = 2\,\%\) oder  \(\Delta \nu_s = 5\,\%\))'. It seems to be a remark, but it is not clear to me how to represent this.
 
-- // manually added
+- // manually added (6)
 - There is a class: 'Wendepunkt'
 - There is a relation: 'hat Wendepunkt'
 - The type of argument1 of 'hat Wendepunkt' is 'Funktion'
@@ -1588,7 +1617,7 @@
 - // snippet(110)
 - New subsection: 'Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
 
-- // manually added
+- // manually added (7)
 - There is a class: 'set of real numbers'
 - 'set of real numbers' 'is subset of' 'set'.
 - There is a class: 'set of complex numbers'
@@ -1657,7 +1686,7 @@
             - 'n1' is an instance of 'Nullstelle'
             - 'ddout1' 'hat Nullstelle' 'n1'
 
-- // manually added
+- // manually added (8)
 - There is a class: 'element'.
 - There is a relation: 'is element of'.
 - 'is element of' has the associated LaTeX notation `$arg1 \in arg2$`.

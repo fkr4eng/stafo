@@ -603,7 +603,7 @@ class ConversionManager:
                         d["items"][arg1][v["key"]] = self.build_reference(new_item_name)
                         break
                     else:
-                        print(f"not processed line {i}: {line}")
+                        print(f"maybe? not processed line {i}: {line}")
 
             else:
                 print(f"not processed line {i}: {line}")
