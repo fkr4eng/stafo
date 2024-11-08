@@ -277,23 +277,22 @@ class ConversionManager:
                 operator = re.findall(op_pattern, line)
                 if operator:
                     sub_content = self.get_sub_content(content[i+1:])
-                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=temp_dict)
+                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=copy.deepcopy(temp_dict))
                     # skip next lines that were processed in subroutine
-                    # not really necessary anymore
-                    i += len(res)
-                    # d= {f"{operator[0]}_{op_count}": res}
-                    # l.append(d)
-                    # temp_dict[f"{operator[0]}_{op_count}"] = res
+                    i += len(sub_content)
+                    # dict diff, only add new part to opKey
+                    dict_diff = deepdiff.DeepDiff(temp_dict, res)
+                    diff = self.get_diffed_dict(dict_diff)
+
+                    temp_dict["items"][f"{operator[0]}_{op_count}"] = diff
 
                     op_count += 1
                 else:
-                    # l.append(line)
                     if temp_dict is not None:
-                        # l.append(self.process_line(copy.deepcopy(temp_dict), line_no+i, line))
-                        self.process_line(temp_dict, line_no+i, line)
+                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line)
+                        # I think this is the same as before: inplace without deepcopy
                     else:
-                        # l.append(self.process_line({}, None, line))
-                        raise ValueError()
+                        raise ValueError("temp_dict should be preconfigured")
 
             elif self.get_indent(line) < indent:
                 # this means that the context was chosen too large
@@ -496,35 +495,18 @@ class ConversionManager:
                     # is passed from one scope to the next. In order to still differentiate "dict_ass - dict_set",
                     # the temp_dict is copied
                     temp_dict = copy.deepcopy(temp_dict)
-                    additional_context[f"formal_{formal[0]}"] = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i+ii+2, temp_dict)
+                    temp_dict = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i+ii+2, temp_dict)
+                    additional_context[f"formal_{formal[0]}"] = temp_dict
             # now differentiate between the dicts
             formal_keys = [key for key in additional_context.keys() if "formal" in key]
             dict_list = [additional_context[key] for key in formal_keys]
+            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
             if len(dict_list) > 1:
                 diff_list = []
                 for index in range(len(dict_list)-1):
                     diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1]))
                 for index, diff in enumerate(diff_list):
-                    dbg = 0
-                    current_dict = additional_context[formal_keys[index+1]] = {"items": {"other":[]}, "relations": {}}
-                    if "iterable_item_added" in diff.keys():
-                        for ikey, ivalue in diff["iterable_item_added"].items():
-                            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
-                            res = re.findall(key_pattern, ikey)
-                            prev = get_nested_value(current_dict, res)
-                            prev.append(ivalue)
-                            set_nested_value(current_dict, res, prev)
-                        dbg += 1
-
-                    if "dictionary_item_added" in diff.keys():
-                        for ikey in diff["dictionary_item_added"]:
-                            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
-                            res = re.findall(key_pattern, ikey)
-                            set_nested_value(current_dict, res, get_nested_value(diff.t2, res))
-                        dbg += 1
-                    if dbg != len(diff.keys()):
-                        raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
-
+                    additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
             d = self.add_item(d, new_item_name, additional_context)
         elif len(explanation) > 0:
@@ -575,7 +557,7 @@ class ConversionManager:
                     # definition
                     if v["key"] == "R37":
                         # resolve if this is def for property or concept or something else?
-
+                        raise DeprecationWarning("This is so old and prob wrong, esp. recursion see other example")
                         process_next_line = True
                         additional_content = []
                         k = i
@@ -630,6 +612,38 @@ class ConversionManager:
 
 
         # for i, v in d["items"].items():
+    def get_diffed_dict(self, diff:deepdiff.DeepDiff):
+        """return the difference dict between to dict. Note: currently only works for addition "info(dict1)<info(dict2)"
+
+        Args:
+            diff (deepdiff.DeepDiff): diff object
+
+        Raises:
+            KeyError: _description_
+
+        Returns:
+            dict: difference dictionary
+        """
+        dbg = 0
+        current_dict = {"items": {"other":[]}, "relations": {}}
+        if "iterable_item_added" in diff.keys():
+            for ikey, ivalue in diff["iterable_item_added"].items():
+                key_pattern = re.compile(r"(?<=\[').+?(?='\])")
+                res = re.findall(key_pattern, ikey)
+                prev = get_nested_value(current_dict, res)
+                prev.append(ivalue)
+                set_nested_value(current_dict, res, prev)
+            dbg += 1
+
+        if "dictionary_item_added" in diff.keys():
+            for ikey in diff["dictionary_item_added"]:
+                key_pattern = re.compile(r"(?<=\[').+?(?='\])")
+                res = re.findall(key_pattern, ikey)
+                set_nested_value(current_dict, res, get_nested_value(diff.t2, res))
+            dbg += 1
+        if dbg != len(diff.keys()):
+            raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
+        return current_dict
 
     def get_rel_dict_key_interpreter(self):
         """create a dict for the relations that can be addressed by pyirk keys (R1)
