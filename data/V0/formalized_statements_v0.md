@@ -182,7 +182,9 @@
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'.
         - '\(u(t)\)' is an instance of 'Eingangssignal'
+        - 'ein Übertragungsglied' 'has input signal' '\(u(t)\)'
         - '\(u^\ast(t)\)' is an instance of 'Eingangssignal'
+        - 'ein Übertragungsglied' 'has input signal' '\(u^\ast(t)\)'
         - '\(c\)' is an instance of 'real number'.
     - formalized premise:
         - AND
@@ -210,6 +212,7 @@
     - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt: \begin{equation} \label{eq:VerschPrinzip} \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)). \end{equation}'
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'
+        - 'ein Übertragungsglied' has the property 'stabil'.
     - formalized premise:
         - There is an equation:
             - full source code: '\(\nu(t) = \varphi(u(t))\)'
@@ -294,6 +297,7 @@
 - There is a relation 'has system order'
 - The type of argument1 of 'has system order' is 'Differenzialgleichung'.
 - The result type of 'has system order' is 'integer number'.
+- 'has system order' is functional.
 - There is a general statement:
     - formalized setting:
         - 'ue1' is an instance of 'Übertragungsglied'
@@ -326,6 +330,7 @@
 - There is a relation: 'has coefficient set'
 - The type of argument1 of 'has coefficient set' is 'mathematical expression'
 - The result type of 'has coefficient set' is 'set of coefficients'
+- 'has coefficient set' is functional
 
 - // snippet(40)
 - There is a class: 'lineares Übertragungsglied'
@@ -368,12 +373,13 @@
 - There is a relation: 'hat Gleichungsreferenz'
 - The type of argument1 of 'hat Gleichungsreferenz' is 'Gleichungssystem'
 - // The result type of 'hat Gleichungsreferenz' is TODO
-- There is a class: 'lineres Gleichungssystem'
-- 'linerares Gleichungssystem' is a subclass of 'Gleichungssystem'
+- There is a class: 'lineares Gleichungssystem'
+- 'lineares Gleichungssystem' is a subclass of 'Gleichungssystem'
 - There is a class: 'Matrix'
 - There is a relation: 'hat erweiterte Koeffizientenmatrix'
 - The type of argument1 of 'hat erweiterte Koeffizientenmatrix' is 'lineares Gleichungssystem'
 - The result type of 'hat erweiterte Koeffizientenmatrix' is 'Matrix'
+- 'hat erweiterte Koeffizientenmatrix' is functional
 
 
 - // snippet(41)
@@ -445,7 +451,6 @@
 - '\(\omega\)' is an instance of 'real number'
 
 - // snippet(49)
-- There is a unary operator 'Laplace-Transformation'
 - 'Laplace-Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
 
 - // snippet(50)
@@ -510,7 +515,7 @@
 - There is a binary operator 'höhere Zeitableitung'
 - 'höhere Zeitableitung' has the alternative label 'higher order time derivative'
 - The type of argument1 of 'höhere Zeitableitung' is 'reellwertige Funktion'
-- The type of argument2 of 'höhere Zeitableitung' is 'integer'
+- The type of argument2 of 'höhere Zeitableitung' is 'integer number'
 - The result type of 'höhere Zeitableitung' is 'reellwertige Funktion'
 - 'höhere Zeitableitung' is associated to 'Zeitbereich'
 - There is a general statement:
@@ -531,6 +536,7 @@
 - There is a relation 'has initial condition'.
 - The type of argument1 of 'has initial condition' is 'Funktion'.
 - The result type of 'has initial condition' is 'real number'.
+- 'has initial condition' is functional
 - There is an if-then-statement:
     - full source code: 'Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man: \begin{multline} \label{eq:DglAllgemeinLinearBildbereich} a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s). \end{multline}'
     - formalized setting:
@@ -558,7 +564,7 @@
 - There is a general statement:
     - formalized setting:
         - 'y(t)' is an instance of 'reellwertige Funktion'
-        - 'i' is an instance of 'integer'
+        - 'i' is an instance of 'integer number'
         - 'Y(s)' is an instance of 'komplexwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'Laplace-Transformation'(y(t))
@@ -684,6 +690,7 @@
 - There is a relation 'hat Übertragungsfunktion'
 - The type of argument1 of 'hat Übertragungsfunktion' is 'Übertragungsglied'
 - The result type of 'hat Übertragungsfunktion' is 'Übertragungsfunktion'
+- 'hat Übertragungsfunktion' is functional
 - // I am not sure how to model the reference to the equation with label 'eq:DglAllgemeinLinear'. It seems to state that the 'Übertragungsfunktion' is defined by this equation. However, it is not clear to me how to represent this.
 - 'eq:UebertragungsfunktionAllgemein' is associated to 'Übertragungsfunktion'
 
@@ -740,12 +747,14 @@
 - There is a relation: 'hat Zähler'
 - The type of argument1 of 'hat Zähler' is 'Funktion'
 - The result type of 'hat Zähler' is 'Zähler'
+- 'hat Zähler' is functional
 
 - There is a class: 'Nenner'
 - 'Nenner' has the alternative label 'denominator'
 - There is a relation: 'hat Nenner'
 - The type of argument1 of 'hat Nenner' is 'Funktion'
 - The result type of 'hat Nenner' is 'Nenner'
+- 'hat Nenner' is functional
 
 
 - // snippet(65)
@@ -775,19 +784,18 @@
 - The result type of 'hat Polstelle' is 'Polstelle'
 - 'Polstelle' has the verbal description 'die Nullstellen des Nenners von  \(G(s)\) (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.'
 
-- // additional content
-- There is an unary operator: 'Re'
-- 'Re' has alternative label 'Realteil'
-- 'Re' has alternative label 'real part'
+- // manually added (4)
+- There is a unary operator: 'Re'
+- 'Re' has the alternative label 'Realteil'
+- 'Re' has the alternative label 'real part'
 - The type of argument1 of 'Re' is 'complex number'
 - The result type of 'Re' is 'real number'
 
-- There is an unary operator: 'Im'
-- 'Im' has alternative label 'Imaginärteil'
-- 'Im' has alternative label 'imaginary part'
+- There is a unary operator: 'Im'
+- 'Im' has the alternative label 'Imaginärteil'
+- 'Im' has the alternative label 'imaginary part'
 - The type of argument1 of 'Im' is 'complex number'
 - The result type of 'Im' is 'real number'
-
 
 
 - // snippet(66)
@@ -818,6 +826,7 @@
 - There is a relation: 'hat Grad'
 - The type of argument1 of 'hat Grad' is 'Polynom'
 - The result type of 'hat Grad' is 'integer number'
+- 'hat Grad' is functional
 
 - // snippet(67)
 - There is a relation: 'hat relativen Grad'
@@ -825,6 +834,7 @@
 - 'hat relativen Grad' has the alternative label 'has relative degree'
 - The type of argument1 of 'hat relativen Grad' is 'Übertragungsfunktion'
 - The result type of 'hat relativen Grad' is 'integer number'
+- 'hat relativen Grad' is functional
 - There is a general statement:
     - formalized setting:
         - 'G(s)' is an instance of 'Übertragungsfunktion'
@@ -832,7 +842,7 @@
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
         - 'G(s)' 'hat Zähler' 'Z'
-        - 'N' is an instance if 'Nenner'
+        - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
         - 'G(s)' 'hat Nenner' 'N'
@@ -854,7 +864,7 @@
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
         - 'G(s)' 'hat Zähler' 'Z'
-        - 'N' is an instance if 'Nenner'
+        - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
         - 'G(s)' 'hat Nenner' 'N'
@@ -874,12 +884,14 @@
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
         - 'G(s)' 'hat Zähler' 'Z'
-        - 'N' is an instance if 'Nenner'
+        - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
         - 'G(s)' 'hat Nenner' 'N'
     - formalized premise:
-        - 'n' = 'm'
+        - There is an equation:
+            - formalized left hand side: 'n'
+            - formalized right hand side: 'm'
     - formalized assertion:
         - 'G(s)' has the property 'proper'
 
@@ -892,7 +904,8 @@
     - formalized setting:
         - 'G(s)' is an instance of 'Übertragungsfunktion'
     - formalized premise:
-        - NOT 'G(s)' has the property 'proper'
+        - NOT
+            - 'G(s)' has the property 'proper'
     - formalized assertion:
         - 'G(s)' has the property 'differenzierend'
 
@@ -994,7 +1007,7 @@
 
 
 - // snippet(77)
-- 'Frequenzgang' has associated latex notation: '\(G(j\omega)\)'
+- 'Frequenzgang' has the associated LaTeX notation: '\(G(j\omega)\)'
 - // snippet(78i)
 - // ignored content
 - // snippet(79)
@@ -1009,7 +1022,7 @@
 - There is a class: 'Sprung'
 - 'Sprung' has the alternative label 'step'
 - 'Sprung' is a subclass of 'Signal'
-- 'Sprung' has associated latex notation: '\(1/s\)'
+- 'Sprung' has the associated LaTeX notation: '\(1/s\)'
 - There is a general statement:
     - formalized setting:
         - 'system1' is an instance of Übertragungsglied
@@ -1164,7 +1177,7 @@
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
     - formalized premise:
-        - NOT 'system1' has the property 'hat stationären Endwert'
+        - 'system1' does not have the property 'hat stationären Endwert'
     - formalized assertion:
         - 'system1' is an instance of 'integrierend wirkende Strecke'
 
@@ -1320,7 +1333,7 @@
         - 'system1' has the property 'nicht schwingungsfähig'
 
 
-- // manually added (4)
+- // manually added (5)
 - There is a unary operator: 'komplexe Konjugation'
 - The type of argument1 of 'komplexe Konjugation' is 'complex number'.
 - The result type of 'komplexe Konjugation' is 'complex number'.
@@ -1450,7 +1463,7 @@
 - // snippet(104)
 - New subsection: 'Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
 
-- // manually added (5)
+- // manually added (6)
 - There is a class: 'set of poles'
 - 'set of poles' is a subclass of 'set'
 - There is a relation: 'has set of poles'
@@ -1524,7 +1537,7 @@
 - // I am unsure how to model 'bis auf den Wert  \(\Delta \nu_s\) an den stationären Endwert herangekommen ist' and 'von da an im Bereich  \(V_\infty \pm \Delta \nu_s\) verweilt'. They seem to be conditions, but it is not clear to me how to represent them.
 - // I am unsure how to model '(üblich ist  \(\Delta \nu_s = 2\,\%\) oder  \(\Delta \nu_s = 5\,\%\))'. It seems to be a remark, but it is not clear to me how to represent this.
 
-- // manually added (6)
+- // manually added (7)
 - There is a class: 'Wendepunkt'
 - There is a relation: 'hat Wendepunkt'
 - The type of argument1 of 'hat Wendepunkt' is 'Funktion'
@@ -1617,7 +1630,7 @@
 - // snippet(110)
 - New subsection: 'Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
 
-- // manually added (7)
+- // manually added (8)
 - There is a class: 'set of real numbers'
 - 'set of real numbers' 'is subset of' 'set'.
 - There is a class: 'set of complex numbers'
@@ -1686,7 +1699,7 @@
             - 'n1' is an instance of 'Nullstelle'
             - 'ddout1' 'hat Nullstelle' 'n1'
 
-- // manually added (8)
+- // manually added (9)
 - There is a class: 'element'.
 - There is a relation: 'is element of'.
 - 'is element of' has the associated LaTeX notation `$arg1 \in arg2$`.
@@ -1725,7 +1738,7 @@
             - formalized left hand side: 'tf1'
             - formalized right hand side: 'tf2' * 'tf3'
 - There is a class: 'Hintereinanderschaltung'
-- 'Hintereinanderschaltung' is associated with 'Multiplication'
+- 'Hintereinanderschaltung' is associated to 'Multiplication'
 
 - // snippet(115)
 - New subsection: 'Sprungantwort eines geschlossenen Regelkreises'
