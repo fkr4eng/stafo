@@ -318,17 +318,17 @@
         - 'm' is an instance of 'integer number'
         - 'F' is an instance of 'Funktion'
         - 'Rnm2' is an instance of 'real coordinate space'
-        - 'k' is an instance if 'integer number'
+        - 'k' is an instance of 'integer number'
         - There is an equation:
             - formalized left hand side: 'k'
             - formalized right hand side: 'n' + 'm' + 2
-        - 'Rnm2' has the dimension 'k'
+        - 'Rnm2' has dimension 'k'
         - 'F' has domain 'Rnm2'
         - 'F' has range 'set of real numbers'
         - 'u' is an instance of 'Eingangssignal'
         - 'ue1' has input signal 'u'
-        - '\nu' is an instance of 'Ausgangssignal'
-        - 'ue1' has output signal '\nu'
+        - 'nu' is an instance of 'Ausgangssignal'
+        - 'ue1' has output signal 'nu'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(F(\nu^{(n)}, \nu^{(n-1)}, \ldots, \ddot \nu, \dot \nu, \nu, u^{(m)}, u^{(m-1)}, \ldots, \ddot u, \dot u, u) = 0\)'
@@ -363,11 +363,11 @@
         - 'm' is an instance of 'integer number'
         - 'F' is an instance of 'Funktion'
         - 'Rnm2' is an instance of 'real coordinate space'
-        - 'k' is an instance if 'integer number'
+        - 'k' is an instance of 'integer number'
         - There is an equation:
             - formalized left hand side: 'k'
             - formalized right hand side: 'n' + 'm' + 2
-        - 'Rnm2' has the dimension 'k'
+        - 'Rnm2' has dimension 'k'
         - 'F' has domain 'Rnm2'
         - 'F' has range 'set of real numbers'
         - 'u' is an instance of 'Eingangssignal'
@@ -795,7 +795,7 @@
     - full source code: 'Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}'
     - formalized setting:
         - 'G' is an instance of 'Übertragungsfunktion'
-        - 'N' is instance of 'Polynom'
+        - 'N' is an instance of 'Polynom'
         - 'G' hat Nenner 'N'
     - formalized assertion:
         - There is an equation:
@@ -1040,7 +1040,6 @@
 - New section: 'Die Sprungantwort'
 - There is a class: 'Sprungantwort'
 - 'Sprungantwort' is a subclass of 'Ausgangssignal'
-- 'Sprungantwort' has the alternative label 'Sprungantwort'
 - 'Sprungantwort' has the alternative label 'step response'
 
 - // snippet(80)
@@ -1057,9 +1056,9 @@
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
     - formalized premise:
-        - 'in1' is an instance of 'Sprung'
+        - 'in1' is a secondary instance of 'Sprung'
     - formalized assertion:
-        - 'out1' is an instance of 'Sprungantwort'
+        - 'out1' is a secondary instance of 'Sprungantwort'
 
 - // snippet(81)
 - There is a class: 'Gleichgewichtszustand'
@@ -1081,29 +1080,29 @@
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
     - formalized premise:
-        - OR
-            - AND
-                - There is a mathematical relation:
-                    - relation sign: <
-                    - formalized left hand side: 't'
-                    - formalized right hand side: 't0'
-                - There is an equation:
-                    - formalized left hand side: in1(t)
-                    - formalized right hand side: 'U0'
-                - There is an equation:
-                    - formalized left hand side: out1(t)
-                    - formalized right hand side: 'V0'
-            - AND
-                - There is a mathematical relation:
-                    - relation sign: >=
-                    - formalized left hand side: 't'
-                    - formalized right hand side: 't0'
-                - There is an equation:
-                    - formalized left hand side: in1(t)
-                    - formalized right hand side: 'U_inf'
-                - There is an equation:
-                    - formalized left hand side: 'in1(t)'
-                    - formalized right hand side: U0 + Us
+        - AND
+            - There is a mathematical relation:
+                - relation sign: <
+                - formalized left hand side: 't'
+                - formalized right hand side: 't0'
+            - There is an equation:
+                - formalized left hand side: in1(t)
+                - formalized right hand side: 'U0'
+            - There is an equation:
+                - formalized left hand side: out1(t)
+                - formalized right hand side: 'V0'
+    - formalied assertion:
+        - AND
+            - There is a mathematical relation:
+                - relation sign: >=
+                - formalized left hand side: 't'
+                - formalized right hand side: 't0'
+            - There is an equation:
+                - formalized left hand side: in1(t)
+                - formalized right hand side: 'U_inf'
+            - There is an equation:
+                - formalized left hand side: 'U_inf'
+                - formalized right hand side: U0 + Us
 
 - // snippet(82i)
 - // ignored content
@@ -1188,9 +1187,9 @@
         - // I cannot model 'anhand Ihrer Sprungantwort'. It seems to be a property of the system, but it is not clear to me how to represent this.
     - formalized assertion:
         - OR
-            - 'system1' is an instance of 'integrierend wirkende Strecke'
-            - 'system1' is an instance of 'proportional wirkende Strecke'
-            - 'system1' is an instance of 'allpasshaltige Strecke'
+            - 'system1' is a secondary instance of 'integrierend wirkende Strecke'
+            - 'system1' is a secondary instance of 'proportional wirkende Strecke'
+            - 'system1' is a secondary instance of 'allpasshaltige Strecke'
 
 
 - // snippet(89)
@@ -1205,7 +1204,7 @@
     - formalized premise:
         - 'system1' does not have the property 'hat stationären Endwert'
     - formalized assertion:
-        - 'system1' is an instance of 'integrierend wirkende Strecke'
+        - 'system1' is a secondary instance of 'integrierend wirkende Strecke'
 
 
 - // snippet(90)
@@ -1220,7 +1219,7 @@
     - formalized premise:
         - 'system1' has the property 'hat stationären Endwert'
     - formalized assertion:
-        - 'system1' is an instance of 'proportional wirkende Strecke'
+        - 'system1' is a secondary instance of 'proportional wirkende Strecke'
 
 - // snippet(91)
 - There is a class: 'allpasshaltige Strecke'
@@ -1261,7 +1260,7 @@
                     - formalized left hand side: 'int(t)' * 'out1(t)'
                     - formalized right hand side: 0
     - formalized assertion:
-        - 'strecke1' is an instance of 'allpasshaltige Strecke'
+        - 'strecke1' is a secondary instance of 'allpasshaltige Strecke'
 
 - // snippet(92i)
 - // ignored content

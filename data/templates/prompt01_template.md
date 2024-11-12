@@ -22,6 +22,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> is applicable to <arg2>.
 - <arg1> is a subproperty of <arg2>.
 - <arg1> is an instance of <arg2>.
+- <arg1> is a secondary instance of <arg2>.
 - <arg1> is a subclass of <arg2>.
 - <arg1> has the associated LaTeX notation <arg2>.
 - <arg1> has the alternative associated LaTeX notation <arg2>.

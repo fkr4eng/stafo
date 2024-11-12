@@ -6,7 +6,8 @@ with {{context.id}}.scope("setting") as cm:
 
 with {{context.id}}.scope("premise") as cm:
     {% if context.premise %}{% for line in context.premise%}
-    {{line}}{% endfor %} {% endif %}
+    {{line}}{% endfor %}
+    {% else %}pass{% endif %}
 
 with {{context.id}}.scope("assertion") as cm:
     {% if context.assertion %}{% for line in context.assertion%}

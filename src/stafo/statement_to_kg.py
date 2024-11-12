@@ -115,6 +115,11 @@ class ConversionManager:
                     "R1": "has LaTeX string",
                     "render": "R24__has_associated_LaTeX_notation"
                 },
+                "is a secondary instance of": {
+                    "key": "R30",
+                    "R1": "is secondary instance of",
+                    "render": "R30__is_secondary_instance_of"
+                },
                 "has the property": {
                     "key": "R16",
                     "R1": "has property",
