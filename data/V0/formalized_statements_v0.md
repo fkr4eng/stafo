@@ -78,9 +78,19 @@
 - The result type of 'is subset of' is 'set'
 
 - There is a class: 'set of real numbers'
-- 'set of real numbers' 'is subset of' 'set'.
+- 'set of real numbers' 'is an instance of' 'set'.
 - There is a class: 'set of complex numbers'
-- 'set of complex numbers' 'is subset of' 'set'.
+- 'set of complex numbers' 'is an instance of' 'set'.
+
+- There is a class: 'real coordinate space'
+- 'real coordinate space' 'is an instance of' 'set'
+- There is a relation: 'has dimension'
+- The type of argument1 of 'has dimension' is 'real coordinate space'
+- The result type of 'has dimension' is 'integer number'
+
+- 'set of real numbers' 'is subset of' 'real coordinate space'
+- 'set of real numbers' 'has dimension' 1
+
 
 - // snippet(14)
 - There is a class: 'Funktion'.
@@ -106,14 +116,15 @@
 - The type of argument1 of 'beschreibt' is 'Funktion'.
 - The result type of 'beschreibt' is 'Signal'.
 
-- '\(f_x\)' is an instance of 'Funktion'
+- 'f' is an instance of 'Funktion'
 
 
 - // snippet(15)
-- '$\mathbb{R}$' is an instance of 'Definitionsbereich'.
-- '$\mathbb{R}^n$' is an instance of 'Wertebereich'.
-- '\(f_x\)' has domain '$\mathbb{R}$'.
-- '\(f_x\)' has range '$\mathbb{R}^n$'.
+- 'Rn' is an instance of 'real coordinate space'
+- 'n' is an instance of 'integer number'
+- 'Rn' has dimension 'n'
+- 'f' has domain 'set of real numbers'.
+- 'f' has range 'Rn'.
 
 
 
@@ -130,7 +141,7 @@
     - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
     - reference: 'eq_übertragungsglied_definition'
 - 'eq_übertragungsglied_definition' is associated to 'Übertragungsglied'
-- There is a unary operator: '\(\varphi\)'
+- There is a unary operator: 'phi'
 - // I am not sure if I should introduce a new statement type 'There is a formula' to model the second part of the equation, i.e.  '\(f_\nu = \varphi(f_u)\)' after 'bzw'.
 
 - // snippet(18)
@@ -141,17 +152,17 @@
 - The type of argument1 of 'Operator' is 'Funktion'.
 - The result type of 'Operator' is 'Funktion'.
 - // I am not sure if this is the correct way to model the fact that an 'Operator' maps a 'Funktion' to another 'Funktion'.
-- '\(\varphi\)' is an instance of 'Operator'
+- 'phi' is an instance of 'Operator'
 
 - // snippet(19)
 - There is an explanation:
-    - verbal summary: 'It is cumbersome to represent the evolution of a quantity \( x \), i.e. its signal, by constructs like \( t \mapsto f_x(t) \) and thus having to define a function \( f_x \) first. Therefore, one often writes \( x = f_x(t) \) for the function, although strictly speaking this notation only denotes the value of the function at the point \( t \).'
+    - verbal summary: 'It is cumbersome to represent the evolution of a quantity \( x \), i.e. its signal, by constructs like \( t \mapsto f(t) \) and thus having to define a function \( f \) first. Therefore, one often writes \( x = f(t) \) for the function, although strictly speaking this notation only denotes the value of the function at the point \( t \).'
     - related to: 'Signal'
-- // I am not sure how to model the statement ' Häufig schreibt man daher für die Funktion einfach  \( x = f_x(t) \), obwohl diese Notation streng genommen nur den Wert der Funktion an der Stelle \( t \) bezeichnet.' It seems to introduce a new notation for functions, but it is not clear how this notation is related to the previous notation.
+- // I am not sure how to model the statement ' Häufig schreibt man daher für die Funktion einfach  \( x = f(t) \), obwohl diese Notation streng genommen nur den Wert der Funktion an der Stelle \( t \) bezeichnet.' It seems to introduce a new notation for functions, but it is not clear how this notation is related to the previous notation.
 
 - // snippet(20)
 - There is an explanation:
-    - verbal summary: 'In engineering disciplines, the abbreviated notation \( x(t) \) has become established instead of \( x = f_x(t) \), although \( x \) is actually only a variable and not a function. This convention will also be used in this course.'
+    - verbal summary: 'In engineering disciplines, the abbreviated notation \( x(t) \) has become established instead of \( x = f(t) \), although \( x \) is actually only a variable and not a function. This convention will also be used in this course.'
     - related to: 'Signal'
 - // I am not sure how to model the statement that the notation \( x(t) \) is used although \( x \) is a variable and not a function. It seems to introduce a new notation for functions, but it is not clear how this notation is related to the previous notation.
 
@@ -181,11 +192,11 @@
     - full source code: 'Man bezeichnet ein Übertragungsglied als \emph{linear}, wenn für zwei beliebige Eingangssignale  \(u(t), u^\ast(t)\) und beliebige reelle Konstanten \(c, c^\ast\) gilt: \begin{subequations} \begin{align} \varphi(u(t) + u^\ast(t)) &= \varphi(u(t)) + \varphi(u^\ast(t)) \label{eq:UebPrinzip}\\[2ex] \varphi (cu^\ast(t)) &= c\varphi (u^\ast(t)) \label{eq:VerstPrinzip}. \end{align}  \end{subequations}'
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'.
-        - '\(u(t)\)' is an instance of 'Eingangssignal'
-        - 'ein Übertragungsglied' 'has input signal' '\(u(t)\)'
-        - '\(u^\ast(t)\)' is an instance of 'Eingangssignal'
-        - 'ein Übertragungsglied' 'has input signal' '\(u^\ast(t)\)'
-        - '\(c\)' is an instance of 'real number'.
+        - 'u1' is an instance of 'Eingangssignal'
+        - 'ein Übertragungsglied' 'has input signal' 'u1'
+        - 'u_star' is an instance of 'Eingangssignal'
+        - 'ein Übertragungsglied' 'has input signal' 'u_star'
+        - 'c' is an instance of 'real number'.
     - formalized premise:
         - AND
             - There is an equation:
@@ -303,11 +314,17 @@
         - 'ue1' is an instance of 'Übertragungsglied'
         - 'df1' is an instance of 'Differenzialgleichung'
         - 'df1' is associated to 'ue1'
-        - '\(n\)' is an instance of 'integer number'
-        - '\(m\)' is an instance of 'integer number'
-        - '\(F\)' is an instance of 'Funktion'
-        - '\(F\)' has domain '\(\mathbb{R}^{n+m+2}\)'
-        - '\(F\)' has range '\(\mathbb{R}\)'
+        - 'n' is an instance of 'integer number'
+        - 'm' is an instance of 'integer number'
+        - 'F' is an instance of 'Funktion'
+        - 'Rnm2' is an instance of 'real coordinate space'
+        - 'k' is an instance if 'integer number'
+        - There is an equation:
+            - formalized left hand side: 'k'
+            - formalized right hand side: 'n' + 'm' + 2
+        - 'Rnm2' has the dimension 'k'
+        - 'F' has domain 'Rnm2'
+        - 'F' has range 'set of real numbers'
         - 'u' is an instance of 'Eingangssignal'
         - 'ue1' has input signal 'u'
         - '\nu' is an instance of 'Ausgangssignal'
@@ -320,7 +337,7 @@
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the function F and its arguments.
             - reference: 'eq:DlgAllgemein'
         - 'df1' has defining formula 'eq:DlgAllgemein'
-        - 'df1' has system order '\(n\)'
+        - 'df1' has system order 'n'
 
 
 - // manually added (2)
@@ -342,15 +359,21 @@
         - 'lue1' is an instance of 'lineares Übertragungsglied'
         - 'df1' is an instance of 'Differenzialgleichung'
         - 'df1' is associated to 'lue1'
-        - '\(n\)' is an instance of 'integer number'
-        - '\(m\)' is an instance of 'integer number'
-        - '\(F\)' is an instance of 'Funktion'
-        - '\(F\)' has domain '\(\mathbb{R}^{n+m+2}\)'
-        - '\(F\)' has range '\(\mathbb{R}\)'
+        - 'n' is an instance of 'integer number'
+        - 'm' is an instance of 'integer number'
+        - 'F' is an instance of 'Funktion'
+        - 'Rnm2' is an instance of 'real coordinate space'
+        - 'k' is an instance if 'integer number'
+        - There is an equation:
+            - formalized left hand side: 'k'
+            - formalized right hand side: 'n' + 'm' + 2
+        - 'Rnm2' has the dimension 'k'
+        - 'F' has domain 'Rnm2'
+        - 'F' has range 'set of real numbers'
         - 'u' is an instance of 'Eingangssignal'
         - 'lue1' has input signal 'u'
-        - '\nu' is an instance of 'Ausgangssignal'
-        - 'lue1' has output signal '\nu'
+        - 'nu' is an instance of 'Ausgangssignal'
+        - 'lue1' has output signal 'nu'
         - 'soc' is an instance of 'set of coefficients'
         - 'df1' 'has coefficient set' 'soc'
     - formalized assertion:
@@ -384,11 +407,11 @@
 
 - // snippet(41)
 - There is a general statement:
-    - full source code: 'Mithilfe der Substitution  \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\) lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von  \(n\) gewöhnlichen Differenzialgleichungen erster Ordnung überführen: \begin{align}\label{eq:DglSysAllgemein} \begin{split} \dot x_1 &= x_2 \\ \dot x_2 &= x_3 \\ &\vdots \\ \dot x_{n-1} &= x_n\\ \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right) \end{split} \end{align} mit den Anfangsbedingungen  \(x_1(0) = V_{00}\),  \(x_2(0)=V_{01}\),  \(\ldots\),  \(x_n(0) =V_{0n-1}\).'
+    - full source code: 'Mithilfe der Substitution  \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\) lässt sich das System \eqref{eq:DglAllgemeinLinear} \emph{immer} in ein System von  n gewöhnlichen Differenzialgleichungen erster Ordnung überführen: \begin{align}\label{eq:DglSysAllgemein} \begin{split} \dot x_1 &= x_2 \\ \dot x_2 &= x_3 \\ &\vdots \\ \dot x_{n-1} &= x_n\\ \dot x_n &= \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right) \end{split} \end{align} mit den Anfangsbedingungen  \(x_1(0) = V_{00}\),  \(x_2(0)=V_{01}\),  \(\ldots\),  \(x_n(0) =V_{0n-1}\).'
     - formalized setting:
-        - '\(n\)' is an instance of 'integer number'
+        - 'n' is an instance of 'integer number'
         - 'lineares Übertragungsglied 1' is an instance of 'lineares Übertragungsglied'
-        - 'lineares Übertragungsglied 1' has system order '\(n\)'
+        - 'lineares Übertragungsglied 1' has system order 'n'
         - 'lineares Übertragungsglied 1' is associated to 'eq:DglAllgemeinLinear'
         - // I am not sure how to model the statement 'Mithilfe der Substitution \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\)'. It seems to introduce a set of variables, but it is not clear to me how to represent this set and how it is related to the other entities.
     - formalized assertion:
@@ -441,14 +464,14 @@
 - // snippet(48)
 - There is a class: 'complex numbers'
 - 'complex numbers' has the associated LaTeX notation '\(\mathbb{C}\)'
-- '\(s\)' is an instance of 'complex numbers'
-- '\(s\)' is associated to 'Laplace-Transformation'
+- 's' is an instance of 'complex numbers'
+- 's' is associated to 'Laplace-Transformation'
 - There is an equation:
     - full source code: '\(s = \sigma + j \omega\)'
-    - source code of left hand side: '\(s\)'
+    - source code of left hand side: 's'
     - source code of right hand side: '\(\sigma + j \omega\)'
-- '\(\sigma\)' is an instance of 'real number'
-- '\(\omega\)' is an instance of 'real number'
+- 'sigma' is an instance of 'real number'
+- 'omega' is an instance of 'real number'
 
 - // snippet(49)
 - 'Laplace-Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
@@ -482,12 +505,12 @@
 - There is a general statement:
     - full source code: 'Für die Laplace-Transformierte der Zeitableitung von  \(f\) gilt: \begin{align*} F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t. \intertext{Partielle Integration liefert} F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t. \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus} F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0). \end{align*}'
     - formalized setting:
-        - '\(f\)' is an instance of 'reellwertige Funktion'
-        - '\(f\)' is associated to 'Zeitbereich'
-        - '\(F\)' is an instance of 'komplexwertige Funktion'
-        - '\(F\)' is associated to 'Bildbereich'
-        - '\(F^\ast\)' is an instance of 'komplexwertige Funktion'
-        - '\(F^\ast\)' is associated to 'Bildbereich'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'f' is associated to 'Zeitbereich'
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'F' is associated to 'Bildbereich'
+        - 'F_star' is an instance of 'komplexwertige Funktion'
+        - 'F_star' is associated to 'Bildbereich'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(F^\ast(s) = \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t\)'
@@ -540,13 +563,13 @@
 - There is an if-then-statement:
     - full source code: 'Betrachtet man nun erneut die (lineare) Differenzialgleichung \eqref{eq:DglAllgemeinLinear} und wendet die Regel \eqref{eq:LaplaceDiffAllgemein} unter der Annahme an, dass sämtliche Anfangswerte Null sind, so erhält man: \begin{multline} \label{eq:DglAllgemeinLinearBildbereich} a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s). \end{multline}'
     - formalized setting:
-        - 'v(t)' is an instance of 'reellwertige Funktion'
-        - 'u(t)' is an instance of 'reellwertige Funktion'
-        - 'V(s)' is an instance of 'komplexwertige Funktion'
-        - 'U(s)' is an instance of 'komplexwertige Funktion'
+        - 'v' is an instance of 'reellwertige Funktion'
+        - 'u' is an instance of 'reellwertige Funktion'
+        - 'V' is an instance of 'komplexwertige Funktion'
+        - 'U' is an instance of 'komplexwertige Funktion'
     - formalized premise:
-        - 'v(t)' has initial condition '0'.
-        - 'u(t)' has initial condition '0'.
+        - 'v' has initial condition '0'.
+        - 'u' has initial condition '0'.
     - formalized assertion:
         - There is an equation:
             - full source code: '\(a_n s^nV(s) + a_{n-1}s^{n-1}V(s) + \ldots + a_2 s^2 V(s) + a_1 s V(s) + a_0 V(s) = \\ b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s).\)'
@@ -563,9 +586,9 @@
     - related to: 'Laplace-Transformation'
 - There is a general statement:
     - formalized setting:
-        - 'y(t)' is an instance of 'reellwertige Funktion'
+        - 'y' is an instance of 'reellwertige Funktion'
         - 'i' is an instance of 'integer number'
-        - 'Y(s)' is an instance of 'komplexwertige Funktion'
+        - 'Y' is an instance of 'komplexwertige Funktion'
         - There is an equation:
             - formalized left hand side: 'Laplace-Transformation'(y(t))
             - formalized right hand side: Y(s)
@@ -589,8 +612,8 @@
 - There is a general statement:
     - full source code: '$f(t)$    &$F(s)$   &Transformation gemäß Gl.~\eqref{eq:LaplaceHin}'
     - formalized setting:
-        - 'f(t)' is an instance of 'reellwertige Funktion'
-        - 'F(s)' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'Laplace-Transformation'('f(t)')
@@ -598,8 +621,8 @@
 - There is a general statement:
     - full source code: '$f^{(i)}(t)$ &$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$ &Ableitung im Zeitbereich'
     - formalized setting:
-        - 'f(t)' is an instance of 'reellwertige Funktion'
-        - 'F(s)' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
         - 'i' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
@@ -609,8 +632,8 @@
 - There is a general statement:
     - full source code: '$\int\limits_0^t f(\tau)\df\tau$ &$\frac{1}{s}F(s)$ &Integration im Zeitbereich'
     - formalized setting:
-        - 'f(t)' is an instance of 'reellwertige Funktion'
-        - 'F(s)' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - // Not sure how to model 'Integration im Zeitbereich'
         - There is an equation:
@@ -619,14 +642,14 @@
 - There is a general statement:
     - full source code: '$f(t-\tau)$,\newline \small $\tau > 0$, $f(t) = 0$ f.~$t < 0$ &$F(s) \mathrm{e}^{-s\tau}$ &Verschiebung nach rechts'
     - formalized setting:
-        - 'f(t)' is an instance of 'reellwertige Funktion'
-        - 'F(s)' is an instance of 'komplexwertige Funktion'
-        - '\(\tau\)' is an instance of 'real number'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'tau' is an instance of 'real number'
     - formalized premise:
         - AND
             - There is a mathematical relation:
                 - relation sign: >
-                - formalized left hand side: '\(\tau\)'
+                - formalized left hand side: 'tau'
                 - formalized right hand side: 0
             - There is a mathematical relation:
                 - relation sign: <
@@ -638,15 +661,15 @@
     - formalized assertion:
         - // Not sure how to model 'Verschiebung nach rechts'
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('f(t - \(\tau\))')
-            - formalized right hand side: 'F(s)' * 'e'^(-'s' * '\(\tau\)')
+            - formalized left hand side: 'Laplace-Transformation'('f(t - tau)')
+            - formalized right hand side: 'F(s)' * 'e'^(-'s' * 'tau')
 - There is a general statement:
     - full source code: '$\int\limits_0^t f(\tau) g(t - \tau) \df\tau$ &$F(s) \cdot G(s)$ &Faltung im Zeitbereich'
     - formalized setting:
-        - 'f(t)' is an instance of 'reellwertige Funktion'
-        - 'F(s)' is an instance of 'komplexwertige Funktion'
-        - 'g(t)' is an instance of 'reellwertige Funktion'
-        - 'G(s)' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'g' is an instance of 'reellwertige Funktion'
+        - 'G' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'Laplace-Transformation'('Faltung'('f(t)', 'g(t)'))
@@ -665,12 +688,12 @@
 - There is a general statement:
     - full source code: 'Die in Gl.~\eqref{eq:DglAllgemeinLinearBildbereichZusammengefasst} vorliegende Darstellung der Dgl.~\eqref{eq:DglAllgemeinLinear} lässt sich unter der Annahme, dass alle Anfangsbedingungen null sind, zu folgender gebrochen rationalen Funktion in  \(s\) umformen: \begin{equation} \label{eq:UebertragungsfunktionAllgemein} G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}. \end{equation}'
     - formalized setting:
-        - 'v(t)' is an instance of 'reellwertige Funktion'
-        - 'u(t)' is an instance of 'reellwertige Funktion'
-        - 'V(s)' is an instance of 'komplexwertige Funktion'
-        - 'U(s)' is an instance of 'komplexwertige Funktion'
-        - 'v(t)' has initial condition '0'.
-        - 'u(t)' has initial condition '0'.
+        - 'v' is an instance of 'reellwertige Funktion'
+        - 'u' is an instance of 'reellwertige Funktion'
+        - 'V' is an instance of 'komplexwertige Funktion'
+        - 'U' is an instance of 'komplexwertige Funktion'
+        - 'v' has initial condition '0'.
+        - 'u' has initial condition '0'.
     - formalized assertion:
         - There is an equation:
             - full source code: '\(G(s) := \frac{V(s)}{U(s)} = \frac{b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0}{a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0}\)'
@@ -700,11 +723,11 @@
 - There is a general statement:
     - full source code: 'Offensichtlich gilt: \begin{equation*} V(s) = G(s) U(s). \end{equation*}'
     - formalized setting:
-        - 'V(s)' is an instance of 'komplexwertige Funktion'
-        - 'V(s)' beschreibt Ausgangssignal
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'U(s)' is an instance of 'komplexwertige Funktion'
-        - 'U(s)' beschreibt Eingangssignal
+        - 'V' is an instance of 'komplexwertige Funktion'
+        - 'V' beschreibt Ausgangssignal
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'U' is an instance of 'komplexwertige Funktion'
+        - 'U' beschreibt Eingangssignal
     - formalized assertion:
         - There is an equation:
             - full source code: 'V(s) = G(s) U(s)'
@@ -717,8 +740,8 @@
 - There is a general statement:
     - full source code: 'Wegen Regel 5 in Tabelle \ref{tab:LapalceRegeln} folgt daraus: Die Übertragungsfunktion  \(G(s)\) ist die Laplace-Transformierte der Gewichtsfunktion  \(g(t)\) (siehe Gl.~\eqref{eq:GewichtsFunktion}).'
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'g(t)' is an instance of 'Gewichtsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'g' is an instance of 'Gewichtsfunktion'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'Laplace-Transformation'('g(t)')
@@ -729,9 +752,9 @@
 - There is a general statement:
     - full source code: 'Da die Übergangsfunktion  $h(t)$ (siehe Gl.~\eqref{eq:Uebergangsfunktion}) gerade das Integral über der Gewichtsfunktion ist, gilt für die Laplace-Transformierte der Übergangsfunktion wegen Regel 3 in Tabelle \ref{tab:LapalceRegeln}: \begin{equation*} H(s) = \frac{1}{s}G(s). \end{equation*}'
     - formalized setting:
-        - 'h(t)' is an instance of 'Übergangsfunktion'
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'H(s)' is an instance of 'komplexwertige Funktion'
+        - 'h' is an instance of 'Übergangsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'H' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - There is an equation:
             - full source code: '$H(s) = \frac{1}{s}G(s)$'
@@ -741,7 +764,7 @@
             - formalized right hand side: 'G(s)' / 's'
 
 
-- // additional content
+- // manually added (4)
 - There is a class: 'Zähler'
 - 'Zähler' has the alternative label 'numerator'
 - There is a relation: 'hat Zähler'
@@ -756,18 +779,28 @@
 - The result type of 'hat Nenner' is 'Nenner'
 - 'hat Nenner' is functional
 
+- There is a class: 'Polynom'
+- There is a relation: 'hat Grad'
+- The type of argument1 of 'hat Grad' is 'Polynom'
+- The result type of 'hat Grad' is 'integer number'
+- 'hat Grad' is functional
 
 - // snippet(65)
-- There is a class: 'charakteristisches Polynom'
+- There is a unary operator: 'charakteristisches Polynom'
 - 'charakteristisches Polynom' has the alternative label 'characteristic polynomial'
 - 'charakteristisches Polynom' is associated to 'Übertragungsfunktion'
+- The type of argument1 of 'charakteristisches Polynom' is 'Übertragungsfunktion'
+- The result type of 'charakteristisches Polynom' is 'Polynom'
 - There is a general statement:
     - full source code: 'Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}'
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'charakteristisches Polynom'('G(s)') is an instance of 'charakteristisches Polynom'
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'N' is instance of 'Polynom'
+        - 'G' hat Nenner 'N'
     - formalized assertion:
-        - 'G(s)' hat Nenner 'charakteristisches Polynom'('G(s)')
+        - There is an equation:
+            - formalized left hand side: 'N'
+            - formalized right hand side: 'charakteristisches Polynom'('G')
 - There is a class: 'Nullstelle'
 - 'Nullstelle' has the alternative label 'zero'
 - There is a relation: 'hat Nullstelle'
@@ -784,7 +817,7 @@
 - The result type of 'hat Polstelle' is 'Polstelle'
 - 'Polstelle' has the verbal description 'die Nullstellen des Nenners von  \(G(s)\) (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.'
 
-- // manually added (4)
+- // manually added (5)
 - There is a unary operator: 'Re'
 - 'Re' has the alternative label 'Realteil'
 - 'Re' has the alternative label 'real part'
@@ -809,10 +842,10 @@
     - full source code: 'Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch  \(G(s)\) repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.'
     - formalized setting:
         - 'ÜG1' is an instance of 'Übertragungsglied'
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'ÜG1' 'hat Übertragungsfunktion' 'G(s)'
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'ÜG1' 'hat Übertragungsfunktion' 'G'
         - 'p' is an instance of 'Polstelle'
-        - 'G(s)' hat Polstelle 'p'
+        - 'G' hat Polstelle 'p'
     - formalized premise:
         - There is a mathematical relation:
             - relation sign: >=
@@ -820,13 +853,6 @@
             - formalized right hand side: 0
     - formalized assertion:
         - 'ÜG1' has the property 'instabil'
-
-- // additonal content
-- There is a class: 'Polynom'
-- There is a relation: 'hat Grad'
-- The type of argument1 of 'hat Grad' is 'Polynom'
-- The result type of 'hat Grad' is 'integer number'
-- 'hat Grad' is functional
 
 - // snippet(67)
 - There is a relation: 'hat relativen Grad'
@@ -837,21 +863,21 @@
 - 'hat relativen Grad' is functional
 - There is a general statement:
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
-        - 'G(s)' 'hat Zähler' 'Z'
+        - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
-        - 'G(s)' 'hat Nenner' 'N'
+        - 'G' 'hat Nenner' 'N'
         - 'r' is an instance of 'integer number'
         - There is an equation:
             - formalized left hand side: 'r'
             - formalized right hand side: 'n' - 'm'
     - formalized assertion:
-        - 'G(s)' 'hat relativen Grad' 'r'
+        - 'G' 'hat relativen Grad' 'r'
 
 - // snippet(68)
 - There is a property: 'streng proper'
@@ -859,41 +885,41 @@
 - 'streng proper' is applicable to 'Übertragungsfunktion'
 - There is an if-then-statement:
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
-        - 'G(s)' 'hat Zähler' 'Z'
+        - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
-        - 'G(s)' 'hat Nenner' 'N'
+        - 'G' 'hat Nenner' 'N'
     - formalized premise:
         - There is a mathematical relation:
             - relation sign: >
             - formalized left hand side: 'n'
             - formalized right hand side: 'm'
     - formalized assertion:
-        - 'G(s)' has the property 'streng proper'
+        - 'G' has the property 'streng proper'
 - There is a property: 'proper'
 - 'proper' is applicable to 'Übertragungsfunktion'
 - There is an if-then-statement:
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
         - 'Z' 'hat Grad' 'm'
-        - 'G(s)' 'hat Zähler' 'Z'
+        - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
         - 'N' is an instance of 'Polynom'
         - 'N' 'hat Grad' 'n'
-        - 'G(s)' 'hat Nenner' 'N'
+        - 'G' 'hat Nenner' 'N'
     - formalized premise:
         - There is an equation:
             - formalized left hand side: 'n'
             - formalized right hand side: 'm'
     - formalized assertion:
-        - 'G(s)' has the property 'proper'
+        - 'G' has the property 'proper'
 
 
 - // snippet(69)
@@ -902,12 +928,12 @@
 - 'differenzierend' is applicable to 'Übertragungsfunktion'
 - There is an if-then-statement:
     - formalized setting:
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
+        - 'G' is an instance of 'Übertragungsfunktion'
     - formalized premise:
         - NOT
-            - 'G(s)' has the property 'proper'
+            - 'G' has the property 'proper'
     - formalized assertion:
-        - 'G(s)' has the property 'differenzierend'
+        - 'G' has the property 'differenzierend'
 
 - // snippet(70i)
 - // ignored content
@@ -928,9 +954,9 @@
 - There is a general statement:
     - full source code: 'Hat man die Bildfunktion  \(X(s) = \mathcal{L}\{x(t)\}\) der zu untersuchenden Zeitfunktion, so gilt:'
     - formalized setting:
-        - 'x(t)' is an instance of 'Funktion'
-        - 'X(s)' is an instance of 'Bildfunktion'
-        - 'x(t)' 'hat Bildfunktion' 'X(s)'
+        - 'x' is an instance of 'Funktion'
+        - 'X' is an instance of 'Bildfunktion'
+        - 'x' 'hat Bildfunktion' 'X'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(x_0 = \lim_{t \to 0} x(t) = \lim_{s \to \infty} s X(s).\)'
@@ -961,11 +987,11 @@
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
         - 'system1' has the property 'stabil'
-        - 'e(t)' is an instance of 'Regeldifferenz'
-        - 'E(s)' is an instance of 'Bildfunktion'
-        - 'e(t)' 'hat Bildfunktion' 'E(s)'
-        - 'e_\infty' is an instance of 'bleibende Regelabweichung'
-        - 'system1' 'hat bleibende Regelabweichung' 'e_\infty'
+        - 'e' is an instance of 'Regeldifferenz'
+        - 'E' is an instance of 'Bildfunktion'
+        - 'e' 'hat Bildfunktion' 'E'
+        - 'e_infty' is an instance of 'bleibende Regelabweichung'
+        - 'system1' 'hat bleibende Regelabweichung' 'e_infty'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(e_\infty = \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s).\)'
@@ -992,17 +1018,17 @@
     - full source code: 'Der Frequenzgang eines linearen zeitinvarianten Übertragungsgliedes mit der Übertragungsfunktion  \(G(s)\) ist die Übertragungsfunktion dieses Gliedes ausgewertet auf der imaginären Achse der komplexen Zahlenebene. Das heißt, man setzt in  \(s = \sigma + j\omega\) den Realteil  \(\sigma = 0\).'
     - formalized setting:
         - 'LTÜG' is an instance of 'lineare zeitinvariante Übertragungsglieder'
-        - 'G(s)' is an instance of 'Übertragungsfunktion'
-        - 'LTÜG' 'hat Übertragungsfunktion' 'G(s)'
-        - '\(s\)' is an instance of 'complex numbers'
-        - '\(\sigma\)' is an instance of 'real number'
-        - '\(\omega\)' is an instance of 'real number'
+        - 'G' is an instance of 'Übertragungsfunktion'
+        - 'LTÜG' 'hat Übertragungsfunktion' 'G'
+        - 's' is an instance of 'complex numbers'
+        - 'sigma' is an instance of 'real number'
+        - 'omega' is an instance of 'real number'
         - There is an equation:
             - formalized left hand side: 's'
-            - formalized right hand side: '\(\sigma\)' + j * '\(\omega\)'
+            - formalized right hand side: 'sigma' + j * 'omega'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: '\(\sigma\)'
+            - formalized left hand side: 'sigma'
             - formalized right hand side: 0
 
 
@@ -1050,10 +1076,10 @@
         - 'U0' is an instance of 'real number'
         - 'Us' is an instance of 'real number'
         - 'U_inf' is an instance of 'real number'
-        - 'in1(t)' is an instance of 'Sprung'
-        - 'out1(t)' is an instance of 'Sprungantwort'
-        - 'system1' 'has input signal' 'in1(t)'
-        - 'system1' 'has output signal' 'out1(t)'
+        - 'in1' is an instance of 'Sprung'
+        - 'out1' is an instance of 'Sprungantwort'
+        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has output signal' 'out1'
     - formalized premise:
         - OR
             - AND
@@ -1113,10 +1139,10 @@
         - 'U0' is an instance of 'real number'
         - 'Us' is an instance of 'real number'
         - 'U_inf' is an instance of 'real number'
-        - 'in1(t)' is an instance of 'Einheitssprung'
-        - 'out1(t)' is an instance of 'Einheitssprungantwort'
-        - 'system1' 'has input signal' 'in1(t)'
-        - 'system1' 'has output signal' 'out1(t)'
+        - 'in1' is an instance of 'Einheitssprung'
+        - 'out1' is an instance of 'Einheitssprungantwort'
+        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has output signal' 'out1'
     - formalized assertion:
         - AND
             - There is an equation:
@@ -1202,10 +1228,10 @@
     - full source code: 'Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.'
     - formalized setting:
         - 'strecke1' is an instance of 'Übertragungsglied'
-        - 'in1(t)' is an instance of 'Sprung'
-        - 'out1(t)' is an instance of 'Sprungantwort'
-        - 'strecke1' 'has input signal' 'in1(t)'
-        - 'strecke1' 'has output signal' 'out1(t)'
+        - 'in1' is an instance of 'Sprung'
+        - 'out1' is an instance of 'Sprungantwort'
+        - 'strecke1' 'has input signal' 'in1'
+        - 'strecke1' 'has output signal' 'out1'
         - 't0' is an instance of 'real number'
         - 't1' is an instance of 'real number'
     - formalized premise:
@@ -1333,7 +1359,7 @@
         - 'system1' has the property 'nicht schwingungsfähig'
 
 
-- // manually added (5)
+- // manually added (6)
 - There is a unary operator: 'komplexe Konjugation'
 - The type of argument1 of 'komplexe Konjugation' is 'complex number'.
 - The result type of 'komplexe Konjugation' is 'complex number'.
@@ -1430,7 +1456,7 @@
 - There is a class: 'Verzögerungszeit'
 - 'Verzögerungszeit' has the alternative label 'Zeitkonstante'
 - 'Verzögerungszeit' has the alternative label 'time constant'
-- 'Verzögerungszeit' has the associated LaTeX notation '\(\tau\)'
+- 'Verzögerungszeit' has the associated LaTeX notation 'tau'
 - There is a relation: 'hat Verzögerungszeit'
 - The type of argument1 of 'hat Verzögerungszeit' is 'Sprungantwort'
 - The result type of 'hat Verzögerungszeit' is 'Verzögerungszeit'
@@ -1449,21 +1475,21 @@
     - verbal summary: 'A tangent is drawn at any point of the step response. The point of contact of this tangent and the intersection with the parallel to the time axis passing through the steady-state final value are projected onto the time axis. The difference between the resulting time points is the time constant. It is best to draw the tangent at the beginning of the step response at  \(t_0\).'
     - related to: 'Verzögerungszeit'
 - There is an explanation:
-    - verbal summary: 'The time after which the step response has reached 63.2\,\% of the steady-state output change  \((V_\infty - V_0)\) is the time constant  \(\tau\). The number 63.2\,\% corresponds to the  \(1-\mathrm{e}^{-1}\) times the steady-state output change.'
+    - verbal summary: 'The time after which the step response has reached 63.2\,\% of the steady-state output change  \((V_\infty - V_0)\) is the time constant  tau. The number 63.2\,\% corresponds to the  \(1-\mathrm{e}^{-1}\) times the steady-state output change.'
     - related to: 'Verzögerungszeit'
 - There is an explanation:
     - verbal summary: 'The time constant results from the area bounded by the graph of the step response normalized to the steady-state final value, the line running parallel to the  \(t\) -axis through the steady-state final value, and the  \(y\) -axis:'
     - related to: 'Verzögerungszeit'
     - There is an equation:
         - full source code: '\(\tau = \int_0^\infty(1-h(\tau)/h(\infty))\text{d}\tau\)'
-        - source code of left hand side: '\(\tau\)'
+        - source code of left hand side: 'tau'
         - source code of right hand side: '\(\int_0^\infty(1-h(\tau)/h(\infty))\text{d}\tau\)'
 
 
 - // snippet(104)
 - New subsection: 'Sprungantwort von schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
 
-- // manually added (6)
+- // manually added (7)
 - There is a class: 'set of poles'
 - 'set of poles' is a subclass of 'set'
 - There is a relation: 'has set of poles'
@@ -1537,7 +1563,7 @@
 - // I am unsure how to model 'bis auf den Wert  \(\Delta \nu_s\) an den stationären Endwert herangekommen ist' and 'von da an im Bereich  \(V_\infty \pm \Delta \nu_s\) verweilt'. They seem to be conditions, but it is not clear to me how to represent them.
 - // I am unsure how to model '(üblich ist  \(\Delta \nu_s = 2\,\%\) oder  \(\Delta \nu_s = 5\,\%\))'. It seems to be a remark, but it is not clear to me how to represent this.
 
-- // manually added (7)
+- // manually added (8)
 - There is a class: 'Wendepunkt'
 - There is a relation: 'hat Wendepunkt'
 - The type of argument1 of 'hat Wendepunkt' is 'Funktion'
@@ -1629,12 +1655,6 @@
 
 - // snippet(110)
 - New subsection: 'Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
-
-- // manually added (8)
-- There is a class: 'set of real numbers'
-- 'set of real numbers' 'is subset of' 'set'.
-- There is a class: 'set of complex numbers'
-- 'set of complex numbers' 'is subset of' 'set'.
 
 - // snippet(111)
 - There is an if-then-statement:
