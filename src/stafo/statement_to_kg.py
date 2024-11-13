@@ -37,7 +37,7 @@ class ConversionManager:
             # },
         # relations: {}
         # }
-        self.d = {"items": {"other": []},
+        self.d = {"items": {},
             # todo: some of them have custom keys (as given by llm), some are copied from p.builtins. automate?
             "relations": {
                 "has label": {
@@ -232,12 +232,9 @@ class ConversionManager:
                 key = key.replace("I", "Ia")
             d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
             for k, v in additional_relations.items():
-                # d["items"][label][k] = v
                 self.add_relation_inplace(d["items"][label], k, v)
             if not auto_keys:
                 self.entity_order.append(key)
-                if "8822" in key:
-                    1
         else:
             print(f"label {label} already existed")
         return d
@@ -251,7 +248,6 @@ class ConversionManager:
                 "render": f"""{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet}
             for k, v in additional_relations.items():
-                # d["items"][label][k] = v
                 self.add_relation_inplace(d["items"][label], k, v)
             self.entity_order.append(key)
         else:
@@ -262,10 +258,6 @@ class ConversionManager:
         """
         Get pyirk keys from a file to avoid key collisions with existing entities
         """
-        # res = subprocess.run(["pyirk", "-l", os.path.join(BASE_DIR, 'control_theory1.py'), "ct", "--new-keys", "100"], capture_output=True)
-
-        # item_keys = re.findall(r"I\d\d\d\d", res.stdout.decode())
-        # relation_keys = re.findall(r"R\d\d\d\d", res.stdout.decode())
         with open(os.path.join(BASE_DIR, "keys.txt"), "rt", encoding="utf-8") as f:
             keys = f.read()
         self.item_keys = re.findall(r"I\d\d\d\d", keys)
@@ -295,10 +287,16 @@ class ConversionManager:
     def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.
         Goal format:
-        [{"OR": [
-            {"AND": [statement1, statement2]},
-            statement3
-        ]}]
+        {"OR_1":
+            {items:
+                {"AND":
+                    {items:
+                        {statement1, statement2}
+                    }
+                }
+                statement3
+            }
+        }
         most outer list should have only one element by definition
         """
         num_lines = len(content)
@@ -427,15 +425,12 @@ class ConversionManager:
             return d
         # new class?
         elif len(new_class) > 0:
-            # self.items.append(self.strip(new_class[0]))
             self.add_new_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'}, auto_keys=auto_keys)
         # new property?
         elif len(new_property) > 0:
-            # self.items.append(self.strip(new_property[0]))
             self.add_new_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'}, auto_keys=auto_keys)
         # new relation?
         elif len(new_relation) > 0:
-            # self.relations.append(self.strip(new_relation[0]))
             self.add_new_rel(d, self.strip(new_relation[0]))
         elif len(new_unary_operator) > 0:
             self.add_new_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'}, auto_keys=auto_keys)
@@ -448,10 +443,8 @@ class ConversionManager:
                 print(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R8", self.build_reference(arg2))
-                # d["items"][arg1]["R8"] = self.build_reference(arg2)
             elif arg1 in self.d["relations"].keys():
                 self.add_relation_inplace(d["relations"][arg1], "R8", self.build_reference(arg2))
-                # d["relations"][arg1]["R8"] = self.build_reference(arg2)
             else:
                 raise KeyError()
         elif len(type_of_arg_2) > 0:
@@ -460,10 +453,8 @@ class ConversionManager:
                 print(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R9", self.build_reference(arg2))
-                # d["items"][arg1]["R9"] = self.build_reference(arg2)
             elif arg1 in self.d["relations"].keys():
                 self.add_relation_inplace(d["relations"][arg1], "R9", self.build_reference(arg2))
-                # d["relations"][arg1]["R9"] = self.build_reference(arg2)
             else:
                 raise KeyError()
         elif len(type_of_result) > 0:
@@ -472,10 +463,8 @@ class ConversionManager:
                 print(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R11", self.build_reference(arg2))
-                # d["items"][arg1]["R11"] = self.build_reference(arg2)
             elif arg1 in self.d["relations"].keys():
                 self.add_relation_inplace(d["relations"][arg1], "R11", self.build_reference(arg2))
-                # d["relations"][arg1]["R11"] = self.build_reference(arg2)
             else:
                 raise KeyError()
         elif len(amend_definition) > 0:
@@ -502,7 +491,8 @@ class ConversionManager:
                 for name, pattern in self.equation_pattern_dict.items():
                     res = re.findall(pattern, l)
                     if res: eq_dict[name] = self.strip(res[0])
-            d["items"]["other"].append(eq_dict)
+            name = f"equation_{i}"
+            d["items"][name] = eq_dict
         elif len(math_rel) > 0:
             lines = self.get_sub_content(self.lines[i+1:])
             math_rel_dict = {
@@ -514,7 +504,8 @@ class ConversionManager:
                 for name, pattern in self.math_rel_pattern_dict.items():
                     res = re.findall(pattern, l)
                     if res: math_rel_dict[name] = self.strip(res[0])
-            d["items"]["other"].append(math_rel_dict)
+            name = f"math_relation_{i}"
+            d["items"][name] = math_rel_dict
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
@@ -526,7 +517,7 @@ class ConversionManager:
                 additional_context = {"R4": 'p.I14["general mathematical proposition"]', "comments": []}
                 new_item_name = f"general-statement_{i}"
             additional_content = self.get_sub_content(self.lines[i+1:])
-            temp_dict = {"items": {"other":[]}, "relations": {}}
+            temp_dict = {"items": {}, "relations": {}}
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 if len(full_source) > 0:
@@ -586,18 +577,11 @@ class ConversionManager:
                             print(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
-                            # d["items"][arg1][v["key"]] = arg2
                         elif arg1 in d["relations"]:
                             self.add_relation_inplace(d["relations"][arg1], v["key"], arg2)
-                            # d["relations"][arg1][v["key"]] = arg2
                         else:
                             raise KeyError
                         # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
-                        # elif arg1 in self.d["items"]:
-                        #     self.d["items"][arg1][v["key"]] = arg2
-                        # elif arg1 in self.d["relations"]:
-                        #     self.d["relations"][arg1][v["key"]] = arg2
-
 
                     break
                 # relations of structure arg1 rel.
@@ -614,7 +598,7 @@ class ConversionManager:
                     # definition
                     elif v["key"] == "R37":
                         # resolve if this is def for property or concept or something else?
-                        raise DeprecationWarning("This is so old and prob wrong, esp. recursion see other example")
+                        raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
                         process_next_line = True
                         additional_content = []
                         k = i
@@ -711,8 +695,9 @@ class ConversionManager:
         Returns:
             dict: difference dictionary
         """
-        dbg = 0
-        current_dict = {"items": {"other":[]}, "relations": {}}
+        dbg = 0 # a counter to make sure every change in dicts is considered, since only some cases are implemented
+        # todo does this still work with other removed?
+        current_dict = {"items": {}, "relations": {}}
         if "iterable_item_added" in diff.keys():
             for ikey, ivalue in diff["iterable_item_added"].items():
                 key_pattern = re.compile(r"(?<=\[').+?(?='\])")
@@ -732,6 +717,13 @@ class ConversionManager:
                 res = re.findall(key_pattern, ikey)
                 set_nested_value(current_dict, res, get_nested_value(diff.t2, res))
             dbg += 1
+        # so far this only happens in snippet 81, with 3 equations in premise and 3 equations in assertion
+        if "values_changed" in diff.keys():
+            for ikey, ivalue in diff["values_changed"].items():
+                key_pattern = re.compile(r"(?<=\[').+?(?='\])")
+                res = re.findall(key_pattern, ikey)
+                set_nested_value(current_dict, res, diff["values_changed"][ikey]["new_value"])
+            dbg += 1
         if dbg != len(diff.keys()):
             raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
         return current_dict
@@ -749,18 +741,14 @@ class ConversionManager:
         to get the long (and possibly different) literal key in self.d["items"]"""
         rel_dict = {}
         for k,v in self.d["items"].items():
-            if k == "other":
-                for i, equation in enumerate(v):
-                    rel_dict[equation["key"]] = f"other_{i}"
-            else:
-                rel_dict[v["key"]] = k
+            rel_dict[v["key"]] = k
         return rel_dict
 
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
         keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81"]
 
-        context = {"key": value_dict["key"], "rel": [], "prerequisites": []}
+        context = {"key": value_dict["key"], "rel": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
         else: context["snip"] = ""
@@ -840,64 +828,6 @@ class ConversionManager:
                 res = render_template("statement_template.py", context)
                 output += res + "\n\n"
 
-        """
-        # render new relations
-        for rel, v in self.d["relations"].items():
-            # check for new relations and discard small numbered keys (builtins)
-            if int(v["key"].split("R")[1]) >= 1000:
-                context = self.built_simple_context(v)
-                res = render_template("basic_relation_template.py", context)
-                output += res + "\n\n"
-                count += 1
-        # render new items
-        for item, v in self.d["items"].items():
-            if item != "other":
-                context = self.built_simple_context(v)
-                res = render_template("basic_item_template.py", context)
-                output += res + "\n\n"
-                count += 1
-
-                # handle more exotic concepts
-                if "definition_" in item:
-                    raise DeprecationWarning("this is old and not working, are you sure you need it?")
-
-
-                elif "equivalence-statement_" in item or "if-then-statement_" in item or "general-statement_" in item:
-                    context = {"id": self.build_reference(item)}
-                    if "snip" in v.keys():
-                        context["snip"] = v["snip"]
-                    else: context["snip"] = ""
-                    if "comments" in v.keys():
-                        context["comments"] = v["comments"]
-                    # context["setting"] = []
-                    # if "setting" in v.keys():
-                    #     context["setting"].append(v["setting"])
-
-                    if "formal_set" in v.keys():
-                        context["setting"] = self.get_statement_context_recursively(v[f"formal_set"])
-                    elif "source_set" in v.keys():
-                        context["setting"] = [f'cm.create_expression({v["source_set"]})']
-
-                    if "formal_pre" in v.keys():
-                        context["premise"] = self.get_statement_context_recursively(v[f"formal_pre"])
-                    elif "source_pre" in v.keys():
-                        context["premise"] = [f'cm.create_expression({v["source_pre"]})']
-
-                    if "formal_ass" in v.keys():
-                        context["assertion"] = self.get_statement_context_recursively(v[f"formal_ass"])
-                    elif "source_ass" in v.keys():
-                        context["assertion"] = [f'cm.create_expression({v["source_ass"]})']
-                    res = render_template("statement_template.py", context)
-                    output += res + "\n\n"
-
-            else:
-                for other_dict in v:
-                    if other_dict["type"] == "equation":
-                        res = self.render_math_relation(other_dict)
-                        output += res + "\n\n"
-                    else:
-                        raise TypeError()
-        """
         try:
             import pyirk as p
             ct_path = os.path.join(p.BASE_DIR, "control_theory1.py")
@@ -918,34 +848,24 @@ class ConversionManager:
     # def get_statement_context(self, subdict, part):
 
     def get_statement_context_recursively(self, subdict:dict):
-        # context[part] = []
         # output
         out = []
         # insertion index makes sure that item creation happens before relations are added, that reference said items
         insertion_index = 0
-        # for key, value in v[f"formal_{part[:3]}"]["items"].items():
         for key, value in subdict["items"].items():
-            if key == "other":
-                # iterate over list of dicts
-                for d in value:
-                    if d["type"] in ["equation", "mathematical relation"]:
-                        res = self.render_math_relation(d)
-                        for l in res.split("\n"):
-                            # adapt equation to context manager
-                            l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
-                            if len(l) > 0 and not "snippet" in l:
-                                out.append(l)
-                    # elif d["type"] == "mathematical relation":
-                    #     res = self.render_math_relation(d)
-                    #         for l in res.split("\n"):
-                    #         # adapt equation to context manager
-                    #         l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
-                    #         context[part].append(l)
-                    else:
-                        raise TypeError()
+            # if key == "other":
+            if "equation" in key or "math_relation" in key:
+                if value["type"] in ["equation", "mathematical relation"]:
+                    res = self.render_math_relation(value)
+                    for l in res.split("\n"):
+                        # adapt equation to context manager
+                        l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
+                        if len(l) > 0 and not "snippet" in l:
+                            out.append(l)
+                else:
+                    raise TypeError()
             elif "OR" in key or "AND" in key:
                 res = self.get_statement_context_recursively(subdict["items"][key])
-                # out.append(res)
                 s = "["
                 for r in res:
                     s += r + ", "
@@ -969,26 +889,8 @@ class ConversionManager:
                             out.append(f'cm.new_relation(cm.{key}, {self.build_reference(self.interpr[kk])}, cm.{vvv})')
         return out
 
-    # def render_equation(self, eq_dict):
-    #     context = {"key": eq_dict["key"], "rel": [], "prerequisites": []}
-    #     if "snip" in eq_dict.keys():
-    #         context["snip"] = eq_dict["snip"]
-    #     else: context["snip"] = ""
-    #     if "comments" in eq_dict.keys():
-    #         context["comments"] = eq_dict["comments"]
-    #     if "lhs_formal" in eq_dict.keys():
-    #         context["lhs_formal"] = eq_dict["lhs_formal"]
-    #     elif "lhs_source" in eq_dict.keys():
-    #         context["lhs_source"] = eq_dict["lhs_source"]
-    #     if "rhs_formal" in eq_dict.keys():
-    #         context["rhs_formal"] = eq_dict["rhs_formal"]
-    #     elif "rhs_source" in eq_dict.keys():
-    #         context["rhs_source"] = eq_dict["rhs_source"]
-    #     res = render_template("equation_template.py", context)
-    #     return res
-
     def render_math_relation(self, eq_dict):
-        context = {"key": eq_dict["key"], "rel": [], "prerequisites": []}
+        context = {"key": eq_dict["key"], "rel": []}
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
         else: context["snip"] = ""

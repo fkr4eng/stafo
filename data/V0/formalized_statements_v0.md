@@ -1091,7 +1091,7 @@
             - There is an equation:
                 - formalized left hand side: out1(t)
                 - formalized right hand side: 'V0'
-    - formalied assertion:
+    - formalized assertion:
         - AND
             - There is a mathematical relation:
                 - relation sign: >=
