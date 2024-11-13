@@ -20,6 +20,7 @@ class ConversionManager:
     def __init__(self, statements_fpath: str):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
+        self.entity_order = []
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -224,12 +225,19 @@ class ConversionManager:
         else:
             raise TypeError(s)
 
-    def add_new_item(self, d, label, additional_relations:dict={}):
+    def add_new_item(self, d, label, additional_relations:dict={}, auto_keys=False):
         if label not in d["items"].keys():
-            d["items"][label] = {"key": self.item_keys.pop(), "R1": label, "snip": self.current_snippet}
+            key = self.item_keys.pop()
+            if auto_keys:
+                key = key.replace("I", "Ia")
+            d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
             for k, v in additional_relations.items():
                 # d["items"][label][k] = v
                 self.add_relation_inplace(d["items"][label], k, v)
+            if not auto_keys:
+                self.entity_order.append(key)
+                if "8822" in key:
+                    1
         else:
             print(f"label {label} already existed")
         return d
@@ -245,6 +253,7 @@ class ConversionManager:
             for k, v in additional_relations.items():
                 # d["items"][label][k] = v
                 self.add_relation_inplace(d["items"][label], k, v)
+            self.entity_order.append(key)
         else:
             print(f"label {label} already existed")
         return d
@@ -317,7 +326,7 @@ class ConversionManager:
                     op_count += 1
                 else:
                     if temp_dict is not None:
-                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line)
+                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line, auto_keys=True)
                         # I think this is the same as before: inplace without deepcopy
                     else:
                         raise ValueError("temp_dict should be preconfigured")
@@ -377,7 +386,7 @@ class ConversionManager:
                 arg2 = f"""{key}["{arg2v['R1']}"]"""
         return arg2
 
-    def process_line(self, d:dict, i:int, line:str, *args, **kwargs):
+    def process_line(self, d:dict, i:int, line:str, auto_keys=False, *args, **kwargs):
         """process the line given
 
         Args:
@@ -419,19 +428,19 @@ class ConversionManager:
         # new class?
         elif len(new_class) > 0:
             # self.items.append(self.strip(new_class[0]))
-            self.add_new_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'})
+            self.add_new_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'}, auto_keys=auto_keys)
         # new property?
         elif len(new_property) > 0:
             # self.items.append(self.strip(new_property[0]))
-            self.add_new_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'})
+            self.add_new_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'}, auto_keys=auto_keys)
         # new relation?
         elif len(new_relation) > 0:
             # self.relations.append(self.strip(new_relation[0]))
             self.add_new_rel(d, self.strip(new_relation[0]))
         elif len(new_unary_operator) > 0:
-            self.add_new_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'})
+            self.add_new_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'}, auto_keys=auto_keys)
         elif len(new_binary_operator) > 0:
-            self.add_new_item(d, self.strip(new_binary_operator[0]), {"R4": 'p.I8["mathematical operation with arity 2"]'})
+            self.add_new_item(d, self.strip(new_binary_operator[0]), {"R4": 'p.I8["mathematical operation with arity 2"]'}, auto_keys=auto_keys)
         elif len(type_of_arg_1) > 0:
             # todo R8, R9, R11 should just be in general relation parsing instead of here
             arg1, arg2 = self.strip(type_of_arg_1[0])
@@ -486,7 +495,7 @@ class ConversionManager:
             lines = self.get_sub_content(self.lines[i+1:])
             eq_dict = {
                 "type": "equation",
-                "key": self.item_keys.pop(),
+                "key": self.item_keys.pop().replace("I", "Ia"),
                 "snip": self.current_snippet
                 }
             for l in lines:
@@ -498,7 +507,7 @@ class ConversionManager:
             lines = self.get_sub_content(self.lines[i+1:])
             math_rel_dict = {
                 "type": "mathematical relation",
-                "key": self.item_keys.pop(),
+                "key": self.item_keys.pop().replace("I", "Ia"),
                 "snip": self.current_snippet
                 }
             for l in lines:
@@ -523,6 +532,7 @@ class ConversionManager:
                 if len(full_source) > 0:
                     additional_context["comments"].append(full_source[0])
                     continue
+                # todo depricated source code of scopes
                 source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
                 source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
                 if source_pre: additional_context["source_pre"] = source_pre[0]
@@ -546,7 +556,7 @@ class ConversionManager:
                 for index, diff in enumerate(diff_list):
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
-            d = self.add_new_item(d, new_item_name, additional_context)
+            d = self.add_new_item(d, new_item_name, additional_context, auto_keys=auto_keys)
         elif len(explanation) > 0:
             additional_content = self.get_sub_content(self.lines[i+1:])
             for ii, l in enumerate(additional_content):
@@ -564,15 +574,15 @@ class ConversionManager:
                     arg2 = self.build_reference(arg2)
                     # instance of
                     if v["key"] == "R4":
-                        self.add_new_item(d, arg1, {"R4": arg2})
+                        self.add_new_item(d, arg1, {"R4": arg2}, auto_keys=auto_keys)
                     # subclass of
                     elif v["key"] == "R3":
-                        self.add_new_item(d, arg1, {"R3": arg2})
+                        self.add_new_item(d, arg1, {"R3": arg2}, auto_keys=auto_keys)
                     else:
                         if not (arg1 in self.d["items"].keys() or \
                             arg1 in d["items"].keys() or \
                             arg1 in self.d["relations"]):
-                            self.add_new_item(d, arg1)
+                            self.add_new_item(d, arg1, auto_keys=auto_keys)
                             print(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
@@ -734,6 +744,18 @@ class ConversionManager:
             rel_dict[v["key"]] = k
         return rel_dict
 
+    def get_item_dict_key_interpreter(self):
+        """create a dict for the items that can be addressed by pyirk keys (I1)
+        to get the long (and possibly different) literal key in self.d["items"]"""
+        rel_dict = {}
+        for k,v in self.d["items"].items():
+            if k == "other":
+                for i, equation in enumerate(v):
+                    rel_dict[equation["key"]] = f"other_{i}"
+            else:
+                rel_dict[v["key"]] = k
+        return rel_dict
+
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
         keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81"]
@@ -752,13 +774,6 @@ class ConversionManager:
                     # the object of this relation is a reference string that appears in the 'reference' key of some equation item
                     # todo find this equation
                     pass
-                    # lhs, rhs = value.split(r"\isdef")
-                    # lhs = lhs.replace("`", "").replace("$", "")
-                    # rhs = rhs.replace("`", "").replace("$", "")
-                    # item_key = self.item_keys.pop()
-                    # eq = f'{item_key} = p.new_equation(lhs=p.create_expression("${lhs}$"), rhs=p.create_expression("${rhs}$"))'
-                    # context["prerequisites"].append(eq)
-                    # line = f'{self.d["relations"][self.interpr[key]]["render"]}={item_key}'
                 elif key in keys_that_want_literals:
                     # value is literal -> need extra quotation marks ""
                     quotes = '"'
@@ -777,36 +792,55 @@ class ConversionManager:
                     context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={quotes}{v}{quotes}')
         return context
 
-    # def recursively_render_premise(self, premise_obj, setting_subj):
-    #     out = ""
-    #     for key, value in premise_obj.items():
-    #         if "OR" in key or "AND" in key:
-    #             res = [self.recursively_render_premise(arg, setting_subj) for arg in value]
-    #             s = ""
-    #             for r in res:
-    #                 s += r[:-1] + ", " # remove \n from r
-    #             op = key.split("_")[0]
-    #             out += f"cm.{op}({s[:-2]})\n" # remove last ", "
-    #         elif key == "items":
-    #             for k, v in value.items():
-    #                 if k == "arg1":
-    #                     s = setting_subj
-    #                 else:
-    #                     s = k
-    #                 # todo: these should always only have one entry, right !?
-    #                 p = list(v.keys())[0]
-    #                 o = list(v.values())[0]
-    #                 out += f"cm.new_rel(cm.{s}, {self.build_reference(self.interpr[p])}, {o})\n"
-    #         elif key == "relations":
-    #             pass
-    #         else:
-    #             raise ValueError()
-    #     return out
 
     def render(self):
         self.interpr = self.get_rel_dict_key_interpreter()
+        self.item_inter = self.get_item_dict_key_interpreter()
+        self.key_to_name = dict(self.interpr)
+        self.key_to_name.update(self.item_inter)
         output = ""
         count = 0
+
+        for key in self.entity_order:
+            name = self.key_to_name[key]
+            if key.startswith("I"):
+                tag = "items"
+            elif key.startswith("R"):
+                tag = "relations"
+            else:
+                raise TypeError()
+            v = self.d[tag][name]
+            context = self.built_simple_context(v)
+            res = render_template(f"basic_{tag[:-1]}_template.py", context)
+            output += res + "\n\n"
+            count += 1
+
+            if "equivalence-statement_" in name or "if-then-statement_" in name or "general-statement_" in name:
+                context = {"id": self.build_reference(name)}
+                if "snip" in v.keys():
+                    context["snip"] = v["snip"]
+                else: context["snip"] = ""
+                if "comments" in v.keys():
+                    context["comments"] = v["comments"]
+
+                if "formal_set" in v.keys():
+                    context["setting"] = self.get_statement_context_recursively(v[f"formal_set"])
+                elif "source_set" in v.keys():
+                    context["setting"] = [f'cm.create_expression({v["source_set"]})']
+
+                if "formal_pre" in v.keys():
+                    context["premise"] = self.get_statement_context_recursively(v[f"formal_pre"])
+                elif "source_pre" in v.keys():
+                    context["premise"] = [f'cm.create_expression({v["source_pre"]})']
+
+                if "formal_ass" in v.keys():
+                    context["assertion"] = self.get_statement_context_recursively(v[f"formal_ass"])
+                elif "source_ass" in v.keys():
+                    context["assertion"] = [f'cm.create_expression({v["source_ass"]})']
+                res = render_template("statement_template.py", context)
+                output += res + "\n\n"
+
+        """
         # render new relations
         for rel, v in self.d["relations"].items():
             # check for new relations and discard small numbered keys (builtins)
@@ -825,20 +859,8 @@ class ConversionManager:
 
                 # handle more exotic concepts
                 if "definition_" in item:
-                    context = {"id": self.build_reference(item)}
-                    if "snip" in v.keys():
-                        context["snip"] = v["snip"]
-                    else: context["snip"] = ""
-                    if "comments" in v.keys():
-                        context["comments"] = v["comments"]
-                    if "setting" in v.keys():
-                        context["setting"] = v["setting"]
-                    if "premise" in v.keys():
-                        context["premise"] = self.recursively_render_premise(v["premise"][0], v["setting"]["s"])
-                    if "assertion" in v.keys():
-                        context["assertion"] = v["assertion"]
-                    res = render_template("definition_template.py", context)
-                    output += res + "\n\n"
+                    raise DeprecationWarning("this is old and not working, are you sure you need it?")
+
 
                 elif "equivalence-statement_" in item or "if-then-statement_" in item or "general-statement_" in item:
                     context = {"id": self.build_reference(item)}
@@ -875,7 +897,7 @@ class ConversionManager:
                         output += res + "\n\n"
                     else:
                         raise TypeError()
-
+        """
         try:
             import pyirk as p
             ct_path = os.path.join(p.BASE_DIR, "control_theory1.py")
