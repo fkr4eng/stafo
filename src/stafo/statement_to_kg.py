@@ -44,120 +44,99 @@ class ConversionManager:
                     "key": "R1",
                     "R1": "has label",
                     "R22": True,
-                    "render": "R1__has_label"
                 },
                 "has the verbal description": {
                     "key": "R2",
                     "R1": "has description",
-                    "render": "R2__has_description"
                 },
                 "is a subclass of": {
                     "key": "R3",
                     "R1": "is subclass of",
                     "R22": True,
-                    "render": "R3__is_subclass_of"
                 },
                 "is an instance of": {
                     "key": "R4",
                     "R1": "is instance of",
                     "R22": True,
-                    "render": "R4__is_instance_of"
                 },
                 "has defining formula": {
                     "key": "R6",
                     "R1": "has defining mathematical relation",
                     "R22": True,
-                    "render": "R6__has_defining_mathematical_relation"
                 },
                 "has domain of argument 1": {
                     "key": "R8",
                     "R1": "has domain of argument 1",
-                    "render": "R8__has_domain_of_argument_1"
                 },
                 "has domain of argument 2": {
                     "key": "R9",
                     "R1": "has domain of argument 2",
-                    "render": "R9__has_domain_of_argument_2"
                 },
                 "has range of result": {
                     "key": "R11",
                     "R1": "has range of result",
-                    "render": "R11__has_range_of_result"
                 },
                 "is applicable to": {
                     "key": self.applicable_to_key, # todo
                     "R1": "is applicable to",
-                    "render": f"{self.applicable_to_key}__is_applicable_to"
                 },
                 "is a subproperty of": {                # this is the dict key the way it occurs in document
                     "key": "R17",                       # this is the irk key
                     "R1": "is subproperty of",          # this is the label in irk
-                    "render": "R17__is_subproperty_of"  # this is for the rendered template
                 },
                 "is functional": {
                     "key": "R22",
                     "R1": "is functional",
                     "R22": True,
-                    "render": "R22__is_functional"
                 },
                 "has the definition": {
                     "key": "R37",
                     "R1": "has definition",
                     "R22": True,
-                    "render": "R37__has_definition"
                 },
                 "has the associated LaTeX notation": {
                     "key": "R24",
                     "R1": "has LaTeX string",
-                    "render": "R24__has_associated_LaTeX_notation"
                 },
                 "has the alternative associated LaTeX notation": {
                     "key": "R24",
                     "R1": "has LaTeX string",
-                    "render": "R24__has_associated_LaTeX_notation"
                 },
                 "is a secondary instance of": {
                     "key": "R30",
                     "R1": "is secondary instance of",
-                    "render": "R30__is_secondary_instance_of"
                 },
                 "has the property": {
                     "key": "R16",
                     "R1": "has property",
-                    "render": "R16__has_property"
                 },
                 "does not have the property": {
                     "key": "R61",
                     "R1": "does not have property",
-                    "render": "R61__does_not_have_property"
                 },
                 "has the alternative label": {
                     "key": "R77",
                     "R1": "has alternative label",
-                    "render": "R77__has_alternative_label"
                 },
                 "is associated to": {
                     "key": "R58",
                     "R1": "wildcard relation",
-                    "render": "R58__wildcard_relation"
                 },
                 "has explanation": {
                     "key": "R81",
                     "R1": "has explanation",
-                    "render": "R81__has_explanation"
                 },
 
             }}
         """
             # todo:
-            "has the alternative associated LaTeX notation",
             "is associate with",
-            "is associated to",
             "There is an example:",
-            "There is an explanation:",
             "There is special terminology:"
             "alternative verbal description?
         """
+        for key, value in self.d["relations"].items():
+            self.d["relations"][key]["render"] = f'{value["key"]}__{value["R1"].replace(" ", "_")}'
 
 
         self.comment_pattern = re.compile(r"- //")
