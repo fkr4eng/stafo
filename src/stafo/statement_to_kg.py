@@ -378,7 +378,7 @@ class ConversionManager:
                 self.d = self.process_line(self.d, i, line)
         # IPS()
 
-    def build_reference(self, arg2):
+    def build_reference(self, arg2, local_dict={}):
         """return dual readable version of entity if possible (might be literal): I1234["something"]"""
         if arg2 in self.d["items"].keys():
             arg2v = self.d["items"][arg2]
@@ -394,6 +394,11 @@ class ConversionManager:
                 arg2 = f"""p.{key}["{arg2v['R1']}"]"""
             else:
                 arg2 = f"""{key}["{arg2v['R1']}"]"""
+        # if we are inside a scope and arg2 references a local variable, arg2 will not appear in self.d,
+        # in this case, we just need to remove potential spaces to create the reference cm.bla_bla to the local variable
+        elif local_dict:
+            if arg2 in local_dict["items"].keys():
+                arg2 = arg2.replace(" ", "_")
         return arg2
 
     def process_line(self, d:dict, i:int, line:str, auto_keys=False, *args, **kwargs):
@@ -427,7 +432,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 838
+        self.stop_at_line = 430
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -520,22 +525,6 @@ class ConversionManager:
                         else:
                             eq_dict[name] = self.strip(res[0])
             d["items"][item_name] = eq_dict
-        # elif len(math_rel) > 0:
-        #     lines = self.get_sub_content(self.lines[i+1:])
-        #     key = self.item_keys.pop().replace("I", "Ia")
-        #     math_rel_dict = {
-        #         "type": "mathematical relation",
-        #         "key": key,
-        #         "snip": self.current_snippet
-        #         }
-        #     for l in lines:
-        #         for name, pattern in self.math_rel_pattern_dict.items():
-        #             res = re.findall(pattern, l)
-        #             if res: math_rel_dict[name] = self.strip(res[0])
-        #             if name == "reference":
-        #                 self.eq_reference_dict[self.strip(res[0])] = key
-        #     name = f"math_relation_{i}"
-        #     d["items"][name] = math_rel_dict
 
         # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
@@ -594,7 +583,7 @@ class ConversionManager:
                 res = re.findall(f"(?<=- )(.+?)(?: {k}:? )(.+?)(?=\\.$|$)", self.strip(line))
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
-                    arg2 = self.build_reference(arg2)
+                    arg2 = self.build_reference(arg2, d)
                     # instance of
                     if v["key"] == "R4":
                         self.add_new_item(d, arg1, {"R4": arg2}, auto_keys=auto_keys)
