@@ -2,7 +2,7 @@ import pyirk as p
 
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
-ct = p.irkloader.load_mod_from_path("{{context.ct_path}}", prefix="ct")
+ct = p.irkloader.load_mod_from_path(r"{{context.ct_path}}", prefix="ct")
 ma = ct.ma
 ag = ma.ag
 

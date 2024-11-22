@@ -91,6 +91,11 @@
 - 'set of real numbers' 'is subset of' 'real coordinate space'
 - 'set of real numbers' 'has dimension' 1
 
+- There is a unary operator: 'Zeitableitung'
+- 'Zeitableitung' has the alternative label 'time derivative'
+- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
+- The result type of 'Zeitableitung' is 'reellwertige Funktion'
+- 'Zeitableitung' is associated to 'Zeitbereich'
 
 - // snippet(14)
 - There is a class: 'Funktion'.
@@ -116,15 +121,18 @@
 - The type of argument1 of 'beschreibt' is 'Funktion'.
 - The result type of 'beschreibt' is 'Signal'.
 
-- 'f' is an instance of 'Funktion'
 
 
-- // snippet(15)
-- 'Rn' is an instance of 'real coordinate space'
-- 'n' is an instance of 'integer number'
-- 'Rn' has dimension 'n'
-- 'f' has domain 'set of real numbers'.
-- 'f' has range 'Rn'.
+- // snippet(15) # todo delete?
+- There is a general statement:
+    - formalized setting:
+        - 'f' is an instance of 'Funktion'
+        - 'Rn' is an instance of 'real coordinate space'
+        - 'n' is an instance of 'integer number'
+        - 'Rn' has dimension 'n'
+    - formalized assertion:
+        - 'f' has domain 'set of real numbers'.
+        - 'f' has range 'Rn'.
 
 
 
@@ -134,14 +142,18 @@
 - // snippet(17)
 - Amend definition of 'Übertragungsglied':
     - replace 'Unter einem Übertragungsglied versteht man eine Anordnung, die aus einem Eingangssignal ein Ausgangssignal erzeugt.' by 'Mit diesen Begrifflichkeiten lässt sich nun genauer definieren, was unter einem \emph{Übertragungsglied} zu verstehen ist, nämlich eine Anordnung, die aus einem Eingangssignal  \(t \mapsto f_u(t)\) ein Ausgangssignal \(t \mapsto f_\nu(t)\) erzeugt:'
-- There is an equation:
-    - full source code: '\(t \mapsto f_\nu(t) = \varphi(t \mapsto f_u(t)) \qquad \text{bzw.} \qquad f_\nu = \varphi(f_u)\)'
-    - source code of left hand side: '\(t \mapsto f_\nu(t)\)'
-    - source code of right hand side: '\(\varphi(t \mapsto f_u(t))\)'
-    - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
-    - reference: 'eq_übertragungsglied_definition'
-- 'eq_übertragungsglied_definition' is associated to 'Übertragungsglied'
-- There is a unary operator: 'phi'
+- There is a general statement:
+    - formalized setting:
+        - There is a unary operator: 'phi'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(t \mapsto f_\nu(t) = \varphi(t \mapsto f_u(t)) \qquad \text{bzw.} \qquad f_\nu = \varphi(f_u)\)'
+            - source code of left hand side: '\(t \mapsto f_\nu(t)\)'
+            - source code of right hand side: '\(\varphi(t \mapsto f_u(t))\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
+            - reference: 'eq:übertragungsglied_definition'
+        - 'eq:übertragungsglied_definition' is associated to 'Übertragungsglied'
+
 - // I am not sure if I should introduce a new statement type 'There is a formula' to model the second part of the equation, i.e.  '\(f_\nu = \varphi(f_u)\)' after 'bzw'.
 
 - // snippet(18)
@@ -152,7 +164,6 @@
 - The type of argument1 of 'Operator' is 'Funktion'.
 - The result type of 'Operator' is 'Funktion'.
 - // I am not sure if this is the correct way to model the fact that an 'Operator' maps a 'Funktion' to another 'Funktion'.
-- 'phi' is an instance of 'Operator'
 
 - // snippet(19)
 - There is an explanation:
@@ -262,11 +273,17 @@
 - The type of argument1 of 'Faltung' is 'Gewichtsfunktion'
 - The type of argument2 of 'Faltung' is 'Eingangssignal'
 - The result type of 'Faltung' is 'Ausgangssignal'
-- There is an equation:
-    - full source code: '\(\nu(t) = \int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau\)'
-    - source code of left hand side: '\(\nu(t)\)'
-    - source code of right hand side: '\(\int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau\)'
-    - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the integral and the application of the operator 'Faltung'.
+- There is a general statement:
+    - formalized setting:
+        - 'g' is an instance of 'Gewichtsfunktion'
+        - 'u' is an instance of 'Eingangssignal'
+        - 'nu' is an instance of 'Ausgangssignal'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(\nu(t) = \int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau\)'
+            - source code of left hand side: '\(\nu(t)\)'
+            - source code of right hand side: '\(\int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the integral and the application of the operator 'Faltung'.
 - // I am not sure how to model the relation between this equation and the 'Faltung' operator. It seems that the equation defines the result of the 'Faltung' operator. However, it is not clear to me how to represent this.
 
 - // snippet(33)
@@ -287,11 +304,16 @@
 - // ignored content
 - // snippet(35)
 - 'Übergangsfunktion' has the associated LaTeX notation '\(h(t)\)'
-- There is an equation:
-    - full source code: '\(h(t) = \int_0^t g(\tau) \mathrm{d}\tau\)'
-    - source code of left hand side: '\(h(t)\)'
-    - source code of right hand side: '\(\int_0^t g(\tau) \mathrm{d}\tau\)'
-    - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the integral.
+- There is a general statement:
+    - formalized setting:
+        - 'h' is an instance of 'Übergangsfunktion'
+        - 'g' is an instance of 'Gewichtsfunktion'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(h(t) = \int_0^t g(\tau) \mathrm{d}\tau\)'
+            - source code of left hand side: '\(h(t)\)'
+            - source code of right hand side: '\(\int_0^t g(\tau) \mathrm{d}\tau\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the integral.
 - // I am not sure how to model the relation between this equation, the 'Gewichtsfunktion' and the 'Übergangsfunktion'. It seems that the equation defines how to calculate the 'Übergangsfunktion' from the 'Gewichtsfunktion'. However, it is not clear to me how to represent this.
 
 - // snippet(36)
@@ -418,15 +440,23 @@
         - 'gls1' is an instance of 'lineares Gleichungssystem'
         - There is an equation:
             - full source code: '\(\dot x_1 = x_2\)'
+            - formalized left hand side: 'Zeitableitung'('x_1')
+            - formalized right hand side: 'x_2'
             - reference: 'eq:DglSysAllgemein_1'
         - There is an equation:
             - full source code: '\(\dot x_2 = x_3\)'
+            - formalized left hand side: 'Zeitableitung'('x_2')
+            - formalized right hand side: 'x_3'
             - reference: 'eq:DglSysAllgemein_2'
         - There is an equation:
             - full source code: '\(\dot x_{n-1} &= x_n\)'
+            - formalized left hand side: 'Zeitableitung'('x_n_1')
+            - formalized right hand side: 'x_n'
             - reference: 'eq:DglSysAllgemein_n_1'
         - There is an equation:
             - full source code: '\(\dot x_n = \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)\)'
+            - source code of left hand side: \dot x_n
+            - source code of right hand side: \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)
             - reference: 'eq:DglSysAllgemein_n'
         - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_1'
         - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_2'
@@ -438,7 +468,7 @@
 
 
 - // snippet(42)
-- New section: 'Laplace-Transformation'
+- New section: 'Laplace Transformation'
 
 - // snippet(43)
 - New subsection: 'Motivation und Definition'
@@ -450,31 +480,46 @@
 - // snippet(46i)
 - // ignored content
 - // snippet(47)
-- There is a unary operator 'Laplace-Transformation'
-- 'Laplace-Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  \(f : \mathbb{R} \to \mathbb{R}\) in den Raum der komplexwertigen Funktionen  \(F : \mathbb{C} \to \mathbb{C}\)'
+- There is a unary operator 'Laplace Transformation'
+- 'Laplace Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  \(f : \mathbb{R} \to \mathbb{R}\) in den Raum der komplexwertigen Funktionen  \(F : \mathbb{C} \to \mathbb{C}\)'
 - // I am not sure how to model 'Raum der ... Funktionen'. It seems to be a set of functions. However, I do not know how to represent this.
-- There is an equation:
-    - full source code: '\(F(s) = \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
-    - source code of left hand side: '\(F(s)\)'
-    - source code of right hand side: '\(\int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
-    - reference: 'eq:LaplaceHin'
-- 'Laplace-Transformation' has defining formula 'eq:LaplaceHin'.
+- There is a class 'komplexwertige Funktion'
+- There is a class 'reellwertige Funktion'
+- There is a general statement:
+    - formalized setting:
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(F(s) = \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
+            - source code of left hand side: '\(F(s)\)'
+            - source code of right hand side: '\(\int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
+            - reference: 'eq:LaplaceHin'
+- 'Laplace Transformation' has defining formula 'eq:LaplaceHin'.
 
 
 - // snippet(48)
-- There is a class: 'complex numbers'
-- 'complex numbers' has the associated LaTeX notation '\(\mathbb{C}\)'
-- 's' is an instance of 'complex numbers'
-- 's' is associated to 'Laplace-Transformation'
-- There is an equation:
-    - full source code: '\(s = \sigma + j \omega\)'
-    - source code of left hand side: 's'
-    - source code of right hand side: '\(\sigma + j \omega\)'
-- 'sigma' is an instance of 'real number'
-- 'omega' is an instance of 'real number'
+- 'set of complex numbers' has the associated LaTeX notation '\(\mathbb{C}\)'
+- 's' is an instance of 'complex number'
+- 's' is associated to 'Laplace Transformation'
+- There is a class: 'imaginary unit'
+- 'imaginary unit' has the alternative label 'j'
+- 'imaginary unit' is an instance of 'complex number'
+- There is a general statement:
+    - formalized setting:
+        - 'sigma' is an instance of 'real number'
+        - 'omega' is an instance of 'real number'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(s = \sigma + j \omega\)'
+            - source code of left hand side: 's'
+            - source code of right hand side: '\(\sigma + j \omega\)'
+            - formalized left hand side: 's'
+            - formalized right hand side: 'sigma' + 'imaginary unit' * 'omega'
+
 
 - // snippet(49)
-- 'Laplace-Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
+- 'Laplace Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
 
 - // snippet(50)
 - There is a class: 'Zeitbereich'
@@ -486,22 +531,17 @@
 - 'Zeitbereich' is associated to 'reellwertige Funktion'
 - 'Bildbereich' is associated to 'komplexwertige Funktion'
 
-- The type of argument1 of 'Laplace-Transformation' is 'reellwertige Funktion'.
-- The result type of 'Laplace-Transformation' is 'komplexwertige Funktion'.
+- The type of argument1 of 'Laplace Transformation' is 'reellwertige Funktion'.
+- The result type of 'Laplace Transformation' is 'komplexwertige Funktion'.
 - // I am not sure how to model the relation between 'Zeitbereich' and 'reellwertigen Funktionen'. It seems that 'Zeitbereich' is a domain where 'reellwertigen Funktionen' are defined. However, it is not clear to me how to represent this.
 - // I am not sure how to model the relation between 'Bildbereich' and 'komplexwertigen Funktionen'. It seems that 'Bildbereich' is a domain where 'komplexwertigen Funktionen' are defined. However, it is not clear to me how to represent this.
-- // I am not sure how to model the relation between 'Zeitbereich' and 'Bildbereich'. It seems that 'Bildbereich' is the image of 'Zeitbereich' under the 'Laplace-Transformation'. However, it is not clear to me how to represent this.
+- // I am not sure how to model the relation between 'Zeitbereich' and 'Bildbereich'. It seems that 'Bildbereich' is the image of 'Zeitbereich' under the 'Laplace Transformation'. However, it is not clear to me how to represent this.
 
 
 - // snippet(51)
-- There is a unary operator: 'Zeitableitung'
-- 'Zeitableitung' has the alternative label 'time derivative'
-- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
-- The result type of 'Zeitableitung' is 'reellwertige Funktion'
-- 'Zeitableitung' is associated to 'Zeitbereich'
 - There is an explanation:
     - verbal summary: 'It will soon become clear why such a seemingly complicated and initially unintuitive transformation is very advantageous for working with transfer elements. For this purpose, we will first consider a particularly practical property of the Laplace transform, namely the "effect" on the time derivative  \(\dot f\) of a function \(f\).'
-    - related to: 'Laplace-Transformation'
+    - related to: 'Laplace Transformation'
 - There is a general statement:
     - full source code: 'Für die Laplace-Transformierte der Zeitableitung von  \(f\) gilt: \begin{align*} F^\ast(s) &= \int\limits_0^\infty \diff{f}{t}(t)\mathrm{e}^{-st}\df t. \intertext{Partielle Integration liefert} F^\ast(s) &= \left[ \mathrm{e}^{-st} f(t) \right]_{t=0}^{t=\infty} - \int\limits_0^\infty f(t)(-s\mathrm{e}^{-st})\df t=-f(0) + s \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t. \intertext{Wegen \eqref{eq:LaplaceHin} ergibt sich daraus} F^\ast(s)&=-f(0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(0). \end{align*}'
     - formalized setting:
@@ -523,14 +563,20 @@
 - // snippet(52)
 - There is an explanation:
     - verbal summary: 'To avoid difficulties due to possible discontinuities in  \(t=0\) , the right-hand limit \(f(+0)\) is used instead of \(f(0)\)'
-    - related to: 'Laplace-Transformation'
-- There is an equation:
-    - full source code: '\(F^\ast(s)= \mathcal{L}(\dot f(t)) = -f(+0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(+0).\)'
-    - source code of left hand side: '\(F^\ast(s)\)'
-    - source code of right hand side: '\(s \mathcal{L}\left\{f(t)\right\} - f(+0)\)'
-    - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the Laplace transformation.
-    - reference: 'eq:LaplaceDiff'
-- 'eq:LaplaceDiff' is associated to 'Laplace-Transformation'
+    - related to: 'Laplace Transformation'
+- There is a general statement:
+    - formalized setting:
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'F_star' is an instance of 'komplexwertige Funktion'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(F^\ast(s)= \mathcal{L}(\dot f(t)) = -f(+0) + sF(s) = s \mathcal{L}\left\{f(t)\right\} - f(+0).\)'
+            - source code of left hand side: '\(F^\ast(s)\)'
+            - source code of right hand side: '\(s \mathcal{L}\left\{f(t)\right\} - f(+0)\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the Laplace transformation.
+            - reference: 'eq:LaplaceDiff'
+        - 'eq:LaplaceDiff' is associated to 'Laplace Transformation'
 
 
 
@@ -553,7 +599,7 @@
             - source code of right hand side: '\(s^i \mathcal{L}\left\{f(t)\right\} - s^{i-1} f(+0) - s^{i-2} \dot f(+0) - \ldots - f^{i-1}(+0)\)'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the Laplace transformation and the repeated subtraction.
             - reference: 'eq:LaplaceDiffAllgemein'
-        - 'eq:LaplaceDiffAllgemein' is associated to 'Laplace-Transformation'
+        - 'eq:LaplaceDiffAllgemein' is associated to 'Laplace Transformation'
 
 - // snippet(54)
 - There is a relation 'has initial condition'.
@@ -577,32 +623,34 @@
             - source code of right hand side: '\(b_m s^{m} + U(s) b_{m-1} s^{m-1}U(s) + \ldots + b_2 s^2 U(s) + b_1 s U(s) + b_0 U(s)\)'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the repeated addition.
             - reference: 'eq:DglAllgemeinLinearBildbereich'
-        - 'eq:DglAllgemeinLinearBildbereich' is associated to 'Laplace-Transformation'
+        - 'eq:DglAllgemeinLinearBildbereich' is associated to 'Laplace Transformation'
 
 
 - // snippet(55)
 - There is an explanation:
     - verbal summary: 'Formally, the  \(i\) -th derivative of the function  \(y(t)\) is to be replaced by  \(s^i Y(s)\) and the  \(j\) -th derivative of the function  \(u(t)\) by  \(s^j U(s)\).'
-    - related to: 'Laplace-Transformation'
+    - related to: 'Laplace Transformation'
 - There is a general statement:
     - formalized setting:
         - 'y' is an instance of 'reellwertige Funktion'
         - 'i' is an instance of 'integer number'
         - 'Y' is an instance of 'komplexwertige Funktion'
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'(y(t))
+            - formalized left hand side: 'Laplace Transformation'(y(t))
             - formalized right hand side: Y(s)
     - formalized assertion
         - There is an equation
-            - formalized left hand side: 'Laplace-Transformation'('höhere Zeitableitung'(y(t), i))
+            - formalized left hand side: 'Laplace Transformation'('höhere Zeitableitung'(y(t), i))
             - formalized right hand side: s^i * Y(s)
-- There is an equation:
-    - full source code: '\((a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s) = \\ (b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s).\)'
-    - source code of left hand side: '\((a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s)\)'
-    - source code of right hand side: '\((b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s)\)'
-    - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the repeated addition.
-    - reference: 'eq:DglAllgemeinLinearBildbereichZusammengefasst'
-- 'eq:DglAllgemeinLinearBildbereichZusammengefasst' is associated to 'Laplace-Transformation'
+- There is a general statement:
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\((a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s) = \\ (b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s).\)'
+            - source code of left hand side: '\((a_n s^n + a_{n-1}s^{n-1} + \ldots + a_2 s^2 + a_1 s + a_0) V(s)\)'
+            - source code of right hand side: '\((b_m s^{m} + b_{m-1} s^{m-1} + \ldots + b_2 s^2 + b_1 s + b_0) U(s)\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the repeated addition.
+            - reference: 'eq:DglAllgemeinLinearBildbereichZusammengefasst'
+        - 'eq:DglAllgemeinLinearBildbereichZusammengefasst' is associated to 'Laplace Transformation'
 
 - // snippet(56i)
 - // ignored content
@@ -616,7 +664,7 @@
         - 'F' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('f(t)')
+            - formalized left hand side: 'Laplace Transformation'('f(t)')
             - formalized right hand side: 'F(s)'
 - There is a general statement:
     - full source code: '$f^{(i)}(t)$ &$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$ &Ableitung im Zeitbereich'
@@ -626,7 +674,7 @@
         - 'i' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('höhere Zeitableitung'('f(t)', 'i'))
+            - formalized left hand side: 'Laplace Transformation'('höhere Zeitableitung'('f(t)', 'i'))
             - formalized right hand side: 's'^'i' * 'F(s)' - sum(j=0, i-1, 's'^(i-1-j) * 'f'^(j)(+0))
             - // I am not sure how to model the sum in a formalized way.
 - There is a general statement:
@@ -661,8 +709,8 @@
     - formalized assertion:
         - // Not sure how to model 'Verschiebung nach rechts'
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('f(t - tau)')
-            - formalized right hand side: 'F(s)' * 'e'^(-'s' * 'tau')
+            - formalized left hand side: 'Laplace Transformation'('f'('t' - 'tau'))
+            - formalized right hand side: 'F'('s') * 'e'^(-'s' * 'tau')
 - There is a general statement:
     - full source code: '$\int\limits_0^t f(\tau) g(t - \tau) \df\tau$ &$F(s) \cdot G(s)$ &Faltung im Zeitbereich'
     - formalized setting:
@@ -672,7 +720,7 @@
         - 'G' is an instance of 'komplexwertige Funktion'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('Faltung'('f(t)', 'g(t)'))
+            - formalized left hand side: 'Laplace Transformation'('Faltung'('f(t)', 'g(t)'))
             - formalized right hand side: 'F(s)' * 'G(s)'
 - // I am not sure how to model 'Transformation gemäß Gl.~\eqref{eq:LaplaceHin}' in the first row. It seems to be a reference to the definition of the Laplace transformation. However, it is not clear to me how to represent this.
 - // I am not sure how to model 'Ableitung im Zeitbereich' in the second row, 'Integration im Zeitbereich' in the third row and 'Verschiebung nach rechts' in the fourth row. They seem to be properties of the Laplace transformation. However, it is not clear to me how to represent these properties.
@@ -744,7 +792,7 @@
         - 'g' is an instance of 'Gewichtsfunktion'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: 'Laplace-Transformation'('g(t)')
+            - formalized left hand side: 'Laplace Transformation'('g(t)')
             - formalized right hand side: 'G(s)'
 
 
@@ -795,11 +843,11 @@
     - full source code: 'Den Nenner der Übertragungsfunktion bezeichnet man auch als \emph{charakteristisches Polynom}'
     - formalized setting:
         - 'G' is an instance of 'Übertragungsfunktion'
-        - 'N' is an instance of 'Polynom'
-        - 'G' hat Nenner 'N'
+        - 'N1' is an instance of 'Polynom'
+        - 'G' hat Nenner 'N1'
     - formalized assertion:
         - There is an equation:
-            - formalized left hand side: 'N'
+            - formalized left hand side: 'N1'
             - formalized right hand side: 'charakteristisches Polynom'('G')
 - There is a class: 'Nullstelle'
 - 'Nullstelle' has the alternative label 'zero'
@@ -866,6 +914,8 @@
         - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
+        - 'n' is an instance of 'integer number'
+        - 'm' is an instance of 'integer number'
         - 'Z' 'hat Grad' 'm'
         - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
@@ -888,6 +938,8 @@
         - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
+        - 'n' is an instance of 'integer number'
+        - 'm' is an instance of 'integer number'
         - 'Z' 'hat Grad' 'm'
         - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
@@ -908,6 +960,8 @@
         - 'G' is an instance of 'Übertragungsfunktion'
         - 'Z' is an instance of 'Zähler'
         - 'Z' is an instance of 'Polynom'
+        - 'n' is an instance of 'integer number'
+        - 'm' is an instance of 'integer number'
         - 'Z' 'hat Grad' 'm'
         - 'G' 'hat Zähler' 'Z'
         - 'N' is an instance of 'Nenner'
@@ -983,7 +1037,7 @@
 - The type of argument1 of 'hat bleibende Regelabweichung' is 'Übertragungsglied'
 - The result type of 'hat bleibende Regelabweichung' is 'bleibende Regelabweichung'
 - There is a general statement:
-    - full source code: 'Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der LAPLACE-Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:'
+    - full source code: 'Interessiert die bleibende Regelabweichung, also der Wert $e_\infty$ der Regelabweichung, welcher sich für große $t$ einstellt, so kann der Endwertsatz der Laplace Transformation angewandt werden. Für die Bildfunktion $E(s) = \mathcal{L}\{e(t)\}$ der zu untersuchenden Zeitfunktion gilt:'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
         - 'system1' has the property 'stabil'
@@ -1020,12 +1074,12 @@
         - 'LTÜG' is an instance of 'lineare zeitinvariante Übertragungsglieder'
         - 'G' is an instance of 'Übertragungsfunktion'
         - 'LTÜG' 'hat Übertragungsfunktion' 'G'
-        - 's' is an instance of 'complex numbers'
+        - 's' is an instance of 'complex number'
         - 'sigma' is an instance of 'real number'
         - 'omega' is an instance of 'real number'
         - There is an equation:
             - formalized left hand side: 's'
-            - formalized right hand side: 'sigma' + j * 'omega'
+            - formalized right hand side: 'sigma' + 'imaginary unit' * 'omega'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'sigma'
@@ -1180,6 +1234,7 @@
 - 'proportional wirkende Strecke' has the alternative label 'P-Strecke'
 - 'proportional wirkende Strecke' is a subclass of 'Übertragungsglied'
 - 'proportional wirkende Strecke' has the property 'hat stationären Endwert'
+- There is a class: 'allpasshaltige Strecke'
 - There is a general statement:
     - full source code: 'Lineare, zeitinvariante Systeme lassen sich anhand Ihrer Sprungantwort grob in drei Klassen einteilen (vergl.\,auch Abbildung \ref{fig:Streckentypen}):'
     - formalized setting:
@@ -1222,7 +1277,7 @@
         - 'system1' is a secondary instance of 'proportional wirkende Strecke'
 
 - // snippet(91)
-- There is a class: 'allpasshaltige Strecke'
+
 - There is an if-then-statement:
     - full source code: 'Strecken, bei denen die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt, werden als \emph{allpasshaltige} Strecken bezeichnet.'
     - formalized setting:
@@ -1602,7 +1657,11 @@
     - formalized assertion:
         - 'w1' is an instance of 'Wendepunkt'
         - 'w1' 'has first coordinate' 'n1'
-        - 'w1' 'has second coordinate' 'f1'('n1')
+        - 'y1' is an instance of 'real number'
+        - There is an equation:
+            - formalized left hand side: 'y1'
+            - formalized right hand side: 'f1'('n1')
+        - 'w1' 'has second coordinate' 'y1'
 
 - // snippet(108)
 - There is a general statement:

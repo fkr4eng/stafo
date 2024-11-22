@@ -12,6 +12,9 @@ TESTA_DATA_DIR = os.path.join(BASE_DIR, "tests", "testdata")
 CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
 
 
+class ParserError(Exception):
+    pass
+
 def render_template(template: str, context: dict):
     """
     :param template:    path to template file relative to TEMPLATE_DIR

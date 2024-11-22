@@ -1,12 +1,15 @@
 import os, sys
 import re
-from ipydex import IPS
+from ipydex import IPS, Container
 from jinja2 import Environment, FileSystemLoader
 import subprocess
 import copy
 import deepdiff
+import sympy as sp
+from sympy.parsing.sympy_parser import T
+from numbers import Real
 
-from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value
+from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 
 
 def get_md_lines(fpath) -> list[str]:
@@ -21,10 +24,12 @@ class ConversionManager:
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
+        self.eq_reference_dict = {}
 
     def sp_to_us(self, s):
         """space to underscore"""
         return s.replace(" ", "_")
+
 
     def step1(self):
 
@@ -161,18 +166,32 @@ class ConversionManager:
 
         self.equation_pattern_dict = {
             "full_source": re.compile(r"(?<=- full source code)(?::? )(.+?)(?=\.$|$)"),
+            "rel_sign": re.compile(r"(?<=- relation sign)(?::? )(.+?)(?=\.$|$)"),
             "lhs_source": re.compile(r"(?<=- source code of left hand side)(?::? )(.+?)(?=\.$|$)"),
             "rhs_source": re.compile(r"(?<=- source code of right hand side)(?::? )(.+?)(?=\.$|$)"),
             "lhs_formal": re.compile(r"(?<=- formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
             "rhs_formal": re.compile(r"(?<=- formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
             "reference": re.compile(r"(?<=- reference)(?::? )(.+)")
         }
-        self.math_rel_pattern_dict = copy.deepcopy(self.equation_pattern_dict)
-        self.math_rel_pattern_dict["rel_sign"] = re.compile(r"(?<=- relation sign)(?::? )(.+?)(?=\.$|$)")
         self.explanation_pattern_dict = {
             "related": re.compile(r"(?<=- related to)(?::? )(.+?)(?=\.$|$)"),
             "verbal": re.compile(r"(?<=- verbal summary)(?::? )(.+?)(?=\.$|$)"),
         }
+
+    #     self.special_char_repl_container = Container()
+    #     self.special_char_repl_container.str_chars = ["-", " "]
+    #     self.special_char_repl_container.py_chars = [ "__", "_"]
+    #     # todo: What about when name has two spaces? -> prevent this!
+
+    # def convert_name_str_to_py(self, name):
+    #     for s_ch, p_ch in zip(self.special_char_repl_container.str_chars, self.special_char_repl_container.py_chars):
+    #         name = name.replace(s_ch, p_ch)
+    #     return name
+
+    # def convert_name_py_to_str(self, name):
+    #     for s_ch, p_ch in zip(self.special_char_repl_container.str_chars, self.special_char_repl_container.py_chars):
+    #         name = name.replace(p_ch, s_ch)
+    #     return name
 
     def strip(self, s):
         if isinstance(s, list):
@@ -188,6 +207,20 @@ class ConversionManager:
             return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "")
         else:
             raise TypeError(s)
+
+    def strip_formal_eq(self, s):
+        """problem examples:
+        'sigma' + 'imaginary unit' * 'omega'
+        s^i * Y(s)
+
+        """
+        s = s.replace('"', "'")
+        s = s.replace("^", "**") # replace power operator
+        symbol_pattern = re.compile(r"'.+?'")
+        def repl_func(matchobj):
+            return matchobj.group(0).replace(" ", "_").replace("-", "_")
+        return self.strip(re.sub(symbol_pattern, repl_func, s))
+
 
     def strip_math(self, s):
         if isinstance(s, list):
@@ -394,7 +427,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = None
+        self.stop_at_line = 838
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -459,32 +492,52 @@ class ConversionManager:
                 if not self.lines[i+i_plus].startswith(" "):
                     # indentation ended
                     process_next_line = False
-        elif len(equation) > 0:
+        # equation or mathematical relation
+        elif len(equation) > 0 or len(math_rel) > 0:
+            if len(equation) > 0:
+                type = "equation"
+                item_name = f"equation_{i}"
+            else:
+                type = "mathematical relation"
+                item_name = f"math_relation_{i}"
             lines = self.get_sub_content(self.lines[i+1:])
+            key = self.item_keys.pop().replace("I", "Ia")
             eq_dict = {
-                "type": "equation",
-                "key": self.item_keys.pop().replace("I", "Ia"),
+                "type": type,
+                "key": key,
                 "snip": self.current_snippet
                 }
             for l in lines:
                 for name, pattern in self.equation_pattern_dict.items():
                     res = re.findall(pattern, l)
-                    if res: eq_dict[name] = self.strip(res[0])
-            name = f"equation_{i}"
-            d["items"][name] = eq_dict
-        elif len(math_rel) > 0:
-            lines = self.get_sub_content(self.lines[i+1:])
-            math_rel_dict = {
-                "type": "mathematical relation",
-                "key": self.item_keys.pop().replace("I", "Ia"),
-                "snip": self.current_snippet
-                }
-            for l in lines:
-                for name, pattern in self.math_rel_pattern_dict.items():
-                    res = re.findall(pattern, l)
-                    if res: math_rel_dict[name] = self.strip(res[0])
-            name = f"math_relation_{i}"
-            d["items"][name] = math_rel_dict
+                    if res:
+                        if name == "reference":
+                            self.eq_reference_dict[self.strip(res[0])] = key
+                        elif "formal" in name:
+                            # here we need to be careful, since operators might have spaces in their name. These need
+                            # to be converted to not mess with the equation parser
+                            eq_dict[name] = self.strip_formal_eq(res[0])
+                        else:
+                            eq_dict[name] = self.strip(res[0])
+            d["items"][item_name] = eq_dict
+        # elif len(math_rel) > 0:
+        #     lines = self.get_sub_content(self.lines[i+1:])
+        #     key = self.item_keys.pop().replace("I", "Ia")
+        #     math_rel_dict = {
+        #         "type": "mathematical relation",
+        #         "key": key,
+        #         "snip": self.current_snippet
+        #         }
+        #     for l in lines:
+        #         for name, pattern in self.math_rel_pattern_dict.items():
+        #             res = re.findall(pattern, l)
+        #             if res: math_rel_dict[name] = self.strip(res[0])
+        #             if name == "reference":
+        #                 self.eq_reference_dict[self.strip(res[0])] = key
+        #     name = f"math_relation_{i}"
+        #     d["items"][name] = math_rel_dict
+
+        # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
@@ -549,9 +602,7 @@ class ConversionManager:
                     elif v["key"] == "R3":
                         self.add_new_item(d, arg1, {"R3": arg2}, auto_keys=auto_keys)
                     else:
-                        if not (arg1 in self.d["items"].keys() or \
-                            arg1 in d["items"].keys() or \
-                            arg1 in self.d["relations"]):
+                        if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, auto_keys=auto_keys)
                             print(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
@@ -559,7 +610,7 @@ class ConversionManager:
                         elif arg1 in d["relations"]:
                             self.add_relation_inplace(d["relations"][arg1], v["key"], arg2)
                         else:
-                            raise KeyError
+                            raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
                         # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
 
                     break
@@ -630,14 +681,70 @@ class ConversionManager:
 
         return d
 
+    def replace_expr(self, expr):
+        try:
+            parsed_expr = sp.parse_expr(expr)
+        except:
+            print(f"sympy parsing failed for {expr}")
+            return expr
+        repl_list, subs_list = [], []
+        repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
+        for old, new in repl_list:
+            parsed_expr = parsed_expr.replace(old, new)
+        # again sp.N is annoying
+        if len(subs_list) > 0:
+            parsed_expr = parsed_expr.subs(subs_list)
+        return parsed_expr
+
+    def _get_repl_list_rec(self, parsed_expr, repl_list:list=[], subs_list:list=[]):
+        """create a list of replacements: new functions and variables with their names as needed for the string in pyirk.
+        this differentiates between local (context) names (cm.local_var) and global names (I1234["Operator1"])
+        """
+        # replace operators
+        if hasattr(parsed_expr, "func") and isinstance(parsed_expr.func, sp.core.function.UndefinedFunction):
+            func = parsed_expr.func
+            if func.name in self.d["items"].keys():
+                repl_list.append((func, sp.Function(self.build_reference(func.name))))
+            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
+            elif func.name.replace("_", " ") in self.d["items"].keys():
+                repl_list.append((func, sp.Function(self.build_reference(func.name.replace("_", " ")))))
+            else:
+                repl_list.append((func, sp.Function(f"cm.{func.name}")))
+        # replace free variables
+        elif isinstance(parsed_expr, sp.Symbol):
+            if parsed_expr.name in self.d["items"].keys():
+                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name))))
+            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
+            elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
+                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
+            else:
+                subs_list.append((parsed_expr, sp.Symbol(f"cm.{parsed_expr.name}")))
+        # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
+        if hasattr(parsed_expr, "args"):
+            for subexpr in parsed_expr.args:
+                # traverse the tree
+                repl_list, subs_list = self._get_repl_list_rec(subexpr, repl_list, subs_list)
+                # elif isinstance(subexpr, sp.Symbol):
+                #     subs_list.append((subexpr, sp.var(f"cm.{subexpr.name}")))
+        return repl_list, subs_list
+
     def add_relation_inplace(self, d:dict, key:str, value:str):
-        """add a relation between subject an object to a given dict (inplace)
+        """add a relation between subject and object to a given dict (inplace)
 
         Args:
             d (dict): the dict in which the subject resides
             key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
         """
+        # try type conversion in case of literals (numbers) -> will be pr
+        try:
+            value = int(value)
+        except:
+            try:
+                value = float(value)
+            except:
+                pass
+
         self.interpr = self.get_rel_dict_key_interpreter()
         if key in self.interpr.keys():
             relation = self.d["relations"][self.interpr[key]]
@@ -675,7 +782,6 @@ class ConversionManager:
             dict: difference dictionary
         """
         dbg = 0 # a counter to make sure every change in dicts is considered, since only some cases are implemented
-        # todo does this still work with other removed?
         current_dict = {"items": {}, "relations": {}}
         if "iterable_item_added" in diff.keys():
             for ikey, ivalue in diff["iterable_item_added"].items():
@@ -809,7 +915,7 @@ class ConversionManager:
 
         try:
             import pyirk as p
-            ct_path = os.path.join(p.BASE_DIR, "control_theory1.py")
+            ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
         except:
             ct_path = ""
 
@@ -865,7 +971,11 @@ class ConversionManager:
                         if not type(vv) == list:
                             vv = [vv]
                         for vvv in vv:
-                            out.append(f'cm.new_relation(cm.{key}, {self.build_reference(self.interpr[kk])}, cm.{vvv})')
+                            if isinstance(vvv, Real):
+                                obj_str = f"{vvv}"
+                            else:
+                                obj_str = f"cm.{vvv}"
+                            out.append(f'cm.new_relation(cm.{key}, {self.build_reference(self.interpr[kk])}, {obj_str})')
         return out
 
     def render_math_relation(self, eq_dict):
@@ -882,11 +992,11 @@ class ConversionManager:
             context["rsgn"] = f'"{eq_dict["rel_sign"]}"'
 
         if "lhs_formal" in eq_dict.keys():
-            context["lhs_formal"] = eq_dict["lhs_formal"]
+            context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"])
         elif "lhs_source" in eq_dict.keys():
             context["lhs_source"] = eq_dict["lhs_source"]
         if "rhs_formal" in eq_dict.keys():
-            context["rhs_formal"] = eq_dict["rhs_formal"]
+            context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"])
         elif "rhs_source" in eq_dict.keys():
             context["rhs_source"] = eq_dict["rhs_source"]
         res = render_template("math_relation_template.py", context)
