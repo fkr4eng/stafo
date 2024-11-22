@@ -240,8 +240,6 @@ class ConversionManager:
     def add_new_item(self, d, label, additional_relations:dict={}, auto_keys=False):
         if label not in d["items"].keys():
             key = self.item_keys.pop()
-            if auto_keys:
-                key = key.replace("I", "Ia")
             d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
             for k, v in additional_relations.items():
                 self.add_relation_inplace(d["items"][label], k, v)
@@ -506,7 +504,7 @@ class ConversionManager:
                 type = "mathematical relation"
                 item_name = f"math_relation_{i}"
             lines = self.get_sub_content(self.lines[i+1:])
-            key = self.item_keys.pop().replace("I", "Ia")
+            key = self.item_keys.pop()
             eq_dict = {
                 "type": type,
                 "key": key,
@@ -517,7 +515,7 @@ class ConversionManager:
                     res = re.findall(pattern, l)
                     if res:
                         if name == "reference":
-                            self.eq_reference_dict[self.strip(res[0])] = key
+                            self.eq_reference_dict[self.strip(res[0])] = {"key": key, "statement_name": self.new_item_name}
                         elif "formal" in name:
                             # here we need to be careful, since operators might have spaces in their name. These need
                             # to be converted to not mess with the equation parser
@@ -555,6 +553,8 @@ class ConversionManager:
                     # is passed from one scope to the next. In order to still differentiate "dict_ass - dict_set",
                     # the temp_dict is copied
                     temp_dict = copy.deepcopy(temp_dict)
+                    # pass this item name down the recursion chain to the point where equations are added so we can find them later
+                    self.new_item_name = new_item_name + "__" + f"formal_{formal[0]}"
                     temp_dict = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i+ii+2, temp_dict)
                     additional_context[f"formal_{formal[0]}"] = temp_dict
             # now differentiate between the dicts
@@ -569,6 +569,8 @@ class ConversionManager:
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
             d = self.add_new_item(d, new_item_name, additional_context, auto_keys=auto_keys)
+            # this should not be used any other way, but just to be sure, reset this
+            self.new_item_name = None
         elif len(explanation) > 0:
             additional_content = self.get_sub_content(self.lines[i+1:])
             for ii, l in enumerate(additional_content):
@@ -584,6 +586,27 @@ class ConversionManager:
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2, d)
+                    # first check for some special relation that require special attention
+                    # todo having this explicite relation name here is very unelegant, pls change
+                    if k == "is associated to":
+                        # this relation should be symmetric so we check for that both cases in input
+                        # this is used to relate equation to items, we check if this is the case and modify subj/obj
+                        key_to_local_item = self.get_local_item_dict_key_interpreter(d)
+                        # if arg1 is the reference obj, we need to find the correspondig item and add the relation
+                        if arg1 in self.eq_reference_dict.keys():
+                            eq_key = self.eq_reference_dict[arg1]["key"]
+                            stm_name, scope = self.eq_reference_dict[arg1]["statement_name"].split("__")
+                            # we are still in the same scope as the equation -> trivial
+                            if eq_key in key_to_local_item.keys():
+                                arg1 = key_to_local_item[eq_key]
+                            # we try to ref a eq from outside its scope -> hard
+                            # todo this might fail if statements are nested
+                            else:
+                                inter = self.get_local_item_dict_key_interpreter(self.d["items"][stm_name][scope])
+                                arg1 = inter[eq_key]
+                        # if arg2 is the ref obj. we just put the key as the statment obj -> will surely exist in namespace :)
+                        if arg2 in self.eq_reference_dict.keys():
+                            arg2 = self.eq_reference_dict[arg2]["key"]
                     # instance of
                     if v["key"] == "R4":
                         self.add_new_item(d, arg1, {"R4": arg2}, auto_keys=auto_keys)
@@ -598,9 +621,13 @@ class ConversionManager:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
                         elif arg1 in d["relations"]:
                             self.add_relation_inplace(d["relations"][arg1], v["key"], arg2)
+                        # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
+                        elif arg1 in self.d["items"]:
+                            self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2)
+                        elif arg1 in self.d["relations"]:
+                            self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2)
                         else:
                             raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
-                        # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
 
                     break
                 # relations of structure arg1 rel.
@@ -811,10 +838,20 @@ class ConversionManager:
         return rel_dict
 
     def get_item_dict_key_interpreter(self):
-        """create a dict for the items that can be addressed by pyirk keys (I1)
+        """create a dict for the items that can be addressed by pyirk keys (I1234)
         to get the long (and possibly different) literal key in self.d["items"]"""
         rel_dict = {}
         for k,v in self.d["items"].items():
+            rel_dict[v["key"]] = k
+        return rel_dict
+
+    def get_local_item_dict_key_interpreter(self, d):
+        """create a dict for the items that can be addressed by pyirk keys (I1234)
+        to get the long (and possibly different) literal key in d["items"]
+        this is used for the local dict inside scopes
+        """
+        rel_dict = {}
+        for k,v in d["items"].items():
             rel_dict[v["key"]] = k
         return rel_dict
 
@@ -933,7 +970,7 @@ class ConversionManager:
                     res = self.render_math_relation(value)
                     for l in res.split("\n"):
                         # adapt equation to context manager
-                        l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
+                        # l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
                         if len(l) > 0 and not "snippet" in l:
                             out.append(l)
                 else:
@@ -960,7 +997,12 @@ class ConversionManager:
                         if not type(vv) == list:
                             vv = [vv]
                         for vvv in vv:
+                            # some exceptions when not to add cm.
+                            # in case of literals (numbers)
                             if isinstance(vvv, Real):
+                                obj_str = f"{vvv}"
+                            # in case of equation references (global item names)
+                            elif re.findall(r"I\d\d\d\d", vvv):
                                 obj_str = f"{vvv}"
                             else:
                                 obj_str = f"cm.{vvv}"

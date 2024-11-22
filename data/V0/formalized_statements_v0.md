@@ -153,6 +153,8 @@
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
             - reference: 'eq:übertragungsglied_definition'
         - 'eq:übertragungsglied_definition' is associated to 'Übertragungsglied'
+        - 'Übertragungsglied' is associated to 'eq:übertragungsglied_definition'
+
 
 - // I am not sure if I should introduce a new statement type 'There is a formula' to model the second part of the equation, i.e.  '\(f_\nu = \varphi(f_u)\)' after 'bzw'.
 
