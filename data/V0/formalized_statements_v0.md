@@ -1,3 +1,35 @@
+- // manually added (1)
+- There is a class: 'set'.
+- There is a class: 'real number'.
+- There is a class: 'integer number'.
+- There is a class: 'complex number'.
+
+- There is a relation: 'is subset of'
+- The type of argument1 of 'is subset of' is 'set'
+- The result type of 'is subset of' is 'set'
+
+- There is a class: 'real coordinate space'
+- 'real coordinate space' 'is an instance of' 'set'
+
+- There is a class: 'set of real numbers'
+- 'set of real numbers' 'is an instance of' 'set'.
+- There is a class: 'set of complex numbers'
+- 'set of complex numbers' 'is an instance of' 'set'.
+
+- There is a relation: 'has dimension'
+- The type of argument1 of 'has dimension' is 'real coordinate space'
+- The result type of 'has dimension' is 'integer number'
+
+- 'set of real numbers' 'is subset of' 'real coordinate space'
+- 'set of real numbers' 'has dimension' 1
+
+- There is a unary operator: 'Zeitableitung'
+- 'Zeitableitung' has the alternative label 'time derivative'
+- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
+- The result type of 'Zeitableitung' is 'reellwertige Funktion'
+- 'Zeitableitung' is associated to 'Zeitbereich'
+
+
 - // snippet(1)
 - New section: 'Elementare Grundbegriffe'
 - New subsection: 'Das Grundanliegen der Regelungstechnik'
@@ -67,35 +99,7 @@
 
 
 
-- // manually added (1)
-- There is a class: 'set'.
-- There is a class: 'real number'.
-- There is a class: 'integer number'.
-- There is a class: 'complex number'.
 
-- There is a relation: 'is subset of'
-- The type of argument1 of 'is subset of' is 'set'
-- The result type of 'is subset of' is 'set'
-
-- There is a class: 'set of real numbers'
-- 'set of real numbers' 'is an instance of' 'set'.
-- There is a class: 'set of complex numbers'
-- 'set of complex numbers' 'is an instance of' 'set'.
-
-- There is a class: 'real coordinate space'
-- 'real coordinate space' 'is an instance of' 'set'
-- There is a relation: 'has dimension'
-- The type of argument1 of 'has dimension' is 'real coordinate space'
-- The result type of 'has dimension' is 'integer number'
-
-- 'set of real numbers' 'is subset of' 'real coordinate space'
-- 'set of real numbers' 'has dimension' 1
-
-- There is a unary operator: 'Zeitableitung'
-- 'Zeitableitung' has the alternative label 'time derivative'
-- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
-- The result type of 'Zeitableitung' is 'reellwertige Funktion'
-- 'Zeitableitung' is associated to 'Zeitbereich'
 
 - // snippet(14)
 - There is a class: 'Funktion'.
@@ -257,6 +261,7 @@
 - 'Gewichtsfunktion' is a subclass of 'Funktion'
 - 'Gewichtsfunktion' has the alternative label 'impulse response'
 - 'Gewichtsfunktion' has the verbal description 'Das Übertragungsverhalten linearer Übertragungsglieder lässt sich eindeutig durch die sogenannte \emph{Gewichtsfunktion} charakterisieren.'
+- There is a class: 'lineares Übertragungsglied'
 - 'Gewichtsfunktion' is associated to 'lineares Übertragungsglied'
 - // I am not sure how to model the term 'Übertragungsverhalten'. It seems to be a property of 'lineares Übertragungsglied'. However, it is not clear to me what this property represents.
 - // I am not sure how to model the statement that the 'Gewichtsfunktion' characterizes the 'Übertragungsverhalten' uniquely.
@@ -367,6 +372,7 @@
 - // manually added (2)
 - There is a class: 'Coefficients'.
 - There is a class: 'set of coefficients'
+- 'set of coefficients' is a subclass of 'set'
 - There is a class: 'mathematical expression'
 - There is a relation: 'has coefficient set'
 - The type of argument1 of 'has coefficient set' is 'mathematical expression'
@@ -374,7 +380,6 @@
 - 'has coefficient set' is functional
 
 - // snippet(40)
-- There is a class: 'lineares Übertragungsglied'
 - 'lineares Übertragungsglied' is a subclass of 'Übertragungsglied'
 - 'lineares Übertragungsglied' has the property 'linear'
 - There is a general statement:

@@ -241,12 +241,14 @@ class ConversionManager:
         if label not in d["items"].keys():
             key = self.item_keys.pop()
             d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
-            for k, v in additional_relations.items():
-                self.add_relation_inplace(d["items"][label], k, v)
-            if not auto_keys:
-                self.entity_order.append(key)
         else:
-            print(f"label {label} already existed")
+            key = d["items"][label]["key"]
+        for k, v in additional_relations.items():
+            self.add_relation_inplace(d["items"][label], k, v)
+            if v == None:
+                del d["items"][label][k]
+        if not auto_keys:
+            self.entity_order.append(key)
         return d
 
     def add_new_rel(self, d, label, additional_relations:dict={}):
@@ -257,11 +259,11 @@ class ConversionManager:
                 "R1": label,
                 "render": f"""{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet}
-            for k, v in additional_relations.items():
-                self.add_relation_inplace(d["items"][label], k, v)
-            self.entity_order.append(key)
         else:
-            print(f"label {label} already existed")
+            key = d["relations"][label]["key"]
+        for k, v in additional_relations.items():
+            self.add_relation_inplace(d["relations"][label], k, v)
+        self.entity_order.append(key)
         return d
 
     def get_keys(self):
@@ -430,7 +432,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 430
+        self.stop_at_line = 251
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -609,10 +611,10 @@ class ConversionManager:
                             arg2 = self.eq_reference_dict[arg2]["key"]
                     # instance of
                     if v["key"] == "R4":
-                        self.add_new_item(d, arg1, {"R4": arg2}, auto_keys=auto_keys)
+                        self.add_new_item(d, arg1, {"R3": None, "R4": arg2}, auto_keys=auto_keys)
                     # subclass of
                     elif v["key"] == "R3":
-                        self.add_new_item(d, arg1, {"R3": arg2}, auto_keys=auto_keys)
+                        self.add_new_item(d, arg1, {"R3": arg2, "R4": None}, auto_keys=auto_keys)
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, auto_keys=auto_keys)
