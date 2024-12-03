@@ -9,16 +9,15 @@
 - The result type of 'is subset of' is 'set'
 
 - There is a class: 'real coordinate space'
-- 'real coordinate space' 'is an instance of' 'set'
-
-- There is a class: 'set of real numbers'
-- 'set of real numbers' 'is an instance of' 'set'.
-- There is a class: 'set of complex numbers'
-- 'set of complex numbers' 'is an instance of' 'set'.
+- 'real coordinate space' 'is a subclass of' 'set'
 
 - There is a relation: 'has dimension'
 - The type of argument1 of 'has dimension' is 'real coordinate space'
 - The result type of 'has dimension' is 'integer number'
+- There is a class: 'set of real numbers'
+
+- 'set of real numbers' 'is an instance of' 'set'.
+- 'set of complex numbers' 'is an instance of' 'set'.
 
 - 'set of real numbers' 'is subset of' 'real coordinate space'
 - 'set of real numbers' 'has dimension' 1
@@ -679,6 +678,7 @@
         - 'f' is an instance of 'reellwertige Funktion'
         - 'F' is an instance of 'komplexwertige Funktion'
         - 'i' is an instance of 'integer number'
+        - 't' is an instance of 'real number'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'Laplace Transformation'('höhere Zeitableitung'('f(t)', 'i'))
@@ -1064,7 +1064,6 @@
 
 - // snippet(75)
 - New subsection: 'Frequenzgang'
-- 'Frequenzgang' has the alternative label 'frequency response'
 
 - // snippet(76)
 - There is a class: 'lineare zeitinvariante Übertragungsglieder'
@@ -1715,8 +1714,6 @@
 - The result type of 'hat Ausgleichszeit' is 'Ausgleichszeit'
 - 'Wendepunkt' has the alternative label 'inflection point'
 - 'Wendepunkt' has the associated LaTeX notation '\(P\)'
-- 'Wendezeit' has the alternative label 'inflection time'
-- 'Wendezeit' has the associated LaTeX notation '\(T_w\)'
 
 - // snippet(110)
 - New subsection: 'Sprungantwort von nicht schwingungsfähigen, proportional wirkenden Strecken zweiter Ordnung'
@@ -1748,7 +1745,6 @@
 - There is an explanation:
     - verbal summary: 'Therefore, only the following parameters are of interest (cf. Figure \ref{fig:ermittlung_verzugszeit}):'
     - related to: 'Sprungantwort'
-- 'Wendezeit' has the verbal description: 'Die Zeit  \(T_w\), bei der die Ableitung der Sprungantwort ein Maximum hat.'
 - 'Verzugszeit' has the verbal description: 'Die Zeit  \(T_e\) vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse.'
 - // I am unsure how to model 'vom Beginn der Sprungantwort bis zum Schnittpunkt der an den Wendepunkt angelegten Tangente mit der Zeitachse'. It seems to be a geometrical definition, but it is not clear to me how to represent this.
 - 'Ausgleichszeit' has the verbal description: 'Durch die Schnittpunkte der Wendetangente mit der Zeitachse und der Geraden, die parallel zur Zeitachse durch den stationären Endwert läuft, ergibt sich eine Strecke. Deren Projektion auf die Zeitachse ergibt die Ausgleichszeit  \(T_b\).'
@@ -1861,11 +1857,7 @@
 - The type of argument1 of 'hat Abweichung im Beharrungszustand' is 'Regelgröße'.
 - The result type of 'hat Abweichung im Beharrungszustand' is 'Abweichung im Beharrungszustand'.
 - 'Überschwingweite' has the associated LaTeX notation '\(x_{m}\)'.
-- 'Überschwingweite' has the alternative label 'overshoot'.
 - 'Toleranzbereich' has the associated LaTeX notation '\(2\cdot\Delta x_{s}\)'.
-- 'Toleranzbereich' has the alternative label 'specified tolerance limit'.
-- 'Totzeit' has the associated LaTeX notation '\(T_t\)'.
-- 'Totzeit' has the alternative label 'dead-time'.
 - There is a class: 'Anregelzeit'.
 - 'Anregelzeit' has the alternative label 'control rise time'.
 - 'Anregelzeit' has the associated LaTeX notation '\(T_{cr}\)'.

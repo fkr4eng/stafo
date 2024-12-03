@@ -178,21 +178,6 @@ class ConversionManager:
             "verbal": re.compile(r"(?<=- verbal summary)(?::? )(.+?)(?=\.$|$)"),
         }
 
-    #     self.special_char_repl_container = Container()
-    #     self.special_char_repl_container.str_chars = ["-", " "]
-    #     self.special_char_repl_container.py_chars = [ "__", "_"]
-    #     # todo: What about when name has two spaces? -> prevent this!
-
-    # def convert_name_str_to_py(self, name):
-    #     for s_ch, p_ch in zip(self.special_char_repl_container.str_chars, self.special_char_repl_container.py_chars):
-    #         name = name.replace(s_ch, p_ch)
-    #     return name
-
-    # def convert_name_py_to_str(self, name):
-    #     for s_ch, p_ch in zip(self.special_char_repl_container.str_chars, self.special_char_repl_container.py_chars):
-    #         name = name.replace(p_ch, s_ch)
-    #     return name
-
     def strip(self, s):
         if isinstance(s, list):
             for i, v in enumerate(s):
@@ -247,7 +232,7 @@ class ConversionManager:
             self.add_relation_inplace(d["items"][label], k, v)
             if v == None:
                 del d["items"][label][k]
-        if not auto_keys:
+        if not auto_keys and key not in self.entity_order:
             self.entity_order.append(key)
         return d
 
@@ -263,7 +248,8 @@ class ConversionManager:
             key = d["relations"][label]["key"]
         for k, v in additional_relations.items():
             self.add_relation_inplace(d["relations"][label], k, v)
-        self.entity_order.append(key)
+        if key not in self.entity_order:
+            self.entity_order.append(key)
         return d
 
     def get_keys(self):
@@ -432,7 +418,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 251
+        self.stop_at_line = 436
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -442,7 +428,7 @@ class ConversionManager:
             return d
         # new class?
         elif len(new_class) > 0:
-            self.add_new_item(d, self.strip(new_class[0]), {"R4": 'p.I12["mathematical object"]'}, auto_keys=auto_keys)
+            self.add_new_item(d, self.strip(new_class[0]), {"R3": 'p.I12["mathematical object"]'}, auto_keys=auto_keys)
         # new property?
         elif len(new_property) > 0:
             self.add_new_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'}, auto_keys=auto_keys)
@@ -535,7 +521,7 @@ class ConversionManager:
                 additional_context = {"R4": 'p.I15["implication proposition"]', "comments": []}
                 new_item_name = f"if-then-statement_{i}"
             elif len(general_statement) > 0:
-                additional_context = {"R4": 'p.I14["general mathematical proposition"]', "comments": []}
+                additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
                 new_item_name = f"general-statement_{i}"
             additional_content = self.get_sub_content(self.lines[i+1:])
             temp_dict = {"items": {}, "relations": {}}
@@ -566,7 +552,13 @@ class ConversionManager:
             if len(dict_list) > 1:
                 diff_list = []
                 for index in range(len(dict_list)-1):
-                    diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1]))
+                    # see https://zepworks.com/deepdiff/current/optimizations.html#threshold-to-diff-deeper-label
+                    # this SEEMS to prevent new dict items be classified as values changed which fucks up self.get_diffed_dict
+                    dd0 = deepdiff.DeepDiff(dict_list[index], dict_list[index+1], threshold_to_diff_deeper=0)
+                    dd = deepdiff.DeepDiff(dict_list[index], dict_list[index+1])
+                    if dd0 != dd:
+                        1
+                    diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1], threshold_to_diff_deeper=0))
                 for index, diff in enumerate(diff_list):
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
@@ -704,7 +696,7 @@ class ConversionManager:
             parsed_expr = sp.parse_expr(expr)
         except:
             print(f"sympy parsing failed for {expr}")
-            return expr
+            return self.get_expr_from_lookup(expr)
         repl_list, subs_list = [], []
         repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
         for old, new in repl_list:
@@ -784,6 +776,13 @@ class ConversionManager:
             d[key] = value
 
 
+    def get_expr_from_lookup(self, eq):
+        # this is not a static dict, since it needs dynamic references
+        if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
+            s = self.build_reference("s")
+            return f"""cm.s**cm.i * cm.F({s}) - sp.Sum({s}**(cm.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm.f, sp.var('j'))(0), (sp.var('j'), 0, cm.i-1))"""
+        else:
+            return '"' + eq + '"'
 
 
         # for i, v in d["items"].items():
@@ -820,8 +819,14 @@ class ConversionManager:
                 res = re.findall(key_pattern, ikey)
                 set_nested_value(current_dict, res, get_nested_value(diff.t2, res))
             dbg += 1
-        # so far this only happens in snippet 81, with 3 equations in premise and 3 equations in assertion
+
+        if "dictionary_item_removed" in diff.keys():
+            # since we start with an empty dict anyways, we dont need to do anything here
+            dbg += 1
+
+        # old: so far this only happens in snippet 81, with 3 equations in premise and 3 equations in assertion
         if "values_changed" in diff.keys():
+            raise DeprecationWarning("since the introduction of kwarg threshold_to_diff_deeper=0, this should not occur anymore.")
             for ikey, ivalue in diff["values_changed"].items():
                 key_pattern = re.compile(r"(?<=\[').+?(?='\])")
                 res = re.findall(key_pattern, ikey)
@@ -881,16 +886,28 @@ class ConversionManager:
                 else:
                     quotes = ""
                 # R22 rels are not lists, for easier processing, put them in a list
-                if not type(value) == list:
-                    value = [value]
-                for v in value:
-                    res = re.findall(r"[R|I]\d\d\d\d", str(v))
-                    # if relation expects an item (or relation), but its just a literal
+                if not type(value) == list or len(value) == 1:
+                    if type(value) == list:
+                        value = value[0]
+                    res = re.findall(r"[R|I]\d\d\d\d", str(value))
                     if not quotes and len(res) == 0:
                         # then maybe the object of rel was set before the item was introduced (order in FNL)
-                        if v in self.d["items"].keys():
-                            v = self.build_reference(v)
-                    context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={quotes}{v}{quotes}')
+                        if value in self.d["items"].keys():
+                            value = self.build_reference(value)
+                    context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={quotes}{value}{quotes}')
+                # handle multiple objects -> list
+                else:
+                    l = []
+                    for v in value:
+                        res = re.findall(r"[R|I]\d\d\d\d", str(v))
+                        # if relation expects an item (or relation), but its just a literal
+                        if not quotes and len(res) == 0:
+                            # then maybe the object of rel was set before the item was introduced (order in FNL)
+                            if v in self.d["items"].keys():
+                                v = self.build_reference(v)
+                        l.append(v)
+                        # l.append(f"{quotes}{v}{quotes}")
+                    context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={l}')
         return context
 
 
@@ -990,9 +1007,11 @@ class ConversionManager:
                 if "R4" in value.keys():
                     out.insert(insertion_index, f'cm.new_var({key}=p.uq_instance_of({value["R4"]}))')
                     insertion_index += 1
-                else:
-                    out.insert(insertion_index, f'cm.new_var({key}=p.uq_instance_of(p.I12["mathematical object"]))')
-                    insertion_index += 1
+                # Note: if there is no R4 relation, the item must be already existing in cm.
+                # todo find a way to verify the existance
+                # else:
+                #     out.insert(insertion_index, f'cm.new_var({key}=p.uq_instance_of(p.I12["mathematical object"]))')
+                #     insertion_index += 1
                 for kk, vv in value.items():
                     number = re.findall(r"(?<=R)\d+", kk)
                     if number and int(number[0]) > 4: # just exclude R1-R4 here
@@ -1008,7 +1027,7 @@ class ConversionManager:
                                 obj_str = f"{vvv}"
                             else:
                                 obj_str = f"cm.{vvv}"
-                            out.append(f'cm.new_relation(cm.{key}, {self.build_reference(self.interpr[kk])}, {obj_str})')
+                            out.append(f'cm.new_rel(cm.{key}, {self.build_reference(self.interpr[kk])}, {obj_str})')
         return out
 
     def render_math_relation(self, eq_dict):

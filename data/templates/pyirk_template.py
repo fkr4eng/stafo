@@ -1,4 +1,5 @@
 import pyirk as p
+import sympy as sp
 
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
