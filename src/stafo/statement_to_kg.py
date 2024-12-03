@@ -548,16 +548,12 @@ class ConversionManager:
             # now differentiate between the dicts
             formal_keys = [key for key in additional_context.keys() if "formal" in key]
             dict_list = [additional_context[key] for key in formal_keys]
-            key_pattern = re.compile(r"(?<=\[').+?(?='\])")
             if len(dict_list) > 1:
                 diff_list = []
                 for index in range(len(dict_list)-1):
                     # see https://zepworks.com/deepdiff/current/optimizations.html#threshold-to-diff-deeper-label
-                    # this SEEMS to prevent new dict items be classified as values changed which fucks up self.get_diffed_dict
-                    dd0 = deepdiff.DeepDiff(dict_list[index], dict_list[index+1], threshold_to_diff_deeper=0)
-                    dd = deepdiff.DeepDiff(dict_list[index], dict_list[index+1])
-                    if dd0 != dd:
-                        1
+                    # this SEEMS to prevent new dict items from being classified as values changed which fucks up
+                    # the current workings of self.get_diffed_dict. Also this seems to work more intuitively
                     diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1], threshold_to_diff_deeper=0))
                 for index, diff in enumerate(diff_list):
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
@@ -582,17 +578,17 @@ class ConversionManager:
                     arg2 = self.build_reference(arg2, d)
                     # first check for some special relation that require special attention
                     # todo having this explicite relation name here is very unelegant, pls change
-                    if k == "is associated to":
-                        # this relation should be symmetric so we check for that both cases in input
+                    if k == "is associated to" or k == "hat Gleichungsreferenz":
+                        # this relation should be symmetric so we check for both cases
                         # this is used to relate equation to items, we check if this is the case and modify subj/obj
-                        key_to_local_item = self.get_local_item_dict_key_interpreter(d)
+                        key_to_local_item_dict = self.get_local_item_dict_key_interpreter(d)
                         # if arg1 is the reference obj, we need to find the correspondig item and add the relation
                         if arg1 in self.eq_reference_dict.keys():
                             eq_key = self.eq_reference_dict[arg1]["key"]
                             stm_name, scope = self.eq_reference_dict[arg1]["statement_name"].split("__")
                             # we are still in the same scope as the equation -> trivial
-                            if eq_key in key_to_local_item.keys():
-                                arg1 = key_to_local_item[eq_key]
+                            if eq_key in key_to_local_item_dict.keys():
+                                arg1 = key_to_local_item_dict[eq_key]
                             # we try to ref a eq from outside its scope -> hard
                             # todo this might fail if statements are nested
                             else:
@@ -755,9 +751,9 @@ class ConversionManager:
             except:
                 pass
 
-        self.interpr = self.get_rel_dict_key_interpreter()
-        if key in self.interpr.keys():
-            relation = self.d["relations"][self.interpr[key]]
+        self.rel_interpr = self.get_rel_dict_key_interpreter()
+        if key in self.rel_interpr.keys():
+            relation = self.d["relations"][self.rel_interpr[key]]
 
             # relation is functional: only one object, might be overwriting old one
             if "R22" in relation.keys() and relation["R22"] == True:
@@ -894,7 +890,7 @@ class ConversionManager:
                         # then maybe the object of rel was set before the item was introduced (order in FNL)
                         if value in self.d["items"].keys():
                             value = self.build_reference(value)
-                    context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={quotes}{value}{quotes}')
+                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
                 # handle multiple objects -> list
                 else:
                     l = []
@@ -907,15 +903,15 @@ class ConversionManager:
                                 v = self.build_reference(v)
                         l.append(v)
                         # l.append(f"{quotes}{v}{quotes}")
-                    context["rel"].append(f'{self.d["relations"][self.interpr[key]]["render"]}={l}')
+                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={l}')
         return context
 
 
     def render(self):
-        self.interpr = self.get_rel_dict_key_interpreter()
-        self.item_inter = self.get_item_dict_key_interpreter()
-        self.key_to_name = dict(self.interpr)
-        self.key_to_name.update(self.item_inter)
+        self.rel_interpr = self.get_rel_dict_key_interpreter()
+        self.item_interpr = self.get_item_dict_key_interpreter()
+        self.key_to_name = dict(self.rel_interpr)
+        self.key_to_name.update(self.item_interpr)
         output = ""
         count = 0
 
@@ -991,7 +987,7 @@ class ConversionManager:
                         # adapt equation to context manager
                         # l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
                         if len(l) > 0 and not "snippet" in l:
-                            out.append(l)
+                            out.insert(insertion_index, l)
                 else:
                     raise TypeError()
             elif "OR" in key or "AND" in key:
@@ -1005,7 +1001,8 @@ class ConversionManager:
             else:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
-                    out.insert(insertion_index, f'cm.new_var({key}=p.uq_instance_of({value["R4"]}))')
+                    # todo decide uq_instance_of vs instance_of
+                    out.insert(insertion_index, f'cm.new_var({key}=p.instance_of({value["R4"]}))')
                     insertion_index += 1
                 # Note: if there is no R4 relation, the item must be already existing in cm.
                 # todo find a way to verify the existance
@@ -1027,7 +1024,7 @@ class ConversionManager:
                                 obj_str = f"{vvv}"
                             else:
                                 obj_str = f"cm.{vvv}"
-                            out.append(f'cm.new_rel(cm.{key}, {self.build_reference(self.interpr[kk])}, {obj_str})')
+                            out.append(f'cm.new_rel(cm.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
         return out
 
     def render_math_relation(self, eq_dict):
