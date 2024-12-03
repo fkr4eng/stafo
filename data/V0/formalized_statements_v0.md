@@ -22,12 +22,6 @@
 - 'set of real numbers' 'is subset of' 'real coordinate space'
 - 'set of real numbers' 'has dimension' 1
 
-- There is a unary operator: 'Zeitableitung'
-- 'Zeitableitung' has the alternative label 'time derivative'
-- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
-- The result type of 'Zeitableitung' is 'reellwertige Funktion'
-- 'Zeitableitung' is associated to 'Zeitbereich'
-
 
 - // snippet(1)
 - New section: 'Elementare Grundbegriffe'
@@ -63,6 +57,7 @@
 - There is a class: 'Übertragungsglied'.
 
 - // snippet(10)
+- There is a class: 'Zeitlicher Verlauf'
 - There is a class: 'Signal'.
 - There is a class: 'Eingangssignal'.
 - 'Eingangssignal' is a subclass of 'Signal'.
@@ -80,7 +75,6 @@
 
 
 - // snippet(11)
-- There is a class: 'Zeitlicher Verlauf'
 - There is a class: 'Größe'
 - 'Größe' has the alternative label 'physical quantity'
 - There is a class: 'Variable'
@@ -165,7 +159,6 @@
 - There is a class: 'Operator'
 - 'Operator' has the verbal description: 'Ein \\emph{Operator} ist eine Abbildung von einem Funktionenraum in einen anderen Funktionenraum.'
 - // I am not sure how to model 'Funktionenraum'. It seems to be a set of functions. However, I do not know how to represent this.
-- 'Operator' is applicable to 'Funktion'
 - The type of argument1 of 'Operator' is 'Funktion'.
 - The result type of 'Operator' is 'Funktion'.
 - // I am not sure if this is the correct way to model the fact that an 'Operator' maps a 'Funktion' to another 'Funktion'.
@@ -256,11 +249,11 @@
 - New subsection: 'Gewichts- und Übergangsfunktion'
 
 - // snippet(30)
+- There is a class: 'lineares Übertragungsglied'
 - There is a class: 'Gewichtsfunktion'
 - 'Gewichtsfunktion' is a subclass of 'Funktion'
 - 'Gewichtsfunktion' has the alternative label 'impulse response'
 - 'Gewichtsfunktion' has the verbal description 'Das Übertragungsverhalten linearer Übertragungsglieder lässt sich eindeutig durch die sogenannte \emph{Gewichtsfunktion} charakterisieren.'
-- There is a class: 'lineares Übertragungsglied'
 - 'Gewichtsfunktion' is associated to 'lineares Übertragungsglied'
 - // I am not sure how to model the term 'Übertragungsverhalten'. It seems to be a property of 'lineares Übertragungsglied'. However, it is not clear to me what this property represents.
 - // I am not sure how to model the statement that the 'Gewichtsfunktion' characterizes the 'Übertragungsverhalten' uniquely.
@@ -293,13 +286,13 @@
 - // I am not sure how to model the relation between this equation and the 'Faltung' operator. It seems that the equation defines the result of the 'Faltung' operator. However, it is not clear to me how to represent this.
 
 - // snippet(33)
+- 'Einheitssprung' is an instance of 'Eingangssignal'.
 - There is a class: 'Übergangsfunktion'
 - 'Übergangsfunktion' is a subclass of 'Funktion'
 - 'Übergangsfunktion' has the alternative label 'Einheitssprungantwort'
 - 'Übergangsfunktion' has the alternative label 'step response'
 - 'Übergangsfunktion' has the verbal description 'Etwas anschaulicher ist die \emph{Übergangsfunktion} des Übertragungsgliedes, auch \emph{Einheitssprungantwort} des Übertragungsgliedes als Reaktion auf einen Sprung des Eingangs von 0 auf 1 zum Zeitpunkt  \(t = 0\) (sog.\,\emph{Einheitssprung}) genannt.'
 - // I am not sure how to model 'als Reaktion auf einen Sprung des Eingangs von 0 auf 1 zum Zeitpunkt \(t = 0\)'. It seems to be a condition. However, it is not clear to me how to represent this condition.
-- 'Einheitssprung' is an instance of 'Eingangssignal'.
 - 'Einheitssprung' has the alternative label 'unit step'
 - 'Einheitssprung' has the verbal description 'Sprung des Eingangs von 0 auf 1 zum Zeitpunkt \(t = 0\)'
 - 'Übergangsfunktion' has input signal 'Einheitssprung'
@@ -432,6 +425,11 @@
 - The result type of 'hat erweiterte Koeffizientenmatrix' is 'Matrix'
 - 'hat erweiterte Koeffizientenmatrix' is functional
 
+- There is a unary operator: 'Zeitableitung'
+- 'Zeitableitung' has the alternative label 'time derivative'
+- The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
+- The result type of 'Zeitableitung' is 'reellwertige Funktion'
+- 'Zeitableitung' is associated to 'Zeitbereich'
 
 - // snippet(41)
 - There is a general statement:
@@ -1025,6 +1023,7 @@
             - source code of right hand side: '\(\lim_{s \to \infty} s X(s)\)'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent limits.
             - reference: 'eq:Anfangswertsatz'
+- There is a class: 'Anfangswertsatz'
 - 'eq:Anfangswertsatz' is associated to 'Anfangswertsatz'
 
 
@@ -1060,6 +1059,7 @@
             - source code of right hand side: '\(\lim_{s \to 0} s E(s)\)'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent limits.
             - reference: 'eq:Endwertsatz'
+- There is a class: 'Endwertsatz'
 - 'eq:Endwertsatz' is associated to 'Endwertsatz'
 
 - // snippet(75)
@@ -1296,7 +1296,7 @@
         - 't1' is an instance of 'real number'
     - formalized premise:
         - // I am unsure how to model 'die Sprungantwort zunächst entgegengesetzt der Richtung des Eingangssprunges läuft, dann aber das Vorzeichen wieder wechselt'. It seems to describe the qualitative behavior of the step response, but it is not clear to me how to represent this.
-        - // TODO: how to model this correctly? OR seems wrong, inequation?
+        - // TODO: how to model this correctly? or seems wrong, inequation?
         - OR
             - AND
                 - There is a mathematical relation:
@@ -1819,6 +1819,7 @@
             - formalized left hand side: 'tf1'
             - formalized right hand side: 'tf2' * 'tf3'
 - There is a class: 'Hintereinanderschaltung'
+- There is a class: 'Multiplication'
 - 'Hintereinanderschaltung' is associated to 'Multiplication'
 
 - // snippet(115)

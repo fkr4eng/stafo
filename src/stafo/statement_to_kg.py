@@ -33,7 +33,7 @@ class ConversionManager:
 
     def step1(self):
 
-        self.applicable_to_key = "R3041"
+        self.applicable_to_key = "R78"
         # {items:
             # {"set":
             #   {"key": I1234, "R2": ..., "R4": ...},
@@ -424,7 +424,7 @@ class ConversionManager:
         if len(comment) > 0:
             return d
         elif len(new_section) > 0:
-            print(f"skip section mark line {i}, {line}")
+            # print(f"skip section mark line {i}, {line}")
             return d
         # new class?
         elif len(new_class) > 0:
@@ -715,7 +715,7 @@ class ConversionManager:
             elif func.name.replace("_", " ") in self.d["items"].keys():
                 repl_list.append((func, sp.Function(self.build_reference(func.name.replace("_", " ")))))
             else:
-                repl_list.append((func, sp.Function(f"cm.{func.name}")))
+                repl_list.append((func, sp.Function(f"cm1.{func.name}")))
         # replace free variables
         elif isinstance(parsed_expr, sp.Symbol):
             if parsed_expr.name in self.d["items"].keys():
@@ -724,7 +724,7 @@ class ConversionManager:
             elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
                 subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
             else:
-                subs_list.append((parsed_expr, sp.Symbol(f"cm.{parsed_expr.name}")))
+                subs_list.append((parsed_expr, sp.Symbol(f"cm1.{parsed_expr.name}")))
         # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
         if hasattr(parsed_expr, "args"):
             for subexpr in parsed_expr.args:
@@ -776,7 +776,7 @@ class ConversionManager:
         # this is not a static dict, since it needs dynamic references
         if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
             s = self.build_reference("s")
-            return f"""cm.s**cm.i * cm.F({s}) - sp.Sum({s}**(cm.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm.f, sp.var('j'))(0), (sp.var('j'), 0, cm.i-1))"""
+            return f"""cm1.s**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm1.f, sp.var('j'))(0), (sp.var('j'), 0, cm1.i-1))"""
         else:
             return '"' + eq + '"'
 
@@ -930,7 +930,7 @@ class ConversionManager:
             count += 1
 
             if "equivalence-statement_" in name or "if-then-statement_" in name or "general-statement_" in name:
-                context = {"id": self.build_reference(name)}
+                context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
                 else: context["snip"] = ""
@@ -940,17 +940,17 @@ class ConversionManager:
                 if "formal_set" in v.keys():
                     context["setting"] = self.get_statement_context_recursively(v[f"formal_set"])
                 elif "source_set" in v.keys():
-                    context["setting"] = [f'cm.create_expression({v["source_set"]})']
+                    context["setting"] = [f'cm1.create_expression({v["source_set"]})']
 
                 if "formal_pre" in v.keys():
                     context["premise"] = self.get_statement_context_recursively(v[f"formal_pre"])
                 elif "source_pre" in v.keys():
-                    context["premise"] = [f'cm.create_expression({v["source_pre"]})']
+                    context["premise"] = [f'cm1.create_expression({v["source_pre"]})']
 
                 if "formal_ass" in v.keys():
                     context["assertion"] = self.get_statement_context_recursively(v[f"formal_ass"])
                 elif "source_ass" in v.keys():
-                    context["assertion"] = [f'cm.create_expression({v["source_ass"]})']
+                    context["assertion"] = [f'cm1.create_expression({v["source_ass"]})']
                 res = render_template("statement_template.py", context)
                 output += res + "\n\n"
 
@@ -973,7 +973,7 @@ class ConversionManager:
 
     # def get_statement_context(self, subdict, part):
 
-    def get_statement_context_recursively(self, subdict:dict):
+    def get_statement_context_recursively(self, subdict:dict, recursion_depth=1):
         # output
         out = []
         # insertion index makes sure that item creation happens before relations are added, that reference said items
@@ -982,33 +982,31 @@ class ConversionManager:
             # if key == "other":
             if "equation" in key or "math_relation" in key:
                 if value["type"] in ["equation", "mathematical relation"]:
-                    res = self.render_math_relation(value)
+                    res = self.render_math_relation(value, recursion_depth)
                     for l in res.split("\n"):
                         # adapt equation to context manager
-                        # l = re.sub(r".+? = p.new_mathematical_relation", r"cm.new_mathematical_relation", l)
                         if len(l) > 0 and not "snippet" in l:
                             out.insert(insertion_index, l)
                 else:
                     raise TypeError()
-            elif "OR" in key or "AND" in key:
-                res = self.get_statement_context_recursively(subdict["items"][key])
-                s = "["
-                for r in res:
-                    s += r + ", "
-                    s.replace("\n", "") # remove \n from r
-                op = key.split("_")[0]
-                out.append(f"cm.{op}({s[:-2]}])")  # remove last ", "
+            elif "OR" in key or "AND" in key or "NOT" in key:
+                res = self.get_statement_context_recursively(subdict["items"][key], recursion_depth+1)
+                context = {
+                    "content": res,
+                    "logic_operator": key.split("_")[0],
+                    "rd": recursion_depth,
+                    "new_rd": recursion_depth + 1,
+                    "indent": " " * 4 * recursion_depth,
+                    }
+                out.append(render_template("and_or_not_template.py", context))
             else:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
                     # todo decide uq_instance_of vs instance_of
-                    out.insert(insertion_index, f'cm.new_var({key}=p.instance_of({value["R4"]}))')
+                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]}))')
                     insertion_index += 1
                 # Note: if there is no R4 relation, the item must be already existing in cm.
                 # todo find a way to verify the existance
-                # else:
-                #     out.insert(insertion_index, f'cm.new_var({key}=p.uq_instance_of(p.I12["mathematical object"]))')
-                #     insertion_index += 1
                 for kk, vv in value.items():
                     number = re.findall(r"(?<=R)\d+", kk)
                     if number and int(number[0]) > 4: # just exclude R1-R4 here
@@ -1023,12 +1021,12 @@ class ConversionManager:
                             elif re.findall(r"I\d\d\d\d", vvv):
                                 obj_str = f"{vvv}"
                             else:
-                                obj_str = f"cm.{vvv}"
-                            out.append(f'cm.new_rel(cm.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
+                                obj_str = f"cm1.{vvv}"
+                            out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
         return out
 
-    def render_math_relation(self, eq_dict):
-        context = {"key": eq_dict["key"], "rel": []}
+    def render_math_relation(self, eq_dict, recursion_depth):
+        context = {"key": eq_dict["key"], "rel": [], "rd": recursion_depth}
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
         else: context["snip"] = ""
