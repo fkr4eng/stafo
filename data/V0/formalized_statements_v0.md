@@ -22,7 +22,6 @@
 - 'set of real numbers' 'is subset of' 'real coordinate space'
 - 'set of real numbers' 'has dimension' 1
 
-
 - // snippet(1)
 - New section: 'Elementare Grundbegriffe'
 - New subsection: 'Das Grundanliegen der Regelungstechnik'
@@ -95,7 +94,7 @@
 
 
 - // snippet(14)
-- There is a class: 'Funktion'.
+- There is a general operator: 'Funktion'.
 - 'Funktion' has the alternative label 'function'
 
 - There is a class: 'Definitionsbereich'
@@ -226,6 +225,7 @@
 - // ignored content
 
 - // snippet(27)
+- There is a property: 'stabil'
 - There is a property: 'zeitinvariant'
 - 'zeitinvariant' has the alternative label 'time-invariant'
 - There is an if-then-statement:
@@ -370,6 +370,10 @@
 - The type of argument1 of 'has coefficient set' is 'mathematical expression'
 - The result type of 'has coefficient set' is 'set of coefficients'
 - 'has coefficient set' is functional
+- There is a class: 't'
+- 't' has the verbal description 'time variable'
+- 't' is an instance of 'Variable'
+
 
 - // snippet(40)
 - 'lineares Übertragungsglied' is a subclass of 'Übertragungsglied'
@@ -424,7 +428,9 @@
 - The type of argument1 of 'hat erweiterte Koeffizientenmatrix' is 'lineares Gleichungssystem'
 - The result type of 'hat erweiterte Koeffizientenmatrix' is 'Matrix'
 - 'hat erweiterte Koeffizientenmatrix' is functional
-
+- There is a class 'komplexwertige Funktion'
+- There is a class 'reellwertige Funktion'
+- There is a class: 'Zeitbereich'
 - There is a unary operator: 'Zeitableitung'
 - 'Zeitableitung' has the alternative label 'time derivative'
 - The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
@@ -439,6 +445,11 @@
         - 'lineares Übertragungsglied 1' is an instance of 'lineares Übertragungsglied'
         - 'lineares Übertragungsglied 1' has system order 'n'
         - 'lineares Übertragungsglied 1' is associated to 'eq:DglAllgemeinLinear'
+        - 'x_1' is an instance of 'Funktion'
+        - 'x_2' is an instance of 'Funktion'
+        - 'x_3' is an instance of 'Funktion'
+        - 'x_n_1' is an instance of 'Funktion'
+        - 'x_n' is an instance of 'Funktion'
         - // I am not sure how to model the statement 'Mithilfe der Substitution \(x_1 := \nu, x_2 := \dot \nu, \ldots, x_{n} := \nu^{(n-1)}\)'. It seems to introduce a set of variables, but it is not clear to me how to represent this set and how it is related to the other entities.
     - formalized assertion:
         - 'gls1' is an instance of 'lineares Gleichungssystem'
@@ -487,8 +498,6 @@
 - There is a unary operator 'Laplace Transformation'
 - 'Laplace Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  \(f : \mathbb{R} \to \mathbb{R}\) in den Raum der komplexwertigen Funktionen  \(F : \mathbb{C} \to \mathbb{C}\)'
 - // I am not sure how to model 'Raum der ... Funktionen'. It seems to be a set of functions. However, I do not know how to represent this.
-- There is a class 'komplexwertige Funktion'
-- There is a class 'reellwertige Funktion'
 - There is a general statement:
     - formalized setting:
         - 'F' is an instance of 'komplexwertige Funktion'
@@ -526,7 +535,6 @@
 - 'Laplace Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
 
 - // snippet(50)
-- There is a class: 'Zeitbereich'
 - 'Zeitbereich' has the alternative label 'time domain'
 - There is a class: 'Bildbereich'
 - 'Bildbereich' has the alternative label 'image domain'
@@ -888,7 +896,6 @@
 - There is a property: 'instabil'
 - 'instabil' has the alternative label 'unstable'
 - 'instabil' is applicable to 'Übertragungsglied'
-- There is a property: 'stabil'
 - 'stabil' has the alternative label 'unstable'
 - 'stabil' is applicable to 'Übertragungsglied'
 - There is a general statement:

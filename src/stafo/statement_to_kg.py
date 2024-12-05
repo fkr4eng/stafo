@@ -53,6 +53,7 @@ class ConversionManager:
                 "has the verbal description": {
                     "key": "R2",
                     "R1": "has description",
+                    "R22": True, # todo I would disagree that this should be functional
                 },
                 "is a subclass of": {
                     "key": "R3",
@@ -122,6 +123,7 @@ class ConversionManager:
                 "has the alternative label": {
                     "key": "R77",
                     "R1": "has alternative label",
+                    "R22": True, #! todo this is a hotfix, as long as pyirk does not support multiple alternative labels
                 },
                 "is associated to": {
                     "key": "R58",
@@ -149,6 +151,7 @@ class ConversionManager:
         self.class_pattern = re.compile(r"(?<=There is a class)(?::? )(.+)")                 # sometimes : is forgotten
         self.property_pattern = re.compile(r"(?<=There is a property)(?::? )(.+)")
         self.relation_pattern = re.compile(r"(?<=There is a relation)(?::? )(.+)")
+        self.general_operator_pattern = re.compile(r"(?<=There is a general operator)(?::? )(.+)")
         self.unary_operator_pattern = re.compile(r"(?<=There is a unary operator)(?::? )(.+)")
         self.binary_operator_pattern = re.compile(r"(?<=There is a binary operator)(?::? )(.+)")
         self.type_of_arg_1_pattern = re.compile(r"(?<=The type of argument1 of )(.+?)(?: is )(.+)")
@@ -365,7 +368,10 @@ class ConversionManager:
         # IPS()
 
     def build_reference(self, arg2, local_dict={}):
-        """return dual readable version of entity if possible (might be literal): I1234["something"]"""
+        """return dual readable version of entity if possible (might be literal): I1234["something"]
+        arg2 is FNL name
+        """
+        # todo add functionality that this also takes a key as argument
         if arg2 in self.d["items"].keys():
             arg2v = self.d["items"][arg2]
             key = arg2v['key']
@@ -403,6 +409,7 @@ class ConversionManager:
         new_class = re.findall(self.class_pattern, line)
         new_property = re.findall(self.property_pattern, line)
         new_relation = re.findall(self.relation_pattern, line)
+        new_general_operator = re.findall(self.general_operator_pattern, line)
         new_unary_operator = re.findall(self.unary_operator_pattern, line)
         new_binary_operator = re.findall(self.binary_operator_pattern, line)
         type_of_arg_1 = re.findall(self.type_of_arg_1_pattern, line)
@@ -418,7 +425,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 436
+        self.stop_at_line = 1286
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -435,6 +442,8 @@ class ConversionManager:
         # new relation?
         elif len(new_relation) > 0:
             self.add_new_rel(d, self.strip(new_relation[0]))
+        elif len(new_general_operator) > 0:
+            self.add_new_item(d, self.strip(new_general_operator[0]), {"R3": 'p.I6["mathematical operation"]'}, auto_keys=auto_keys)
         elif len(new_unary_operator) > 0:
             self.add_new_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'}, auto_keys=auto_keys)
         elif len(new_binary_operator) > 0:
@@ -578,7 +587,7 @@ class ConversionManager:
                     arg2 = self.build_reference(arg2, d)
                     # first check for some special relation that require special attention
                     # todo having this explicite relation name here is very unelegant, pls change
-                    if k == "is associated to" or k == "hat Gleichungsreferenz":
+                    if k == "is associated to" or k == "hat Gleichungsreferenz" or k == "has defining formula":
                         # this relation should be symmetric so we check for both cases
                         # this is used to relate equation to items, we check if this is the case and modify subj/obj
                         key_to_local_item_dict = self.get_local_item_dict_key_interpreter(d)
@@ -776,7 +785,7 @@ class ConversionManager:
         # this is not a static dict, since it needs dynamic references
         if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
             s = self.build_reference("s")
-            return f"""cm1.s**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm1.f, sp.var('j'))(0), (sp.var('j'), 0, cm1.i-1))"""
+            return f"""{s}**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm1.f, sp.var('j'))(0), (sp.var('j'), 0, cm1.i-1))"""
         else:
             return '"' + eq + '"'
 
@@ -862,7 +871,7 @@ class ConversionManager:
         """return context for template. works for most items and relations."""
         keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81"]
 
-        context = {"key": value_dict["key"], "rel": []}
+        context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
         else: context["snip"] = ""
@@ -871,18 +880,25 @@ class ConversionManager:
         else: context["comments"] = ""
         for key, value in value_dict.items():
             if key.startswith("R"):
-                # first some exceptions, then the general case
+                # first some exceptions
                 if key == "R6":
                     # the object of this relation is a reference string that appears in the 'reference' key of some equation item
                     # todo find this equation
                     pass
-                elif key in keys_that_want_literals:
+                elif (key == "R4" or key == "R3") and ("p.I6" in value or "p.I7" in value or "p.I8" in value or "p.I9" in value):
+                    # operators need custom call method
+                    context["extra"].append(f'{self.build_reference(value_dict["R1"])}.add_method(p.create_evaluated_mapping, "_custom_call")')
+
+                # add correct amount of quotation marks
+                if key in keys_that_want_literals:
                     # value is literal -> need extra quotation marks ""
                     quotes = '"'
                 else:
                     quotes = ""
-                # R22 rels are not lists, for easier processing, put them in a list
+
+                # handle functional relations and non-functional with single object -> no list (R8__=I000[".."])
                 if not type(value) == list or len(value) == 1:
+                    # R22 rels are not lists, for easier processing, put them in a list
                     if type(value) == list:
                         value = value[0]
                     res = re.findall(r"[R|I]\d\d\d\d", str(value))
@@ -891,7 +907,7 @@ class ConversionManager:
                         if value in self.d["items"].keys():
                             value = self.build_reference(value)
                     context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
-                # handle multiple objects -> list
+                # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
                 else:
                     l = []
                     for v in value:
@@ -1018,10 +1034,14 @@ class ConversionManager:
                             if isinstance(vvv, Real):
                                 obj_str = f"{vvv}"
                             # in case of equation references (global item names)
+                            # todo this is suboptimal. if the same name exists in global namespace and scope, the global one is used
+                            # todo bc. it is hard to know here, whats already been defined in e.g. settings scopes above
                             elif re.findall(r"I\d\d\d\d", vvv):
                                 obj_str = f"{vvv}"
                             else:
+                                # todo this cm1 is not clean since new variables might be defined in subscopes
                                 obj_str = f"cm1.{vvv}"
+                            # todo this cm1 is not clean since new variables might be defined in subscopes
                             out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
         return out
 
