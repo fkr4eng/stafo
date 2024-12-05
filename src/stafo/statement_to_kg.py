@@ -30,8 +30,112 @@ class ConversionManager:
         """space to underscore"""
         return s.replace(" ", "_")
 
+    ####################################################################################################################
+    # helper functions
+    ####################################################################################################################
 
-    def step1(self):
+    def strip(self, s):
+        if isinstance(s, list):
+            for i, v in enumerate(s):
+                s[i] = self.strip(v)
+            return s
+        elif isinstance(s, tuple):
+            new = []
+            for i, v in enumerate(s):
+                new.append(self.strip(v))
+            return tuple(new)
+        elif isinstance(s, str):
+            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "")
+        else:
+            raise TypeError(s)
+
+    def strip_formal_eq(self, s):
+        """problem examples:
+        'sigma' + 'imaginary unit' * 'omega'
+        s^i * Y(s)
+
+        """
+        s = s.replace('"', "'")
+        s = s.replace("^", "**") # replace power operator
+        symbol_pattern = re.compile(r"'.+?'")
+        def repl_func(matchobj):
+            return matchobj.group(0).replace(" ", "_").replace("-", "_")
+        return self.strip(re.sub(symbol_pattern, repl_func, s))
+
+
+    def strip_math(self, s):
+        if isinstance(s, list):
+            for i, v in enumerate(s):
+                s[i] = self.strip(v)
+            return s
+        elif isinstance(s, tuple):
+            new = []
+            for i, v in enumerate(s):
+                new.append(self.strip(v))
+            return tuple(new)
+        elif isinstance(s, str):
+            return s.replace("\\", "").replace('$', '')
+        else:
+            raise TypeError(s)
+
+    def get_keys(self):
+        """
+        Get pyirk keys from a file to avoid key collisions with existing entities
+        """
+        with open(os.path.join(BASE_DIR, "keys.txt"), "rt", encoding="utf-8") as f:
+            keys = f.read()
+        self.item_keys = re.findall(r"I\d\d\d\d", keys)
+        self.relation_keys = re.findall(r"R\d\d\d\d", keys)
+
+    def get_indent(self, line:str):
+        """get indentation (number of spaces) of string"""
+        if line == "":
+            return 0
+        indent_pattern = re.compile(r" +?(?=-)")
+        indent_res = re.findall(indent_pattern, line)
+        if indent_res:
+            indent = len(indent_res[0])
+        else:
+            indent = 0
+        return indent
+
+    def get_sub_content(self, content):
+        """return the lines that have the same (or more) indentation as the first line in content"""
+        assert isinstance(content, list), f"content has to be list of str"
+        og_indent = self.get_indent(content[0])
+        for i, line in enumerate(content):
+            if self.get_indent(line) < og_indent:
+                return content[:i]
+        return content
+
+    def get_rel_dict_key_interpreter(self):
+        """create a dict for the relations that can be addressed by pyirk keys (R1)
+        to get the long (and possibly different) literal key in self.d["relations"]"""
+        rel_dict = {}
+        for k,v in self.d["relations"].items():
+            rel_dict[v["key"]] = k
+        return rel_dict
+
+    def get_item_dict_key_interpreter(self):
+        """create a dict for the items that can be addressed by pyirk keys (I1234)
+        to get the long (and possibly different) literal key in self.d["items"]"""
+        return self.get_local_item_dict_key_interpreter(self.d)
+
+    def get_local_item_dict_key_interpreter(self, d):
+        """create a dict for the items that can be addressed by pyirk keys (I1234)
+        to get the long (and possibly different) literal key in d["items"]
+        this is used for the local dict inside scopes
+        """
+        rel_dict = {}
+        for k,v in d["items"].items():
+            rel_dict[v["key"]] = k
+        return rel_dict
+
+    ####################################################################################################################
+    # init formal natural language parser
+    ####################################################################################################################
+
+    def step1_init(self):
 
         self.applicable_to_key = "R78"
         # {items:
@@ -182,166 +286,11 @@ class ConversionManager:
             "verbal": re.compile(r"(?<=- verbal summary)(?::? )(.+?)(?=\.$|$)"),
         }
 
-    def strip(self, s):
-        if isinstance(s, list):
-            for i, v in enumerate(s):
-                s[i] = self.strip(v)
-            return s
-        elif isinstance(s, tuple):
-            new = []
-            for i, v in enumerate(s):
-                new.append(self.strip(v))
-            return tuple(new)
-        elif isinstance(s, str):
-            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "")
-        else:
-            raise TypeError(s)
+    ####################################################################################################################
+    # parse formal natural language
+    ####################################################################################################################
 
-    def strip_formal_eq(self, s):
-        """problem examples:
-        'sigma' + 'imaginary unit' * 'omega'
-        s^i * Y(s)
-
-        """
-        s = s.replace('"', "'")
-        s = s.replace("^", "**") # replace power operator
-        symbol_pattern = re.compile(r"'.+?'")
-        def repl_func(matchobj):
-            return matchobj.group(0).replace(" ", "_").replace("-", "_")
-        return self.strip(re.sub(symbol_pattern, repl_func, s))
-
-
-    def strip_math(self, s):
-        if isinstance(s, list):
-            for i, v in enumerate(s):
-                s[i] = self.strip(v)
-            return s
-        elif isinstance(s, tuple):
-            new = []
-            for i, v in enumerate(s):
-                new.append(self.strip(v))
-            return tuple(new)
-        elif isinstance(s, str):
-            return s.replace("\\", "").replace('$', '')
-        else:
-            raise TypeError(s)
-
-    def add_new_item(self, d, label, additional_relations:dict={}, auto_keys=False):
-        if label not in d["items"].keys():
-            key = self.item_keys.pop()
-            d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
-        else:
-            key = d["items"][label]["key"]
-        for k, v in additional_relations.items():
-            self.add_relation_inplace(d["items"][label], k, v)
-            if v == None:
-                del d["items"][label][k]
-        if not auto_keys and key not in self.entity_order:
-            self.entity_order.append(key)
-        return d
-
-    def add_new_rel(self, d, label, additional_relations:dict={}):
-        if label not in d["relations"].keys():
-            key = self.relation_keys.pop()
-            d["relations"][label] = {
-                "key": key,
-                "R1": label,
-                "render": f"""{key}__{self.sp_to_us(label)}""",
-                "snip": self.current_snippet}
-        else:
-            key = d["relations"][label]["key"]
-        for k, v in additional_relations.items():
-            self.add_relation_inplace(d["relations"][label], k, v)
-        if key not in self.entity_order:
-            self.entity_order.append(key)
-        return d
-
-    def get_keys(self):
-        """
-        Get pyirk keys from a file to avoid key collisions with existing entities
-        """
-        with open(os.path.join(BASE_DIR, "keys.txt"), "rt", encoding="utf-8") as f:
-            keys = f.read()
-        self.item_keys = re.findall(r"I\d\d\d\d", keys)
-        self.relation_keys = re.findall(r"R\d\d\d\d", keys)
-
-    def get_indent(self, line:str):
-        """get indentation (number of spaces) of string"""
-        if line == "":
-            return 0
-        indent_pattern = re.compile(r" +?(?=-)")
-        indent_res = re.findall(indent_pattern, line)
-        if indent_res:
-            indent = len(indent_res[0])
-        else:
-            indent = 0
-        return indent
-
-    def get_sub_content(self, content):
-        """return the lines that have the same (or more) indentation as the first line in content"""
-        assert isinstance(content, list), f"content has to be list of str"
-        og_indent = self.get_indent(content[0])
-        for i, line in enumerate(content):
-            if self.get_indent(line) < og_indent:
-                return content[:i]
-        return content
-
-    def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
-        """parse the content of nested definition statements recursively.
-        Goal format:
-        {"OR_1":
-            {items:
-                {"AND":
-                    {items:
-                        {statement1, statement2}
-                    }
-                }
-                statement3
-            }
-        }
-        most outer list should have only one element by definition
-        """
-        num_lines = len(content)
-        indent = self.get_indent(content[0])
-        l = []
-        i = 0
-        op_count = 0
-        while i < num_lines:
-            line = content[i]
-            # if line is more indented it will be processed in subroutine
-            if self.get_indent(line) == indent:
-                op_pattern = re.compile(r"(OR|AND|NOT)")
-                operator = re.findall(op_pattern, line)
-                if operator:
-                    sub_content = self.get_sub_content(content[i+1:])
-                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=copy.deepcopy(temp_dict))
-                    # skip next lines that were processed in subroutine
-                    i += len(sub_content)
-                    # dict diff, only add new part to opKey
-                    dict_diff = deepdiff.DeepDiff(temp_dict, res)
-                    diff = self.get_diffed_dict(dict_diff)
-
-                    temp_dict["items"][f"{operator[0]}_{op_count}"] = diff
-
-                    op_count += 1
-                else:
-                    if temp_dict is not None:
-                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line, auto_keys=True)
-                        # I think this is the same as before: inplace without deepcopy
-                    else:
-                        raise ValueError("temp_dict should be preconfigured")
-
-            elif self.get_indent(line) < indent:
-                # this means that the context was chosen too large
-                break
-            else:
-                # print(f"skipping: {line}")
-                pass
-            i += 1
-        return temp_dict
-
-
-    def step2(self):
+    def step2_parse_fnl(self):
         """iterate lines, add items and relations to dictionary
         first process lines that add items and some with special patterns, later process general relations (s p o)"""
         self.get_keys()
@@ -367,32 +316,6 @@ class ConversionManager:
             else:
                 self.d = self.process_line(self.d, i, line)
         # IPS()
-
-    def build_reference(self, arg2, local_dict={}):
-        """return dual readable version of entity if possible (might be literal): I1234["something"]
-        arg2 is FNL name
-        """
-        # todo add functionality that this also takes a key as argument
-        if arg2 in self.d["items"].keys():
-            arg2v = self.d["items"][arg2]
-            key = arg2v['key']
-            if int(key[1:]) < 1000:
-                arg2 = f"""p.{key}["{arg2v['R1']}"]"""
-            else:
-                arg2 = f"""{key}["{arg2v['R1']}"]"""
-        elif arg2 in self.d["relations"].keys():
-            arg2v = self.d["relations"][arg2]
-            key = arg2v['key']
-            if int(key[1:]) < 1000:
-                arg2 = f"""p.{key}["{arg2v['R1']}"]"""
-            else:
-                arg2 = f"""{key}["{arg2v['R1']}"]"""
-        # if we are inside a scope and arg2 references a local variable, arg2 will not appear in self.d,
-        # in this case, we just need to remove potential spaces to create the reference cm.bla_bla to the local variable
-        elif local_dict:
-            if arg2 in local_dict["items"].keys():
-                arg2 = arg2.replace(" ", "_")
-        return arg2
 
     def process_line(self, d:dict, i:int, line:str, auto_keys=False, *args, **kwargs):
         """process the line given
@@ -697,52 +620,35 @@ class ConversionManager:
 
         return d
 
-    def replace_expr(self, expr):
-        try:
-            parsed_expr = sp.parse_expr(expr)
-        except:
-            print(f"sympy parsing failed for {expr}")
-            return self.get_expr_from_lookup(expr)
-        repl_list, subs_list = [], []
-        repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
-        for old, new in repl_list:
-            parsed_expr = parsed_expr.replace(old, new)
-        # again sp.N is annoying
-        if len(subs_list) > 0:
-            parsed_expr = parsed_expr.subs(subs_list)
-        return parsed_expr
+    def add_new_item(self, d, label, additional_relations:dict={}, auto_keys=False):
+        if label not in d["items"].keys():
+            key = self.item_keys.pop()
+            d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet}
+        else:
+            key = d["items"][label]["key"]
+        for k, v in additional_relations.items():
+            self.add_relation_inplace(d["items"][label], k, v)
+            if v == None:
+                del d["items"][label][k]
+        if not auto_keys and key not in self.entity_order:
+            self.entity_order.append(key)
+        return d
 
-    def _get_repl_list_rec(self, parsed_expr, repl_list:list=[], subs_list:list=[]):
-        """create a list of replacements: new functions and variables with their names as needed for the string in pyirk.
-        this differentiates between local (context) names (cm.local_var) and global names (I1234["Operator1"])
-        """
-        # replace operators
-        if hasattr(parsed_expr, "func") and isinstance(parsed_expr.func, sp.core.function.UndefinedFunction):
-            func = parsed_expr.func
-            if func.name in self.d["items"].keys():
-                repl_list.append((func, sp.Function(self.build_reference(func.name))))
-            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
-            elif func.name.replace("_", " ") in self.d["items"].keys():
-                repl_list.append((func, sp.Function(self.build_reference(func.name.replace("_", " ")))))
-            else:
-                repl_list.append((func, sp.Function(f"cm1.{func.name}")))
-        # replace free variables
-        elif isinstance(parsed_expr, sp.Symbol):
-            if parsed_expr.name in self.d["items"].keys():
-                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name))))
-            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
-            elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
-                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
-            else:
-                subs_list.append((parsed_expr, sp.Symbol(f"cm1.{parsed_expr.name}")))
-        # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
-        if hasattr(parsed_expr, "args"):
-            for subexpr in parsed_expr.args:
-                # traverse the tree
-                repl_list, subs_list = self._get_repl_list_rec(subexpr, repl_list, subs_list)
-                # elif isinstance(subexpr, sp.Symbol):
-                #     subs_list.append((subexpr, sp.var(f"cm.{subexpr.name}")))
-        return repl_list, subs_list
+    def add_new_rel(self, d, label, additional_relations:dict={}):
+        if label not in d["relations"].keys():
+            key = self.relation_keys.pop()
+            d["relations"][label] = {
+                "key": key,
+                "R1": label,
+                "render": f"""{key}__{self.sp_to_us(label)}""",
+                "snip": self.current_snippet}
+        else:
+            key = d["relations"][label]["key"]
+        for k, v in additional_relations.items():
+            self.add_relation_inplace(d["relations"][label], k, v)
+        if key not in self.entity_order:
+            self.entity_order.append(key)
+        return d
 
     def add_relation_inplace(self, d:dict, key:str, value:str):
         """add a relation between subject and object to a given dict (inplace)
@@ -781,18 +687,85 @@ class ConversionManager:
             assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
             d[key] = value
 
+    def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
+        """parse the content of nested definition statements recursively.
+        Goal format:
+        {"OR_1":
+            {items:
+                {"AND":
+                    {items:
+                        {statement1, statement2}
+                    }
+                }
+                statement3
+            }
+        }
+        most outer list should have only one element by definition
+        """
+        num_lines = len(content)
+        indent = self.get_indent(content[0])
+        i = 0
+        op_count = 0
+        while i < num_lines:
+            line = content[i]
+            # if line is more indented it will be processed in subroutine
+            if self.get_indent(line) == indent:
+                op_pattern = re.compile(r"(OR|AND|NOT)")
+                operator = re.findall(op_pattern, line)
+                if operator:
+                    sub_content = self.get_sub_content(content[i+1:])
+                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=copy.deepcopy(temp_dict))
+                    # skip next lines that were processed in subroutine
+                    i += len(sub_content)
+                    # dict diff, only add new part to opKey
+                    dict_diff = deepdiff.DeepDiff(temp_dict, res)
+                    diff = self.get_diffed_dict(dict_diff)
 
-    def get_expr_from_lookup(self, eq):
-        # this is not a static dict, since it needs dynamic references
-        if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
-            s = self.build_reference("s")
-            dt = self.build_reference("höhere Zeitableitung")
-            return f"""{s}**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), (cm1.j, 0, cm1.i-1))"""
-        else:
-            return '"' + eq + '"'
+                    temp_dict["items"][f"{operator[0]}_{op_count}"] = diff
 
+                    op_count += 1
+                else:
+                    if temp_dict is not None:
+                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line, auto_keys=True)
+                        # I think this is the same as before: inplace without deepcopy
+                    else:
+                        raise ValueError("temp_dict should be preconfigured")
 
-        # for i, v in d["items"].items():
+            elif self.get_indent(line) < indent:
+                # this means that the context was chosen too large
+                break
+            else:
+                # print(f"skipping: {line}")
+                pass
+            i += 1
+        return temp_dict
+
+    def build_reference(self, arg2, local_dict={}):
+        """return dual readable version of entity if possible (might be literal): I1234["something"]
+        arg2 is FNL name
+        """
+        # todo add functionality that this also takes a key as argument
+        if arg2 in self.d["items"].keys():
+            arg2v = self.d["items"][arg2]
+            key = arg2v['key']
+            if int(key[1:]) < 1000:
+                arg2 = f"""p.{key}["{arg2v['R1']}"]"""
+            else:
+                arg2 = f"""{key}["{arg2v['R1']}"]"""
+        elif arg2 in self.d["relations"].keys():
+            arg2v = self.d["relations"][arg2]
+            key = arg2v['key']
+            if int(key[1:]) < 1000:
+                arg2 = f"""p.{key}["{arg2v['R1']}"]"""
+            else:
+                arg2 = f"""{key}["{arg2v['R1']}"]"""
+        # if we are inside a scope and arg2 references a local variable, arg2 will not appear in self.d,
+        # in this case, we just need to remove potential spaces to create the reference cm.bla_bla to the local variable
+        elif local_dict:
+            if arg2 in local_dict["items"].keys():
+                arg2 = arg2.replace(" ", "_")
+        return arg2
+
     def get_diffed_dict(self, diff:deepdiff.DeepDiff):
         """return the difference dict between to dict. Note: currently only works for addition "info(dict1)<info(dict2)"
 
@@ -843,90 +816,9 @@ class ConversionManager:
             raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
         return current_dict
 
-    def get_rel_dict_key_interpreter(self):
-        """create a dict for the relations that can be addressed by pyirk keys (R1)
-        to get the long (and possibly different) literal key in self.d["relations"]"""
-        rel_dict = {}
-        for k,v in self.d["relations"].items():
-            rel_dict[v["key"]] = k
-        return rel_dict
-
-    def get_item_dict_key_interpreter(self):
-        """create a dict for the items that can be addressed by pyirk keys (I1234)
-        to get the long (and possibly different) literal key in self.d["items"]"""
-        rel_dict = {}
-        for k,v in self.d["items"].items():
-            rel_dict[v["key"]] = k
-        return rel_dict
-
-    def get_local_item_dict_key_interpreter(self, d):
-        """create a dict for the items that can be addressed by pyirk keys (I1234)
-        to get the long (and possibly different) literal key in d["items"]
-        this is used for the local dict inside scopes
-        """
-        rel_dict = {}
-        for k,v in d["items"].items():
-            rel_dict[v["key"]] = k
-        return rel_dict
-
-    def built_simple_context(self, value_dict):
-        """return context for template. works for most items and relations."""
-        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81", "R82"]
-
-        context = {"key": value_dict["key"], "rel": [], "extra": []}
-        if "snip" in value_dict.keys():
-            context["snip"] = value_dict["snip"]
-        else: context["snip"] = ""
-        if "comments" in value_dict.keys():
-            context["comments"] = value_dict["comments"]
-        else: context["comments"] = ""
-        for key, value in value_dict.items():
-            if key.startswith("R"):
-                # first some exceptions
-                if key == "R6":
-                    # the object of this relation is a reference string that appears in the 'reference' key of some equation item
-                    # todo find this equation
-                    pass
-                elif (key == "R4" or key == "R3") and ("p.I6" in value or "p.I7" in value or "p.I8" in value or "p.I9" in value):
-                    # operators need custom call method
-                    context["extra"].append(f'{self.build_reference(value_dict["R1"])}.add_method(p.create_evaluated_mapping, "_custom_call")')
-
-                # add correct amount of quotation marks
-                if key in keys_that_want_literals:
-                    # value is literal -> need extra quotation marks ""
-                    quotes = '"'
-                else:
-                    quotes = ""
-
-                # handle functional relations and non-functional with single object -> no list (R8__=I000[".."])
-                if not type(value) == list or len(value) == 1:
-                    # R22 rels are not lists, for easier processing, put them in a list
-                    if type(value) == list:
-                        value = value[0]
-                    res = re.findall(r"[R|I]\d\d\d\d", str(value))
-                    if not quotes and len(res) == 0:
-                        # then maybe the object of rel was set before the item was introduced (order in FNL)
-                        if value in self.d["items"].keys():
-                            value = self.build_reference(value)
-                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
-                # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
-                else:
-                    l = []
-                    for v in value:
-                        res = re.findall(r"[R|I]\d\d\d\d", str(v))
-                        # if relation expects an item (or relation), but its just a literal
-                        if not quotes and len(res) == 0:
-                            # then maybe the object of rel was set before the item was introduced (order in FNL)
-                            if v in self.d["items"].keys():
-                                v = self.build_reference(v)
-                        l.append(v)
-                        # l.append(f"{quotes}{v}{quotes}")
-                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={l}')
-            # sort the relations in ascending number oder
-            context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
-        return context
-
-
+    ####################################################################################################################
+    # rendering
+    ####################################################################################################################
 
     def render(self):
         self.rel_interpr = self.get_rel_dict_key_interpreter()
@@ -992,7 +884,62 @@ class ConversionManager:
             f.write(res)
         print(f"{count} new entities written to {fpath}.")
 
-    # def get_statement_context(self, subdict, part):
+    def built_simple_context(self, value_dict):
+        """return context for template. works for most items and relations."""
+        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81", "R82"]
+
+        context = {"key": value_dict["key"], "rel": [], "extra": []}
+        if "snip" in value_dict.keys():
+            context["snip"] = value_dict["snip"]
+        else: context["snip"] = ""
+        if "comments" in value_dict.keys():
+            context["comments"] = value_dict["comments"]
+        else: context["comments"] = ""
+        for key, value in value_dict.items():
+            if key.startswith("R"):
+                # first some exceptions
+                if key == "R6":
+                    # the object of this relation is a reference string that appears in the 'reference' key of some equation item
+                    # todo find this equation
+                    pass
+                elif (key == "R4" or key == "R3") and ("p.I6" in value or "p.I7" in value or "p.I8" in value or "p.I9" in value):
+                    # operators need custom call method
+                    context["extra"].append(f'{self.build_reference(value_dict["R1"])}.add_method(p.create_evaluated_mapping, "_custom_call")')
+
+                # add correct amount of quotation marks
+                if key in keys_that_want_literals:
+                    # value is literal -> need extra quotation marks ""
+                    quotes = '"'
+                else:
+                    quotes = ""
+
+                # handle functional relations and non-functional with single object -> no list (R8__=I000[".."])
+                if not type(value) == list or len(value) == 1:
+                    # R22 rels are not lists, for easier processing, put them in a list
+                    if type(value) == list:
+                        value = value[0]
+                    res = re.findall(r"[R|I]\d\d\d\d", str(value))
+                    if not quotes and len(res) == 0:
+                        # then maybe the object of rel was set before the item was introduced (order in FNL)
+                        if value in self.d["items"].keys():
+                            value = self.build_reference(value)
+                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
+                # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
+                else:
+                    l = []
+                    for v in value:
+                        res = re.findall(r"[R|I]\d\d\d\d", str(v))
+                        # if relation expects an item (or relation), but its just a literal
+                        if not quotes and len(res) == 0:
+                            # then maybe the object of rel was set before the item was introduced (order in FNL)
+                            if v in self.d["items"].keys():
+                                v = self.build_reference(v)
+                        l.append(v)
+                        # l.append(f"{quotes}{v}{quotes}")
+                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={l}')
+            # sort the relations in ascending number oder
+            context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
+        return context
 
     def get_statement_context_recursively(self, subdict:dict, recursion_depth=1):
         # output
@@ -1074,10 +1021,65 @@ class ConversionManager:
         res = render_template("math_relation_template.py", context)
         return res
 
+    def replace_expr(self, expr):
+        try:
+            parsed_expr = sp.parse_expr(expr)
+        except:
+            print(f"sympy parsing failed for {expr}")
+            return self.get_expr_from_lookup(expr)
+        repl_list, subs_list = [], []
+        repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
+        for old, new in repl_list:
+            parsed_expr = parsed_expr.replace(old, new)
+        # again sp.N is annoying
+        if len(subs_list) > 0:
+            parsed_expr = parsed_expr.subs(subs_list)
+        return parsed_expr
+
+    def _get_repl_list_rec(self, parsed_expr, repl_list:list=[], subs_list:list=[]):
+        """create a list of replacements: new functions and variables with their names as needed for the string in pyirk.
+        this differentiates between local (context) names (cm.local_var) and global names (I1234["Operator1"])
+        """
+        # replace operators
+        if hasattr(parsed_expr, "func") and isinstance(parsed_expr.func, sp.core.function.UndefinedFunction):
+            func = parsed_expr.func
+            if func.name in self.d["items"].keys():
+                repl_list.append((func, sp.Function(self.build_reference(func.name))))
+            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
+            elif func.name.replace("_", " ") in self.d["items"].keys():
+                repl_list.append((func, sp.Function(self.build_reference(func.name.replace("_", " ")))))
+            else:
+                repl_list.append((func, sp.Function(f"cm1.{func.name}")))
+        # replace free variables
+        elif isinstance(parsed_expr, sp.Symbol):
+            if parsed_expr.name in self.d["items"].keys():
+                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name))))
+            # before pasring, the spaces in the names were removed (for sympy), now check if this is applicable here
+            elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
+                subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
+            else:
+                subs_list.append((parsed_expr, sp.Symbol(f"cm1.{parsed_expr.name}")))
+        # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
+        if hasattr(parsed_expr, "args"):
+            for subexpr in parsed_expr.args:
+                # traverse the tree
+                repl_list, subs_list = self._get_repl_list_rec(subexpr, repl_list, subs_list)
+                # elif isinstance(subexpr, sp.Symbol):
+                #     subs_list.append((subexpr, sp.var(f"cm.{subexpr.name}")))
+        return repl_list, subs_list
+
+    def get_expr_from_lookup(self, eq):
+        # this is not a static dict, since it needs dynamic references
+        if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
+            s = self.build_reference("s")
+            dt = self.build_reference("höhere Zeitableitung")
+            return f"""{s}**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), (cm1.j, 0, cm1.i-1))"""
+        else:
+            return '"' + eq + '"'
 
 
 def main(statements_fpath: str):
     convm = ConversionManager(statements_fpath)
-    convm.step1()
-    convm.step2()
+    convm.step1_init()
+    convm.step2_parse_fnl()
     convm.render()
