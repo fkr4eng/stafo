@@ -22,6 +22,9 @@
 - 'set of real numbers' 'is subset of' 'real coordinate space'
 - 'set of real numbers' 'has dimension' 1
 
+- 'e' is an instance of 'real number'
+- 'e' has the verbal description 'euler number'
+
 - // snippet(1)
 - New section: 'Elementare Grundbegriffe'
 - New subsection: 'Das Grundanliegen der Regelungstechnik'
@@ -56,7 +59,9 @@
 - There is a class: 'Übertragungsglied'.
 
 - // snippet(10)
+- There is a general operator: 'Funktion'.
 - There is a class: 'Zeitlicher Verlauf'
+- 'Zeitlicher Verlauf' is a subclass of 'Funktion'
 - There is a class: 'Signal'.
 - There is a class: 'Eingangssignal'.
 - 'Eingangssignal' is a subclass of 'Signal'.
@@ -94,7 +99,6 @@
 
 
 - // snippet(14)
-- There is a general operator: 'Funktion'.
 - 'Funktion' has the alternative label 'function'
 
 - There is a class: 'Definitionsbereich'
@@ -685,6 +689,7 @@
         - 'F' is an instance of 'komplexwertige Funktion'
         - 'i' is an instance of 'integer number'
         - 't' is an instance of 'real number'
+        - 'j' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
             - formalized left hand side: 'Laplace Transformation'('höhere Zeitableitung'('f(t)', 'i'))
@@ -1190,9 +1195,8 @@
     - full source code: 'Auf einen Einheitssprung reagieren lineare zeitinvariante Systeme mit der \emph{Übergangsfunktion} $h$.'
     - formalized setting:
         - 'system1' is an instance of 'lineare zeitinvariante Übertragungsglieder'
-        - 'in1' is an instance of 'Einheitssprung'
         - 'out1' is an instance of 'Einheitssprungantwort'
-        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has input signal' 'Einheitssprung'
         - 'system1' 'has output signal' 'out1'
     - formalized assertion:
         - 'out1' is associated to 'Übergangsfunktion'
@@ -1200,14 +1204,14 @@
     - full source code: 'Die Einheitssprungantwort ist ein Spezialfall der allgemeinen Sprungantwort mit $U_0 = 0$, $U_S = 1$, $t_0 = \qty{0}{\second}$ und $V_0 = 0$.'
     - formalized setting:
         - 'system1' is an instance of 'Übertragungsglied'
+        - 't0' is an instance of 'real number'
         - 't' is an instance of 'real number'
         - 'V0' is an instance of 'real number'
         - 'U0' is an instance of 'real number'
         - 'Us' is an instance of 'real number'
         - 'U_inf' is an instance of 'real number'
-        - 'in1' is an instance of 'Einheitssprung'
         - 'out1' is an instance of 'Einheitssprungantwort'
-        - 'system1' 'has input signal' 'in1'
+        - 'system1' 'has input signal' 'Einheitssprung'
         - 'system1' 'has output signal' 'out1'
     - formalized assertion:
         - AND
@@ -1501,6 +1505,10 @@
         - 'out1' is an instance of 'Sprungantwort'
         - 'system1' 'has input signal' 'in1'
         - 'system1' 'has output signal' 'out1'
+        - 'dout1' is an instance of 'reellwertige Funktion'
+        - There is an equation:
+            - formalized left hand side: 'dout1'
+            - formalized right hand side: 'Zeitableitung'('out1')
     - formalized premise:
         - There is a mathematical relation:
             - relation sign: >=
@@ -1631,11 +1639,11 @@
 - // I am unsure how to model '(üblich ist  \(\Delta \nu_s = 2\,\%\) oder  \(\Delta \nu_s = 5\,\%\))'. It seems to be a remark, but it is not clear to me how to represent this.
 
 - // manually added (8)
+- There is a class: 'Punkt'
 - There is a class: 'Wendepunkt'
 - There is a relation: 'hat Wendepunkt'
 - The type of argument1 of 'hat Wendepunkt' is 'Funktion'
 - The result type of 'hat Wendepunkt' is 'Wendepunkt'
-- There is a class: 'Punkt'
 - There is a relation: 'has first coordinate'
 - The type of argument1 of 'has first coordinate' is 'Punkt'
 - The result type of 'has first coordinate' is 'real number'
@@ -1666,7 +1674,7 @@
             - formalized right hand side: 'Zeitableitung'('df1')
         - 'n1' is an instance of 'Nullstelle'
     - formalized premise:
-        - 'ddout1' 'hat Nullstelle' 'n1'
+        - 'ddf1' 'hat Nullstelle' 'n1'
     - formalized assertion:
         - 'w1' is an instance of 'Wendepunkt'
         - 'w1' 'has first coordinate' 'n1'
@@ -1675,6 +1683,7 @@
             - formalized left hand side: 'y1'
             - formalized right hand side: 'f1'('n1')
         - 'w1' 'has second coordinate' 'y1'
+        - 'f1' 'hat Wendepunkt' 'w1'
 
 - // snippet(108)
 - There is a general statement:
@@ -1825,8 +1834,8 @@
         - There is an equation:
             - formalized left hand side: 'tf1'
             - formalized right hand side: 'tf2' * 'tf3'
-- There is a class: 'Hintereinanderschaltung'
 - There is a class: 'Multiplication'
+- There is a class: 'Hintereinanderschaltung'
 - 'Hintereinanderschaltung' is associated to 'Multiplication'
 
 - // snippet(115)
@@ -1864,8 +1873,8 @@
 - There is a relation: 'hat Abweichung im Beharrungszustand'.
 - The type of argument1 of 'hat Abweichung im Beharrungszustand' is 'Regelgröße'.
 - The result type of 'hat Abweichung im Beharrungszustand' is 'Abweichung im Beharrungszustand'.
-- 'Überschwingweite' has the associated LaTeX notation '\(x_{m}\)'.
-- 'Toleranzbereich' has the associated LaTeX notation '\(2\cdot\Delta x_{s}\)'.
+- 'Überschwingweite' has the alternative associated LaTeX notation '\(x_{m}\)'.
+- 'Toleranzbereich' has the alternative associated LaTeX notation '\(2\cdot\Delta x_{s}\)'.
 - There is a class: 'Anregelzeit'.
 - 'Anregelzeit' has the alternative label 'control rise time'.
 - 'Anregelzeit' has the associated LaTeX notation '\(T_{cr}\)'.

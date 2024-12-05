@@ -103,10 +103,11 @@ class ConversionManager:
                 "has the associated LaTeX notation": {
                     "key": "R24",
                     "R1": "has LaTeX string",
+                    "R22": True, # Todo does it have to be functional?
                 },
                 "has the alternative associated LaTeX notation": {
-                    "key": "R24",
-                    "R1": "has LaTeX string",
+                    "key": "R82",
+                    "R1": "has alternative latex string",
                 },
                 "is a secondary instance of": {
                     "key": "R30",
@@ -785,7 +786,8 @@ class ConversionManager:
         # this is not a static dict, since it needs dynamic references
         if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
             s = self.build_reference("s")
-            return f"""{s}**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-sp.var('j')) * I1007["höhere Zeitableitung"](cm1.f, sp.var('j'))(0), (sp.var('j'), 0, cm1.i-1))"""
+            dt = self.build_reference("höhere Zeitableitung")
+            return f"""{s}**cm1.i * cm1.F({s}) - sp.Sum({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), (cm1.j, 0, cm1.i-1))"""
         else:
             return '"' + eq + '"'
 
@@ -869,7 +871,7 @@ class ConversionManager:
 
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
-        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81"]
+        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81", "R82"]
 
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
@@ -920,7 +922,10 @@ class ConversionManager:
                         l.append(v)
                         # l.append(f"{quotes}{v}{quotes}")
                     context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={l}')
+            # sort the relations in ascending number oder
+            context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
         return context
+
 
 
     def render(self):

@@ -14,3 +14,5 @@ p.register_mod(__URI__, keymanager)
 p.start_mod(__URI__)
 
 {{context.content}}
+
+IPS()
