@@ -13,7 +13,14 @@ keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
 p.start_mod(__URI__)
 
-{{context.content}}
+# these entities are declared here all at once in order to avoid referencing issues when setting relations.
+# the relations of these entities are set below with the update method. This update method is called exactly once.
+{{context.entity_declaration}}
 
+########################################################################################################################
+# content:
+########################################################################################################################
+
+{{context.content}}
 
 p.end_mod()

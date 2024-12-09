@@ -8,6 +8,7 @@ import deepdiff
 import sympy as sp
 from sympy.parsing.sympy_parser import T
 from numbers import Real
+import pyirk as p
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 
@@ -20,11 +21,17 @@ def get_md_lines(fpath) -> list[str]:
 
 
 class ConversionManager:
-    def __init__(self, statements_fpath: str):
+    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
         self.eq_reference_dict = {}
+
+        if force_key_tuple is None:
+            self.get_keys()
+        # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
+        else:
+            self.item_keys, self.relation_keys = force_key_tuple
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -80,12 +87,10 @@ class ConversionManager:
 
     def get_keys(self):
         """
-        Get pyirk keys from a file to avoid key collisions with existing entities
+        generate pyirk keys
         """
-        with open(os.path.join(BASE_DIR, "keys.txt"), "rt", encoding="utf-8") as f:
-            keys = f.read()
-        self.item_keys = re.findall(r"I\d\d\d\d", keys)
-        self.relation_keys = re.findall(r"R\d\d\d\d", keys)
+        self.item_keys = [p.generate_new_key("I") for i in range(1000)]
+        self.relation_keys = [p.generate_new_key("R") for i in range(1000)]
 
     def get_indent(self, line:str):
         """get indentation (number of spaces) of string"""
@@ -293,7 +298,6 @@ class ConversionManager:
     def step2_parse_fnl(self):
         """iterate lines, add items and relations to dictionary
         first process lines that add items and some with special patterns, later process general relations (s p o)"""
-        self.get_keys()
         self.current_snippet = ""
         for i, line in enumerate(self.lines):
 
@@ -828,6 +832,7 @@ class ConversionManager:
         self.item_interpr = self.get_item_dict_key_interpreter()
         self.key_to_name = dict(self.rel_interpr)
         self.key_to_name.update(self.item_interpr)
+        entity_declaration = ""
         output = ""
         count = 0
 
@@ -840,8 +845,10 @@ class ConversionManager:
             else:
                 raise TypeError()
             v = self.d[tag][name]
+            entity_declaration += f'{key} = p.create_{tag[:-1]}(R1__has_label="{v["R1"]}")\n'
             context = self.built_simple_context(v)
-            res = render_template(f"basic_{tag[:-1]}_template.py", context)
+            context["name"] = name
+            res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
 
@@ -871,13 +878,13 @@ class ConversionManager:
                 output += res + "\n\n"
 
         try:
-            import pyirk as p
             ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
         except:
             ct_path = ""
 
         pyirk_context = {"uri_name": f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}",
                          "ct_path": ct_path,
+                         "entity_declaration": entity_declaration,
                          "content": output}
 
         res = render_template("pyirk_template.py", pyirk_context)
@@ -943,6 +950,8 @@ class ConversionManager:
                     context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={l}')
             # sort the relations in ascending number oder
             context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
+
+        del context["rel"][0] # get rid of R1, since we use the entity.update method
         return context
 
     def get_statement_context_recursively(self, subdict:dict, recursion_depth=1):
@@ -1082,8 +1091,8 @@ class ConversionManager:
             return '"' + eq + '"'
 
 
-def main(statements_fpath: str):
-    convm = ConversionManager(statements_fpath)
+def main(statements_fpath: str, force_key_tuple=None):
+    convm = ConversionManager(statements_fpath, force_key_tuple)
     convm.step1_init()
     convm.step2_parse_fnl()
     mod_fpath = convm.render()

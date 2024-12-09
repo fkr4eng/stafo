@@ -1,5 +1,5 @@
 {% if context.snip %}# {{context.snip}} {% endif %}
-{{context.key}} = p.create_item(
+{{context.key}}["{{context.name}}"].update_relations(
     {% for line in context.rel%}{{line}},
     {% endfor %}{% if context.comments %}{% for line in context.comments%}# {{line}}{% endfor %}{% endif %}
 )
