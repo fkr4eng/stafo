@@ -820,7 +820,10 @@ class ConversionManager:
     # rendering
     ####################################################################################################################
 
-    def render(self):
+    def render(self) -> str:
+        """
+        :returns: path of rendered module
+        """
         self.rel_interpr = self.get_rel_dict_key_interpreter()
         self.item_interpr = self.get_item_dict_key_interpreter()
         self.key_to_name = dict(self.rel_interpr)
@@ -883,6 +886,7 @@ class ConversionManager:
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)
         print(f"{count} new entities written to {fpath}.")
+        return fpath
 
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
@@ -1082,4 +1086,5 @@ def main(statements_fpath: str):
     convm = ConversionManager(statements_fpath)
     convm.step1_init()
     convm.step2_parse_fnl()
-    convm.render()
+    mod_fpath = convm.render()
+    return mod_fpath
