@@ -1,0 +1,15 @@
+- // snippet(1)
+- // later defined class is related to earlier defined one
+- // right now this is solved by just moving class signal up
+- There is a class: 'Eingangssignal'.
+- There is a class: 'Signal'.
+- 'Eingangssignal' is a subclass of 'Signal'.
+
+- // snippet(2)
+- // even harder a complete ring
+- // no matter what comes first (A or B), you cannot create the first class completely
+- There is a class: 'A'
+- There is a class: 'B'
+- There is a relation: 'has some relation to'
+- 'A' 'has some relation to' 'B'
+- 'B' 'has some relation to' 'A'

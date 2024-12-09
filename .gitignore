@@ -10,11 +10,16 @@ final_response_list.md
 src/*.egg-info/*
 __pycache__
 output.py
+debug.py
+output_no_error.py
 
 # this for the auto-completion vs code extension
 .ac_candidates.txt
 
-# snapshots/
+ignored_content/
+
+snapshots/
+
 
 # tex related files
 *.log

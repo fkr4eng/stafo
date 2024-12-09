@@ -15,6 +15,7 @@ from ipydex import IPS, activate_ips_on_exception
 activate_ips_on_exception()
 
 TEST_DATA1_FPATH = os.path.join(TESTA_DATA_DIR, "statements01.md")
+TEST_DATA2_FPATH = os.path.join(TESTA_DATA_DIR, "statements02_ring.md")
 
 
 class HousekeeperMixin(GeneralHousekeeperMixin):
@@ -32,12 +33,8 @@ class Test_00_Core(unittest.TestCase):
 
         # ensure that the result can be loaded without errors
 
-        # TODO JF (should be easy):
-        # currently this fails
-        # a) because of hardcoded IPS()
-        # b) due to "PyIRKError: The module irk:/ocse/0.2/auto_import_statements01
-        # was not properly ended. Ensure that pyirk.end_mod() is called after the last PyIRK-statement."
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+
 
 
 class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
@@ -45,6 +42,7 @@ class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
     These tests specifically trigger bugs (or test former bugs)
     """
 
+    @unittest.expectedFailure
     def test_b01__R77_list_problem(self):
         with p.uri_context(uri=self.TEST_BASE_URI, prefix="ut"):
             I1000 = p.create_item(
@@ -52,3 +50,13 @@ class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
                 R4__is_instance_of=p.I35["real number"],
                 R77__has_alternative_label=["test1", "test2"]
             )
+
+class Test_02_FeatureRequest(HousekeeperMixin, unittest.TestCase):
+    """
+    Test for new requested features
+    """
+
+    def test_c01__render_order_ring_problem(self):
+        res_mod_fpath = s2k.main(TEST_DATA2_FPATH)
+        # ensure that the result can be loaded without errors
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")

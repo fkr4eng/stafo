@@ -977,8 +977,8 @@ class ConversionManager:
                     # todo decide uq_instance_of vs instance_of
                     out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]}))')
                     insertion_index += 1
-                # Note: if there is no R4 relation, the item must be already existing in cm.
-                # todo find a way to verify the existance
+                    # Note: if there is no R4 relation, the item must be already existing in cm.
+                    # todo find a way to verify the existance
                 for kk, vv in value.items():
                     number = re.findall(r"(?<=R)\d+", kk)
                     if number and int(number[0]) > 4: # just exclude R1-R4 here
