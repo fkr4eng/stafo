@@ -1,0 +1,7 @@
+# this file contains some configuration for the pyirk package
+
+main_module = "output_no_error.py"
+main_module_prefix = "stafo"
+version = "0.3.0"
+
+[pyirkdjango]

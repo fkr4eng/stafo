@@ -15,4 +15,5 @@ p.start_mod(__URI__)
 
 {{context.content}}
 
-IPS()
+
+p.end_mod()
