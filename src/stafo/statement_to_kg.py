@@ -991,7 +991,7 @@ class ConversionManager:
                 for kk, vv in value.items():
                     number = re.findall(r"(?<=R)\d+", kk)
                     if number and int(number[0]) > 4: # just exclude R1-R4 here
-                        if not type(vv) == list:
+                        if not isinstance(vv, list):
                             vv = [vv]
                         for vvv in vv:
                             # some exceptions when not to add cm.

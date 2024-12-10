@@ -1320,7 +1320,7 @@
                     - formalized right hand side: 't1'
                 - There is a mathematical relation:
                     - relation sign: <
-                    - formalized left hand side: 'int(t)' * 'out1(t)'
+                    - formalized left hand side: 'in1(t)' * 'out1(t)'
                     - formalized right hand side: 0
             - AND
                 - There is a mathematical relation:
@@ -1329,7 +1329,7 @@
                     - formalized right hand side: 't'
                 - There is a mathematical relation:
                     - relation sign: >
-                    - formalized left hand side: 'int(t)' * 'out1(t)'
+                    - formalized left hand side: 'in1(t)' * 'out1(t)'
                     - formalized right hand side: 0
     - formalized assertion:
         - 'strecke1' is a secondary instance of 'allpasshaltige Strecke'
