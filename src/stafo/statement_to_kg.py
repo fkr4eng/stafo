@@ -451,17 +451,25 @@ class ConversionManager:
 
         # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
+            name_given = False
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
-                new_item_name = f"equivalence-statement_{i}"
+                new_item_name = f"eq stm "
             elif len(if_then) > 0:
                 additional_context = {"R4": 'p.I15["implication proposition"]', "comments": []}
-                new_item_name = f"if-then-statement_{i}"
+                new_item_name = f"it stm "
             elif len(general_statement) > 0:
                 additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
-                new_item_name = f"general-statement_{i}"
+                new_item_name = f"g stm "
             additional_content = self.get_sub_content(self.lines[i+1:])
             temp_dict = {"items": {}, "relations": {}}
+            # note: statement name only allowed as first line in statement to prevent mid parsing name changes
+            name = re.findall(r"statement name: (.+?)(?=\.$|$)", self.lines[i+1])
+            if name:
+                assert name_given == False, "multiple name assignments for statement is not supported"
+                new_item_name += f"{self.strip(name[0])}"
+                name_given = True
+            new_item_name +=  f" l.{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 if len(full_source) > 0:
@@ -851,8 +859,7 @@ class ConversionManager:
             res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
-
-            if "equivalence-statement_" in name or "if-then-statement_" in name or "general-statement_" in name:
+            if "R4" in v.keys() and (v["R4"] == 'p.I15["implication proposition"]' or v["R4"] == 'p.I17["equivalence proposition"]' or v["R4"] == 'p.I14["mathematical proposition"]'):
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]

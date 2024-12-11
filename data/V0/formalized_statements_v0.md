@@ -335,6 +335,7 @@
 - The result type of 'has system order' is 'integer number'.
 - 'has system order' is functional.
 - There is a general statement:
+    - statement name: 'Definition Differentialgleichung'
     - formalized setting:
         - 'ue1' is an instance of 'Übertragungsglied'
         - 'df1' is an instance of 'Differenzialgleichung'
