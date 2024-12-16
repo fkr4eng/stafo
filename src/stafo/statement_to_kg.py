@@ -233,7 +233,6 @@ class ConversionManager:
                 "has the alternative label": {
                     "key": "R77",
                     "R1": "has alternative label",
-                    "R22": True, #! todo this is a hotfix, as long as pyirk does not support multiple alternative labels
                 },
                 "is associated to": {
                     "key": "R58",

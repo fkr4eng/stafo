@@ -4,3 +4,4 @@
 - 'finite' is applicable to 'set'.
 - There is a property: 'infinite'.
 - 'infinite' is applicable to 'set'.
+- There is a general operator: 'Funktion'.
