@@ -1,0 +1,1574 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass svmono
+\options german,deutsch,sectrefs
+\use_default_options true
+\maintain_unincluded_children false
+\language ngerman
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style german
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part
+Vorbereitung
+\begin_inset CommandInset label
+LatexCommand label
+name "part:Vorbereitung"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Motivationsbeispiele
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Einleitung"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dieses Kapitel befasst sich mit der Modellierung einiger technischer Beispielsys
+teme, bei denen man auf nichtlineare Modellgleichungen geführt wird.
+ Auf diese Beispielsysteme wird in den weiteren Kapiteln mehrfach zurückgegriffe
+n.
+\end_layout
+
+\begin_layout Section
+Mobiler Roboter
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Mobiler-Roboter-Modellierung"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mobile Roboter spielen eine wichtige Rolle bei der automatisierten Lagerhaltung
+ und bei flexiblen Fertigungsprozessen, finden aber auch als Inspektions-
+ bzw.
+ Serviceroboter Anwendung.
+ Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:mobiler-roboter-kinematisches-modell"
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+(links) stellt einen für Lehrzwecke entwickelten mobilen Roboter mit zwei
+ Rädern dar
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2015roboter"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Roboter_Foto.jpg
+	lyxscale 15
+	width 45text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset space \hspace*{}
+\length 5text%
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Roboter_kin_Modell.svg
+	width 45text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mobiler Roboter, Prototyp nach
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2015roboter"
+literal "true"
+
+\end_inset
+
+ (links), Modell in der 
+\begin_inset Formula $(x_{1},x_{2})$
+\end_inset
+
+-Ebene (rechts)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:mobiler-roboter-kinematisches-modell"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Herleitung des kinematischen Modells
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Für den mobilen Roboters wird nachfolgend ein kinematisches Modell hergeleitet.
+ Dieses Modell beschreibt die Bewegung in der Ebene ohne Berücksichtigung
+ der die Bewegung verursachenden Kräfte.
+ Der Antrieb des Roboters erfolgt über zwei Räder mit dem Radius
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $r$
+\end_inset
+
+.
+ Das linke Rad habe die Winkelgeschwindigkeit 
+\begin_inset Formula $\omega_{L}$
+\end_inset
+
+, das rechte die Winkelgeschwindigkeit 
+\begin_inset Formula $\omega_{R}$
+\end_inset
+
+.
+ An den Auflagepunkten der Räder erhält man die Tangentialgeschwindigkeiten
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+v_{L} & = & \omega_{L}r,\\
+v_{R} & = & \omega_{R}r.
+\end{array}
+\]
+
+\end_inset
+
+Für unterschiedliche Winkelgeschwindigkeiten (also 
+\begin_inset Formula $\omega_{L}\neq\omega_{R}$
+\end_inset
+
+) dreht sich der Roboter.
+ Wir stellen uns diese Drehung als Umfahrung eines (fiktiven) Punktes
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+ vor, der zum Mittelpunkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ des Roboters den Abstand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R$
+\end_inset
+
+ habe.
+ Linkes und rechtes Rad haben von dem Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+ die Abstände
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+R_{L} & = & R+\frac{L}{2},\\
+R_{R} & = & R-\frac{L}{2},
+\end{array}
+\]
+
+\end_inset
+
+wobei
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ den Abstand beider Räder voneinander bezeichnet.
+ Beschreibt man die Rotation um den Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+ mit dem in Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:mobiler-roboter-kinematisches-modell"
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+(rechts) eingeführten Winkel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\varphi$
+\end_inset
+
+, so erhält man die Rotationgeschwindigkeit 
+\begin_inset Formula 
+\begin{equation}
+\omega=\dot{\varphi}\label{eq:roboter-modell-rot}
+\end{equation}
+
+\end_inset
+
+als zeitliche Ableitung des Winkels.
+ Zu den Tangentialgeschwindigkeiten der beiden Räder besteht dann der Zusammenha
+ng
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+v_{L} & = & \omega R_{L},\\
+v_{R} & = & \omega R_{R}.
+\end{array}
+\]
+
+\end_inset
+
+Aus gegebenen Winkelgeschwindigkeiten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\omega_{L}$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\omega_{R}$
+\end_inset
+
+ der Motoren kann man damit einerseits die Rotationsgeschwindigkeit des
+ Roboters um die eigene Achse bestimmen
+\begin_inset Formula 
+\[
+\omega=\frac{r}{L}\left(\omega_{L}-\omega_{R}\right),
+\]
+
+\end_inset
+
+andererseits auch den Abstand
+\begin_inset Formula 
+\[
+R=\frac{L}{2}\left(\frac{\omega_{L}+\omega_{R}}{\omega_{L}-\omega_{R}}\right)
+\]
+
+\end_inset
+
+zwischen dem Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ und dem Drehpunkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+.
+ Damit erhält man zugleich die translatorische Geschwindigkeit 
+\begin_inset Formula 
+\[
+v=\omega R=\frac{r}{2}\left(\omega_{L}+\omega_{R}\right)
+\]
+
+\end_inset
+
+des Roboters.
+ Mit dem Winkel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\varphi$
+\end_inset
+
+ und der Geschwindigkeit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $v$
+\end_inset
+
+ lässt sich die translatorische Bewegung beschreiben: 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & v\,\sin\varphi,\\
+\dot{x}_{2} & = & v\,\cos\varphi.
+\end{array}\label{eq:roboter-modell-trans}
+\end{equation}
+
+\end_inset
+
+Führt man den Zustand 
+\begin_inset Formula 
+\[
+x=\left(\begin{array}{c}
+x_{1}\\
+x_{2}\\
+x_{3}
+\end{array}\right)=\left(\begin{array}{c}
+x_{1}\\
+x_{2}\\
+\varphi
+\end{array}\right)
+\]
+
+\end_inset
+
+sowie die Eingänge 
+\begin_inset Formula $u_{1}=v$
+\end_inset
+
+ und 
+\begin_inset Formula $u_{2}=\omega$
+\end_inset
+
+ ein, so liefert die Kombination aus
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:roboter-modell-rot"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:roboter-modell-trans"
+
+\end_inset
+
+ das kinematische Gesamtmodell 
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{c}
+\dot{x}_{1}\\
+\dot{x}_{2}\\
+\dot{x}_{3}
+\end{array}\right)=\left(\begin{array}{c}
+\sin x_{3}\\
+\cos x_{3}\\
+0
+\end{array}\right)u_{1}+\left(\begin{array}{c}
+0\\
+0\\
+1
+\end{array}\right)u_{2}.\label{eq:roboter-kinematisches-modell}
+\end{equation}
+
+\end_inset
+
+Bedingt durch die Winkelfunktionen liegt damit ein Modell als nichtlineares
+ Differentialgleichungssystem vor.
+ Genauer gesagt ist das Modell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:roboter-kinematisches-modell"
+
+\end_inset
+
+ nichtlinear bezüglich des Zustands
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+, aber linear hinsichtlich der Eingänge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u_{1}$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Ausblick, aktuelle Probleme
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Das kinematische Robotermodell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:roboter-kinematisches-modell"
+
+\end_inset
+
+ lässt sich als einachsiges Fahrzeugmodell aufgefassen.
+ Kinematische Fahrzeugmodelle werden auch bei aktuellen Forschungsvorhaben
+ genutzt, beispielsweise bei der Spurregelung und beobachterbasierten Spurschätz
+ung für mehrachsige, mehrgliedrige bzw.
+ mehr\SpecialChar softhyphen
+achs\SpecialChar softhyphen
+gelenkte Fahrzeuge (LKWs, LKWs mit Anhänger, überlange Beförderungssyst
+eme wie z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ AutoTram
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\backslash
+textregistered}
+\end_layout
+
+\end_inset
+
+, siehe 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "huber2012ssd,nitzsche2014ecc,riesmeier2016"
+literal "true"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+Wagen mit Pendel
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Wagen-mit-Pendel"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Verladebrücken bzw.
+ Brückenkräne werden in Montagehallen, in Lagern und auf Güterumschlagplätzen
+ (z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ Güterbahnhöfen, Häfen) eingesetzt.
+ Für eine schnelle Bewegung bzw.
+ hochpräzise Positionierung der zu transportierenden Lasten ist eine Regelung
+ erforderlich.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Modellbildung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Aus physikalischer Sicht kann man eine Verladebrücke als ein horizontal
+ bewegliches Pendel auffassen.
+ Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Wagen-mit-Pendel"
+
+\end_inset
+
+ zeigt einen Wagen, an welchem ein Pendel der Länge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\ell$
+\end_inset
+
+ angebracht ist.
+ Zur Vereinfachung gehen wir von einer festen Seillänge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\ell$
+\end_inset
+
+ aus.
+ Der Wagen habe die Masse
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $m_{1}$
+\end_inset
+
+, die Last die Masse
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $m_{2}$
+\end_inset
+
+.
+ Das Seil selber werde als masselos angenommen.
+ Die Lage des Systems wird durch die Wagenposition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q_{1}$
+\end_inset
+
+ und den Pendelwinkel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q_{2}$
+\end_inset
+
+ beschrieben.
+ Eine auf den Wagen wirkende Kraft
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\digamma$
+\end_inset
+
+ stellt den Eingang des Wagen-Pendel-Systems dar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename wagen_pendel.fig
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Wagen mit Pendel
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Wagen-mit-Pendel"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die kinetische Energie hat die Form
+\begin_inset Formula 
+\[
+T=\frac{m_{1}}{2}\dot{q}_{1}^{2}+\frac{m_{2}}{2}\left(\dot{x}_{s}^{2}+\dot{y}_{s}^{2}\right),
+\]
+
+\end_inset
+
+wobei die Position der Last durch die Koordinaten 
+\begin_inset Formula 
+\begin{eqnarray*}
+x_{s} & = & q_{1}+\ell\sin q_{2}\\
+y_{s} & = & \ell\cos q_{2}
+\end{eqnarray*}
+
+\end_inset
+
+beschrieben wird.
+ Daraus ergibt sich unmittelbar 
+\begin_inset Formula 
+\[
+T=\frac{m_{1}+m_{2}}{2}\dot{q}_{1}^{2}+m_{2}\ell\dot{q}_{1}\dot{q}_{2}\cos q_{2}+\frac{m_{2}}{2}\ell^{2}\dot{q}_{2}^{2}.
+\]
+
+\end_inset
+
+Mit der potentiellen Energie 
+\begin_inset Formula 
+\[
+V=m_{2}g\ell(1-\cos q_{2})
+\]
+
+\end_inset
+
+erhält man die Lagrange-Funktion 
+\begin_inset Formula $L=T-V$
+\end_inset
+
+.
+ Die Bewegungsgleichungen haben die Form
+\begin_inset Formula 
+\[
+M(q)\ddot{q}+C(q,\dot{q})+K(q)=Q
+\]
+
+\end_inset
+
+mit der Massematrix 
+\begin_inset Formula 
+\[
+M(q)=\left(\begin{array}{cc}
+m_{1}+m_{2} & \ell m_{2}\cos q_{2}\\
+\ell m_{2}\cos q_{2} & \ell^{2}m_{2}
+\end{array}\right).
+\]
+
+\end_inset
+
+Die Vektoren
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $C$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $K$
+\end_inset
+
+ beinhalten die Zentrifugal- und Corioliskräfte bzw.
+ die Potentialkräfte 
+\begin_inset Formula 
+\[
+C(q,\dot{q})=\left(\begin{array}{c}
+-\ell m_{2}\dot{q}_{2}^{2}\sin q_{2}\\
+\text{0}
+\end{array}\right),\quad K(q)=\left(\begin{array}{c}
+0\\
+m_{2}g\ell\sin q_{2}
+\end{array}\right).
+\]
+
+\end_inset
+
+Als äußere Kräfte wirken die Reibungskräfte (viskose Reibung mit den Koeffizient
+en
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d_{1}$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d_{2}$
+\end_inset
+
+) sowie die auf den Wagen eingeprägte Kraft
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\digamma$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+Q=\left(\begin{array}{c}
+\digamma-d_{1}\dot{q}_{1}\\
+-d_{2}\dot{q}_{2}
+\end{array}\right).
+\]
+
+\end_inset
+
+Mit dem Zustand 
+\begin_inset Formula $x=(q_{1},\dot{q}_{1},q_{2},\dot{q}_{2})^{T}$
+\end_inset
+
+ und dem Eingang 
+\begin_inset Formula $u=\digamma$
+\end_inset
+
+ erhält man das folgende nichtlineare Modell:
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Wagen_mit_Pendel_Christoffel1neu.wmx
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & \frac{m_{2}\ell^{2}x_{4}^{2}\sin x_{3}-d_{1}\ell x_{2}+\cos x_{3}\left(m_{2}g\ell\sin x_{3}+d_{2}x_{4}\right)+\ell u}{\ell\left(m_{1}+m_{2}\sin^{2}x_{3}\right)}\\
+\dot{x}_{3} & = & x_{4}\\
+\dot{x}_{4} & = & \frac{-\left(m_{1}+m_{2}\right)\left(m_{2}g\ell\sin x_{3}+d_{2}x_{4}\right)-\cos x_{3}\left(\ell^{2}m_{2}^{2}x_{4}^{2}\sin x_{3}-d_{1}\ell m_{2}x_{2}\right)-\ell m_{2}u\cos x_{3}}{\ell^{2}m_{2}\left(m_{1}+m_{2}\sin^{2}x_{3}\right)}
+\end{array}\label{eq:modell-pendel-mit-wagen}
+\end{equation}
+
+\end_inset
+
+Das Modell ist nichtlinear im Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+, aber affin im Eingang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Hochsetzsteller
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Hochsetzsteller-Modellierung"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mit Spannungswandlern lassen sich verschiedene Spannungsniveaus aneinander
+ anpassen, z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ zwischen einer bereitgestellten Versorgungsspannung und einem Verbraucher.
+ Gleichsspannungswandler sind ein beliebte Objekte für die Erprobung und
+ den Vergleich nichtlinearer Regelungsverfahren
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sira-ramirez1991ijc,kugi2000at,gensior2006"
+literal "true"
+
+\end_inset
+
+.
+ Aufgrund ihres Wirkungsgrades werden geschaltete Spannungswandler in vielen
+ Bereichen der Leistungselektronik und der Antriebstechnik eingesetzt.
+\end_layout
+
+\begin_layout Standard
+Ein 
+\emph on
+Hochsetzsteller
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Hochsetzsteller
+\end_layout
+
+\end_inset
+
+ bzw.
+ 
+\emph on
+Aufwärtswandler
+\emph default
+ (engl.
+ 
+\emph on
+Boost Converter
+\emph default
+) ist ein Gleichspannungswandler, der eine Eingangsspannung in eine höhere
+ Ausgangsspannung überführt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "erickson2004,bacha2014"
+literal "true"
+
+\end_inset
+
+.
+ Das Schaltbild in Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:hochsetzsteller-schaltbild-netzwerk"
+
+\end_inset
+
+ zeigt die grundsätzliche Schaltungstopologie bzw.
+ das Netzwerkmodell eines Hochsetzstellers.
+ Der Leistungstransistor wird zusammen mit der Freilaufdiode als Umschalter
+ modelliert, wobei 
+\begin_inset Formula $d=1$
+\end_inset
+
+ einem durchgesteuerten Transistor und 
+\begin_inset Formula $d=0$
+\end_inset
+
+ einem sperrenden Transistor entspricht.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename schaltbild-boost-konverter.fig
+	width 99text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Prinzipschaltbild (links) und Netzwerkmodell (rechts) eines Hochsetzstellers
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:hochsetzsteller-schaltbild-netzwerk"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Für den Spulenstrom
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I$
+\end_inset
+
+ gilt aufgrund des Maschensatzes 
+\begin_inset Formula 
+\[
+L\dot{I}=E+\left\{ \begin{array}{rcl}
+0 & \text{für} & d=1,\\
+-U & \text{für} & d=0.
+\end{array}\right.
+\]
+
+\end_inset
+
+Die Bilanzierung der in den Kondensator fließenden Ströme (Knotensatz) liefert
+ 
+\begin_inset Formula 
+\[
+C\dot{U}=-\frac{U}{R}+\left\{ \begin{array}{rcl}
+0 & \text{für} & d=1,\\
+I & \text{für} & d=0.
+\end{array}\right.
+\]
+
+\end_inset
+
+Mit Einführung des Vektors 
+\begin_inset Formula $x=(x_{1},x_{2})^{T}=(I,U)^{T}$
+\end_inset
+
+ erhält man das Differentialgleichungssystem 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & -(1-d)\frac{1}{L}x_{2}+\frac{E}{L},\\
+\dot{x}_{2} & = & (1-d)\frac{1}{C}x_{1}-\frac{1}{RC}x_{2}.
+\end{array}\label{eq:Hochsetzsteller-modell}
+\end{equation}
+
+\end_inset
+
+Das System ist aufgrund der Produktbildung zwischen dem Eingang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ und den Komponenten des Zustands
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ nichtlinear.
+ Ein solches Modell nennt man auch bilinear
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "schwarz91"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+PWM
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Der Eingang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ beschreibt das Verhalten des als Schalter modellierten Transistors und
+ kann zunächst nur die diskreten Werte 
+\begin_inset Formula $d\in\{0,1\}$
+\end_inset
+
+ annehmen.
+ In diesem Kontext liegt mit Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Hochsetzsteller-modell"
+
+\end_inset
+
+ ein 
+\emph on
+geschaltetes Modell
+\emph default
+ (engl.
+ 
+\emph on
+switched model
+\emph default
+) vor.
+ Mit einer 
+\emph on
+Pulsweitenmodulation
+\emph default
+ (kurz 
+\emph on
+PWM
+\emph default
+, engl.
+ 
+\emph on
+pulse width modulation
+\emph default
+) lassen sich auch Zwischenwerte einstellen (siehe Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:PWM"
+
+\end_inset
+
+).
+ Das Verhältnis der Einschaltzeit mit 
+\begin_inset Formula $d=1$
+\end_inset
+
+ gegenüber der Schaltperiode 
+\begin_inset Formula $T>0$
+\end_inset
+
+ bezeichnet man dabei als as 
+\emph on
+Tastverhältnis
+\begin_inset space ~
+\end_inset
+
+
+\emph default
+
+\begin_inset Formula $\bar{d}$
+\end_inset
+
+ (engl.
+ 
+\emph on
+duty ratio
+\emph default
+), welches Werte aus dem Intervall 
+\begin_inset Formula $\bar{d}\in[0,1]$
+\end_inset
+
+ annehmen kann.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename PWM.fig
+	width 55text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Signalverlauf des Eingangs
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ bei Pulsweitenmodulation (PWM)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:PWM"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Gemitteltes Modell
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Das Tastverhältnis
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\bar{d}$
+\end_inset
+
+ gibt den Mittelwert des Schaltsignals
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ über eine Periode
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $T$
+\end_inset
+
+ an:
+\begin_inset Formula 
+\[
+\bar{d}(t)=\frac{1}{T}\int_{t}^{t+T}d(\tau)\,\d\tau.
+\]
+
+\end_inset
+
+In analoger Weise kann man auch für alle anderen Systemgrößen (Ströme, Spannunge
+n, ggf.
+ Ladungen usw.) gemittelte Größen einführen.
+ In diesem Sinne erhält man mit 
+\begin_inset Formula 
+\[
+\bar{x}_{i}(t)=\frac{1}{T}\int_{t}^{t+T}x_{i}(\tau)\,\d\tau\quad\text{für}\quad i=1,2
+\]
+
+\end_inset
+
+die gemittelten Zustandskomponenten aus dem Modell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Hochsetzsteller-modell"
+
+\end_inset
+
+.
+ Der zeitliche Verlauf der gemittelten Größen lässt sich wiederum durch
+ ein Differentialgleichungssystem beschreiben.
+ Für den Grenzübergang 
+\begin_inset Formula $T\to0$
+\end_inset
+
+, was aus technischer Sicht durch eine hinreichend hohe Schaltfrequenz 
+\begin_inset Formula $1/T$
+\end_inset
+
+ angenähert wird, erhält man für die gemittelten Größen das 
+\emph on
+gemittelte Modell
+\emph default
+ (engl.
+ 
+\emph on
+averaged model
+\emph default
+):
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\bar{x}}_{1} & = & -(1-\bar{d})\frac{1}{L}\bar{x}_{2}+\frac{E}{L}\\
+\dot{\bar{x}}_{2} & = & (1-\bar{d})\frac{1}{C}\bar{x}_{1}-\frac{1}{RC}\bar{x}_{2}.
+\end{array}\label{eq:Hochsetzsteller-modell-gemittelt}
+\end{equation}
+
+\end_inset
+
+Das gemittelte Modell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Hochsetzsteller-modell-gemittelt"
+
+\end_inset
+
+ in seiner Struktur vollständig mit dem Modell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Hochsetzsteller-modell"
+
+\end_inset
+
+ übereinstimmt, wird man in der praktischen Handhabung darauf verzichten,
+ die gemittelen Größen separat auszuweisen.
+ Den Reglerentwurf führt man an dem (hinsichtlich des Eingangssignals wertkontun
+ierlichen) gemittelten Modell durch, bei der Implementierung wird das Reglerausg
+angssignal nach einer Pulsweitenmodulation dem geschalteten System zugeführt.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Rolle der Bedeutung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Im Zuge der Energiewende gewinnen Problemstellungen wie Impedanzanpassung,
+ Ein- bzw.
+ Rückspeisung ins Drehstromnetz an Bedeutung.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Literatur
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "dynamic"
+options "babalpha"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

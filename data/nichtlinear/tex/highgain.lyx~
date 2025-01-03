@@ -1,0 +1,11238 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass svmono
+\options german,deutsch,sectrefs
+\use_default_options true
+\maintain_unincluded_children false
+\language ngerman
+\language_package default
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style german
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part
+Beobachterentwurf
+\begin_inset CommandInset label
+LatexCommand label
+name "part:Beobachterentwurf"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Beobachter mit großer Verstärkung und starke Beobachter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:High-Gain-Beobachter"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die in den Kapiteln
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:regler-grundlagen"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:regler-varianten"
+
+\end_inset
+
+ entworfenen Rückführungen setzen in der Regel die Kenntnis des vollständigen
+ Systemzustands voraus.
+ In der regelungstechnischen Praxis wird dagegen meist nur ein Teil der
+ Zustände messtechnisch erfasst.
+ Dieses Kapitel behandelt einige Ansätze für Zustandsbeobachter, mit denen
+ aus aktuellen Messdaten von Eingang und Ausgang der jeweilige Systemzustand
+ asymptotisch rekonstruiert wird.
+ Der Hauptteil des Kapitels befasst sich mit Beobachtern, bei denen die
+ im System auftretenden Nichtlinearitäten durch eine lineare Aufschaltung
+ dominiert werden.
+ Zusätzlich wird auf starke Beobachter eingegangen, welche den Zustand ohne
+ Kenntnis des Systemeingangs schätzen.
+\end_layout
+
+\begin_layout Section
+Beobachterentwurf in Originalkoordinaten
+\end_layout
+
+\begin_layout Standard
+Gegeben sei ein nichtlineares System
+\begin_inset Formula 
+\begin{equation}
+\dot{x}=F(x,u),\quad y=h(x)\label{eq:hg-system-nicht-affin}
+\end{equation}
+
+\end_inset
+
+mit einem eingangsabhängigen Vektorfeld 
+\begin_inset Formula $F:\mathcal{M}\times\mathcal{U}\to\R^{n}$
+\end_inset
+
+, der offenen Menge 
+\begin_inset Formula $\mathcal{M}\subseteq\R^{n}$
+\end_inset
+
+ und dem zulässigen Wertebereich 
+\begin_inset Formula $\mathcal{U}\subseteq\R^{m}$
+\end_inset
+
+ der Eingangs\SpecialChar softhyphen
+signale.
+ Die auf der Menge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{M}$
+\end_inset
+
+ definierte Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $h$
+\end_inset
+
+ überführt den Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ in die Ausgangsgröße
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+.
+ Wir gehen davon aus, dass die Zeitverläufe des Eingangs
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u$
+\end_inset
+
+ und des Ausgangs
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+ gemessen werden.
+ Die Regelung von System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-nicht-affin"
+
+\end_inset
+
+ mittels Zustandsrückführung erfordert die Kenntnis des Zustands
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Da der Ausgang in der Regel eine niedrigere Dimension besitzt als der Zustand,
+ d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $\dim y<\dim x$
+\end_inset
+
+, lässt sich der Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ nicht eindeutig durch eine Umkehrung der Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $h$
+\end_inset
+
+ ermitteln.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Die Dimensionangabe für y wäre hilfreich.
+ Damit wäre auch die Dimension der Matrix C im nächsten Unterabschnitt klar
+ ...
+\end_layout
+
+\end_inset
+
+Stattdessen entwirft man in Ergänzung zu der gegebenen Regelstrecke
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-nicht-affin"
+
+\end_inset
+
+ ein weiteres dynamisches System, den sogenannten 
+\emph on
+Beobachter
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter
+\end_layout
+
+\end_inset
+
+ bzw.
+ 
+\emph on
+Zustandsbeobachter
+\emph default
+ (engl.
+ 
+\emph on
+state observer
+\emph default
+), mit der allgemeinen Struktur
+\begin_inset Formula 
+\begin{equation}
+\dot{\hat{z}}=\hat{F}(\hat{z},u,y),\quad\hat{x}=\hat{H}(\hat{z},u,y).\label{eq:hg-beobachter-allgemein}
+\end{equation}
+
+\end_inset
+
+Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:beobachter-struktur"
+
+\end_inset
+
+ skizziert die Verknüpfung von System und Beobachter.
+ Der Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-allgemein"
+
+\end_inset
+
+ ist so zu entwerfen, dass (ggf.
+ unter zusätzlichen Voraussetzungen an die Anfangswerte) der geschätzte
+ Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\hat{x}(t)$
+\end_inset
+
+ gegen den Systemzustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x(t)$
+\end_inset
+
+ für 
+\begin_inset Formula $t\to\infty$
+\end_inset
+
+ konvergiert.
+ In Abhängigkeit von der Dimension des Zustandsraums des Beobachters
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-allgemein"
+
+\end_inset
+
+ unterscheidet man zwischen einem 
+\emph on
+Identitätsbeobachter
+\emph default
+ (
+\begin_inset Formula $\dim\hat{z}=\dim x$
+\end_inset
+
+, insbesondere 
+\begin_inset Formula $\hat{z}=\hat{x}$
+\end_inset
+
+), einem 
+\emph on
+reduzierten Beobachter
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!reduzierter
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Formula $\dim\hat{z}<\dim x$
+\end_inset
+
+) sowie einem 
+\emph on
+Einbettungsbeobachter
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!Einbettungs-
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset Formula $\dim\hat{z}>\dim x$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Dieser Abschnitt widmet sich dem Entwurf von Beobachtern in den Originalkoordina
+ten des Systems.
+ Das dabei entwickelte Entwurfskonzept von Beobachtern mit großer Verstärkung
+ wird in den Abschnitten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:High-Gain-Entwurf-Beobachtbarkeitsnormalform"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:High-Gain-Entwurf-Eingangs-Ausgangs-Normalform"
+
+\end_inset
+
+ auf den Beobachterentwurf in den Koordinaten verschiedener Normalformen
+ übertragen.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename beobachter.fig
+	width 60text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Beobachterbasierte Zustandsschätzung
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:beobachter-struktur"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+High-Gain-Entwurf für unstrukturierte nichtlineare Systeme
+\end_layout
+
+\begin_layout Standard
+Dieser Abschnitt basiert auf den in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thau1973,raghavan1994,zak1990,rajamani1998"
+literal "true"
+
+\end_inset
+
+ vorgestellten Verfahren zum Beobachterentwurf.
+ Es wird vorausgesetzt, dass der Leser mit den Konzepten der Beobachtbarkeit
+ und der Ermittelbarkeit für lineare System vertraut ist
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ludyk1995-2,lunze-rt2"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Angenommen, das nichtlineare System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-nicht-affin"
+
+\end_inset
+
+ lässt sich in der Form 
+\begin_inset Formula 
+\begin{equation}
+\dot{x}=Ax+\widetilde{F}(x,u),\quad y=Cx\label{eq:hg-system-rajamani}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $\mathcal{M}=\R^{n}$
+\end_inset
+
+ darstellen.
+ Dieses System besteht aus einem linearen Teil, der durch die Matrizen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $A$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $C$
+\end_inset
+
+ beschrieben wird, und aus einem nichtlinearen Teil mit der Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+.
+ Eine derartige Aufspaltung des Differential\SpecialChar softhyphen
+gleichungs\SpecialChar softhyphen
+systems in einen linearen
+ und einen nichtlinearen Teil ist praktisch immer möglich.
+ Eine lineare Ausgangsabbildung ist in vielen Fällen anzutreffen, insbesondere
+ dann, wenn einige Komponenten des Zustands als Ausgangsgrößen fungieren.
+\end_layout
+
+\begin_layout Standard
+Der Beobachter besitzt die Struktur eines 
+\emph on
+Luenberger-Beobachters
+\emph default
+ (engl.
+ 
+\emph on
+Luenberger observer
+\emph default
+), vgl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "luenberger64,luenberger66"
+literal "true"
+
+\end_inset
+
+.
+ Er besteht aus einer Kopie des Systems (dem sog.
+ 
+\shape italic
+Simulationsterm
+\shape default
+) und einer Aufschaltung des Ausgangsfehlers, der über eine konstante Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ (der 
+\shape italic
+Beobachterverstärkung
+\shape default
+) auf die Systemgleichungen wirkt (
+\shape italic
+Korrekturterm
+\shape default
+): 
+\begin_inset Formula 
+\begin{equation}
+\dot{\hat{x}}=A\hat{x}+\widetilde{F}(\hat{x},u)+L(y-C\hat{x}).\label{eq:hg-beobachter-rajamani}
+\end{equation}
+
+\end_inset
+
+Zur Beschreibung der Abweichung zwischen den Trajektorien von System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ und dem Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-rajamani"
+
+\end_inset
+
+ führt man den Beobachtungsfehler 
+\begin_inset Formula $\tilde{x}=x-\hat{x}$
+\end_inset
+
+ ein, dessen Dynamik der Fehlerdifferentialgleichung
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\tilde{x}} & = & \dot{x}-\dot{\hat{x}}\\
+ & = & Ax+\widetilde{F}(x,u)-A\hat{x}-\widetilde{F}(\hat{x},u)-L(y-C\hat{x})\\
+ & = & \left(A-LC\right)\tilde{x}+\widetilde{F}(x,u)-\widetilde{F}(\hat{x},u)
+\end{array}\label{eq:hg-fehler-dgl-rajamani}
+\end{equation}
+
+\end_inset
+
+unterliegt.
+ Wird die Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $A$
+\end_inset
+
+ in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ aus der Linearisierung in einer Ruhelage 
+\begin_inset Formula $(x^{0},u^{0})$
+\end_inset
+
+ bestimmt, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $A:=\tfrac{\partial}{\partial x}F(x,u)|_{(x^{0},u^{0})}$
+\end_inset
+
+, und die Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ über eine Eigenwertplazierung bezüglich der Matrix 
+\begin_inset Formula $A-LC$
+\end_inset
+
+ berechnet, dann liegt ein 
+\emph on
+Arbeitspunktbeobachter
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!Arbeitspunkt-
+\end_layout
+
+\end_inset
+
+ vor, der nur lokale Konvergenz garantieren kann
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rothfuss93,birk90,adamy2014"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Globale Betrachtung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bei einer global asymptotisch stabilen Ruhelage 
+\begin_inset Formula $\tilde{x}=0$
+\end_inset
+
+ der Fehlerdifferentialgleichung konvergiert der Beobachter global, d
+\begin_inset space ~
+\end_inset
+
+h.
+ es gilt 
+\begin_inset Formula 
+\begin{equation}
+\lim_{t\to\infty}\left\Vert \hat{x}(t)-x(t)\right\Vert =0\label{eq:hg-konvergenz-rajamani}
+\end{equation}
+
+\end_inset
+
+für alle Anfangswerte 
+\begin_inset Formula $x(0),\hat{x}(0)\in\R^{n}$
+\end_inset
+
+.
+ Die Idee des auf Thau
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thau1973"
+literal "true"
+
+\end_inset
+
+ zurückgehenden Entwurfs besteht darin, den linearen Teil in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-rajamani"
+
+\end_inset
+
+ durch passende Wahl der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ so auszulegen, dass die in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-rajamani"
+
+\end_inset
+
+ auftretenden Nichtlinearitäten von dem linearen Teil 
+\begin_inset Formula $A-LC$
+\end_inset
+
+ dominiert werden.
+ Diese Dominanz des linearen Teils führt meist auf große Beobachterverstärkungen.
+ Daher spricht man von einem 
+\emph on
+Beobachter mit großer Verstärkung
+\emph default
+ (engl.
+ 
+\emph on
+high gain observer
+\emph default
+).
+ Dazu wird angenommen, dass die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+ höchstens einen linearen Zuwachs aufweist.
+ Formal bedeutet das, dass die Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+ einer Lipschitz-Bedingung
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Lipschitz-Bedingung
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\forall x,\hat{x}\in\R^{n},\;\forall u\in\mathcal{U}:\quad\left\Vert \widetilde{F}(x,u)-\widetilde{F}(\hat{x},u)\right\Vert \leq\rho\left\Vert x-\hat{x}\right\Vert \label{eq:hg-lipschitz-rajamani}
+\end{equation}
+
+\end_inset
+
+mit der Lipschitz-Konstanten 
+\begin_inset Formula $\rho>0$
+\end_inset
+
+ genügt.
+ Verschiedene hinreichende Konvergenzbedingungen und Ansätze zur Berechnung
+ der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ sind in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thau1973,raghavan1994,zak1990"
+literal "true"
+
+\end_inset
+
+ angegeben.
+ Eine umfassende Charakterisierung ist in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rajamani1998"
+literal "true"
+
+\end_inset
+
+ zu finden:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:Rajamani-hinreichend"
+
+\end_inset
+
+Man betrachte das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ mit dem Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-rajamani"
+
+\end_inset
+
+.
+ Das lineare Teilsystem von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+, welches durch das Paar 
+\begin_inset Formula $(A,C)$
+\end_inset
+
+ beschrieben wird, sei beobachtbar
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+beobachtbar
+\end_layout
+
+\end_inset
+
+, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ es gelte
+\begin_inset Formula 
+\[
+\forall s\in\C:\quad\rank\left(\begin{array}{c}
+sI-A\\
+C
+\end{array}\right)=n.
+\]
+
+\end_inset
+
+Die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\tilde{F}$
+\end_inset
+
+ genüge der globalen Lipschitz-Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-rajamani"
+
+\end_inset
+
+ mit der Lipschitz-Konstanten 
+\begin_inset Formula $\rho>0$
+\end_inset
+
+.
+ Lässt sich die Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ so wählen, dass die Matrix 
+\begin_inset Formula $A-LC$
+\end_inset
+
+ stabil ist und zusätzlich
+\begin_inset Formula 
+\begin{equation}
+\left\Vert \left(sI-(A-LC)\right)^{-1}\right\Vert _{\infty}<\frac{1}{\rho}\label{eq:hg-norm-rajamani}
+\end{equation}
+
+\end_inset
+
+gilt, dann ist die Ruhelage 
+\begin_inset Formula $\tilde{x}=0$
+\end_inset
+
+ der Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-rajamani"
+
+\end_inset
+
+ global asymptotisch stabil.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Norm, Verweis auf Beweis
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In der Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-rajamani"
+
+\end_inset
+
+ bezeichnet 
+\begin_inset Formula $\|G\|_{\infty}$
+\end_inset
+
+ die Norm einer Übertragungsfunktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $G$
+\end_inset
+
+ im Hardy-Raum
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{H}_{\infty}$
+\end_inset
+
+ der stabilen Übertragungsfunktionen (siehe
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zhou1998"
+literal "true"
+
+\end_inset
+
+ und Anhang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Stabilitaet-im-geschlossenen-Regelkreis"
+
+\end_inset
+
+).
+ Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:Rajamani-hinreichend"
+
+\end_inset
+
+ wird an dieser Stelle nicht bewiesen; er ergibt sich später als Folgerung
+ aus Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-strukturiert"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Bemerkung, dass die Bedingung auch notwendig ist?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel, HG_Pendel1.wxmx
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:hg-inverses-pendel"
+
+\end_inset
+
+In Anlehnung an Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:inverses-pendel-gleichstrommotor"
+
+\end_inset
+
+ betrachten wir das in Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:inverses-mathematisches-Pendel"
+
+\end_inset
+
+ dargestellte ungedämpfte mathematische Pendel mit der Länge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\ell$
+\end_inset
+
+ und der Masse
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $m$
+\end_inset
+
+ der Last.
+ Der Winkel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\theta$
+\end_inset
+
+ gibt die Auslenkung an.
+ Im Aufhängepunkt wird ein zusätzliches Drehmoment
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\tau$
+\end_inset
+
+ eingeprägt, so dass sich das System durch die Bewegungsgleichung 
+\begin_inset Formula 
+\[
+m\ell^{2}\ddot{\theta}-mg\ell\sin\theta=\tau
+\]
+
+\end_inset
+
+beschreiben lässt.
+ Mit 
+\begin_inset Formula $x=(x_{1},x_{2})^{T}=(\theta,\dot{\theta})^{T}$
+\end_inset
+
+, 
+\begin_inset Formula $u=\tau$
+\end_inset
+
+, 
+\begin_inset Formula $\kappa_{1}:=g/\ell$
+\end_inset
+
+ und 
+\begin_inset Formula $\kappa_{2}:=1/(m\ell^{2})$
+\end_inset
+
+ erhält man das Zustands\SpecialChar softhyphen
+raum\SpecialChar softhyphen
+modell 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & \kappa_{1}\sin x_{1}+\kappa_{2}u\\
+y & = & x_{1},
+\end{array}\label{eq:hg-inv-math-pendel}
+\end{equation}
+
+\end_inset
+
+bei welchem der Winkel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\theta$
+\end_inset
+
+ als Ausgangs- bzw.
+ Messgröße verwendet wird.
+ Das Pendelmodell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-inv-math-pendel"
+
+\end_inset
+
+ lässt sich in der Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ mit
+\begin_inset Formula 
+\[
+A=\left(\begin{array}{cc}
+0 & 1\\
+0 & 0
+\end{array}\right),\quad C=\left(\begin{array}{cc}
+1 & 0\end{array}\right),\quad\widetilde{F}(x,u)=\left(\begin{array}{c}
+0\\
+\kappa_{1}\sin x_{1}+\kappa_{2}u
+\end{array}\right)
+\]
+
+\end_inset
+
+darstellen.
+ Die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+ besitzt die Lipschitz-Konstante 
+\begin_inset Formula $\rho=\kappa_{1}$
+\end_inset
+
+.
+ Mit der Beobachterverstärkung 
+\begin_inset Formula $L=(a_{1},a_{0})^{T}$
+\end_inset
+
+ erhält man das charakteristische Polynom
+\begin_inset Formula 
+\[
+\det(sI-(A-LC))=s^{2}+a_{1}s+a_{0},
+\]
+
+\end_inset
+
+so dass die Matrix 
+\begin_inset Formula $A-LC$
+\end_inset
+
+ für 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+ stabil ist.
+ In der gebrochen\SpecialChar softhyphen
+rationalen Matrix
+\begin_inset Formula 
+\[
+\left(sI-(A-LC)\right)^{-1}=\left(\begin{array}{cc}
+s+a_{1} & -1\\
+a_{0} & s
+\end{array}\right)^{-1}=\frac{1}{s^{2}+a_{1}s+a_{0}}\left(\begin{array}{cc}
+s & 1\\
+-a_{0} & s+a_{1}
+\end{array}\right)
+\]
+
+\end_inset
+
+geht der linke untere Eintrag für 
+\begin_inset Formula $s\to0$
+\end_inset
+
+ gegeben der Wert 
+\begin_inset Formula $\tfrac{a_{0}}{a_{0}}=1$
+\end_inset
+
+.
+ Für die Verstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-rajamani"
+
+\end_inset
+
+ gilt somit 
+\begin_inset Formula $\|\cdot\|_{\infty}\geq1$
+\end_inset
+
+, so dass die strikte Ungleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-rajamani"
+
+\end_inset
+
+ für 
+\begin_inset Formula $\kappa_{1}\geq1$
+\end_inset
+
+ nicht erfüllt ist.
+ Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:Rajamani-hinreichend"
+
+\end_inset
+
+ ist dann nicht anwendbar.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename inv_pendel.fig
+	scale 150
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Inverses mathematisches Pendel
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:inverses-mathematisches-Pendel"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+High-Gain-Entwurf für strukturierte nichtlineare Systeme
+\end_layout
+
+\begin_layout Standard
+Die in System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ auftretende Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+ kann von allen Zuständen abhängen und alle Komponenten der Differentialgleichun
+g beeinflussen.
+ In der Praxis werden die Nichtlinaeritäten nur von bestimmen Variablen
+ abhängen und nur in einigen Komponenten des Differentialgleichungssytems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ auftreten.
+ Beschreibt man diese Abhängigkeiten durch geeignet gewählte Matrizen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $B$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $D$
+\end_inset
+
+, dann kann man die nichtlineare Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\widetilde{F}$
+\end_inset
+
+ folgendermaßen darstellen:
+\begin_inset Formula 
+\begin{equation}
+\widetilde{F}=B\bar{F}(Dx,u).\label{eq:F-strukturiert}
+\end{equation}
+
+\end_inset
+
+Setzt man
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+ in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-rajamani"
+
+\end_inset
+
+ ein, so erhält man die zugehörige Fehlerdifferentialgleichung
+\begin_inset Formula 
+\begin{equation}
+\dot{\tilde{x}}=\left(A-LC\right)\tilde{x}+B\left[\bar{F}(Dx,u)-\bar{F}(D\hat{x},u)\right].\label{eq:hg-fehler-dgl-strukturiert}
+\end{equation}
+
+\end_inset
+
+Unter der Annahme
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-rajamani"
+
+\end_inset
+
+ genügt auch die Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\bar{F}$
+\end_inset
+
+ einer Lipschitz-Bedingung
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Lipschitz-Bedingung
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\forall z,\hat{z}\in\im\,D,\;\forall u\in\mathcal{U}:\quad\left\Vert \bar{F}(z,u)-\bar{F}(\hat{z},u)\right\Vert \leq\bar{\rho}\left\Vert z-\hat{z}\right\Vert \label{eq:hg-lipschitz-strukturiert}
+\end{equation}
+
+\end_inset
+
+mit der Lipschitz-Konstanten 
+\begin_inset Formula $\bar{\rho}>0$
+\end_inset
+
+.
+ Durch passende Wahl der Matrizen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $B$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $D$
+\end_inset
+
+ lassen sich auch unterschiedlich stark ausgeprägte Nichtlinearitäten hinsichtli
+ch der Lipschitz-Konstanten aufeinander abgleichen.
+ In Analogie zu Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-strukturiert"
+
+\end_inset
+
+ ist im Fall einer durch Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+ strukturierten Nichtlinearität folgende Konvergenzaussage möglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2012ssd,roebenack2014pamm,roebenack2016sac"
+literal "true"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-strukturiert"
+
+\end_inset
+
+Man betrachte das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+ mit dem Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-rajamani"
+
+\end_inset
+
+ und einer Nichtlinearität in der Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+.
+ Das lineare Teilsystem von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-rajamani"
+
+\end_inset
+
+, welches durch das Paar 
+\begin_inset Formula $(A,C)$
+\end_inset
+
+ beschrieben wird, sei ermittelbar
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Ein lineares System ist ermittelbar, wenn es bezüglich der instabilen Eigenmodi
+ beobachtbar ist.
+ Hinsichtlich einer Kalman-Zerlegung nach Beobachtbarkeit bedeutet das,
+ dass das nicht beobachtbare Teilsystem asymptotisch stabil ist
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ludyk1995-2,lunze-rt2"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+ermittelbar
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+detectable
+\emph default
+), d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ es gelte
+\begin_inset Formula 
+\[
+\forall s\in\C,\;\Re(s)\geq0:\quad\rank\left(\begin{array}{c}
+sI-A\\
+C
+\end{array}\right)=n.
+\]
+
+\end_inset
+
+Die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\bar{F}$
+\end_inset
+
+ genüge der globalen Lipschitz-Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-strukturiert"
+
+\end_inset
+
+ mit der Lipschitz-Konstanten 
+\begin_inset Formula $\bar{\rho}>0$
+\end_inset
+
+.
+ Lässt sich die Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ so wählen, dass die Matrix 
+\begin_inset Formula $A-LC$
+\end_inset
+
+ stabil ist und zusätzlich
+\begin_inset Formula 
+\begin{equation}
+\left\Vert D\left(sI-(A-LC)\right)^{-1}B\right\Vert _{\infty}<\frac{1}{\bar{\rho}}\label{eq:hg-norm-strukturiert}
+\end{equation}
+
+\end_inset
+
+gilt, dann ist die Ruhelage 
+\begin_inset Formula $\tilde{x}=0$
+\end_inset
+
+ der Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-strukturiert"
+
+\end_inset
+
+ global asymptotisch stabil.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beweisskizze
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{proofsketch}
+\end_layout
+
+\end_inset
+
+Die Annahmen von Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-strukturiert"
+
+\end_inset
+
+ seien erfüllt.
+ Mit der Ungleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-strukturiert"
+
+\end_inset
+
+ besitzt die 
+\emph on
+algebraische Riccati-Ungleichung
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Riccati-Ungleichung
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+algebraic Riccati inequality
+\emph default
+)
+\begin_inset Formula 
+\begin{equation}
+(A-LC)^{T}P+P(A-LC)+\bar{\rho}^{2}PBB^{T}P+D^{T}D\prec0\label{eq:hg-ARI}
+\end{equation}
+
+\end_inset
+
+eine positiv definite Lösung 
+\begin_inset Formula $P=P^{T}\succ0$
+\end_inset
+
+ (siehe Anhang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Stabilitaet-im-geschlossenen-Regelkreis"
+
+\end_inset
+
+).
+ Für die Stabilitätsuntersuchung setzen wir als mögliche Ljapunov-Funktion
+ die quadratische Form 
+\begin_inset Formula 
+\[
+V(\tilde{x})=\tilde{x}^{T}P\tilde{x}
+\]
+
+\end_inset
+
+mit der Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+ an.
+ Damit ist die Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ global positiv definit.
+ Unter Beachtung der Lipschitz-Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-strukturiert"
+
+\end_inset
+
+ und der Ungleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-ARI"
+
+\end_inset
+
+ erhält man für die Zeitableitung entlang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-strukturiert"
+
+\end_inset
+
+ die Abschätzung
+\begin_inset Formula 
+\[
+\dot{V}(\tilde{x})\leq\tilde{x}^{T}\left[(A-LC)^{T}P+P(A-LC)+\bar{\rho}^{2}PBB^{T}P+D^{T}D\right]\tilde{x}<0
+\]
+
+\end_inset
+
+für alle 
+\begin_inset Formula $\tilde{x}\neq0$
+\end_inset
+
+.
+ Damit ist die Ruhelage 
+\begin_inset Formula $\tilde{x}=0$
+\end_inset
+
+ der Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-strukturiert"
+
+\end_inset
+
+ global asymptotisch stabil.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{proofsketch}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Interpretation nach Satz über die kleine Kreisverstärkung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Das Fehlersystem
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-strukturiert"
+
+\end_inset
+
+ kann man auch als Kombination eines linearen Systems mit der Übertragungsfunkti
+on 
+\begin_inset Formula 
+\begin{equation}
+G(s)=D\left(sI-(A-LC)\right)^{-1}B\label{eq:hg-G-strukturiert}
+\end{equation}
+
+\end_inset
+
+und einer zeitvarianten Nichtlinearität
+\begin_inset Formula 
+\begin{equation}
+\Delta\widetilde{F}(\tilde{z},t):=\bar{F}(z,t)-\bar{F}(\hat{z},t)\label{eq:Delta-F-strukturiert}
+\end{equation}
+
+\end_inset
+
+auffassen (Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Strukturierte-Fehlerdynamik"
+
+\end_inset
+
+).
+ Bedingt durch
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-strukturiert"
+
+\end_inset
+
+ genügt auch die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Delta-F-strukturiert"
+
+\end_inset
+
+ einer Lipschitz-Bedingung mit der Lipschitz-Konstanten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\bar{\rho}$
+\end_inset
+
+.
+ Mit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-strukturiert"
+
+\end_inset
+
+ ist die Verstärkung des linearen Teils
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-G-strukturiert"
+
+\end_inset
+
+ im Sinne der 
+\begin_inset Formula $\mathcal{H}_{\infty}$
+\end_inset
+
+-Norm nicht größer als 
+\begin_inset Formula $1/\bar{\rho}$
+\end_inset
+
+, so dass die Gesamtverstärkung des offenen Kreises kleiner als Eins ist.
+ Der Satz von der kleinen Kreisverstärkung
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Satz!von der kleinen Kreisverstärkung
+\end_layout
+
+\end_inset
+
+ garantiert dann die Stabilität des geschlossenen Kreises (siehe Anhang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Stabilitaet-im-geschlossenen-Regelkreis"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename high-gain-struktur.fig
+	width 98text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Struktur der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehler-dgl-strukturiert"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Strukturierte-Fehlerdynamik"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ein beobachtbares lineares System ist auch ermittelbar.
+ Mit 
+\begin_inset Formula $D=B=I$
+\end_inset
+
+ ergibt sich Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:Rajamani-hinreichend"
+
+\end_inset
+
+ als Folgerung aus Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-strukturiert"
+
+\end_inset
+
+.
+ Das nachfolgende Beispiel zeigt, dass man durch eine Berücksichtigung der
+ Struktur entsprechend Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+ in etlichen Fällen die Existenzbedingungen abschwächen kann:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel: Inverses Pendel (Fortsetzung)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:hg-inverses-pendel-struktur"
+
+\end_inset
+
+Beim inversen Pendel aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-inverses-pendel"
+
+\end_inset
+
+ hängt die Nichtlinearität 
+\begin_inset Formula $\widetilde{F}(x,u)$
+\end_inset
+
+ neben
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u$
+\end_inset
+
+ nur von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ ab und beeinflusst nur die zweite Komponente der Differentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-inv-math-pendel"
+
+\end_inset
+
+.
+ Daraus ergibt sich die Struktur
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+ mit
+\begin_inset Formula 
+\[
+B=\left(\begin{array}{c}
+0\\
+1
+\end{array}\right),\quad D=\left(\begin{array}{cc}
+1 & 0\end{array}\right),\quad\bar{F}(z,u)=\kappa_{1}\sin z+\kappa_{2}u
+\]
+
+\end_inset
+
+und der Lipschitz-Konstanten 
+\begin_inset Formula $\bar{\rho}=\kappa_{1}$
+\end_inset
+
+.
+ Für den linearen Teil erhält man die Übertragungsfunktion
+\begin_inset Formula 
+\[
+G(s)=\frac{1}{s^{2}+a_{1}s+a_{0}}
+\]
+
+\end_inset
+
+eines 
+\begin_inset Formula $PT_{2}$
+\end_inset
+
+-Gliedes, welches für 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+ stabil ist.
+ Vermeidet man durch passende Eigenwertvorgabe eine Resonanzerhöhung, so
+ gilt 
+\begin_inset Formula $\|G\|_{\infty}=\tfrac{1}{a_{0}}.$
+\end_inset
+
+ Für 
+\begin_inset Formula $a_{0}>\bar{\rho}$
+\end_inset
+
+ ist die Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-norm-strukturiert"
+
+\end_inset
+
+ erfüllt.
+ Dieses Ziel lässt sich beispielsweise mit einem reellen Doppelpol 
+\begin_inset Formula $s_{1,2}<-\sqrt{\kappa_{1}}$
+\end_inset
+
+ erreichen.
+ Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-strukturiert"
+
+\end_inset
+
+ garantiert dann die globale Konvergenz des High-Gain-Beobachters.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Berechnung mit LMI
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+\begin_inset CommandInset label
+LatexCommand label
+name "rem:High-Gain-Beobachter-LMI"
+
+\end_inset
+
+Beim Beobachterentwurf ist die Riccati-Ungleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-ARI"
+
+\end_inset
+
+ simultan bezüglich der Variablen 
+\begin_inset Formula $P\succ0$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L$
+\end_inset
+
+ zu lösen.
+ In der gegebenen Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-ARI"
+
+\end_inset
+
+ ist die Ungleichung nichtlinear.
+ Die bilinearen Terme 
+\begin_inset Formula $PL$
+\end_inset
+
+ und 
+\begin_inset Formula $L^{T}P^{T}$
+\end_inset
+
+ lassen sich mit der Substitution 
+\begin_inset Formula $Y=PL$
+\end_inset
+
+ beseitigen.
+ Damit erhält man die Ungleichung 
+\begin_inset Formula 
+\[
+A^{T}P+PA-C^{T}Y^{T}-YC+\bar{\rho}^{2}PBB^{T}P+D^{T}D\prec0.
+\]
+
+\end_inset
+
+Den quadratischen Term 
+\begin_inset Formula $PBB^{T}P$
+\end_inset
+
+ kann man mit Hilfe des Schur-Komplements
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Schur-Komplement
+\end_layout
+
+\end_inset
+
+ eliminieren
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "boyd1994"
+literal "true"
+
+\end_inset
+
+, so dass man auf die 
+\emph on
+lineare Matrix\SpecialChar softhyphen
+ungleichung
+\emph default
+ (engl.
+ 
+\emph on
+linear matrix inequality
+\emph default
+, kurz 
+\emph on
+LMI
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+LMI
+\end_layout
+
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{cc}
+-A^{T}P-PA+C^{T}Y^{T}+YC-D^{T}D & \bar{\rho}PB\\
+\bar{\rho}B^{T}P & I
+\end{array}\right)\succ0,\quad P\succ0\label{eq:hg-LMI}
+\end{equation}
+
+\end_inset
+
+geführt wird, die bezüglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $P$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Y$
+\end_inset
+
+ zu lösen ist.
+ Die gesuchte Beobachterverstärkung ergibt sich aus 
+\begin_inset Formula $L=P^{-1}Y$
+\end_inset
+
+.
+ Zum numerischen Lösen der Ungleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-LMI"
+
+\end_inset
+
+ existieren Routinen für 
+\shape smallcaps
+Matlab
+\shape default
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gahinet1995"
+literal "true"
+
+\end_inset
+
+ und 
+\shape smallcaps
+Scilab
+\shape default
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nikoukhah1995"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Erweiterungen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+Anstelle einer konstanten und damit statischen Beobachterverstärkung kann
+ man auch eine dynamische Beobachterverstärkung einsetzen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pertew2005ifac,pertew2006"
+literal "true"
+
+\end_inset
+
+.
+ Damit erhält man einen Beobachter, dessen Zustandsraum eine höhere Dimension
+ als das zu beobachtende System aufweist.
+ Eine gegenüber
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:F-strukturiert"
+
+\end_inset
+
+ noch detailliertere Berücksichtigung der Struktur der im System auftretenden
+ Nichtlinearitäten ist mit dem in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "franke2016pamm"
+literal "true"
+
+\end_inset
+
+ beschriebenen Zugang möglich, der konzeptionell auf dem in der robusten
+ Regelung verwendeten strukturierten Singulärwert aufbaut
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after "Kap.~10"
+key "zhou1998"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Beobachterentwurf auf Basis der Beobachtbarkeitsnormalform
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:High-Gain-Entwurf-Beobachtbarkeitsnormalform"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Nichtunterscheidbarkeit und Beobachtbarkeit für autonome Systeme
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Beobachtbarkeit-autonom"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Um das Konzept der Beobachtbarkeit für nichtlineare Systeme einzuführen
+ betrachten wir zunächst das autonome System 
+\begin_inset Formula 
+\begin{equation}
+\dot{x}=f(x),\quad y=h(x)\label{eq:hg-system-autonom}
+\end{equation}
+
+\end_inset
+
+mit einem Vektorfeld 
+\begin_inset Formula $f:\mathcal{M}\to\R^{n}$
+\end_inset
+
+ und einem Skalarfeld 
+\begin_inset Formula $h:\mathcal{M}\to\R$
+\end_inset
+
+.
+ Beide Felder seien hinreichend glatt und auf einer offenen Menge 
+\begin_inset Formula $\mathcal{M}\subseteq\R^{n}$
+\end_inset
+
+ definiert.
+ Zusätzlich bezeichne
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\varphi_{t}$
+\end_inset
+
+ den Fluss des Vektorfeldes
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Nichtunterscheidbarkeit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die nachfolgenden Betrachtungen orientieren sich an
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hermann1977"
+literal "true"
+
+\end_inset
+
+.
+ Sei 
+\begin_inset Formula $T>0$
+\end_inset
+
+.
+ Zwei Zustände 
+\begin_inset Formula $p,\bar{p}\in\mathcal{M}$
+\end_inset
+
+ heißen 
+\emph on
+nicht unterscheidbar
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Nichtunterscheidbarkeit
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+indistinguishable
+\emph default
+) auf dem Intervall 
+\begin_inset Formula $[0,T]$
+\end_inset
+
+, wenn die zugehörigen Verläufe der Ausgänge übereinstimmen, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+\begin_inset Formula 
+\begin{equation}
+\forall t\in[0,T]:\quad h(\varphi_{t}(p))=h(\varphi_{t}(\bar{p})).\label{eq:Nichtunterscheidbarkeit}
+\end{equation}
+
+\end_inset
+
+Andernfalls heißen die Zustände 
+\emph on
+unterscheidbar
+\emph default
+ (siehe Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Unterscheidbarkeit"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename unterscheidbarkeit1.fig
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Auf dem Zeitintervall 
+\begin_inset Formula $[0,T]$
+\end_inset
+
+ unterscheidbare Zustände 
+\begin_inset Formula $p,\bar{p}\in\mathcal{M}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Unterscheidbarkeit"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Globale / lokale Beobachtbarkeit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Nichtunterscheidbarkeit"
+
+\end_inset
+
+ definiert auf der Menge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{M}$
+\end_inset
+
+ eine Äquivalenzrelation
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Eine 
+\emph on
+Äquivalenzrelation
+\emph default
+ auf einer Menge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{M}$
+\end_inset
+
+ ist eine Teilmenge 
+\begin_inset Formula $\mathcal{R}\subseteq\mathcal{M}\times\mathcal{M}$
+\end_inset
+
+ mit 
+\begin_inset Formula $(p,p)\in\mathcal{R}$
+\end_inset
+
+ (Reflexivität), 
+\begin_inset Formula $(p,\bar{p})\in\mathcal{R}\Rightarrow(\bar{p},p)\in\mathcal{R}$
+\end_inset
+
+ (Symmetrie) und 
+\begin_inset Formula $(p,\bar{p})\in\mathcal{R}\wedge(\bar{p},v)\in\mathcal{R}\Rightarrow(p,v)\in\mathcal{R}$
+\end_inset
+
+ (Transitivität) für alle 
+\begin_inset Formula $p,\bar{p},v\in\mathcal{M}$
+\end_inset
+
+.
+ Zwei Elemente 
+\begin_inset Formula $p,\bar{p}\in\mathcal{M}$
+\end_inset
+
+ nennt man 
+\emph on
+äquivalent
+\emph default
+, wenn 
+\begin_inset Formula $(p,\bar{p})\in\mathcal{R}$
+\end_inset
+
+.
+ Notation: 
+\begin_inset Formula $p\sim\bar{p}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $p\sim\bar{p}$
+\end_inset
+
+.
+ Die Menge der Punkte, die von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ nicht unterscheidbar (und damit zu
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ äquivalent) sind, sei mit 
+\begin_inset Formula $\mathcal{I}(p):=\left\{ \bar{p}\in\mathcal{M};\,p\sim\bar{p}\right\} $
+\end_inset
+
+ bezeichnet.
+ Ein System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ heißt 
+\emph on
+global beobachtbar
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+beobachtbar
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+globally observable
+\emph default
+), wenn 
+\begin_inset Formula 
+\[
+\forall p\in\mathcal{M}:\quad\mathcal{I}(p)=\{p\}.
+\]
+
+\end_inset
+
+Das bedeutet, dass der einzige Zustand, der von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ nicht unterscheidbar ist, der Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ selber ist.
+ Anders formuliert: Alle (verschiedenen) Zustände sind (voneinander) unterscheid
+bar.
+ Wir nennen das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ 
+\emph on
+lokal beobachtbar im Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+
+\emph default
+, wenn es eine Umgebung 
+\begin_inset Formula $\mathcal{U}\subseteq\mathcal{M}$
+\end_inset
+
+ von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ mit 
+\begin_inset Formula 
+\[
+\mathcal{U}\cap\mathcal{I}(p)=\{p\}
+\]
+
+\end_inset
+
+gibt.
+ Das System heißt 
+\emph on
+lokal beobachtbar
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+beobachtbar
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+locally observable
+\emph default
+), wenn es in allen Punkten 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+ lokal beobachtbar ist.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Satz implizite Funktion
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Alle Zustände aus einer Umgebung eines Punktes 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+ sind genau dann unterscheidbar, wenn die Zuordnung 
+\begin_inset Formula 
+\begin{equation}
+\Upsilon:p\mapsto\left.h(\varphi_{t}(p))\right|_{[0,T]}\label{eq:hg-unterscheidbarkeit-funktion}
+\end{equation}
+
+\end_inset
+
+injektiv
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Abbildung!injektive
+\end_layout
+
+\end_inset
+
+ ist.
+ Sind die Felder
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $h$
+\end_inset
+
+ des Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ analytisch, dann ist die Ausgangskurve analytisch und kann in eine konvergente
+ Taylorreihe entwickelt werden
+\begin_inset Formula 
+\[
+y(t)=h(\varphi_{t}(p))=\sum_{i=0}^{\infty}L_{f}^{i}h(p)\frac{t^{i}}{i!},
+\]
+
+\end_inset
+
+die man auch als Lie-Reihe
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Lie-Reihe
+\end_layout
+
+\end_inset
+
+ bezeichnet (vgl.
+ Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Lie-Ableitung-Skalarfeld"
+
+\end_inset
+
+).
+ Bei der Untersuchung der Injektivität geht man dabei von der Abbildung
+ in einen Funktionenraum nach Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-funktion"
+
+\end_inset
+
+ zu einer Abbildung
+\begin_inset Formula 
+\begin{equation}
+p\mapsto\left(L_{f}^{i}h(p)\right)_{i=0}^{\infty}\label{eq:hg-unterscheidbarkeit-folge}
+\end{equation}
+
+\end_inset
+
+in den Folgenraum
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\R^{\infty}$
+\end_inset
+
+ über.
+ Da der Definitionsbereich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{M}$
+\end_inset
+
+ eine Teilmenge des Vektorraums
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\R^{n}$
+\end_inset
+
+ ist, kann der von den Abbildungen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-funktion"
+
+\end_inset
+
+ bzw.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-folge"
+
+\end_inset
+
+ aufgespannte Bildbereich topologisch höchstens die Dimension
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $n$
+\end_inset
+
+ besitzen.
+ Damit lässt sich der Bildbereich von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-folge"
+
+\end_inset
+
+ durch (maximal) 
+\begin_inset Formula $n$
+\end_inset
+
+ Komponenten 
+\begin_inset Formula $L_{f}^{i}h$
+\end_inset
+
+ parametrieren.
+ Sind die Gradienten 
+\begin_inset Formula $\d L_{f}^{i}h$
+\end_inset
+
+ von 
+\begin_inset Formula $n$
+\end_inset
+
+ derartigen Komponenten linear unabhängig, dann ist die Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-folge"
+
+\end_inset
+
+ in einer Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ injektiv (Anwendung des Satzes über die implizite Abbildung bzw.
+ des Satzes über die Umkehrabbildung, vgl.
+ Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm: Umkehrfunktion"
+
+\end_inset
+
+).
+ Damit sind in einer geeigneten Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ verschiedene Zustände unterscheidbar und das System ist im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ lokal beobachtbar.
+ Da im Vorfeld nicht bekannt ist, welche Gradienten linear unabhängig sind,
+ erfassen wir in der Kodistribution 
+\begin_inset Formula 
+\begin{equation}
+\Omega(p):=\spann\left\{ \d L_{j}^{i}h(p);\;i=0,1,2,\ldots\right\} \label{eq:Beobachtbarkeit-Kodistribution}
+\end{equation}
+
+\end_inset
+
+die lineare Hülle aller Gradienten.
+ Gilt
+\begin_inset Formula 
+\begin{equation}
+\dim\Omega(p)=n,\label{eq:Beobachtbarkeitsrangbedingung}
+\end{equation}
+
+\end_inset
+
+dann ist das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ lokal beobachtbar.
+ Ist die sog.
+ 
+\emph on
+Beobachtbarkeitsrangbedingung
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsrangbedingung
+\end_layout
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsrangbedingung"
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+observability rank condition
+\emph default
+) für alle 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+ erfüllt, dann ist das System (überall) lokal beobachtbar.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel lineares System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Beobachtbarkeit-linear-autonom"
+
+\end_inset
+
+Das lineare System
+\begin_inset Formula 
+\[
+\dot{x}=Ax,\quad y=c^{T}x
+\]
+
+\end_inset
+
+stellt wegen 
+\begin_inset Formula $f(x)=Ax$
+\end_inset
+
+, 
+\begin_inset Formula $h(x)=c^{T}x$
+\end_inset
+
+ mit 
+\begin_inset Formula $A\in\R^{n\times n}$
+\end_inset
+
+ und 
+\begin_inset Formula $c\in\R^{n}$
+\end_inset
+
+ einen Spezialfall von System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ dar.
+ Mit 
+\begin_inset Formula $\d L_{f}^{i}h(x)=c^{T}A^{i}$
+\end_inset
+
+ für 
+\begin_inset Formula $i\in\NN$
+\end_inset
+
+ (vgl.
+ Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Lie-linear-gradient"
+
+\end_inset
+
+) besitzt die Kodistribution
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeit-Kodistribution"
+
+\end_inset
+
+ die Form 
+\begin_inset Formula 
+\begin{equation}
+\Omega=\spann\left\{ c^{T},\,c^{T}A,\,c^{T}A^{2},\,\ldots,\,c^{T}A^{i},\,\ldots\right\} .\label{eq:Beobachtbarkeit-Kodistr-Linear1}
+\end{equation}
+
+\end_inset
+
+Nach dem Satz von Cayley-Hamilton
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Satz!von Cayley-Hamilton
+\end_layout
+
+\end_inset
+
+ erfüllt jede quadratische Matrix (formal) ihre eigene charakteristische
+ Gleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gantmacher86,beutelspacher2001"
+literal "true"
+
+\end_inset
+
+.
+ Daraus folgt unmittelbar, dass die Matrixpotenzen 
+\begin_inset Formula $A^{n},A^{n+1},\ldots$
+\end_inset
+
+ von den Matrizen 
+\begin_inset Formula $I,A,\ldots,A^{n-1}$
+\end_inset
+
+ linear abhängig sind, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $A^{i}\in\spann\{I,A,\ldots,A^{n-1}\}$
+\end_inset
+
+ für 
+\begin_inset Formula $i\geq n$
+\end_inset
+
+.
+ Als Konsequenz wird die Distribution
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeit-Kodistr-Linear1"
+
+\end_inset
+
+ bereits von den ersten 
+\begin_inset Formula $n$
+\end_inset
+
+ Kovektoren aufgespannt:
+\begin_inset Formula 
+\begin{equation}
+\Omega=\spann\left\{ c^{T},\,c^{T}A,\,c^{T}A^{2},\,\ldots,\,c^{T}A^{n-1}\right\} .\label{eq:Beobachtbarkeit-Kodistr-Linear2}
+\end{equation}
+
+\end_inset
+
+Die Beobachtbarkeitsrangbedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsrangbedingung"
+
+\end_inset
+
+ lässt sich in diesem Fall durch 
+\begin_inset Formula 
+\[
+\rank\,Q_{B}\stackrel{!}{=}n\quad\text{mit}\quad Q_{B}:=\left(\begin{array}{c}
+c^{T}\\
+c^{T}A\\
+\vdots\\
+c^{T}A^{n-1}
+\end{array}\right)
+\]
+
+\end_inset
+
+prüfen.
+ Die dabei auftretende Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q_{B}$
+\end_inset
+
+ ist die Beobachtbarkeitsmatrix
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsmatrix
+\end_layout
+
+\end_inset
+
+ nach Kalman
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lunze-rt2"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsabbildung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Der Satz von Cayley-Hamilton
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Satz!von Cayley-Hamilton
+\end_layout
+
+\end_inset
+
+ kann nicht unmittelbar auf nichtlineare Systeme übertragen werden.
+ Damit ist nicht klar, bis zu welcher Ordnung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $N$
+\end_inset
+
+ die Lie-Ableitungen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $L_{f}^{i}h(x)$
+\end_inset
+
+ für 
+\begin_inset Formula $0\leq i\leq N-1$
+\end_inset
+
+ in die Beobachtbarkeitsanalyse einbezogen werden müssen.
+ Betrachtet man Systeme
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ mit analytischen Feldern
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f,h$
+\end_inset
+
+, dann ist die an
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-unterscheidbarkeit-folge"
+
+\end_inset
+
+ angelehnte Abbildung 
+\begin_inset Formula 
+\begin{equation}
+x\mapsto\left(\begin{array}{c}
+h(x)\\
+L_{f}h(x)\\
+\cdots\\
+L_{f}^{N-1}h(x)
+\end{array}\right)\label{eq:Beobachtbarkeitsabbildung-allgemein}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $N=2n+1$
+\end_inset
+
+ für 
+\shape italic
+fast alle
+\shape default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Gilt eine Eigenschaft für alle Elemente einer offenen und dichten Teilmenge
+ 
+\begin_inset Formula $\mathcal{A}\subseteq\mathbb{M}$
+\end_inset
+
+ eines metrischen Raumes
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathbb{M}$
+\end_inset
+
+, so sagt man, die Eigenschaft gilt für 
+\emph on
+fast alle
+\emph default
+ Elemente von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathbb{M}$
+\end_inset
+
+.
+ Die Teilmenge
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{A}$
+\end_inset
+
+ ist dann von 
+\emph on
+zweiter Kategorie
+\emph default
+ im Sinne von Baire
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "goepfert2009"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ analytischen Systeme injektiv
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gauthier91"
+literal "true"
+
+\end_inset
+
+.
+ In Anlehnung an den in Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Beobachtbarkeit-linear-autonom"
+
+\end_inset
+
+ beschriebenen Fall linearer zeitinvarianter Systeme berücksichtigen viele
+ Verfahren zum Beobachterentwurf die Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsabbildung-allgemein"
+
+\end_inset
+
+ nur für 
+\begin_inset Formula $N=n$
+\end_inset
+
+.
+ Die Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsabbildung-allgemein"
+
+\end_inset
+
+ geht dann in die 
+\emph on
+Beobachtbarkeitsabbildung
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsabbildung
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+observability map
+\emph default
+) 
+\begin_inset Formula 
+\begin{equation}
+q(x):=\left(\begin{array}{c}
+h(x)\\
+L_{f}h(x)\\
+\cdots\\
+L_{f}^{n-1}h(x)
+\end{array}\right)\label{eq:Beobachtbarkeitsabbildung}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $q:\mathcal{M}\to\R^{n}$
+\end_inset
+
+ über.
+ Die zugehörige Jacobimatrix 
+\begin_inset Formula 
+\begin{equation}
+Q_{B}(x):=\d q(x)=\left(\begin{array}{c}
+\d h(x)\\
+\d L_{f}h(x)\\
+\cdots\\
+\d L_{f}^{n-1}h(x)
+\end{array}\right)\label{eq:Beobachtbarkeitsmatrix}
+\end{equation}
+
+\end_inset
+
+nennt man 
+\emph on
+Beobachtbarkeitsmatrix
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsmatrix
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+observability matrix
+\emph default
+).
+ Alg.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Berechnung-Beobachtbarkeitsmatrix"
+
+\end_inset
+
+ zeigt eine einfache 
+\shape smallcaps
+Maxima
+\shape default
+-Implementierung zur Berechnung der Beobachtbarkeitsabbildung zusammen mit
+ der Beobachtbarkeitsmatrix.
+ Dabei wird auf die in Alg.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Lie-Ableitung-Skalar"
+
+\end_inset
+
+ angegebene Routine 
+\family typewriter
+LieScalar
+\family default
+ zurückgegriffen.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset CommandInset include
+LatexCommand input
+filename "Observability_Matrix.tex"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Berechnung von Beobachtbarkeitsabbildung und -matrix mit 
+\shape smallcaps
+Maxima
+\shape default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Berechnung-Beobachtbarkeitsmatrix"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Hinreichende Bedingung für lokale Beobachtbarkeit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mit Hilfe der Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsmatrix"
+
+\end_inset
+
+ lässt sich eine leicht anzuwendende hinreichende Bedingung für lokale Beobachtb
+arkeit
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Globale Beobachtbarkeit ist wesentlich schwerer zu prüfen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tibken2004cdc,bartosiewicz1995local"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ angeben: 
+\end_layout
+
+\begin_layout Lemma
+\begin_inset CommandInset label
+LatexCommand label
+name "lem:Beobachtbarkeit-hinreichende-Bedingung"
+
+\end_inset
+
+Man betrachte System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Gilt 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+ in einem Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+, dann ist das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ lokal beobachtbar im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Gilt 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+ für alle Punkte 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+, dann ist das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ lokal beobachtbar.
+\end_layout
+
+\end_deeper
+\begin_layout Proof(smartQED)
+Im Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+ gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ die Jacobimatrix der Beobachtbarkeitsabbildung ist im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ regulär.
+ Nach dem Satz über die Umkehrfunktion ist die Abbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q$
+\end_inset
+
+ ein lokaler Diffeomorphismus.
+ In einer geeigneten Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ ist
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q$
+\end_inset
+
+ folglich bijektiv und somit insbesondere injektiv.
+ Damit ist das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ lokal beobachtbar.
+ Gilt 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+ für alle 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+, dann ist das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ lokal beobachtbar.
+\end_layout
+
+\begin_layout Subsection
+Beobachterentwurf für autonome Systeme
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Beobachterentwurf-autonom"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dieser Abschnitt widmet sich dem Entwurf von High-Gain-Beobachtern für autonome
+ Systeme der Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+.
+ Der vorgestellte Entwurfsansatz basiert auf
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gauthier92,ciccarella93,dalla-mora1997"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-beobachtbarkeitsnormalform"
+
+\end_inset
+
+Man betrachte das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ in einem Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+.
+ Gilt 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+, dann ist die Beobachtbarkeitsabbildung ein lokaler Diffeomorphismus, der
+ das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ in die 
+\emph on
+Beobachtbarkeitsnormalform
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsnormalform
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Normalform!Beobachtbarkeits-
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+observability canonical form
+\emph default
+)
+\begin_inset Formula 
+\begin{equation}
+\left.\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}\\
+ & \vdots\\
+\dot{\xi}_{n-1} & = & \xi_{n}\\
+\dot{\xi}_{n} & = & \alpha(\xi)\\
+y & = & \xi_{1}
+\end{array}\right\} \quad\begin{array}{rcl}
+\dot{\xi} & = & A\xi+b\alpha(\xi)\\
+y & = & c^{T}\xi
+\end{array}\label{eq:Beobachtbarkeits-NF-autonom}
+\end{equation}
+
+\end_inset
+
+überführt.
+\end_layout
+
+\begin_layout Standard
+Der Beweis erfolgt ähnlich wie bei der Eingangs-Ausgangs-, der Byrnes-Isidori-
+ bzw.
+ der Regelungsnormalform (vgl.
+ Kapitel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:regler-grundlagen"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Proof(smartQED)
+Es gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+.
+ Nach Lemma
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lem:Beobachtbarkeit-hinreichende-Bedingung"
+
+\end_inset
+
+ ist die Beobachtbarkeitsabbildung 
+\begin_inset Formula $\xi=q(x)$
+\end_inset
+
+ in einer Umgebung des Punktes
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ ein lokaler Diffeomorphismus.
+ Die transformierten Koordinaten sind durch 
+\begin_inset Formula $\xi_{i}=q_{i}(x)=L_{f}^{i-1}h(x)$
+\end_inset
+
+ für 
+\begin_inset Formula $i=1,\ldots,n$
+\end_inset
+
+ definiert.
+ Dadurch gilt
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+\dot{\xi}_{i} & = & \frac{\d}{\d t}\xi_{i}\\
+ & = & \frac{\d}{\d t}q_{i}(x)\\
+ & = & \frac{\d}{\d t}L_{f}^{i-1}h(x)\\
+ & = & \d L_{f}^{i-1}h(x)\cdot\dot{x}\\
+ & = & \d L_{f}^{i-1}h(x)\cdot f(x)\\
+ & = & L_{f}^{i}h(x)\\
+ & = & \left\{ \begin{array}{lcl}
+\xi_{i+1} & \text{für} & i=1,\ldots n-1\\
+\alpha(\xi) & \text{für} & i=n
+\end{array}\right.
+\end{array}
+\]
+
+\end_inset
+
+mit 
+\begin_inset Formula $\alpha(\xi):=L_{f}^{n}h(q^{-1}(\xi))$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beobachter in transformierten Koordinaten
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In den transformierten Koordinaten beinhaltet der Beobachter eine Kopie
+ des Systems.
+ Zusätzlich wird über die konstante Beobachterverstärkung 
+\begin_inset Formula $l\in\R^{n}$
+\end_inset
+
+ der Ausgangsfehler aufgeschaltet:
+\begin_inset Formula 
+\begin{equation}
+\dot{\hat{\xi}}=A\hat{\xi}+b\alpha(\hat{\xi})+l\cdot(y-\hat{\xi}_{1}).\label{eq:hg-beobachter-autonom-trans}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Fehlerdifferentialgleichung, Wahl der Verstärkung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Der Beobachtungsfehler 
+\begin_inset Formula $\tilde{\xi}:=\xi-\hat{\xi}$
+\end_inset
+
+ zwischen dem System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-autonom"
+
+\end_inset
+
+ und dem Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-trans"
+
+\end_inset
+
+ führt auf die Fehlerdifferentialgleichung
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{ccl}
+\dot{\tilde{\xi}} & = & \dot{\xi}-\dot{\hat{\xi}}\\
+ & = & A\xi+b\alpha(\xi)-A\hat{\xi}-b\alpha(\hat{\xi})-l\cdot(\xi_{1}-\hat{\xi}_{1})\\
+ & = & \left(A-lc^{T}\right)\tilde{\xi}+b\left(\alpha(\xi)-\alpha(\hat{\xi})\right).
+\end{array}\label{eq:hg-fehlerdyn}
+\end{equation}
+
+\end_inset
+
+Mit der Beobachterverstärkung 
+\begin_inset Formula $l=(a_{n-1},\ldots,a_{0})^{T}$
+\end_inset
+
+ erhält man für den linearen Teil das charakteristische Polynom
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{crl}
+\CP(s) & := & \det(sI-(A-lc^{T}))\\
+ & = & a_{0}+a_{1}s+\cdots+a_{n-1}s^{n-1}+s^{n}\\
+ & = & (s-s_{1})\cdots(s-s_{n}),
+\end{array}\label{eq:hg-cp}
+\end{equation}
+
+\end_inset
+
+welches man aus vorgegebenen Eigenwerten 
+\begin_inset Formula $s_{1},\ldots,s_{n}$
+\end_inset
+
+ mit jeweils negativem Realteil ermittelt.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beobachter in Originalkoordinaten
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Zur Darstellung des Beobachters
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-trans"
+
+\end_inset
+
+ in Originalkoordinaten wenden wir die durch die Beobachtbarkeitsabbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q$
+\end_inset
+
+ gegebene Transformation 
+\begin_inset Formula 
+\[
+\dot{\hat{\xi}}=\frac{\d}{\d t}\hat{\xi}=\frac{\d}{\d t}q(\hat{x})=\d q(\hat{x})\cdot\dot{\hat{x}}=Q_{B}(\hat{x})\cdot\dot{\hat{x}}
+\]
+
+\end_inset
+
+auf den Beobachter an
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{cll}
+\dot{\hat{x}} & = & Q_{B}^{-1}(\hat{x})\cdot\dot{\hat{\xi}}\\
+ & = & Q_{B}^{-1}(\hat{x})\cdot\left(A\hat{\xi}+b\alpha(\hat{\xi})+l\cdot(y-\hat{\xi}_{1})\right)\\
+ & = & f(\hat{x})+Q_{B}^{-1}(\hat{x})\cdot l\cdot(y-h(\hat{x}))\\
+ & =: & f(\hat{x})+k(\hat{x})\cdot(y-h(\hat{x}))
+\end{array}\label{eq:hg-beobachter-autonom-orig}
+\end{equation}
+
+\end_inset
+
+und erhalten dabei eine zustandsabhängige Beobachterverstärkung 
+\begin_inset Formula $k:\mathcal{M}\to\R^{n}$
+\end_inset
+
+.
+ Die Berechnung der Beobachterverstärkung nach Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ wird an einigen Beispielen illustriert:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiele
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:hg-mathematisches-Pendel-autonom"
+
+\end_inset
+
+Wir betrachten das inverse Pendel aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-inverses-pendel"
+
+\end_inset
+
+, allerdings zunächst ohne Erregung
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Der Beobachterentwurf für das inverse Pendel wird in Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Beobachterentwurf-mit-eingang"
+
+\end_inset
+
+ erneut aufgegriffen und dort in Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-mathematisches-Pendel-Drehmoment"
+
+\end_inset
+
+ für den Fall mit Eingang betrachtet.
+\end_layout
+
+\end_inset
+
+, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ für 
+\begin_inset Formula $u\equiv0$
+\end_inset
+
+.
+ Nutzt man (abweichend von Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-inverses-pendel"
+
+\end_inset
+
+) als Ausgangs- bzw.
+ Messgröße die Winkelgeschwindigkeit, die z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ mit einem Tacho erfasst werden kann.
+ Damit erhält man das Zustands\SpecialChar softhyphen
+raum\SpecialChar softhyphen
+modell 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & \kappa_{1}\sin x_{1}\\
+y & = & x_{2}.
+\end{array}\label{eq:hg-math-pendel-autonom}
+\end{equation}
+
+\end_inset
+
+Aus der Beobachtbarkeitsabbildung
+\begin_inset Formula 
+\begin{equation}
+q(x)=\left(\begin{array}{c}
+h(x)\\
+L_{f}h(x)
+\end{array}\right)=\left(\begin{array}{c}
+x_{2}\\
+\kappa_{1}\sin x_{1}
+\end{array}\right)\label{eq:hg-math-pendel-q}
+\end{equation}
+
+\end_inset
+
+ergibt sich die Beobachtbarkeitsmatrix
+\begin_inset Formula 
+\[
+Q_{B}(x)=\left(\begin{array}{c}
+\d h(x)\\
+\d L_{f}h(x)
+\end{array}\right)=\left(\begin{array}{cc}
+0 & 1\\
+\kappa_{1}\cos x_{1} & 0
+\end{array}\right),
+\]
+
+\end_inset
+
+die wegen 
+\begin_inset Formula $\det Q_{B}(x)=-\kappa_{1}\cos x_{1}$
+\end_inset
+
+ für 
+\begin_inset Formula $|x_{1}|<\pi/2$
+\end_inset
+
+ regulär ist.
+ Für Auslenkungen, die betragsmäßig kleiner als 
+\begin_inset Formula $90\text{°}$
+\end_inset
+
+ sind, ist das System somit lokal beobachtbar.
+ Die Beobachterverstärkung hat die Form 
+\begin_inset Formula 
+\begin{equation}
+k(\hat{x})=Q_{B}^{-1}(\hat{x})\left(\begin{array}{c}
+a_{1}\\
+a_{0}
+\end{array}\right)=\left(\begin{array}{c}
+\frac{a_{0}}{\kappa_{1}\cos\hat{x}_{1}}\\
+a_{1}
+\end{array}\right)\label{eq:math-pendel-autonom-beobachterverstaerkung-x}
+\end{equation}
+
+\end_inset
+
+mit Koeffizienten 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+.
+ Entsprechend Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ erhält man für System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-math-pendel-autonom"
+
+\end_inset
+
+ den Beobachter 
+\begin_inset Formula 
+\[
+\left(\begin{array}{l}
+\dot{\hat{x}}_{1}\\
+\dot{\hat{x}}_{2}
+\end{array}\right)=\left(\begin{array}{c}
+\hat{x}_{2}\\
+\kappa_{1}\sin\hat{x}_{1}
+\end{array}\right)+\left(\begin{array}{c}
+\frac{a_{0}}{\kappa_{1}\cos\hat{x}_{1}}\\
+a_{1}
+\end{array}\right)\left(y-\hat{x}_{2}\right).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel: Kreiselgleichungen, Kreisel_HG.wxmx, Kreisel_HG.sce
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Kreisel-autonom-high-gain"
+
+\end_inset
+
+Man betrachte die Rotation eines starren Körpers im körper\SpecialChar softhyphen
+festen Hauptachsensyst
+em ohne Einwirkung äußerer Kräfte.
+ Die Drehbewegung lässt sich durch die 
+\emph on
+eulerschen Kreiselgleichungen
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+eulersche Kreiselgleichungen
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+I_{1}\dot{\omega}_{1} & = & (I_{2}-I_{3})\omega_{2}\omega_{3}\\
+I_{2}\dot{\omega}_{2} & = & (I_{3}-I_{1})\omega_{1}\omega_{3}\\
+I_{3}\dot{\omega}_{3} & = & (I_{1}-I_{2})\omega_{2}\omega_{3}
+\end{array}
+\]
+
+\end_inset
+
+mit den Winkelgeschwindigkeiten 
+\begin_inset Formula $\omega_{1},\omega_{2},\omega_{3}$
+\end_inset
+
+ um die Hauptachsen und den Hauptträgheitsmomenten 
+\begin_inset Formula $I_{1},I_{2},I_{3}>0$
+\end_inset
+
+ beschreiben
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "magnus1971,arnold1989,marsden2001"
+literal "true"
+
+\end_inset
+
+.
+ Mit dem Zustandsvektor 
+\begin_inset Formula $x=(x_{1},x_{2},x_{3})^{T}=(\omega_{1},\omega_{2},\omega_{3})^{T}$
+\end_inset
+
+ und
+\begin_inset Formula 
+\[
+\lambda_{1}:=\frac{I_{2}-I_{3}}{I_{1}},\;\lambda_{2}:=\frac{I_{3}-I_{1}}{I_{2}},\;\lambda_{3}:=\frac{I_{1}-I_{2}}{I_{3}}
+\]
+
+\end_inset
+
+erhält man das Zustandsraummodell 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & \lambda_{1}x_{2}x_{3}\\
+\dot{x}_{2} & = & \lambda_{2}x_{1}x_{3}\\
+\dot{x}_{3} & = & \lambda_{3}x_{1}x_{2}\\
+y & = & x_{1}.
+\end{array}\label{eq:hg-kreiselmodell}
+\end{equation}
+
+\end_inset
+
+Als Ausgang ist dabei die Winkelgeschwindigkeit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\omega_{1}$
+\end_inset
+
+ der ersten Hauptachse vorgesehen, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ aus der Messung einer Winkelgeschwindigkeit sollen die anderen zwei Winkelgesch
+windigkeiten durch den Beobachter geschätzt werden.
+ Die Beobachtbarkeitsmatrix 
+\begin_inset Formula 
+\[
+Q_{B}(x)=\left(\begin{array}{ccc}
+1 & 0 & 0\\
+0 & \lambda_{1}x_{3} & \lambda_{1}x_{2}\\
+\lambda_{1}\left(\lambda_{3}x_{2}^{2}+\lambda_{2}x_{3}^{2}\right) & 2\lambda_{1}\lambda_{3}x_{1}x_{2} & 2\lambda_{1}\lambda_{2}x_{1}x_{3}
+\end{array}\right)
+\]
+
+\end_inset
+
+ist wegen 
+\begin_inset Formula $\det Q_{B}(x)=2\lambda_{1}^{2}x_{1}(\lambda_{2}x_{3}^{2}-\lambda_{2}x_{2}^{2})$
+\end_inset
+
+ für 
+\begin_inset Formula $x_{1}\neq0\wedge\lambda_{2}x_{3}^{2}\neq\lambda_{2}x_{2}^{2}$
+\end_inset
+
+ mit 
+\begin_inset Formula $\lambda_{1}\neq0$
+\end_inset
+
+ (d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $I_{2}\neq I_{3}$
+\end_inset
+
+) regulär.
+ Mit Alg.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Berechnung-Beobachtbarkeitsmatrix"
+
+\end_inset
+
+ lässt sich die Verstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $k$
+\end_inset
+
+ für den Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ berechnen:
+\end_layout
+
+\begin_layout Example
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{maxima}
+\backslash
+input{Kreisel_HG.tex}
+\backslash
+end{maxima}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+Für die Simulation verwenden wir die (normierten) Hauptträgheitsmomente
+ 
+\begin_inset Formula $I_{1}=5$
+\end_inset
+
+, 
+\begin_inset Formula $I_{2}=4$
+\end_inset
+
+, 
+\begin_inset Formula $I_{3}=3$
+\end_inset
+
+ und erhalten dadurch die Parameter 
+\begin_inset Formula $\lambda_{1}=\tfrac{1}{5}$
+\end_inset
+
+, 
+\begin_inset Formula $\lambda_{2}=-\tfrac{1}{2}$
+\end_inset
+
+ und 
+\begin_inset Formula $\lambda_{3}=\tfrac{1}{3}$
+\end_inset
+
+.
+ Für die Fehlerdynamik des linearen Teils wurde ein dreifache Eigenwert
+ 
+\begin_inset Formula $s=-0,2$
+\end_inset
+
+ vorgegeben, womit man die Koeffizienten 
+\begin_inset Formula $a_{0}=0,008$
+\end_inset
+
+, 
+\begin_inset Formula $a_{1}=0,12$
+\end_inset
+
+ und 
+\begin_inset Formula $a_{2}=0,6$
+\end_inset
+
+ des charakteristischen Polynoms
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp"
+
+\end_inset
+
+ erhält.
+ Die Anfangswerte des Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-kreiselmodell"
+
+\end_inset
+
+ und des zugehörigen Beobachters
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ lauten 
+\begin_inset Formula 
+\[
+x(0)=\left(\begin{array}{c}
+0,5\\
+0,4\\
+0,3
+\end{array}\right)\quad\text{und}\quad\hat{x}(0)=\left(\begin{array}{c}
+0,5\\
+0,1\\
+0,1
+\end{array}\right).
+\]
+
+\end_inset
+
+Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Kreisel-HG"
+
+\end_inset
+
+ zeigt die numerisch berechneten Trajektorien.
+ Es ist zu erkennen, dass der Beobachterzustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ gegen den Systemzustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ konvergiert.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Kreisel_HG.svg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulation der Kreiselgleichungen und des zugehörigen High-Gain-Beobachters
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Kreisel-HG"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel: Wagen-Pendel-System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:wagen-pendel-hg1"
+
+\end_inset
+
+Man betrachte das Wagen-Pendel-System aus Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Wagen-mit-Pendel"
+
+\end_inset
+
+, allerdings ohne Eingang (
+\begin_inset Formula $u=0$
+\end_inset
+
+) und reibungsfrei (
+\begin_inset Formula $d_{1}=0,$
+\end_inset
+
+ 
+\begin_inset Formula $d_{2}=0$
+\end_inset
+
+).
+ Aus Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:modell-pendel-mit-wagen"
+
+\end_inset
+
+ liest man das Vektorfeld 
+\begin_inset Formula 
+\begin{equation}
+f(x)=\left(\begin{array}{c}
+x_{2}\\
+\frac{m_{2}\sin x_{3}\left(g\cos x_{3}+\ell x_{4}^{2}\right)}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+x_{4}\\
+-\frac{\sin x_{3}\left(g(m_{1}+m_{2})+\ell m_{2}x_{4}^{2}\cos x_{3}\right)}{\ell\left(m_{1}+m_{2}\sin^{2}x_{3}\right)}
+\end{array}\right)\label{eq:hg-wagen-pendel-f0}
+\end{equation}
+
+\end_inset
+
+ab.
+ Als Ausgang verwenden wir zunächst die Position des Wagens, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $y_{1}=h_{1}(x)=x_{1}$
+\end_inset
+
+ (siehe Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Wagen-mit-Pendel-Hig-Gain"
+
+\end_inset
+
+).
+ Die Beobachtbarkeitsmatrix 
+\begin_inset Formula 
+\begin{equation}
+Q_{B}(x)=\left(\begin{array}{cccc}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & * & \frac{2\ell m_{2}x_{4}\sin x_{3}}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+0 & 0 & * & *
+\end{array}\right)\label{eq:wageh-pendel-hg-Qb1}
+\end{equation}
+
+\end_inset
+
+enthält in den letzten zwei Zeilen bzw.
+ Spalten vergleichsweise komplizierte Ausdrücke.
+ Zur Überprüfung der Regularität der Beobachtbarkeitsmatrix berechnen wir
+ deren Determinante, für die man auch einen umfangreichen Ausdruck erhält.
+ Mit 
+\begin_inset Formula $\det Q_{B}(x)=(gm_{2}/m_{1})^{2}$
+\end_inset
+
+ für 
+\begin_inset Formula $x_{3}=0$
+\end_inset
+
+, 
+\begin_inset Formula $x_{4}=0$
+\end_inset
+
+ ist die Beobachtbarkeitsmatrix zumindest für kleine Auslenkungen des Pendels
+ und kleine Winkelgeschwindigkeiten regulär.
+ Die Beobachterverstärkung
+\begin_inset Formula 
+\[
+k(\hat{x})=Q_{B}^{-1}(x)\cdot\left(\begin{array}{c}
+a_{3}\\
+a_{2}\\
+a_{1}\\
+a_{0}
+\end{array}\right)=\left(\begin{array}{c}
+a_{3}\\
+a_{2}\\
+*\\
+*
+\end{array}\right)
+\]
+
+\end_inset
+
+nach Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ enthält in den letzten zwei Komponenten ebenfalls sehr umfangreiche Ausdrücke,
+ so dass auf die vollständige Angabe verzichtet wird.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename wagen_pendel_high_gain.fig
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Wagen mit Pendel
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Wagen-mit-Pendel-Hig-Gain"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:wagen-pendel-hg2"
+
+\end_inset
+
+Wir betrachten erneut das Wagen-Pendel-System aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:wagen-pendel-hg1"
+
+\end_inset
+
+, verwenden jetzt aber die horizontale Position der Last als Ausgang, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $y_{2}=h_{2}(x)=x_{1}+\ell\sin x_{3}$
+\end_inset
+
+ (vgl.
+ Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Wagen-mit-Pendel-Hig-Gain"
+
+\end_inset
+
+).
+ Die zugehörige Beobachtbarkeitsmatrix hat die Form 
+\begin_inset Formula 
+\[
+Q_{B}(x)=\left(\begin{array}{cccc}
+1 & 0 & \ell\cos x_{3} & 0\\
+0 & 1 & -\ell x_{4}\sin x_{3} & \ell\cos x_{3}\\
+0 & 0 & * & -\frac{2\ell m_{1}x_{4}\sin x_{3}}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+0 & 0 & * & *
+\end{array}\right).
+\]
+
+\end_inset
+
+Mit 
+\begin_inset Formula $\det Q_{B}(x)=g^{2}$
+\end_inset
+
+ für 
+\begin_inset Formula $x_{3}=0$
+\end_inset
+
+, 
+\begin_inset Formula $x_{4}=0$
+\end_inset
+
+ ist die Beobachtbarkeitsmatrix auch mit diesem Ausgang für kleine Auslenkungen
+ und kleine Winkelgeschwindigkeiten regulär.
+ Damit kann man den Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+ berechnen, erhält aber wiederum umfangreiche Ausdrücke.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Globale Konvergenz
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Für die Konvergenzanalyse betrachten wir das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ und den Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-trans"
+
+\end_inset
+
+ in den transformierten Koordinaten.
+ Genügt die in der Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehlerdyn"
+
+\end_inset
+
+ auftretende Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\alpha$
+\end_inset
+
+ einer Lipschitz-Bedingung
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Lipschitz-Bedingung
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{equation}
+\forall\xi,\hat{\xi}:\quad\left\Vert \alpha(\xi)-\alpha(\hat{\xi})\right\Vert \leq\rho\left\Vert \xi-\hat{\xi}\right\Vert \label{eq:hg-lipschitz-bedingung}
+\end{equation}
+
+\end_inset
+
+mit der Lipschitz-Konstanten 
+\begin_inset Formula $\rho>0$
+\end_inset
+
+, dann kann über die Wahl der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $l$
+\end_inset
+
+ durch den linearen Teil 
+\begin_inset Formula $A-lc^{T}$
+\end_inset
+
+ die Konvergenz des Beobachters gesichert werden.
+ Der folgende Satz trifft eine globale Konvergenzaussage:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-konvergenz-autonom"
+
+\end_inset
+
+Gegeben sei System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ zusammen mit dem Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-orig"
+
+\end_inset
+
+.
+ Das Vektorfeld
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f$
+\end_inset
+
+ sei auf 
+\begin_inset Formula $\mathcal{M}=\R^{n}$
+\end_inset
+
+ definiert und vollständig.
+ Die Beobachtbarkeitsabbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $q$
+\end_inset
+
+ sei ein globaler Diffeomorphismus.
+ Außerdem genüge die Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\alpha$
+\end_inset
+
+ der globalen Lipschitz-Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-bedingung"
+
+\end_inset
+
+.
+ Dann existiert ein Vektor 
+\begin_inset Formula $l\in\R^{n}$
+\end_inset
+
+ derart, dass 
+\begin_inset Formula 
+\begin{equation}
+\lim_{t\to\infty}\left\Vert \hat{x}(t)-x(t)\right\Vert =0\label{eq:hg-konvergenz}
+\end{equation}
+
+\end_inset
+
+für alle Anfangswerte 
+\begin_inset Formula $x(0),\hat{x}(0)\in\mathcal{M}$
+\end_inset
+
+ gilt.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Bemerkung zum Beweis
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die Beweise in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gauthier92,ciccarella93,dalla-mora1997"
+literal "true"
+
+\end_inset
+
+ basieren auf sehr speziellen Eigenwertvorgaben.
+ In späteren Arbeiten entfällt diese Einschränkung.
+ Der folgende Beweis beruht auf
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2012ssd,roebenack2016sac"
+literal "true"
+
+\end_inset
+
+:
+\begin_inset CommandInset citation
+LatexCommand nocite
+key "derbel2016sac"
+literal "true"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof(smartQED)
+Laut Annahme ist die Beobachtbarkeitsabbildung ein globaler Diffeomorphismus.
+ Wir führen daher die Konvergenzanalyse in den transformierten Koordinaten
+ durch und zeigen, dass die Ruhelage 
+\begin_inset Formula $\tilde{\xi}=0$
+\end_inset
+
+ der Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehlerdyn"
+
+\end_inset
+
+ global asymptotisch stabil ist.
+ Definiert man 
+\begin_inset Formula 
+\begin{equation}
+\Delta\alpha(\tilde{\xi},t):=\alpha(\xi)-\alpha(\hat{\xi}),\label{eq:hg-delta-alpha}
+\end{equation}
+
+\end_inset
+
+dann lässt sich die Fehlerdifferentialgleichung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehlerdyn"
+
+\end_inset
+
+ als Verknüpfung eines linearen zeitinvarianten Systems mit der Übertragungsfunk
+tion
+\begin_inset Formula 
+\[
+G(s)=\left(sI-\left(A-lc^{T}\right)\right)^{-1}b=\frac{1}{\CP(s)}\left(\begin{array}{c}
+1\\
+s+a_{n-1}\\
+s^{2}+a_{n-1}s+a_{n-2}\\
+\vdots
+\end{array}\right)
+\]
+
+\end_inset
+
+und der zeitvarianten Nichtlinearität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-delta-alpha"
+
+\end_inset
+
+ darstellen (vgl.
+ Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Fehlerdynamik-High-Gain"
+
+\end_inset
+
+).
+ Wir gehen davon aus, dass
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp"
+
+\end_inset
+
+ als Hurwitz-Polynom vorgegeben wurde.
+ Damit besitzt das lineare Teilsystem eine endliche Verstärkung, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $\|G\|_{\infty}<\infty$
+\end_inset
+
+.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename high-gain-nf1.fig
+	width 82text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Struktur der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-fehlerdyn"
+
+\end_inset
+
+ des High-Gain-Beobachters
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-trans"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Fehlerdynamik-High-Gain"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof(smartQED)
+Führt man bei der Beobachterverstärkung 
+\begin_inset Formula $l^{\epsilon}=(a_{n-1}/\epsilon,\ldots,a_{0}/\epsilon^{n})^{T}$
+\end_inset
+
+ einen Skalierungsfaktor 
+\begin_inset Formula $\epsilon\in(0,1]$
+\end_inset
+
+ ein, so erhält man das in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ parametrierte charakteristische Polynom
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lrl}
+\CP^{\epsilon}(s) & := & \det(sI-A+l^{\epsilon}c^{T})\\
+ & = & \frac{a_{0}}{\epsilon^{n}}+\frac{a_{1}}{\epsilon^{n-1}}s+\cdots+\frac{a_{n-1}}{\epsilon}s^{n-1}+s^{n}\\
+ & = & \left(s-\frac{s_{1}}{\epsilon}\right)\cdots\left(s-\frac{s_{n}}{\epsilon}\right).
+\end{array}\label{eq:hg-cp-epsilon}
+\end{equation}
+
+\end_inset
+
+Für 
+\begin_inset Formula $\epsilon\to0$
+\end_inset
+
+ entspricht diese Skalierung einer Streckung der Eigenwerte nach links.
+ Die zugehörige Übertragungsfunktion hat dann die Form
+\begin_inset Formula 
+\[
+G^{\epsilon}(s)=\left(sI-\left(A-l^{\epsilon}c^{T}\right)\right)^{-1}b=\frac{1}{\CP^{\epsilon}(s)}\left(\begin{array}{c}
+1\\
+s+a_{n-1}\epsilon^{-1}\\
+s^{2}+a_{n-1}\epsilon^{-1}s+a_{n-2}\epsilon^{-2}\\
+\vdots
+\end{array}\right).
+\]
+
+\end_inset
+
+Für den Frequenzgang der 
+\begin_inset Formula $i$
+\end_inset
+
+-ten Komponente gilt
+\begin_inset Formula 
+\[
+\begin{array}{ccl}
+G_{i}^{\epsilon}(j\omega) & = & \frac{(j\omega)^{i-1}+\frac{a_{n-1}}{\epsilon}(j\omega)^{i-2}+\cdots+\frac{a_{n-i+1}}{\epsilon^{i-1}}}{\left(j\omega-\frac{s_{1}}{\epsilon}\right)\cdots\left(j\omega-\frac{s_{n}}{\epsilon}\right)}\\
+ & = & \frac{(j\omega\epsilon)^{i-1}+a_{n-1}(j\omega\epsilon)^{i-2}+\cdots+a_{n-i+1}}{\left(j\omega\epsilon-s_{1}\right)\cdots\left(j\omega\epsilon-s_{n}\right)}\epsilon^{n-i+1}\\
+ & = & \frac{(j\tilde{\omega})^{i-1}+a_{n-1}(j\tilde{\omega})^{i-2}+\cdots+a_{n-i+1}}{\left(j\tilde{\omega}-s_{1}\right)\cdots\left(j\tilde{\omega}-s_{n}\right)}\epsilon^{n-i+1}\\
+ & = & G_{i}(j\tilde{\omega})\epsilon^{n-i+1}
+\end{array}
+\]
+
+\end_inset
+
+mit 
+\begin_inset Formula $\tilde{\omega}=\omega\epsilon$
+\end_inset
+
+.
+ Daraus folgt unmittelbar 
+\begin_inset Formula $\|G_{i}^{\epsilon}\|_{\infty}=\|G_{i}\|_{\infty}\epsilon^{n-i+1}\to0$
+\end_inset
+
+ für 
+\begin_inset Formula $\epsilon\to0$
+\end_inset
+
+.
+ Somit lassen sich der Parameter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ und damit die zugehörige Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $l^{\epsilon}$
+\end_inset
+
+ immer so wählen, dass 
+\begin_inset Formula $\|G^{\epsilon}\|_{\infty}<1/\rho$
+\end_inset
+
+.
+ Mit einer derartigen Wahl der Beobachterverstärkung im linearen Teilsystem
+ ist die Gesamtverstärkung des offenen Kreises kleiner als Eins.
+ Nach dem Satz über die kleine Kreisverstärkung ist die Ruhelage 
+\begin_inset Formula $\tilde{\xi}=0$
+\end_inset
+
+ global asymptotisch stabil, so dass die Konvergenz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-konvergenz"
+
+\end_inset
+
+ gesichert ist (siehe Anhang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Stabilitaet-im-geschlossenen-Regelkreis"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Praktischer Entwurf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+Für die korrekte Festlegung der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $l$
+\end_inset
+
+ ist die Kenntnis der Lipschitz-Konstanten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\rho$
+\end_inset
+
+ aus Ungl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-lipschitz-bedingung"
+
+\end_inset
+
+ erforderlich.
+ Die exakte Bestimmung der Lipschitz-Konstanten ist in der Regel aufwendig.
+ Alternativ könnte man versuchen, über Intervallarithmetik eine Abschätzung
+ der Lipschitz-Konstanten zu erhalten.
+ Praktisch gibt man zunächst Eigenwerte 
+\begin_inset Formula $s_{1},\ldots,s_{n}$
+\end_inset
+
+ für ein stabiles charakteristisches Polynom
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp"
+
+\end_inset
+
+ vor.
+ Dann geht man zum charakteristischen Polynom
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp-epsilon"
+
+\end_inset
+
+ mit 
+\begin_inset Formula $\epsilon=1$
+\end_inset
+
+ über und verkleinert 
+\begin_inset Formula $\epsilon>0$
+\end_inset
+
+ solange, bis der Boebachter konvergiert.
+ 
+\end_layout
+
+\begin_layout Subsection
+Beobachtbarkeit und Beobachterentwurf für eingangsabhängige Systeme
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Beobachterentwurf-mit-eingang"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Im Folgenden wird das in Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Beobachtbarkeit-autonom"
+
+\end_inset
+
+ zunächst für autonome Systeme eingeführte Konzept der Beobachtbarkeit auf
+ eingangsabhängige Systeme übertragen, um anschließend auch für diese Systeme
+ den Beobachter aus Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Beobachterentwurf-autonom"
+
+\end_inset
+
+ verwenden zu können.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Für die Beobachtbarkeitsanalyse betrachten wir das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-nicht-affin"
+
+\end_inset
+
+ auf dem Zeit\SpecialChar softhyphen
+inter\SpecialChar softhyphen
+vall 
+\begin_inset Formula $[0,T]$
+\end_inset
+
+ mit 
+\begin_inset Formula $T>0$
+\end_inset
+
+.
+ Das Eingangssignal 
+\begin_inset Formula $u(\cdot)$
+\end_inset
+
+ sei auf diesem Zeit\SpecialChar softhyphen
+inter\SpecialChar softhyphen
+vall (mindestens) stückweise stetig.
+ Dann besitzt das System für hinreichend kleine 
+\begin_inset Formula $T>0$
+\end_inset
+
+ ein allgemeine Lösung, die wir in leichter Modifikation der bisherigen
+ Notation mit 
+\begin_inset Formula $\varphi_{t}^{u}$
+\end_inset
+
+ bezeichnen (vgl.
+ Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Vektorfelder-und-Fluesse"
+
+\end_inset
+
+).
+ Zwei Zustände 
+\begin_inset Formula $p,\bar{p}\in\mathcal{M}$
+\end_inset
+
+ heißen 
+\emph on
+nicht unterscheidbar bezüglich eines (gegebenen) Eingangssignals
+\emph default
+ 
+\begin_inset Formula $u(\cdot)$
+\end_inset
+
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Nichtunterscheidbarkeit!bezüglich eines Eingangssignals
+\end_layout
+
+\end_inset
+
+, wenn die zugehörigen Verläufe der Ausgänge übereinstimmen, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+\begin_inset Formula 
+\[
+\forall t\in[0,T]:\quad h(\varphi_{t}^{u}(p))=h(\varphi_{t}^{u}(\bar{p})).
+\]
+
+\end_inset
+
+Mit dem Begriff der Unterscheidbarkeit lassen sich in Analogie zu Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Beobachtbarkeit-autonom"
+
+\end_inset
+
+ auch lokale und globale Beobachtbarkeit für eingangsabhängige Systeme definiere
+n.
+ Das folgende Beispiel zeigt, dass bei einem nichtlinearen System die Möglichkei
+t, den Zustand aus dem Verlauf des Ausgangs und seinen Zeitableitungen zu
+ rekonstruieren, vom konkreten Eingangssignal abhängen kann:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel: Beobachtbarkeit hängt vom Eingang ab
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Minisystem-nicht-glm-beob"
+
+\end_inset
+
+Gegeben sei das System
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & -x_{1}+x_{2}(1+u)\\
+\dot{x}_{2} & = & x_{2}\\
+y & = & x_{1}.
+\end{array}\label{eq:Minisystem-nicht-glm-beob}
+\end{equation}
+
+\end_inset
+
+Für 
+\begin_inset Formula $u\neq-1$
+\end_inset
+
+ erhält man den Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ aus dem Ausgang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+ und seiner ersten Zeitableitung:
+\begin_inset Formula 
+\[
+\left.\begin{array}{lcl}
+y & = & x_{1}\\
+\dot{y} & = & -x_{1}+x_{2}(1+u)
+\end{array}\right\} \quad\Longrightarrow\quad\begin{array}{lcl}
+x_{1} & = & y,\\
+x_{2} & = & \frac{y+\dot{y}}{1+u}.
+\end{array}
+\]
+
+\end_inset
+
+Für 
+\begin_inset Formula $u\equiv-1$
+\end_inset
+
+ wirkt sich dagegen der Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ nicht auf den Ausgang aus.
+ In diesem Fall sind alle Anfangszustände, die in der ersten Komponente
+ übereinstimmen, nicht unterscheidbar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Gleichmäßig Beobachtbarkeit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Das Beispiel verdeutlicht, dass es sinnvoll sein kann, die Beobachtbarkeit
+ eines eingangsabhängigen Systems derart zu definieren, dass diese Eigenschaft
+ unabhängig vom gewählten Eingangssignal ist.
+ Wir nennen ein System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ 
+\emph on
+gleichmäßig lokal
+\emph default
+ bzw.
+ 
+\emph on
+global beobachtbar
+\emph default
+, wenn es für alle zulässigen Eingangssignale 
+\begin_inset Formula $u(\cdot)$
+\end_inset
+
+ lokal bzw.
+ global beobachtbar ist.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Bedingung für eingangsaffinen Fall
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Gegeben sei ein eingangsaffines System
+\begin_inset Formula 
+\begin{equation}
+\dot{x}=f(x)+g(x)u,\quad y=h(x)\label{eq:hg-system-eingangsaffin}
+\end{equation}
+
+\end_inset
+
+mit den Vektorfeldern 
+\begin_inset Formula $f,g:\mathcal{M}\to\R^{n}$
+\end_inset
+
+ und dem Skalarfeld 
+\begin_inset Formula $h:\mathcal{M}\to\R$
+\end_inset
+
+.
+ Die Felder seien hinreichend glatt.
+ Erfüllt der autonome Teil
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ von System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ die Bedingungen von Lemma
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lem:Beobachtbarkeit-hinreichende-Bedingung"
+
+\end_inset
+
+, so ist eine Beurteilung der gleichmäßigen lokalen Beobachtbarkeit anhand
+ der Beobachtbarkeitsnormalform
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsnormalform
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Normalform!Beobachtbarkeits-
+\end_layout
+
+\end_inset
+
+ möglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gauthier81,gauthier92"
+literal "true"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-Beobachtbarkeit-nicht-autonom"
+
+\end_inset
+
+Man betrachte das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ im Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+.
+ Es gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+.
+ Das System ist genau dann gleichmäßig lokal beobachtbar im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+, wenn es zustands\SpecialChar softhyphen
+äquivalent zur Form 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}+\beta_{1}(\xi_{1})u\\
+\dot{\xi}_{2} & = & \xi_{3}+\beta_{2}(\xi_{1},\xi_{2})u\\
+ & \vdots\\
+\dot{\xi}_{n-1} & = & \xi_{n}+\beta_{n-1}(\xi_{1},\xi_{2},\ldots,\xi_{n-1})u\\
+\dot{\xi}_{n} & = & \alpha(\xi)+\beta_{n}(\xi_{1},\xi_{2},\ldots,\xi_{n-1},\xi_{n})u\\
+y & = & \xi_{1}
+\end{array}\label{eq:Beobachtbarkeits-NF-nicht-autonom}
+\end{equation}
+
+\end_inset
+
+ist.
+\end_layout
+
+\begin_layout Proof(smartQED)
+Es gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+.
+ Dann ist die in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsabbildung"
+
+\end_inset
+
+ definierte Beobachtbarkeitsabbildung 
+\begin_inset Formula $\xi=q(x)$
+\end_inset
+
+ ein lokaler Diffeomorphismus, der das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ in die Beobachtbarkeitsnormalform
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsnormalform
+\end_layout
+
+\end_inset
+
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Normalform!Beobachtbarkeits-
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}+\beta_{1}(\xi)u\\
+\dot{\xi}_{2} & = & \xi_{3}+\beta_{2}(\xi)u\\
+ & \vdots\\
+\dot{\xi}_{n-1} & = & \xi_{n}+\beta_{n-1}(\xi)u\\
+\dot{\xi}_{n} & = & \alpha(\xi)+\beta_{n}(\xi)u\\
+y & = & \xi_{1}
+\end{array}\label{eq:Beobachtbarkeits-NF-nicht-autonom-allgemein}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $\alpha(\xi):=L_{f}^{n}h(q^{-1}(\xi))$
+\end_inset
+
+ und 
+\begin_inset Formula 
+\begin{equation}
+\beta_{i}(\xi):=L_{g}L_{f}^{i-1}h(q^{-1}(\xi))\quad\text{für}\quad i=1,\ldots,n\label{eq:beobachtbarkeits-NF-beta-i}
+\end{equation}
+
+\end_inset
+
+überführt (vgl.
+ Beweis von Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-beobachtbarkeitsnormalform"
+
+\end_inset
+
+).
+ Für die nachfolgenden Untersuchungen betrachten wir zwei Instanzen des
+ Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+, nämlich eine mit dem Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\xi$
+\end_inset
+
+ und dem Anfangswert 
+\begin_inset Formula $\xi(0)$
+\end_inset
+
+ und eine weitere Instanz mit dem Zustand
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\bar{\xi}$
+\end_inset
+
+ und dem Anfangswert 
+\begin_inset Formula $\bar{\xi}(0)$
+\end_inset
+
+.
+ Beide Instanzen werden mit dem gleichen Eingangssignal
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u$
+\end_inset
+
+ beaufschlagt.
+\end_layout
+
+\begin_layout Proof(smartQED)
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+notwendig
+\backslash
+
+\end_layout
+
+\end_inset
+
+ Wir zeigen die Notwendigkeit der Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ indirekt.
+ Wir nehmen also an, dass das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+ nicht der speziellen Struktur
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ genügt.
+ Sei 
+\begin_inset Formula $i_{0}<n$
+\end_inset
+
+ die kleinste Zahl, so dass eine Zahl 
+\begin_inset Formula $j_{0}>i_{0}$
+\end_inset
+
+ mit 
+\begin_inset Formula $\partial\beta_{i_{0}}/\partial\xi_{j_{0}}\not\equiv0$
+\end_inset
+
+ existiert.
+ (Das bedeutet, dass 
+\begin_inset Formula $\beta_{i_{0}}(\xi)$
+\end_inset
+
+ nicht nur von 
+\begin_inset Formula $\xi_{1},\ldots,\xi_{i_{0}}$
+\end_inset
+
+, sondern auch von 
+\begin_inset Formula $\xi_{j_{0}}$
+\end_inset
+
+ abhängt.) Die Anfangswerte 
+\begin_inset Formula $\xi(0)\neq\bar{\xi}(0)$
+\end_inset
+
+ beider Systeminstanzen seien so gewählt, dass sie in den ersten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $i_{0}$
+\end_inset
+
+ Komponenten übereinstimmen, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $\xi_{i}(0)=\bar{\xi}_{i}(0)$
+\end_inset
+
+ für 
+\begin_inset Formula $i=1,\ldots,i_{0}$
+\end_inset
+
+.
+ Wegen 
+\begin_inset Formula $\partial\beta_{i_{0}}/\partial\xi_{j_{0}}\not\equiv0$
+\end_inset
+
+ lassen sich zusätzlich die 
+\begin_inset Formula $j_{0}$
+\end_inset
+
+-ten Komponenten 
+\begin_inset Formula $\xi_{j_{0}}(0)\neq\bar{\xi}_{j_{o}}(0)$
+\end_inset
+
+ beider Anfangswerte so wählen, dass 
+\begin_inset Formula $\beta_{i_{0}}(\xi(0))-\beta_{i_{0}}(\bar{\xi}(0))\neq0$
+\end_inset
+
+ gilt.
+ Die Rückführung 
+\begin_inset Formula 
+\begin{equation}
+u=-\frac{\xi_{i_{0}+1}-\bar{\xi}_{i_{0}+1}}{\beta_{i_{0}}(\xi)-\beta_{i_{0}}(\bar{\xi})}\label{eq:beweis-struktur-nicht-autonom-u}
+\end{equation}
+
+\end_inset
+
+ist damit zumindest für ein gewisses Zeitintervall 
+\begin_inset Formula $[0,T]$
+\end_inset
+
+ bei hinreichend kleiner Endzeit 
+\begin_inset Formula $T>0$
+\end_inset
+
+ definiert.
+ Die Abweichung in der 
+\begin_inset Formula $i_{0}$
+\end_inset
+
+-ten Differentialgleichung beider Instanzen verschwindet unter Wirkung des
+ Eingangssignals
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beweis-struktur-nicht-autonom-u"
+
+\end_inset
+
+ identisch:
+\begin_inset Formula 
+\[
+\dot{\xi}_{i_{0}}-\dot{\bar{\xi}}_{i_{0}}=\xi_{i_{0}+1}+\bar{\xi}_{i_{0}+1}+\left(\beta_{i_{0}}(\xi)-\beta_{i_{0}}(\bar{\xi})\right)u\equiv0.
+\]
+
+\end_inset
+
+Dann stimmen die Zeitverläufe in den ersten 
+\begin_inset Formula $i_{0}$
+\end_inset
+
+ Komponenten von 
+\begin_inset Formula $\xi,\bar{\xi}$
+\end_inset
+
+ auf dem Intervall 
+\begin_inset Formula $[0,T]$
+\end_inset
+
+ überein und führen somit unabhängig von den Anfangswerten der letzten 
+\begin_inset Formula $n-i_{0}$
+\end_inset
+
+ Komponenten zu dem gleichen Ausgangsverlauf.
+ Damit sind alle Anfangswerte 
+\begin_inset Formula $\xi(0),\bar{\xi}(0)$
+\end_inset
+
+, die in den ersten 
+\begin_inset Formula $i_{0}$
+\end_inset
+
+ Komponenten übereinstimmen, für den Eingangsverlauf
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beweis-struktur-nicht-autonom-u"
+
+\end_inset
+
+ nicht unterscheidbar.
+ Das System ist also nicht gleichmäßig lokal beobachtbar.
+\end_layout
+
+\begin_layout Proof(smartQED)
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hinreichend
+\backslash
+
+\end_layout
+
+\end_inset
+
+ Das transformierte System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+ besitze die Struktur
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+.
+ Für beide Instanzen des Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ betrachten wir beliebige Verläufe von dem Ausgang 
+\begin_inset Formula $y(t)=\xi_{1}(t)=\bar{\xi}_{1}(t)$
+\end_inset
+
+ und dem Eingang 
+\begin_inset Formula $u(t)$
+\end_inset
+
+ für alle 
+\begin_inset Formula $t\in[0,T]$
+\end_inset
+
+ mit 
+\begin_inset Formula $T>0$
+\end_inset
+
+.
+ Durch Einsetzen in die erste Differentialgleichung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ erhält man übereinstimmende Verläufe 
+\begin_inset Formula $\xi_{2}(t)=\bar{\xi}_{2}(t)$
+\end_inset
+
+, aus der zweiten Differentialgleichung folgt 
+\begin_inset Formula $\xi_{3}(t)=\bar{\xi}_{3}(t)$
+\end_inset
+
+.
+ Dieses Verfahren setzt man bis zur vorletzen Differentialgleichung fort,
+ aus der man 
+\begin_inset Formula $\xi_{n}(t)=\bar{\xi}_{n}(t)$
+\end_inset
+
+ für alle 
+\begin_inset Formula $t\in[0,T]$
+\end_inset
+
+ erhält.
+ Damit gilt 
+\begin_inset Formula $\xi(t)=\bar{\xi}(t)$
+\end_inset
+
+ für alle 
+\begin_inset Formula $t\in[0,T]$
+\end_inset
+
+, so dass auch die Anfangswerte beider Systeminstanzen übereinstimmen: 
+\begin_inset Formula $\xi(0)=\bar{\xi}(0)$
+\end_inset
+
+.
+ Für einen vorgegebenen Ausgangsverlauf ist unabhängig vom konkreten Eingangsver
+lauf der Anfangswert eindeutig festgelegt.
+ Das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ ist daher gleichmäßig beobachtbar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Verallgemeinerung
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die Argumentation im hinreichenden Teil des Beweises lässt unmittelbar eine
+ Verallgemeinerung auf nicht eingangsaffine Systeme mit ggf.
+ vektorwertigem Eingang zu:
+\end_layout
+
+\begin_layout Corollary
+\begin_inset CommandInset label
+LatexCommand label
+name "cor:Beobachtbarkeit-nicht-affin-MISO"
+
+\end_inset
+
+Gegeben sei ein System 
+\begin_inset Formula 
+\[
+\dot{x}=f(x)+\tilde{g}(x,u),\quad y=h(x)
+\]
+
+\end_inset
+
+mit hinreichend glatten Feldern 
+\begin_inset Formula $f:\mathcal{M}\to\R^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\tilde{g}:\mathcal{M}\times\mathcal{U}\to\R^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $h:\mathcal{M}\to\R$
+\end_inset
+
+ und 
+\begin_inset Formula $\mathcal{U}\subseteq\R^{m}$
+\end_inset
+
+.
+ Für das zugeordnete autonome System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-autonom"
+
+\end_inset
+
+ gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+ in einem Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+.
+ Ist das System in einer Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ zustands\SpecialChar softhyphen
+äquivalent zur Form
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}+\tilde{\beta}_{1}(\xi_{1},u)\\
+\dot{\xi}_{2} & = & \xi_{3}+\tilde{\beta}_{2}(\xi_{1},\xi_{2},u)\\
+ & \vdots\\
+\dot{\xi}_{n-1} & = & \xi_{n}+\tilde{\beta}_{n-1}(\xi_{1},\xi_{2},\ldots,\xi_{n-1},u)\\
+\dot{\xi}_{n} & = & \alpha(\xi)+\tilde{\beta}_{n}(\xi_{1},\xi_{2},\ldots,\xi_{n-1},\xi_{n},u)\\
+y & = & \xi_{1},
+\end{array}\label{eq:Beobachtbarkeits-NF-nicht-affin}
+\end{equation}
+
+\end_inset
+
+dann ist es im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ gleichmäßig lokal beobachtbar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Überleitung Beispiele
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Für einige eingangsaffine Beispielssysteme wird die Existenz der speziellen
+ Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ untersucht:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiele
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Minisystem-nicht-glm-Beobachtbarkeits-NF"
+
+\end_inset
+
+Das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Minisystem-nicht-glm-beob"
+
+\end_inset
+
+ aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Minisystem-nicht-glm-beob"
+
+\end_inset
+
+ besitzt eine lineare Beobachtbarkeitsabbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsabbildung"
+
+\end_inset
+
+ und folglich eine konstante Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsmatrix"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\xi=q(x)=\left(\begin{array}{c}
+x_{1}\\
+-x_{1}+x_{2}
+\end{array}\right),\quad Q_{B}(x)=q^{\prime}(x)=\left(\begin{array}{rc}
+1 & 0\\
+-1 & 1
+\end{array}\right).
+\]
+
+\end_inset
+
+Damit ist die Umkehrtransformation 
+\begin_inset Formula $x=q^{-1}(\xi)$
+\end_inset
+
+ auch linear: 
+\begin_inset Formula $x_{1}=\xi_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $x_{2}=\xi_{1}+\xi_{2}$
+\end_inset
+
+.
+ Das transformierte System lautet
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+\dot{\xi} & = & \frac{\d}{\d t}q(x)\\
+ & = & q^{\prime}(x)\cdot\dot{x}\\
+ & = & Q_{B}(x)\left(f(x)+g(x)u\right)\\
+ & = & \left.\left(\begin{array}{rc}
+1 & 0\\
+-1 & 1
+\end{array}\right)\left(\begin{array}{c}
+-x_{1}+x_{2}(1+u)\\
+x_{2}
+\end{array}\right)\right|_{x=q^{-1}(\xi)}\\
+ & = & \left(\begin{array}{c}
+\xi_{2}+(\xi_{1}+\xi_{2})u\\
+\xi_{1}-(\xi_{1}+\xi_{2})u
+\end{array}\right).
+\end{array}
+\]
+
+\end_inset
+
+Das System liegt damit in der Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+ mit 
+\begin_inset Formula $\beta_{1}(\xi)=\xi_{1}+\xi_{2}$
+\end_inset
+
+ und 
+\begin_inset Formula $\beta_{2}(\xi)=-(\xi_{1}+\xi_{2})$
+\end_inset
+
+ vor.
+ Da 
+\begin_inset Formula $\beta_{1}(\xi)$
+\end_inset
+
+ auch von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\xi_{2}$
+\end_inset
+
+ abhängt, ist die Struktur
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ nicht gegeben.
+ Das System ist also in Übereinstimmung mit den Betrachtungen aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Minisystem-nicht-glm-beob"
+
+\end_inset
+
+ nicht gleichmäßig lokal beobachtbar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Pendel mit eingeprägtem Drehmoment
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:hg-mathematisches-Pendel-Drehmoment"
+
+\end_inset
+
+Das inverse mathematische Pendel aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-inverses-pendel"
+
+\end_inset
+
+ mit der Ausgangsgröße aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:hg-mathematisches-Pendel-autonom"
+
+\end_inset
+
+ lässt sich durch das Zustandsraummodell
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & \kappa_{1}\sin x_{1}+\kappa_{2}u\\
+y & = & x_{2}
+\end{array}\label{eq:hg-math-pendel-drehmoment}
+\end{equation}
+
+\end_inset
+
+beschreiben.
+ Aus der Beobachtbarkeitsabbildung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-math-pendel-q"
+
+\end_inset
+
+ erhält man Hin- und Rücktransformation 
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+\xi_{1} & = & x_{2}\\
+\xi_{2} & = & \kappa_{1}\sin x_{1}
+\end{array}\qquad\text{und}\qquad\begin{array}{lcl}
+x_{1} & = & \arcsin\frac{\xi_{2}}{\kappa_{1}}\\
+x_{2} & = & \xi_{1}
+\end{array}
+\]
+
+\end_inset
+
+in die Beobachtbarkeitsnormalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+.
+ Daraus ergibt sich das transformierte System 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}+\kappa_{2}u\\
+\dot{\xi}_{2} & = & \kappa_{1}\xi_{1}\sqrt{1-\frac{\xi_{2}^{2}}{\kappa_{1}^{2}}}
+\end{array}\label{eq:hg-math-pendel-transformiert}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $\beta_{1}(\xi)=\kappa_{2}$
+\end_inset
+
+ und 
+\begin_inset Formula $\beta_{2}(\xi)=0$
+\end_inset
+
+.
+ Dabei hängt 
+\begin_inset Formula $\beta_{1}(\xi)$
+\end_inset
+
+ nicht von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\xi_{2}$
+\end_inset
+
+ ab, so dass das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-math-pendel-transformiert"
+
+\end_inset
+
+ in de Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ vorliegt und für 
+\begin_inset Formula $|x_{1}|<\pi/2$
+\end_inset
+
+ nach Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-Beobachtbarkeit-nicht-autonom"
+
+\end_inset
+
+ gleichmäßig lokal beobachtbar ist.
+ Mit der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:math-pendel-autonom-beobachterverstaerkung-x"
+
+\end_inset
+
+ erhält man für das erregte System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-math-pendel-drehmoment"
+
+\end_inset
+
+ den Beobachter
+\begin_inset Formula 
+\[
+\left(\begin{array}{l}
+\dot{\hat{x}}_{1}\\
+\dot{\hat{x}}_{2}
+\end{array}\right)=\left(\begin{array}{c}
+\hat{x}_{2}\\
+\kappa_{1}\sin\hat{x}_{1}+\kappa_{2}u
+\end{array}\right)+\left(\begin{array}{c}
+\frac{a_{0}}{\kappa_{1}\cos\hat{x}_{1}}\\
+a_{1}
+\end{array}\right)\left(y-\hat{x}_{2}\right)
+\]
+
+\end_inset
+
+mit den Koeffizienten 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Synchronmaschine, Synchronmotor_HG.wxmx
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Synchronmaschine-HG"
+
+\end_inset
+
+In
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "mukhopadhyay1972"
+literal "true"
+
+\end_inset
+
+ wird eine Synchronmaschine
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Synchronmaschine
+\end_layout
+
+\end_inset
+
+ modelliert und durch die Zustandsgleichungen 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & B_{1}-A_{1}x_{2}-A_{2}x_{3}\sin x_{1}-\tfrac{1}{2}B_{2}\sin(2x_{1})\\
+\dot{x}_{3} & = & u-D_{1}x_{3}+D_{2}\cos x_{1}\\
+y & = & x_{1}
+\end{array}\label{eq:synchronmotor}
+\end{equation}
+
+\end_inset
+
+beschrieben.
+ Dabei bezeichnet
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ den Polradwinkel, also den Winkel zwischen dem Polrad und dem Drehfeld.
+ Der Polradwinkel fungiert zugleich als Ausgangsgröße, welche aus dem mit
+ einen Winkelencoder erfassten Drehwinkel berechnet wird.
+ Fernen seien 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ die zugehörige Winkelgeschwindigkeit (relativ zum rotierenden Bezugssystem),
+ 
+\begin_inset Formula $x_{3}$
+\end_inset
+
+ die Flussverkettung der Erregerwicklung und 
+\begin_inset Formula $u$
+\end_inset
+
+ der Eingang.
+\end_layout
+
+\begin_layout Example
+Das Modell
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:synchronmotor"
+
+\end_inset
+
+ wird häufig zu Vergleichszwecken beim nichtlinearen Beobachterentwurf verwendet
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "keller86diss,birk88,adjallah94,roebenack2003buch,roebenack2005habil,adamy2014,franke2016pamm"
+literal "true"
+
+\end_inset
+
+.
+ Die Beobachtbarkeitsmatrix 
+\begin_inset Formula 
+\begin{equation}
+Q_{B}(x)=\left(\begin{array}{ccc}
+1 & 0 & 0\\
+0 & 1 & 0\\
+-A_{2}x_{2}\cos x_{1}-B_{2}\cos(2x_{1}) & -A_{1} & -A_{2}\sin x_{1}
+\end{array}\right)\label{eq:synchronmotor-beobachtbarkeitsmatrix}
+\end{equation}
+
+\end_inset
+
+ist für 
+\begin_inset Formula $x_{1}\neq\pi i$
+\end_inset
+
+ mit 
+\begin_inset Formula $i\in\mathbb{Z}$
+\end_inset
+
+ regulär, so dass der zugehörige autonome Systemteil, den man für 
+\begin_inset Formula $u=0$
+\end_inset
+
+ erhält, in diesem Bereich lokal beobachtbar ist.
+ Zur Untersuchung der gleichmäßigen Beobachtbarkeit betrachten wir die Struktur
+ des aus
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:synchronmotor"
+
+\end_inset
+
+ resultierenden Eingangsvektorfeldes 
+\begin_inset Formula $g(x)=\tfrac{\partial}{\partial x_{3}}$
+\end_inset
+
+ in den transformierten Koordinaten:
+\begin_inset Formula 
+\[
+Q_{B}(x)\cdot g(x)=\left(\begin{array}{c}
+0\\
+0\\
+-A_{2}\sin x_{1}
+\end{array}\right).
+\]
+
+\end_inset
+
+Mit 
+\begin_inset Formula $\beta_{1}(\cdot)=0$
+\end_inset
+
+ und 
+\begin_inset Formula $\beta_{2}(\cdot)=0$
+\end_inset
+
+ ist die Strukturbedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ erfüllt, so dass das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:synchronmotor"
+
+\end_inset
+
+ im o.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ Bereich gleichmäßig lokal beobachtbar ist.
+ Die Beobachterverstärkung hat die Form
+\begin_inset Formula 
+\[
+k(\hat{x})=Q_{B}^{-1}(\hat{x})\left(\begin{array}{c}
+a_{2}\\
+a_{1}\\
+a_{0}
+\end{array}\right)=\left(\begin{array}{c}
+a_{2}\\
+a_{1}\\
+-\frac{a_{0}+a_{1}A_{1}+a_{2}A_{2}\hat{x}_{3}\cos\hat{x}_{1}+a_{2}B_{2}\cos(2\hat{x}_{1})}{A_{2}\sin\hat{x}_{1}}
+\end{array}\right)
+\]
+
+\end_inset
+
+mit den Koeffizienten 
+\begin_inset Formula $a_{0},a_{1},a_{2}>0$
+\end_inset
+
+.
+ Simulationsuntersuchungen des Beobachters sind in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2003buch"
+literal "true"
+
+\end_inset
+
+ beschrieben.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Überleitung zur alternativen Prüfung der speziellen Beobachtbarkeitsnormalform
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bei komplizierteren Systemen lässt sich die Beobachtbarkeitsnormalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+ in der Regel nicht explizit angeben.
+ In diesen Fällen ist Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-Beobachtbarkeit-nicht-autonom"
+
+\end_inset
+
+ zur Überprüfung der gleichmäßigen Beobachtbarkeit nicht geeignet.
+ Mit folgendem Satz ist die Überprüfung der Struktur
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ auch in Originalkoordinaten möglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after "Lemma~2"
+key "jo2002"
+literal "true"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-Beobachtbarkeit-nicht-autonom2"
+
+\end_inset
+
+Man betrachte das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ im Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+.
+ Es gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+.
+ Das System ist genau dann gleichmäßig lokal beobachtbar im Punkt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+, wenn 
+\begin_inset Formula 
+\begin{equation}
+\d L_{g}L_{f}^{i}h\in\spann\{\d h,\d L_{f}h,\ldots,\d L_{f}^{i}h\}\quad\text{für}\quad i=0,\ldots,n-2\label{eq:beob-nicht-autonom-grad-x}
+\end{equation}
+
+\end_inset
+
+in einer Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+ gilt.
+\end_layout
+
+\begin_layout Proof(smartQED)
+Es gelte 
+\begin_inset Formula $\rank\,Q_{B}(p)=n$
+\end_inset
+
+.
+ Dann ist die in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsabbildung"
+
+\end_inset
+
+ definierte Beobachtbarkeitsabbildung 
+\begin_inset Formula $\xi=q(x)$
+\end_inset
+
+ ein lokaler Diffeomorphismus, der das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ in die Beobachtbarkeitsnormalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom-allgemein"
+
+\end_inset
+
+ überführt.
+ Die in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ angegebenen funkionalen Abhängigkeiten in den Komponenten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\beta_{i}$
+\end_inset
+
+ des (transformierten) Eingangsvektorfeldes lassen sich über lineare Abhängigkei
+ten ausdrücken:
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lclcl}
+\beta_{1}(\xi_{1}) & \quad\Longleftrightarrow\quad & \d\beta_{1} & \in & \spann\{\d\xi_{1}\}\\
+\beta_{2}(\xi_{1},\xi_{2}) & \quad\Longleftrightarrow\quad & \d\beta_{2} & \in & \spann\{\d\xi_{1},\d\xi_{2}\}\\
+ & \vdots\\
+\beta_{n-1}(\xi_{1},\xi_{2},\ldots,\xi_{n-1}) & \quad\Longleftrightarrow\quad & \d\beta_{n-1} & \in & \spann\{\d\xi_{1},\d\xi_{2},\ldots,\d\xi_{n-1}\}.
+\end{array}\label{eq:beob-nicht-autonom-grad-z}
+\end{equation}
+
+\end_inset
+
+Aus 
+\begin_inset Formula $\xi_{i}=L_{f}^{i-1}h(x)$
+\end_inset
+
+ ergibt sich 
+\begin_inset Formula $\d\xi_{i}=\d L_{f}^{i-1}h(x)$
+\end_inset
+
+ für 
+\begin_inset Formula $i=1,\ldots,n$
+\end_inset
+
+.
+ Mit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beobachtbarkeits-NF-beta-i"
+
+\end_inset
+
+ wertet Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beob-nicht-autonom-grad-x"
+
+\end_inset
+
+ die in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beob-nicht-autonom-grad-z"
+
+\end_inset
+
+ beschriebenen Abhängigkeiten in den Originalkoordinaten aus.
+ Die Anwendung von Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-Beobachtbarkeit-nicht-autonom"
+
+\end_inset
+
+ liefert den Bezug zur gleichmäßigen lokalen Beobachtbarkeit.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel, Wagen_mit_Pendel_HG_Originalsystem.wxmx
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+Wir ergänzen das in Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:wagen-pendel-hg1"
+
+\end_inset
+
+ betrachtete Wagen-Pendel-System um das Eingangsvektorfeld
+\begin_inset Formula 
+\[
+g(x)=\left(\begin{array}{c}
+0\\
+\frac{1}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+0\\
+-\frac{\cos x_{3}}{l(m_{1}+m_{2}\sin^{2}x_{3})}
+\end{array}\right)
+\]
+
+\end_inset
+
+aus Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Wagen-mit-Pendel"
+
+\end_inset
+
+.
+ Mit dem Vektorfeld
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f$
+\end_inset
+
+ aus Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-wagen-pendel-f0"
+
+\end_inset
+
+ und dem Ausgang 
+\begin_inset Formula $y=h(x)=x_{1}$
+\end_inset
+
+ berechnet man die Lie-Ableitungen 
+\begin_inset Formula 
+\[
+\begin{array}{lcl}
+L_{g}h(x) & = & 0\\
+L_{g}L_{f}h(x) & = & \frac{1}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+L_{g}L_{f}^{2}h(x) & = & -2\frac{m_{2}x_{4}\sin x_{3}\cos x_{3}}{(m_{1}+m_{2}\sin^{2}x_{3})^{2}},
+\end{array}
+\]
+
+\end_inset
+
+deren Gradienten die folgende Struktur aufweisen:
+\begin_inset Formula 
+\[
+\begin{array}{lcc}
+\d L_{g}h & = & (\,0\,,\,0\,,\,0\,,\,0\,)\phantom{.}\\
+\d L_{g}L_{f}h & = & (\,0\,,\,0\,,\,*\,,\,0\,)\phantom{.}\\
+\d L_{g}L_{f}^{2}h & = & (\,0\,,\,0\,,\,*\,,\,*\,).
+\end{array}
+\]
+
+\end_inset
+
+Aus den ersten zwei Zeilen der Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:wageh-pendel-hg-Qb1"
+
+\end_inset
+
+ liest man 
+\begin_inset Formula $\d\xi_{1}=\d h=\d x_{1}$
+\end_inset
+
+ und 
+\begin_inset Formula $\d\xi_{2}=\d L_{f}h=\d x_{2}$
+\end_inset
+
+ ab.
+ Damit ist Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:beob-nicht-autonom-grad-x"
+
+\end_inset
+
+ für 
+\begin_inset Formula $i=1$
+\end_inset
+
+ nicht erfüllt, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ aus 
+\begin_inset Formula $\d L_{g}L_{f}h\in\spann\{\d x_{3}\}$
+\end_inset
+
+ folgt 
+\begin_inset Formula $\d L_{g}L_{f}h\notin\spann\{\d h,\d L_{f}h\}=\spann\{\d x_{1},\d x_{2}\}$
+\end_inset
+
+.
+ Das System ist also nicht gleichmäßig beobachtbar.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Verallgemeinerung: MIMO, Parameteradaption, AD
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+Der beschriebene Zugang zum Entwurf von High-Gain-Beobachtern lässt sich
+ für Mehrgrößensysteme verallgemeinern
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "dalla-mora2000"
+literal "true"
+
+\end_inset
+
+.
+ Gleichzeitig zur Schätzung des Zustands ist grundsätzlich auch eine Parametersc
+hätzung mittels Adaption möglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bullinger1997cdc,besancon2004"
+literal "true"
+
+\end_inset
+
+.
+ Erhält man für die Beobachtbarkeitsmatrix umfangreiche Ausdrücke, so bietet
+ sich die Berechnung mit algorithmischem Differenzieren an
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rr2000nolta,roebenack2005dsmc,roebenack2005habil"
+literal "true"
+
+\end_inset
+
+.
+ Ist die Beobachtbarkeitsrangbedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsrangbedingung"
+
+\end_inset
+
+ erfüllt, aber die Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeitsmatrix"
+
+\end_inset
+
+ singulär, dann empfiehlt sich der Entwurf eines Einbettungsbeobachters
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gauthier91"
+literal "true"
+
+\end_inset
+
+.
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!Einbettungs-
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Beobachterentwurf auf Basis der Eingangs-Ausgangs-Normalform
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:High-Gain-Entwurf-Eingangs-Ausgangs-Normalform"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Struktur des Beobachters
+\end_layout
+
+\begin_layout Standard
+Die gleichmäßig lokale Beobachtbarkeit eines eingangsaffinen Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ setzt die Zustandsäquivalenz zur Form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ voraus.
+ Dabei unterliegen mit Ausnahme der letzten Komponente alle anderen Komponenten
+ des transformierten Eingangsvektorfeldes hinsichtlich der zulässigen Abhängigke
+iten bestimmten Strukturbedingungen.
+ Bei einem System mit wohldefiniertem relativen Grad würde der Eingang nur
+ in der letzten Differentialgleichungen des ersten Teilsystems der Eingangs-Ausg
+angs-Normalform in Erscheinung treten.
+ Die vorangegangenen Komponenten des transformierten Eingangsvektorfeldes
+ sind dabei identisch Null, so dass das erste Teilsystem (unter Beachtung
+ der zusätzlichen Abhängigkeiten vom zweiten Teilsystem) der Strukturbedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-nicht-autonom"
+
+\end_inset
+
+ genügt.
+ Dieser Abschnitt behandelt die in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jo2000b,roebenack2004at,roebenack2007ndst"
+literal "true"
+
+\end_inset
+
+ vorgestellten Entwurfsverfahren, bei denen der in Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:High-Gain-Entwurf-Beobachtbarkeitsnormalform"
+
+\end_inset
+
+ beschriebene Beobachterentwurf von der Beobachtbarkeitsnormalform auf die
+ Eingangs-Ausgang- bzw.
+ Byrnes-Isidori-Normalform übertragen wird.
+\end_layout
+
+\begin_layout Standard
+Das eingangsaffine System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ habe einen wohldefinierten relativen Grad 
+\begin_inset Formula $r<n$
+\end_inset
+
+.
+ Dann kann das System mit einer Zustandstransformation 
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{c}
+\xi\\
+\eta
+\end{array}\right)=\Phi(x)\label{eq:hg-EA-Phi}
+\end{equation}
+
+\end_inset
+
+ in die Eingangs-Ausgangs-Normalform
+\begin_inset Formula 
+\begin{equation}
+\left.\begin{array}{lcl}
+\dot{\xi}_{1} & = & \xi_{2}\\
+ & \vdots\\
+\dot{\xi}_{r-1} & = & \xi_{r}\\
+\dot{\xi}_{r} & = & \alpha(\xi,\eta)+\beta(\xi,\eta)u\\
+\dot{\eta}_{1} & = & q_{1}(\xi,\eta)+d_{1}(\xi,\eta)u\\
+ & \vdots\\
+\dot{\eta}_{n-r} & = & q_{n-r}(\xi,\eta)+d_{n-r}(\xi,\eta)u\\
+y & = & \xi_{1}
+\end{array}\right\} \quad\begin{array}{rcl}
+\dot{\xi} & = & A\xi+b(\alpha(\xi,\eta)+\beta(\xi,\eta)u)\\
+\dot{\eta} & = & q(\xi,\eta)+d(\xi,\eta)u\\
+y & = & c^{T}\xi
+\end{array}\label{eq:hg-EA-NF}
+\end{equation}
+
+\end_inset
+
+transformiert werden (siehe Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Byrnes-Isidori-Normalform"
+
+\end_inset
+
+).
+ Das erste Teilsystem besitzt weitgehend die Struktur der Beobachtbarkeitsnormal
+form
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Beobachtbarkeits-NF-autonom"
+
+\end_inset
+
+, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h., dass die Nichtlinearitäten, die hier zusätzlich über den Eingang beeinflusst
+ werden, nur in der letzten Zeile auftreten.
+ Daher wird der Beobachter für das erste Teilsystem auch in der Form analog
+ zu Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-beobachter-autonom-trans"
+
+\end_inset
+
+ angesetzt.
+ Der Korrekturterm wirkt nicht direkt auf das zweite Teilsystem.
+ Insgesamt erhält man dabei den Ansatz 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{rcl}
+\dot{\hat{\xi}} & = & A\hat{\xi}+b(\alpha(\hat{\xi},\hat{\eta})+\beta(\hat{\xi},\hat{\eta})u)+l\cdot(y-\hat{\xi}_{1})\\
+\dot{\hat{\eta}} & = & q(\hat{\xi},\hat{\eta})+d(\hat{\xi},\hat{\eta})u
+\end{array}\label{eq:hg-EA-NF-Beobachter}
+\end{equation}
+
+\end_inset
+
+mit der konstanten Beobachterverstärkung 
+\begin_inset Formula $l\in\R^{r}$
+\end_inset
+
+.
+ Der Beobachtungsfehler 
+\begin_inset Formula $\tilde{\xi}=\xi-\hat{\xi}$
+\end_inset
+
+ und 
+\begin_inset Formula $\tilde{\eta}=\eta-\hat{\eta}$
+\end_inset
+
+ genügt dem Differentialgleichungssystem
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\tilde{\xi}} & = & \left(A-lc^{T}\right)\tilde{\xi}+b\left[\alpha(\xi,\eta)+\beta(\xi,\eta)u-\alpha(\hat{\xi},\hat{\eta})-\beta(\hat{\xi},\hat{\eta})u\right]\\
+\dot{\tilde{\eta}} & = & q(\xi,\eta)+d(\xi,\eta)u-q(\hat{\xi},\hat{\eta})-d(\hat{\xi},\hat{\eta})u.
+\end{array}\label{eq:hg-EA-fehler-dgl}
+\end{equation}
+
+\end_inset
+
+In Anlehnung an Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp"
+
+\end_inset
+
+ erhält man mit 
+\begin_inset Formula $l=(a_{r-1},\ldots,a_{0})^{T}$
+\end_inset
+
+ das charakteristische Polynom 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{crl}
+\CP(s) & := & \det(sI-(A-lc^{T}))\\
+ & = & a_{0}+a_{1}s+\cdots+a_{r-1}s^{r-1}+s^{r}\\
+ & = & (s-s_{1})\cdots(s-s_{r}).
+\end{array}\label{eq:hg-cp-EA-NF}
+\end{equation}
+
+\end_inset
+
+Man würde Eigenwerte 
+\begin_inset Formula $s_{1},\ldots,s_{r}$
+\end_inset
+
+, die hinreichend weit links in der komplexen Ebene liegen, vorgeben und
+ daraus die Koeffizienten 
+\begin_inset Formula $p_{0},\ldots,p_{r-1}$
+\end_inset
+
+ des charakteristischen Polynoms
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-cp-EA-NF"
+
+\end_inset
+
+ berechnen.
+ Mit 
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+\dot{\hat{\xi}}\\
+\dot{\hat{\eta}}
+\end{array}\right)=\frac{\d}{\d t}\Phi(\hat{x})=\Phi^{\prime}(\hat{x})\cdot\dot{\hat{x}}
+\]
+
+\end_inset
+
+lässt sich der Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-NF-Beobachter"
+
+\end_inset
+
+ in den Originalkoordinaten angeben:
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lll}
+\dot{\hat{x}} & = & \left(\Phi^{\prime}(\hat{x})\right)^{-1}\cdot\left(\begin{array}{c}
+\dot{\hat{\xi}}\\
+\dot{\hat{\eta}}
+\end{array}\right)\\
+ & = & \left(\Phi^{\prime}(\hat{x})\right)^{-1}\cdot\left(\begin{array}{c}
+A\hat{\xi}+b(\alpha(\hat{\xi},\hat{\eta})+\beta(\hat{\xi},\hat{\eta})u)+l\cdot(y-\hat{\xi}_{1})\\
+q(\hat{\xi},\hat{\eta})+d(\hat{\xi},\hat{\eta})u
+\end{array}\right)\\
+ & = & f(\hat{x})+g(\hat{x})u+\left(\Phi^{\prime}(\hat{x})\right)^{-1}\cdot\left(\begin{array}{c}
+l\\
+0
+\end{array}\right)\cdot(y-h(\hat{x}))\\
+ & =: & f(\hat{x})+g(\hat{x})u+k(\hat{x})\cdot(y-h(\hat{x})).
+\end{array}\label{eq:hg-EA-Beobachter-x}
+\end{equation}
+
+\end_inset
+
+Damit erhält man eine vom Beobachterzustand abhängige Beobachterverstärkung
+ 
+\begin_inset Formula $k:\mathcal{M}\to\R^{n}$
+\end_inset
+
+.
+ Anwendungen dieses Beobachteransatzes sind beispielsweise in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gao2010,mahmud2011,ide2013,koester2015"
+literal "true"
+
+\end_inset
+
+ zu finden.
+\end_layout
+
+\begin_layout Subsection
+Berechnung der Beobachterverstärkung auf Basis der Byrnes-Isidori-Normalform
+\end_layout
+
+\begin_layout Standard
+Eine besondere Situation liegt vor, wenn die Koordinatentransformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+ in die Eingangs-Ausgangs-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-NF"
+
+\end_inset
+
+ so gewählt wird, dass 
+\begin_inset Formula $d\equiv0$
+\end_inset
+
+ gilt.
+ In diesem Fall geht
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-NF"
+
+\end_inset
+
+ in die Byrnes-Isidori-Normalform 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{rcl}
+\dot{\xi} & = & A\xi+b(\alpha(\xi,\eta)+\beta(\xi,\eta)u)\\
+\dot{\eta} & = & q(\xi,\eta)\\
+y & = & c^{T}\xi
+\end{array}\label{eq:hg-BI-NF}
+\end{equation}
+
+\end_inset
+
+über.
+ Dabei vereinfacht sich die Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-fehler-dgl"
+
+\end_inset
+
+ zu 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{\tilde{\xi}} & = & \left(A-lc^{T}\right)\tilde{\xi}+b\left[\alpha(\xi,\eta)+\beta(\xi,\eta)u-\alpha(\hat{\xi},\hat{\eta})-\beta(\hat{\xi},\hat{\eta})u\right]\\
+\dot{\tilde{\eta}} & = & q(\xi,\eta)-q(\hat{\xi},\hat{\eta}).
+\end{array}\label{eq:hg-BI-NF-fehler-dgl}
+\end{equation}
+
+\end_inset
+
+Der nachfolgende Satz gibt globale Konvergenzbedingungen an.
+ Schwächere Existenzbedingungen, die allerdings einen umfangreicheren Beweis
+ mit sich bringen, sind in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jo2000b"
+literal "true"
+
+\end_inset
+
+ zu finden.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Satz zur Konvergenz
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:hg-konvergenz-BI-BF"
+
+\end_inset
+
+System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ habe einen gleichmäßigen relativen Grad
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $r$
+\end_inset
+
+ auf 
+\begin_inset Formula $\mathcal{M}=\R^{n}$
+\end_inset
+
+.
+ Zusätzlich sei die Transformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+ in die Byrnes-Isidori-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-BI-NF"
+
+\end_inset
+
+ ein globaler Diffeomorphismus.
+ Die Nichtlinearitäten des ersten Teilsystems genügen einer globalen Lipschitz-B
+edingung
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Lipschitz-Bedingung
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\forall\xi,\hat{\xi},\eta,\hat{\eta},u:\quad\left\Vert \alpha(\xi,\eta)+\beta(\xi,\eta)u-\alpha(\hat{\xi},\hat{\eta})-\beta(\hat{\xi},\hat{\eta})u\right\Vert \leq\rho\left\Vert \xi-\hat{\xi}\right\Vert \label{eq:hg-BI-NF-Lipschitz}
+\end{equation}
+
+\end_inset
+
+gleichmäßig in 
+\begin_inset Formula $\eta,\hat{\eta},u$
+\end_inset
+
+.
+ Existieren eine global positiv definite Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V_{2}$
+\end_inset
+
+ und Funktionen 
+\begin_inset Formula $\gamma_{1},\gamma_{2}$
+\end_inset
+
+ der Klasse
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{K}_{\infty}$
+\end_inset
+
+ derart, dass die Zeit\SpecialChar softhyphen
+ableitung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V_{2}(\tilde{\eta})$
+\end_inset
+
+ entlang der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-fehler-dgl"
+
+\end_inset
+
+ der Bedingung 
+\begin_inset Formula 
+\begin{equation}
+\forall\tilde{\xi},\tilde{\eta}:\quad\dot{V}_{2}\leq-\gamma_{1}(\|\tilde{\eta}\|)+\gamma_{2}(\|\tilde{\xi}\|)\label{eq:hg-BI-NF-dV}
+\end{equation}
+
+\end_inset
+
+genügt, dann existiert eine Beobachterverstärkung 
+\begin_inset Formula $l\in\R^{r}$
+\end_inset
+
+ derart, dass der Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Beobachter-x"
+
+\end_inset
+
+ global konvergiert.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{proofsketch}
+\end_layout
+
+\end_inset
+
+Mit der Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-Lipschitz"
+
+\end_inset
+
+ lässt sich die globale asympotitsche Stabilität der Ruhelage 
+\begin_inset Formula $\tilde{\xi}=0$
+\end_inset
+
+ des ersten Teilsystems der Fehler\SpecialChar softhyphen
+dynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-fehler-dgl"
+
+\end_inset
+
+ analog zu Satz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "thm:hg-konvergenz-autonom"
+
+\end_inset
+
+ zeigen.
+ Nach Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-dV"
+
+\end_inset
+
+ ist das zweite Teilsystem der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-fehler-dgl"
+
+\end_inset
+
+ eingangs-zustands-stabil bezüglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\tilde{\xi}$
+\end_inset
+
+.
+ Aufgrund der Kaskaden\SpecialChar softhyphen
+struktur ist die Ruhelage 
+\begin_inset Formula $(\tilde{\xi},\tilde{\eta})=(0,0)$
+\end_inset
+
+ der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-fehler-dgl"
+
+\end_inset
+
+ global asymptotisch stabil.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{proofsketch}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Detektierbarkeit, dISS
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-dV"
+
+\end_inset
+
+, welche die Eingangs-Zustands-Stabilität des zweiten Teilsystems der Fehlerdyna
+mik sichert, gewährleistet die Ermittelbarkeit des Gesamtsystems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "amicucci1998,sontag97oss"
+literal "true"
+
+\end_inset
+
+.
+ Hinsichtlich des zweiten Teilsystems der Regelstrecke
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF"
+
+\end_inset
+
+ entspricht die Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF-dV"
+
+\end_inset
+
+ einer inkrementellen Eingangs-Zustands-Stabilität
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Angeli2002"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiele
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel aus Isidori, Ex.
+ 4.3.4, S.
+ 167, HG_Isidori1.wxmx
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:isidori434-HG-BI-NF"
+
+\end_inset
+
+Das folgende Beispielsystem entstammt aus
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after "S.~{167}"
+key "isidori3"
+literal "true"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{3}-x_{2}^{3}\\
+\dot{x}_{2} & = & -x_{2}-x_{3}^{2}u\\
+\dot{x}_{3} & = & -x_{3}+x_{1}^{2}+u\\
+y & = & x_{1}.
+\end{array}\label{eq:isidori434-system}
+\end{equation}
+
+\end_inset
+
+Mit 
+\begin_inset Formula $L_{g}h(x)=0$
+\end_inset
+
+ und 
+\begin_inset Formula $L_{g}L_{f}h(x)=1+3x_{2}^{2}x_{3}^{2}>0$
+\end_inset
+
+ ist der relative Grad 
+\begin_inset Formula $r=2$
+\end_inset
+
+ im gesamten Zustandsraum 
+\begin_inset Formula $\mathcal{M}=\R^{3}$
+\end_inset
+
+ wohldefiniert.
+ Zur Transformation in die Byrnes-Isidori-Normalform ist eine Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\phi_{3}$
+\end_inset
+
+ gesucht, welche die partielle Differentialgleichung 
+\begin_inset Formula 
+\[
+L_{g}\phi_{3}(x)=-x_{3}^{2}\frac{\partial\phi_{3}(x)}{\partial x_{2}}+\frac{\partial\phi_{3}(x)}{\partial x_{3}}=0
+\]
+
+\end_inset
+
+erfüllt.
+ Eine mögliche Wahl ist 
+\begin_inset Formula $\phi_{3}(x)=x_{2}+x_{3}^{3}/3$
+\end_inset
+
+.
+ Die zugehörige Transformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+ lautet 
+\begin_inset Formula 
+\[
+\Phi(x)=\left(\begin{array}{c}
+h(x)\\
+L_{f}h(x)\\
+\phi_{3}(x)
+\end{array}\right)=\left(\begin{array}{c}
+x_{1}\\
+x_{3}-x_{2}^{3}\\
+x_{2}+\frac{1}{3}x_{3}^{3}
+\end{array}\right).
+\]
+
+\end_inset
+
+Aus der Jacobimatrix
+\begin_inset Formula 
+\begin{equation}
+\Phi^{\prime}(x)=\left(\begin{array}{ccc}
+1 & 0 & 0\\
+0 & -3x_{2}^{2} & 1\\
+0 & 1 & x_{3}^{2}
+\end{array}\right)\label{eq:isidori434-dPhi}
+\end{equation}
+
+\end_inset
+
+ergibt sich die auf ganz
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{M}$
+\end_inset
+
+ definierte Beobachterverstärkung 
+\begin_inset Formula 
+\begin{equation}
+k(\hat{x})=\left(\Phi^{\prime}(\hat{x})\right)^{-1}\left(\begin{array}{c}
+a_{1}\\
+a_{0}\\
+0
+\end{array}\right)=\left(\begin{array}{c}
+a_{1}\\
+-\frac{a_{0}\hat{x}_{3}^{2}}{1+3\hat{x}_{2}^{2}\hat{x}_{3}^{2}}\\
+\frac{a_{0}}{1+3\hat{x}_{2}^{2}\hat{x}_{3}^{2}}
+\end{array}\right)\label{eq:isidori434-k-BINF}
+\end{equation}
+
+\end_inset
+
+mit den Koeffizienten 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Wagen-Pendel-System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Wagen-Pendel-HG-BINF"
+
+\end_inset
+
+Wir betrachten das gedämpfte Wagen-Pendel-System aus Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Wagen-mit-Pendel"
+
+\end_inset
+
+.
+ Für den Ausgang 
+\begin_inset Formula $y=x_{1}$
+\end_inset
+
+ (Position der Last) besitzt das System den relativen Grad 
+\begin_inset Formula $r=2$
+\end_inset
+
+ (siehe Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Wagen-Pendel-partielle-Linearisierung"
+
+\end_inset
+
+).
+ In Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Wagen-Pendel-System-BINF"
+
+\end_inset
+
+ wurde für das partiell linearisierte Systeme die Transformation
+\begin_inset Formula 
+\[
+\Phi(x)=\left(\begin{array}{c}
+x_{1}\\
+x_{2}\\
+x_{3}\\
+x_{4}+\frac{1}{l}x_{2}\cos x_{3}
+\end{array}\right)\quad\text{mit}\quad\Phi^{\prime}(x)=\left(\begin{array}{cccc}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & -\frac{1}{l}\cos x_{3} & \frac{x_{2}}{l}\cos x_{3} & 1
+\end{array}\right)
+\]
+
+\end_inset
+
+in die Byrnes-Isidori-Normalform berechnet.
+ Diese Transformation überführt auch das nicht partiell linearisierte Originalsy
+stem in die Byrnes-Isidori-Normalform.
+ Das ist daran zu erkennen, dass die letzten 
+\begin_inset Formula $n-r=2$
+\end_inset
+
+ Komponenten des transformierten Eingangsvektorfelds verschwinden:
+\begin_inset Formula 
+\[
+\Phi_{*}g(x)=\Phi^{\prime}(x)g(x)=\left(\begin{array}{c}
+0\\
+\frac{1}{m_{1}+m_{2}\sin^{2}x_{3}}\\
+0\\
+0
+\end{array}\right).
+\]
+
+\end_inset
+
+Aus Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Beobachter-x"
+
+\end_inset
+
+ ergibt sich die Beobachterverstärkung 
+\begin_inset Formula 
+\[
+k(\hat{x})=\left(\Phi^{\prime}(\hat{x})\right)^{-1}\cdot\left(\begin{array}{c}
+a_{1}\\
+a_{0}\\
+\hline 0\\
+0
+\end{array}\right)=\left(\begin{array}{c}
+a_{1}\\
+a_{0}\\
+0\\
+-\frac{a_{0}}{l}\cos\hat{x}_{3}
+\end{array}\right)
+\]
+
+\end_inset
+
+mit 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+.
+ Es ist zu erwarten, dass der Beobachter hinsichtlich des zweites Teilsystems,
+ welches maßgeblich vom rotatorischen Teil bestimmt wird, aufgrund der Dämpfung
+ (Reibung) konvergiert.
+ 
+\end_layout
+
+\begin_layout Subsection
+Berechnung der Beobachterverstärkung mit der Moore-Penrose-Inversen
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Moore-Penrose-Inverse
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die bei der Transformation in die Eingangs-Ausgangs-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-NF"
+
+\end_inset
+
+ bestehenden Freiheitsgrade für die Koordinaten des zweiten Teilsystems
+ lassen sich auch nutzen, um eine möglichst einfache Berechnungsvorschrift
+ für die in Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Beobachter-x"
+
+\end_inset
+
+ definierte Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $k$
+\end_inset
+
+ zu erhalten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2004at,roebenack2007ndst"
+literal "true"
+
+\end_inset
+
+.
+ In diesen Zusammenhang fällt auf, dass die Jacobimatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\Phi^{\prime}$
+\end_inset
+
+ der Transformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+ in den ersten 
+\begin_inset Formula $r$
+\end_inset
+
+ Zeilen mit der Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q_{B}$
+\end_inset
+
+ übereinstimmt.
+ Diese 
+\begin_inset Formula $r$
+\end_inset
+
+ Zeilen definieren die 
+\emph on
+reduzierte
+\emph default
+ 
+\emph on
+Beobachtbarkeitsmatrix
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachtbarkeitsmatrix!reduzierte
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+Q(x)=\left(\begin{array}{c}
+\d h(x)\\
+\d L_{f}h(x)\\
+\vdots\\
+\d L_{f}^{r-1}h(x)
+\end{array}\right).
+\]
+
+\end_inset
+
+Bei einem im Punkt 
+\begin_inset Formula $p\in\mathcal{M}$
+\end_inset
+
+ wohldefinierten relativen Grad sind die Zeilen dieser Matrix linear unabhängig
+ (Lemma
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "lem:Lin-Unabh-Kovektoren"
+
+\end_inset
+
+).
+ Die verbleibenden 
+\begin_inset Formula $n-r$
+\end_inset
+
+ Zeilen von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\Phi^{\prime}$
+\end_inset
+
+ fassen wir in einer 
+\begin_inset Formula $(n-r)\times n$
+\end_inset
+
+-Matrix
+\begin_inset Formula 
+\[
+R(x)=\left(\begin{array}{c}
+\d\phi_{r+1}(x)\\
+\vdots\\
+\d\phi_{n}(x)
+\end{array}\right)
+\]
+
+\end_inset
+
+zusammen.
+ Die Zeilen der Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ bestehen nach Konstruktion aus exakten Kovektorfeldern.
+ Nach Korollar
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cor:ergaenzung-einer-kodistribution-integrierbar"
+
+\end_inset
+
+ lassen sich die Zeilen der Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R$
+\end_inset
+
+ so wählen, dass die 
+\begin_inset Formula $n\times n$
+\end_inset
+
+-Gesamtmatrix
+\begin_inset Formula 
+\begin{equation}
+\Phi^{\prime}(x)=\left(\begin{array}{c}
+Q(x)\\
+R(x)
+\end{array}\right)\label{eq:hg-EA-QR-Jac}
+\end{equation}
+
+\end_inset
+
+regulär ist und zusätzlich die Zeilen von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R$
+\end_inset
+
+ senkrecht aufeinander stehen, z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ es gilt 
+\begin_inset Formula 
+\begin{equation}
+R(x)\cdot Q^{T}(x)=0\label{eq:hg-EA-QR-orth}
+\end{equation}
+
+\end_inset
+
+für alle
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+ aus einer Umgebung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Wegen dieser Orthogonalität kann man die Inverse der Jacobimatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-QR-Jac"
+
+\end_inset
+
+ blockweise über die 
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Moore-Penrose-Inverse
+\end_layout
+
+\end_inset
+
+
+\emph on
+Moore-Penrose-Inversen
+\emph default
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q^{+}$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R^{+}$
+\end_inset
+
+ der Matrizen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R$
+\end_inset
+
+ beschreiben
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "boullion71,rao71,ben-israel"
+literal "true"
+
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+Q(x)\\
+R(x)
+\end{array}\right)^{-1}=\left(Q^{+}(x)\,|\,R^{+}(x)\right).
+\]
+
+\end_inset
+
+Dann vereinfacht sich die Beobachterverstärkung zu
+\begin_inset Formula 
+\begin{equation}
+k(x)=\left(\Phi^{\prime}(x)\right)^{-1}\cdot\left(\begin{array}{c}
+l\\
+0
+\end{array}\right)=\left(Q^{+}(x)\,|\,R^{+}(x)\right)\cdot\left(\begin{array}{c}
+l\\
+0
+\end{array}\right)=Q^{+}(x)\cdot l,\label{eq:hg-k-Moore-Penrose-Inverse}
+\end{equation}
+
+\end_inset
+
+so dass für deren Berechnung die Matrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $R$
+\end_inset
+
+ nicht explizit benötigt wird.
+ Da die reduzierte Beobachtbarkeitsmatrix
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $Q$
+\end_inset
+
+ vollen Zeilenrang besitzt, lässt sich deren Moore-Penrose-Inverse folgendermaße
+n berechnen:
+\begin_inset Formula 
+\[
+Q^{+}=Q^{T}\left(QQ^{T}\right)^{-1}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiele
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel aus Isidori, Ex.
+ 4.3.4, S.
+ 167, HG_Isidori2.wxmx
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:isidori434-HG-MPPI"
+
+\end_inset
+
+Das System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:isidori434-system"
+
+\end_inset
+
+ aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:isidori434-HG-BI-NF"
+
+\end_inset
+
+ hat den relativen Grad 
+\begin_inset Formula $r=2$
+\end_inset
+
+.
+ Daraus ergibt sich die reduzierte Beobachtbarkeitsmatrix 
+\begin_inset Formula 
+\[
+Q(x)=\left(\begin{array}{c}
+\d h(x)\\
+\d L_{f}h(x)
+\end{array}\right)=\left(\begin{array}{ccc}
+1 & 0 & 0\\
+0 & -3x_{2}^{2} & 1
+\end{array}\right),
+\]
+
+\end_inset
+
+vgl.
+ Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:isidori434-dPhi"
+
+\end_inset
+
+.
+ Nach Gl.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-k-Moore-Penrose-Inverse"
+
+\end_inset
+
+ erhält man die Beobachterverstärkung 
+\begin_inset Formula 
+\begin{equation}
+k(\hat{x})=Q^{+}(x)\cdot\left(\begin{array}{c}
+a_{1}\\
+a_{0}
+\end{array}\right)=\left(\begin{array}{c}
+a_{1}\\
+-\frac{3a_{0}\hat{x}_{2}^{2}}{1+9\hat{x}_{2}^{4}}\\
+\frac{a_{0}}{1+9\hat{x}_{2}^{4}}
+\end{array}\right),\label{eq:isidori434-k-MPPI}
+\end{equation}
+
+\end_inset
+
+Dieses Ergebnis wird von der mit 
+\shape smallcaps
+Maxima
+\shape default
+ durchgeführten Kontrollrechnung bestätigt:
+\end_layout
+
+\begin_layout Example
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{maxima}
+\backslash
+input{HG_Isidori2.tex}
+\backslash
+end{maxima}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+Kombiniert man den Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Beobachter-x"
+
+\end_inset
+
+ mit einem Regelgesetz entsprechend Abschnitt
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:E-A-Linearisierung-affin"
+
+\end_inset
+
+, dann ist sowohl mit der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:isidori434-k-BINF"
+
+\end_inset
+
+ aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:isidori434-HG-BI-NF"
+
+\end_inset
+
+ als auch mit der Beobachterverstärkung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:isidori434-k-MPPI"
+
+\end_inset
+
+ eine Stabilisierung der Ruhelage 
+\begin_inset Formula $x=0$
+\end_inset
+
+ möglich
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "roebenack2004at"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Wagen-Pendel-System
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset CommandInset label
+LatexCommand label
+name "exa:Wagen-Pendel-HG-MPPI"
+
+\end_inset
+
+Für das gedämpfte Wagen-Pendel-System aus Beispiel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "exa:Wagen-Pendel-HG-BINF"
+
+\end_inset
+
+ erhält man aus der reduzierten Beobachtbarkeitsmatrix
+\begin_inset Formula 
+\[
+Q(x)=\left(\begin{array}{cccc}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0
+\end{array}\right)
+\]
+
+\end_inset
+
+die sehr einfache (nämlich konstante) Beobachterverstärkung
+\begin_inset Formula 
+\[
+k(\hat{x})=\left(\begin{array}{c}
+a_{1}\\
+a_{0}\\
+0\\
+0
+\end{array}\right)
+\]
+
+\end_inset
+
+mit 
+\begin_inset Formula $a_{0},a_{1}>0$
+\end_inset
+
+.
+ Die dem translatorischen Teilsystem zugeordneten Beobachterzustände 
+\begin_inset Formula $\hat{x}_{1},\hat{x}_{2}$
+\end_inset
+
+ werden über diese Beobachterverstärkung direkt beeinflusst.
+ Die das rotatorische Teilsystem beschreibenden Beobachterzustände 
+\begin_inset Formula $\hat{x}_{3},\hat{x}_{4}$
+\end_inset
+
+ werden als Simulationsterm, der vom ersten Teilsystem über
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\hat{x}_{2}$
+\end_inset
+
+ angeregt wird, mitgeführt.
+ Unter Annahme einer geeigneten Dämpfung konvergiert der Beobachter.
+\end_layout
+
+\begin_layout Section
+Beobachterentwurf bei unbekanntem Eingang
+\end_layout
+
+\begin_layout Standard
+Bei den bisher behandelten Beobachtern wurde davon ausgegangen, dass man
+ bei einem System mit Eingang diesen auch messen kann.
+ Schätzt ein Beobachter den Systemzustand bei Messung des Ausgangs
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+, aber ohne Kenntnis des (vorhandenen) Systemeingangs
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $u$
+\end_inset
+
+ (vgl.
+ Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:uio-struktur"
+
+\end_inset
+
+), so spricht man von einem 
+\emph on
+Beobachter mit unbekanntem Eingang
+\emph default
+
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!mit unbekanntem Eingang
+\end_layout
+
+\end_inset
+
+ (engl.
+ 
+\emph on
+unkown input observer
+\emph default
+, kurz 
+\emph on
+UIO
+\emph default
+) oder einem 
+\emph on
+starken Beobachter
+\emph default
+ (engl.
+ 
+\emph on
+strong observer
+\emph default
+).
+ Diese Art des Beobachters setzt man ein, wenn die messtechnische Erfassung
+ der Eingangsgröße sehr aufwendig bzw.
+ nicht möglich ist.
+ Die Existenzbedingungen und der Beobachterentwurf werden für lineare Systeme
+ in einem kürzlich erschienenen Übersichtsbeitrag beschrieben
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "lunze2017at"
+literal "true"
+
+\end_inset
+
+.
+ Dieser Abschnitt befasst sich mit der Berechnung eines starken Beobachters
+ für eine spezielle Klasse nicht\SpecialChar softhyphen
+linearer Systeme
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "moreno2000UnknownInput"
+literal "true"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename uio.fig
+	width 55text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Zustandsbeobachtung bei unbekanntem Eingang
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:uio-struktur"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+BI-NF
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Man betrachtet das eingangsaffine Eingrößensystem
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+.
+ Bei wohldefiniertem relativen Grad
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $r$
+\end_inset
+
+ existiert immer eine Transformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+, die das System in die Byrnes-Isidori-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF"
+
+\end_inset
+
+ überführt.
+ Im Fall 
+\begin_inset Formula $r=1$
+\end_inset
+
+ gilt 
+\begin_inset Formula $\xi=\xi_{1}=y$
+\end_inset
+
+, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ der eindimensionale Zustand des ersten Teilsystems ist der Ausgang.
+ Damit lässt sich die Byrnes-Isidori-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-BI-NF"
+
+\end_inset
+
+ auch folgendermaßen angeben: 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{rcl}
+\dot{y} & = & \alpha(y,\eta)+\beta(y,\eta)u\\
+\dot{\eta} & = & q(y,\eta)
+\end{array}\label{eq:uio-BI-NF}
+\end{equation}
+
+\end_inset
+
+Der starke Beobachter 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{ccl}
+\dot{\hat{\eta}} & = & q(y,\hat{\eta})\\
+\hat{x} & = & \Phi^{-1}(y,\hat{\eta})
+\end{array}\label{eq:uio-beobachter}
+\end{equation}
+
+\end_inset
+
+besteht aus einer Kopie des zweiten Teilsystems von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-BI-NF"
+
+\end_inset
+
+, welches direkt vom gemessenen Ausgang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+ erregt wird.
+ Da das zweite Teilsystem bei 
+\begin_inset Formula $r=1$
+\end_inset
+
+ die Dimension 
+\begin_inset Formula $n-1$
+\end_inset
+
+ besitzt, handelt es sich um einen reduzierten Beobachter
+\begin_inset Index idx
+status open
+
+\begin_layout Plain Layout
+Beobachter!reduzierter
+\end_layout
+
+\end_inset
+
+.
+ Bemerkenswert ist, dass beim Beobachter kein Einstellparameter (z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ in Form einer Beobachterverstärkung) auftritt.
+ Mit der Rücktransformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\Phi^{-1}$
+\end_inset
+
+ erhält man den Schätzwert des Zustands in den Originalkoordinaten.
+\end_layout
+
+\begin_layout Standard
+Für die Untersuchung der Konvergenz des Beobachters ist lediglich das zweite
+ Teilsystem zu betrachten.
+ Mit 
+\begin_inset Formula $\tilde{\eta}=\eta-\hat{\eta}$
+\end_inset
+
+ erhält man die Fehlerdifferentialgleichung
+\begin_inset Formula 
+\begin{equation}
+\dot{\tilde{\eta}}=q(y,\eta)-q(y,\hat{\eta}),\label{eq:uio-fehler-dgl}
+\end{equation}
+
+\end_inset
+
+deren Konvergenz der Gegenstand des folgenden Satzes ist:
+\end_layout
+
+\begin_layout Theorem
+\begin_inset CommandInset label
+LatexCommand label
+name "thm:uio-konvergenz-global"
+
+\end_inset
+
+System
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-system-eingangsaffin"
+
+\end_inset
+
+ habe einen gleichmäßigen relativen Grad 
+\begin_inset Formula $r=1$
+\end_inset
+
+ auf 
+\begin_inset Formula $\mathcal{M}=\R^{n}$
+\end_inset
+
+.
+ Zusätzlich sei die Transformation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:hg-EA-Phi"
+
+\end_inset
+
+ in die Byrnes-Isidori-Normalform
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-BI-NF"
+
+\end_inset
+
+ ein globaler Diffeomorphismus.
+ Existieren eine global positiv definite Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ und eine Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\gamma$
+\end_inset
+
+ der Klasse
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\mathcal{K}_{\infty}$
+\end_inset
+
+ derart, dass die Zeit\SpecialChar softhyphen
+ableitung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V(\tilde{\eta})$
+\end_inset
+
+ entlang der Fehlerdynamik
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-fehler-dgl"
+
+\end_inset
+
+ der Bedingung 
+\begin_inset Formula 
+\begin{equation}
+\forall\eta,\hat{\eta}:\quad\dot{V}(\eta,\hat{\eta})\leq-\gamma(\|\eta-\hat{\eta}\|)\label{eq:uio-dV}
+\end{equation}
+
+\end_inset
+
+genügt, dann konvergiert der Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-beobachter"
+
+\end_inset
+
+ global.
+\end_layout
+
+\begin_layout Proof(smartQED)
+Bei gleichmäßigem relativen Grad und einer globalen Transformation kann
+ die Konvergenzuntersuchung in den Koordinaten der Bynres-Isidori-Normalform
+ erfolgen.
+ Die Funktion
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ ist eine strenge Ljapunov-Funktion für das Fehlersystem
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-fehler-dgl"
+
+\end_inset
+
+.
+ Mit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-dV"
+
+\end_inset
+
+ ist die Ruhelage 
+\begin_inset Formula $\tilde{\eta}=0$
+\end_inset
+
+ von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-fehler-dgl"
+
+\end_inset
+
+ global asymptotisch stabil (vgl.
+ Anhang
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Stabilitaet-autonomer-Systeme"
+
+\end_inset
+
+).
+ Damit konvergiert der Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-beobachter"
+
+\end_inset
+
+ global.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Beispiel
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Die Funktion eines starken Beobachters wird an folgendem Beispiel illustriert:
+\end_layout
+
+\begin_layout Example
+Das Hodgkin-Huxley-Modell beschreibt das Aktionspotential eines Neurons
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hodgkin1952"
+literal "true"
+
+\end_inset
+
+.
+ Das Aktionspotential ist eine Spannung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $U$
+\end_inset
+
+, die zwischen dem Inneren und dem Äußeren der Zelle abfällt.
+ Die Zellmembran wirkt als Kondensator mit dem Kapazitätsbelag 
+\begin_inset Formula $C=1\,\text{\mu F}/\text{cm}^{2}$
+\end_inset
+
+.
+ Die Dynamik des Aktionspotentials lässt sich durch die Differentialgleichung
+ 
+\begin_inset Formula 
+\begin{equation}
+C\dot{U}=I-I_{\text{Na}}-I_{\text{K}}-I_{\text{L}}\label{eq:uio-hodgkin1}
+\end{equation}
+
+\end_inset
+
+beschreiben.
+ Dabei wird die Stromdichte in die Zelle (z.
+\begin_inset space \thinspace{}
+\end_inset
+
+B.
+ durch äußere Erregung) mit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I$
+\end_inset
+
+ bezeichnet.
+ Die Bewegung von 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hbox{Natrium-}
+\end_layout
+
+\end_inset
+
+ bzw.
+ Kalium\SpecialChar softhyphen
+ionen verursacht die Stromdichten
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I_{\text{Na}}$
+\end_inset
+
+ bzw.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I_{\text{K}}$
+\end_inset
+
+.
+ Zusätzlich enthält das Modell eine Leckstromdichte
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I_{\text{L}}$
+\end_inset
+
+.
+ Die letztgenannten Stromdichten werden durch die Gleichungen
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+I_{\text{Na}} & = & g_{\text{Na}}m^{3}h\left(U-U_{\text{Na}}\right)\\
+I_{\text{K}} & = & g_{\text{K}}n^{4}\left(U-U_{\text{K}}\right)\\
+I_{\text{L}} & = & g_{\text{L}}\left(U-U_{\text{L}}\right)
+\end{array}\label{eq:uio-hodgkin2}
+\end{equation}
+
+\end_inset
+
+mit den flächenbezogenenen Leitwerten 
+\begin_inset Formula $g_{\text{Na}}=120\,\text{mS}/\text{cm}^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $g_{\text{K}}=36\,\text{mS}/\text{cm}^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $g_{\text{L}}=0,3\,\text{mS}/\text{cm}^{2}$
+\end_inset
+
+ und den Spannungen 
+\begin_inset Formula $U_{\text{Na}}=50\,\text{mV}$
+\end_inset
+
+, 
+\begin_inset Formula $U_{\text{K}}=-77\,\text{mV}$
+\end_inset
+
+, 
+\begin_inset Formula $U_{\text{L}}=-54,4\,\text{mV}$
+\end_inset
+
+ beschrieben.
+ Die Durchlässigkeit der Ionenkanäle wird durch die Zustände 
+\begin_inset Formula $m,h,n$
+\end_inset
+
+ und das Markovmodell
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{ccl}
+\dot{m} & = & \alpha_{m}(U)\,(1-m)-\beta_{m}(U)\,m\\
+\dot{h} & = & \alpha_{h}(U)\,(1-h)-\beta_{h}(U)\,h\\
+\dot{n} & = & \alpha_{n}(U)\,(1-n)-\beta_{n}(U)\,n
+\end{array}\label{eq:uio-hoghkin3}
+\end{equation}
+
+\end_inset
+
+mit den Übergangsraten 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{lcl}
+\alpha_{m}(U) & = & 0,1(U+40)/(1-\exp(-(U+40)/10)),\\
+\beta_{m}(U) & = & 4\exp(-(U+65)/18),\\
+\alpha_{h}(U) & = & 0,07\exp(-(U+65)/20),\\
+\beta_{h}(U) & = & 1/(1+\exp(-(U+35)/10)),\\
+\alpha_{n}(U) & = & 0,01(U+55)/(1-\exp(-(U+55)/10)),\\
+\beta_{n}(U) & = & 0,125\exp(-(U+65)/80)
+\end{array}\label{eq:uio-hodgkin4}
+\end{equation}
+
+\end_inset
+
+modelliert.
+ Die Spannung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $U$
+\end_inset
+
+ ist dabei auf 
+\begin_inset Formula $\text{mV}$
+\end_inset
+
+ normiert.
+ Das zu den Modellgleichungen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin1"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin2"
+
+\end_inset
+
+ gehörende elektrische Ersatzschaltbild ist in Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:hodgkin-huxley-netzwerk"
+
+\end_inset
+
+ dargestellt.
+\end_layout
+
+\begin_layout Example
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset External
+	template XFig
+	filename hodgkin-huxley-modell.fig
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Ersatznetzwerk des Hodgkin-Huxley-Modells
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:hodgkin-huxley-netzwerk"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+Mit dem Ausgang 
+\begin_inset Formula $y=U$
+\end_inset
+
+ liegt das durch Gln.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin1"
+
+\end_inset
+
+ bis
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin4"
+
+\end_inset
+
+ beschriebene Modell bereits in der Byrnes-Isidori-Normalform vor.
+ Für die Simulation des Systems verwenden wir die Anfangswerte 
+\begin_inset Formula $U(0)=-61,733\,\text{mV}$
+\end_inset
+
+, 
+\begin_inset Formula $m(0)=0,0722$
+\end_inset
+
+, 
+\begin_inset Formula $h(0)=0,4794$
+\end_inset
+
+, 
+\begin_inset Formula $n(0)=0,3687$
+\end_inset
+
+ und das Eingangssignal
+\begin_inset Formula 
+\[
+I(t)=\left\{ \begin{array}{rcl}
+5 & \text{für} & 0\leq t\leq100\\
+10 & \text{für} & t>100
+\end{array}\right.
+\]
+
+\end_inset
+
+mit der Zeit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $t$
+\end_inset
+
+ in 
+\begin_inset Formula $\text{ms}$
+\end_inset
+
+ und der Stromdichte
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $I$
+\end_inset
+
+ in 
+\begin_inset Formula $\text{\mu A}/\text{cm}^{2}$
+\end_inset
+
+.
+ Zum Zeitpunkt 
+\begin_inset Formula $t=100$
+\end_inset
+
+ wird die Zelle stimuliert.
+ Der zugehörige Spannungsverlauf ist in Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:hodgkin-huxley-simulation"
+
+\end_inset
+
+ (oben) dargestellt.
+\end_layout
+
+\begin_layout Example
+Den Beobachter setzt man einfach als Kopie des Systems
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hoghkin3"
+
+\end_inset
+
+ an, wobei man die Zustände 
+\begin_inset Formula $m,h,n$
+\end_inset
+
+ in 
+\begin_inset Formula $\hat{m},\hat{h},\hat{n}$
+\end_inset
+
+ umbenennt.
+ Zur Überprüfung der Konvergenzbedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-dV"
+
+\end_inset
+
+ setzen wir
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ als quadratische Form 
+\begin_inset Formula $V(\tilde{\eta})=\tfrac{1}{2}\sum_{i=1}^{3}\tilde{\eta}_{i}^{2}$
+\end_inset
+
+ mit 
+\begin_inset Formula $\tilde{\eta}=(\tilde{m},\tilde{h},\tilde{n})^{T}$
+\end_inset
+
+ an.
+ Damit ist
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ global positiv definit.
+ Für die Zeitableitung von
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $V$
+\end_inset
+
+ entlang der sich aus
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hoghkin3"
+
+\end_inset
+
+ ergebenden Fehlerdynamik gilt 
+\begin_inset Formula 
+\begin{equation}
+\dot{V}=\sum_{i=1}^{3}\tilde{\eta}_{i}\dot{\tilde{\eta}}_{i}=-\sum_{i=1}^{3}\left(\alpha_{i}(U)+\beta_{i}U)\right)\tilde{\eta}_{i}^{2}\leq-\mu\|\tilde{\eta}\|^{2}\label{eq:uio-hodgkin-dV}
+\end{equation}
+
+\end_inset
+
+mit 
+\begin_inset Formula $\mu:=\inf_{i,U}(\alpha_{i}(U)+\beta_{i}U))>0$
+\end_inset
+
+, wobei die Funktionen
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin4"
+
+\end_inset
+
+ entsprechend der Gleichungssnummer in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hoghkin3"
+
+\end_inset
+
+ notiert wurden, d.
+\begin_inset space \thinspace{}
+\end_inset
+
+h.
+ 
+\begin_inset Formula $\alpha_{1}=\alpha_{m},\ldots,\beta_{3}=\beta_{n}$
+\end_inset
+
+.
+ Mit
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-hodgkin-dV"
+
+\end_inset
+
+ ist Bedingung
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-dV"
+
+\end_inset
+
+ erfüllt, so dass der Beobachter global konvergiert.
+ Für die Simulation des Beobachter wird der Anfangsvektor 
+\begin_inset Formula $\hat{\eta}=0\in\R^{3}$
+\end_inset
+
+ gewählt.
+ In Abb.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:hodgkin-huxley-simulation"
+
+\end_inset
+
+ (unten) ist zu sehen, dass die Beobachtertrajektorien schnell gegen die
+ Systemtrajektorien konvergieren.
+\end_layout
+
+\begin_layout Example
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Hodgkin_Sim.svg
+	width 95text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulierter Spannungsverlauf des Hodgkin-Huxley-Modells (oben), Trajektorien
+ der internen Dynamik von System und Beobachter (unten)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:hodgkin-huxley-simulation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Erweiterung: Schätzung des Eingangssignals
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+Der starke Beobachter
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:uio-beobachter"
+
+\end_inset
+
+ lässt sich dahingehend erweitern, dass man simultan auch eine (nicht asymptotis
+che) Schätzung des Eingangs erhält.
+ Dabei nutzt man Beobachter-Filter-Kombinationen, die in
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "goel2005tech,roebenack2007medjmc,roebenack2009ijss,roebenack2009ndst"
+literal "true"
+
+\end_inset
+
+ an verschiedenen Zellmodellen erprobt werden.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Literaturverzeichnis
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "dynamic"
+options "babalpha"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

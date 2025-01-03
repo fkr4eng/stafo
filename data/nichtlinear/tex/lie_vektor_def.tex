@@ -1,0 +1,24 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+LieBracket([l]):=block([f,g,x,k,Df,Dg,ad],
+    if (length(l)<3) or (length(l)>4) then 
+       error ("Aufruf mit 3 oder 4 Argumenten."),
+    f:l[1],
+    g:l[2],
+    x:l[3],
+    if length(l)=3 then k:1 else k:l[4],
+    if not(nonnegintegerp(k)) then 
+       error ("Ordnung k muss natürliche Zahl sein."),
+    if k=0 then return(g)
+    else 
+        Df:jacobian(f,x),
+        Dg:jacobian(g,x),
+        ad:list_matrix_entries(Dg.f-Df.g),
+        return(LieBracket(f,ad,x,k-1))
+)$
+\end{verbatim}
+\end{minipage}

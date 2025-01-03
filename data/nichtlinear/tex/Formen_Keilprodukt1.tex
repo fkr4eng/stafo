@@ -1,0 +1,117 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i2) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+load(basic)$
+if get('cartan,'version)=false then load(cartan)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i3) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+init_cartan([x1,x2,x3]);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o3) }
+[dx1,dx2,dx3]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i6) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+ω:ω1*dx1+ω2*dx2+ω3*dx3;
+η:η1*dx1+η2*dx2+η3*dx3;
+σ:σ1*dx1+σ2*dx2+σ3*dx3;
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o4) }
+dx3\,\omega3+dx2\,\omega2+dx1\,\omega1
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o5) }
+dx3\,\eta3+dx2\,\eta2+dx1\,\eta1
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o6) }
+dx3\,\sigma3+dx2\,\sigma2+dx1\,\sigma1
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+facsum(ω ~ η,dx1,dx2,dx3);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o7) }
+-dx2dx3( \eta2\omega3-\eta3\omega2) -dx1dx3( \eta1\omega3-\eta3\omega1) -dx1dx2( \eta1\omega2-\eta2\omega1) 
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i8) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+factor(ω ~ η ~ σ);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o8) }
+dx1dx2dx3( \eta1\sigma2\omega3-\eta2\sigma1\omega3-\eta1\sigma3\omega2+\eta3\sigma1\omega2+\eta2\sigma3\omega1-\eta3\sigma2\omega1) 
+\end{math}
+%%%%%%%%%%%%%%%

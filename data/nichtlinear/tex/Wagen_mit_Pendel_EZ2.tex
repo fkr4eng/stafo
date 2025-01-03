@@ -1,0 +1,40 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i6) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[x2,0,x4,-(G*sin(x3))/l]$
+g:[0,1,0,-cos(x3)/l]$
+x:[x1,x2,x3,x4]$
+n:length(x)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i8) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+D:makelist(LieBracket(-f,g,x,i),i,0,n-2)$
+Involutivep(D,x);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o8) }\quad $}
+\mbox{}\mbox{false}
+\end{math}

@@ -1,0 +1,82 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i3) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+f:[sin(x3),cos(x3),0];
+h:x1^2+x2^2;
+x:[x1,x2,x3];
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o3) }
+[\mathrm{sin}\left( x3\right) ,\mathrm{cos}\left( x3\right) ,0]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o4) }
+{x2}^{2}+{x1}^{2}
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o5) }
+[x1,x2,x3]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i6) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+dh:list_matrix_entries(jacobian([h],x));
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o6) }
+[2\,x1,2\,x2,0]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+LieCovector(f,dh,x);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o7) }
+[2\,\mathrm{sin}\left( x3\right) ,2\,\mathrm{cos}\left( x3\right) ,2\,x1\,\mathrm{cos}\left( x3\right) -2\,x2\,\mathrm{sin}\left( x3\right) ]
+\end{math}
+%%%%%%%%%%%%%%%
+

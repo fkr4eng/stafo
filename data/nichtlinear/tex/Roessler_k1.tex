@@ -1,0 +1,44 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[-x2-x3,x1+a*x2,c+x3*(x1-b)]$
+h:log(x3)$
+x:[x1,x2,x3]$
+n:length(x)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i10) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Q:ObservabilityMatrix(f,h,x)$
+v:list_matrix_entries(col(invert(Q),n))$
+cp:a0+a1*s+a2*s^2+s^3$
+k1:sum(coeff(cp,s,i)*LieBracket(-f,v,x,i),i,0,n)$
+transpose(ratsimp(k1));
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o10) }\quad $}
+\begin{pmatrix}-\mathit{x3}+a\cdot \mathit{a2}+\mathit{a1}+{{a}^{2}}-1\cr \left( 1-{{a}^{2}}\right) \cdot \mathit{a2}-a\cdot \mathit{a1}-\mathit{a0}-{{a}^{3}}+2\cdot a\cr \left( a+\mathit{a2}\right) \cdot \mathit{x3}-c\end{pmatrix}\mbox{}
+$
+%%%%%%%%%%%%%%%

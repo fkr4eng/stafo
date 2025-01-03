@@ -1,0 +1,27 @@
+\begin{picture}(0,0)%
+\includegraphics{beispiel_distr_rotation}%
+\end{picture}%
+\setlength{\unitlength}{4144sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(4074,2191)(-56,-3095)
+\put(1891,-3031){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$0$}%
+}}}}
+\put(3871,-3031){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$x_1$}%
+}}}}
+\put(1891,-1051){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$x_2$}%
+}}}}
+\put(2026,-1681){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$f_1(p)$}%
+}}}}
+\put(766,-2581){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$f_2(p)$}%
+}}}}
+\put(2791,-1726){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$f_1(q)$}%
+}}}}
+\put(991,-1726){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$f_2(q)$}%
+}}}}
+\end{picture}%

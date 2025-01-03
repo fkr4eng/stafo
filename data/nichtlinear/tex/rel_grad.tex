@@ -1,0 +1,18 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+RelativeDegree(f,g,h,x):=block([n,r:inf,lie],
+    n:length(x),
+    for k:1 thru n do (
+        lie:ratsimp(LieScalar(g,h,x)),
+        if not (lie=0)
+        then (r:k, return(r)),
+        h:LieScalar(f,h,x) 
+    ),
+    r
+)$
+\end{verbatim}
+\end{minipage}

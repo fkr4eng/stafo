@@ -1,0 +1,27 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+%\begin{minipage}[t]{8ex}
+%\color{red}\bf
+%\begin{verbatim}
+%(%i11) 
+%\end{verbatim}
+%\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+Involutivep(L,x):=block([F,G,i,j,r],
+    r:length(L),
+    F:apply('matrix,L),
+    F:transpose(F),
+    G:copy(F),  
+    for i:1 thru r do 
+        for j:i+1 thru r do block([f1,f2],
+            f1:list_matrix_entries(col(F,i)),
+            f2:list_matrix_entries(col(F,j)),
+            G:addcol(G,LieBracket(f1,f2,x))
+    ),
+    is(rank(F)=rank(G))
+)$
+\end{verbatim}
+\end{minipage}

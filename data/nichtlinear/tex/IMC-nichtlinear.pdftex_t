@@ -1,0 +1,53 @@
+\begin{picture}(0,0)%
+\includegraphics{IMC-nichtlinear}%
+\end{picture}%
+\setlength{\unitlength}{4144sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(6684,2004)(259,-2818)
+\put(1531,-1411){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\tilde{w}$}%
+}}}}
+\put(2791,-1321){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\hat{y}^{(r)}$}%
+}}}}
+\put(3916,-1951){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\hat{\eta}$}%
+}}}}
+\put(2251,-2289){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$c^T$}%
+}}}}
+\put(1396,-1951){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\hat{y}$}%
+}}}}
+\put(4591,-1411){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$u$}%
+}}}}
+\put(6436,-1051){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$d$}%
+}}}}
+\put(5446,-1569){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Gl.~(\ref{eq:var-basissystem})}%
+}}}}
+\put(6706,-1411){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$y$}%
+}}}}
+\put(406,-1411){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$w$}%
+}}}}
+\put(3826,-2604){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Interne Dynamik}%
+}}}}
+\put(3826,-2289){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Gl.~(\ref{eq:IMC-TS2-EA})}%
+}}}}
+\put(3826,-1569){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Gl.~(\ref{eq:IMC-u})}%
+}}}}
+\put(2251,-1569){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Gl.~(\ref{eq:IMC-Zustandsvariablenfilter})}%
+}}}}
+\put(2251,-1951){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Modellausgang}%
+}}}}
+\put(3061,-1951){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\hat{\xi}$}%
+}}}}
+\put(2881,-961){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}Regler}%
+}}}}
+\put(2251,-1254){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Filter}%
+}}}}
+\put(3826,-1254){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Hirschorn-Inverse}%
+}}}}
+\put(5446,-1254){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Strecke}%
+}}}}
+\end{picture}%

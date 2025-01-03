@@ -1,0 +1,69 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i1) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+load("vect")$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i2) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+f1:[sin(x3),cos(x3),0];
+f2:[0,0,1];
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o2) }
+[\mathrm{sin}\left( x3\right) ,\mathrm{cos}\left( x3\right) ,0]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o3) }
+[0,0,1]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i4) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+express(f1~f2);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o4) }
+[\mathrm{cos}\left( x3\right) ,-\mathrm{sin}\left( x3\right) ,0]
+\end{math}
+%%%%%%%%%%%%%%%

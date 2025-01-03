@@ -1,0 +1,42 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[x2,(m*G*l*sin(x1)-d*x2+K*x3)/J,-(K*x2+R*x3)/L]$
+ω:[J*L/K,0,0]$
+x:[x1,x2,x3]$
+n:length(x)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+sum(a[i]*LieCovector(f,ω,x,i),i,0,n)$
+σ:subst([a[3]=1],%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o7) }\quad $}
+[\frac{{{a}_{0}}\cdot J\cdot L}{K}-\frac{d\cdot l\cdot m\cdot \mathrm{cos}\left( \mathit{x1}\right) \cdot G\cdot L}{J\cdot K}-\frac{l\cdot m\cdot \mathrm{sin}\left( \mathit{x1}\right) \cdot \mathit{x2}\cdot G\cdot L}{K}+\frac{{{a}_{2}}\cdot l\cdot m\cdot \mathrm{cos}\left( \mathit{x1}\right) \cdot G\cdot L}{K},\frac{{{a}_{1}}\cdot J\cdot L}{K}+\frac{{{d}^{2}}\cdot L}{J\cdot K}+\frac{l\cdot m\cdot \mathrm{cos}\left( \mathit{x1}\right) \cdot G\cdot L}{K}-\frac{{{a}_{2}}\cdot d\cdot L}{K}-K,-R-\frac{d\cdot L}{J}+{{a}_{2}}\cdot L]\mbox{}
+$
+%%%%%%%%%%%%%%%

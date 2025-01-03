@@ -1,0 +1,69 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i2) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+f:[sin(x3),cos(x3),0];
+h:x1^2+x2^2;
+x:[x1,x2,x3];
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o2) }
+[\mathrm{sin}\left( x3\right) ,\mathrm{cos}\left( x3\right) ,0]
+\end{math}
+
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o3) }
+{x2}^{2}+{x1}^{2}
+\end{math}
+
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o4) }
+[x1,x2,x3]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+LieScalar(f,h,x);
+LieScalar(f,h,x,2);
+LieScalar(f,h,x,3);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o5) }
+2\,x1\,\mathrm{sin}\left( x3\right) +2\,x2\,\mathrm{cos}\left( x3\right) 
+\end{math}
+
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o6) }
+2\,{\mathrm{sin}\left( x3\right) }^{2}+2\,{\mathrm{cos}\left( x3\right) }^{2}
+\end{math}
+
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o7) }
+0
+\end{math}
+%%%%%%%%%%%%%%%
+

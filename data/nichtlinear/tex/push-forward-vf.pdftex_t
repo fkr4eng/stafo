@@ -1,0 +1,45 @@
+\begin{picture}(0,0)%
+\includegraphics{push-forward-vf}%
+\end{picture}%
+\setlength{\unitlength}{3729sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(6954,2670)(383,-3100)
+\put(6021,-1956){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\frac{\partial}{\partial z_1}$}%
+}}}}
+\put(6061,-2852){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\mathcal{N}$}%
+}}}}
+\put(1628,-2791){\makebox(0,0)[rb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\mathcal{M}$}%
+}}}}
+\put(398,-931){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Tangential-}%
+}}}}
+\put(398,-1156){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}raum $T_x\mathcal{M}$}%
+}}}}
+\put(1901,-1706){\makebox(0,0)[rb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\frac{\partial}{\partial x_2}$}%
+}}}}
+\put(6353,-1021){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Tangential-}%
+}}}}
+\put(6353,-1246){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}raum $T_z\mathcal{N}$}%
+}}}}
+\put(5241,-1726){\makebox(0,0)[rb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\frac{\partial}{\partial z_2}$}%
+}}}}
+\put(2821,-1676){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\frac{\partial}{\partial x_1}$}%
+}}}}
+\put(3894,-2701){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}Diffeomorphismus $\psi$}%
+}}}}
+\put(2394,-2206){\makebox(0,0)[rb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$x$}%
+}}}}
+\put(5139,-2379){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$z=\psi(x)$}%
+}}}}
+\put(3961,-601){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}Pushforward $\psi_*=\psi^\prime$}%
+}}}}
+\put(5626,-1321){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$q(z)$}%
+}}}}
+\put(2501,-1256){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$g(x)$}%
+}}}}
+\end{picture}%

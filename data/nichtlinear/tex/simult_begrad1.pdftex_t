@@ -1,0 +1,22 @@
+\begin{picture}(0,0)%
+\includegraphics{simult_begrad1.pdf}%
+\end{picture}%
+\setlength{\unitlength}{3522sp}%
+\begin{picture}(5310,2595)(110,-2733)
+\put(125,-1751){\makebox(0,0)[lb]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$x$}%
+}}}
+\put(1302,-1518){\makebox(0,0)[lb]{\smash{\fontsize{8}{9.6}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$x_0$}%
+}}}
+\put(4388,-1421){\makebox(0,0)[lb]{\smash{\fontsize{8}{9.6}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$0$}%
+}}}
+\put(5210,-2343){\makebox(0,0)[lb]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$z$}%
+}}}
+\put(2000,-1091){\makebox(0,0)[lb]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$f_2(x_0)$}%
+}}}
+\put(802,-1012){\makebox(0,0)[rb]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$f_1(x_0)$}%
+}}}
+\put(5405,-1564){\makebox(0,0)[lb]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$\frac{\partial}{\partial z_1}$}%
+}}}
+\put(4317,-305){\makebox(0,0)[b]{\smash{\fontsize{10}{12}\usefont{T1}{ptm}{m}{n}{\color[rgb]{0,0,0}$\frac{\partial}{\partial z_2}$}%
+}}}
+\end{picture}%

@@ -1,0 +1,447 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass svmono
+\options deutsch,german
+\use_default_options false
+\master buch5.lyx
+\maintain_unincluded_children false
+\language ngerman
+\language_package babel
+\inputencoding utf8
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language german
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Preface
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Inhalt
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nichtlineare Regelungs- und Steuerungsverfahren kommen überall dort zum
+ Einsatz, wo die Leistungsfähigkeit linearer Methoden an ihre Grenzen stößt.
+ An- und Abfahrvorgänge bzw.
+ Arbeitspunktwechsel in chemischen Reaktoren, die hochpräzise Lageregelung
+ von Starrkörpern im Raum (beispielsweise Effektoren von Industrierobotern
+ oder autonome Flugkörper) oder die Regelung leistungselektronischer Baugruppen
+ mögen als Beispiele dienen.
+ Vor diesem Hintergrund verwundert es nicht, dass Ansätze zur nichtlinearen
+ Regelung in der industriellen Praxis zunehmend auf Interesse stoßen, um
+ die Ausbeute und Zuverlässigkeit der zugrundliegenden technischen Prozesse
+ zu erhöhen.
+ Gleichwohl ist der in der nichtlinearen Regelungstheorie verwendete mathematisc
+he Apparat gefürchtet.
+ Genau an dieser Stelle setzt dieses Lehrbuch an: Die Darstellung ist einerseits
+ in sich mathematisch schlüssig und nachvollziehbar, andererseits aber auch
+ in einer für Ingenieure verständlichen Sprache formuliert.
+ Der inhaltliche Fokus des Buches liegt dabei auf der Methode der exakten
+ Linearisierung zum Regler- und Beobachterentwurf.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Zielgruppe
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Das Buch richtet sich maßgeblich an Studierende der Elektrotechnik und Mechatron
+ik in der Vertiefungsrichtung Automatisierungs- bzw.
+ Regelungstechnik, die bereits über fortgeschrittene regelungstechnische
+ Kenntnisse verfügen.
+ Doktoranden können anhand des Buches ihr systemtheoretisches bzw.
+ regelungstechnisches Verständnis nichtlinearer Systeme vertiefen.
+ Für Ingenieure in der Industrie, die mit der Regelung nichtlinearer Systeme
+ konfrontiert sind, werden verschiedene Entwurfsansätze detailliert beschrieben.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Aufbau des Buches
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Im Teil
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "part:Vorbereitung"
+
+\end_inset
+
+ des Buches werden nach einigen Einführungsbeispielen die benötigten mathematisc
+hen Konzepte aus den Bereichen der linearen Algebra, der Vektoranalysis
+ bzw.
+ der Differentialgeometrie vermittelt.
+ Zur Festigung der Lehrinhalte sind am Ende der Kapitel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Grundlagen"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Diff-Geo"
+
+\end_inset
+
+ Übungsaufgaben vorgesehen.
+ Die Teile
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "part:Reglerentwurf"
+
+\end_inset
+
+ und
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "part:Beobachterentwurf"
+
+\end_inset
+
+ behandeln den Regler- bzw.
+ Beobachterentwurf.
+ Die jeweilige Herangehensweise bzw.
+ Entwurfsmethodik wird an verschiedenen Beispielen veranschaulicht bzw.
+ durch den Einsatz des Open-Source-Computeralgebrasystems 
+\shape smallcaps
+Maxima
+\shape default
+ illustriert.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Entstehung des Buches, Lehrveranstaltungen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Erste Skizzen zum vorliegenden Buch entstanden in Verbindung mit der Vorlesung
+ 
+\begin_inset Quotes gld
+\end_inset
+
+Mathematische Grundlagen der nichtlinearen Regelungstheorie
+\begin_inset Quotes grd
+\end_inset
+
+, die ich im Sommersemester 2006 an der Fakultät Mathematik und Naturwissenschaf
+ten der TU Dresden hielt.
+ Diese Lehrveranstaltung führe ich seit 2007 als Wahlpflichtfach 
+\begin_inset Quotes gld
+\end_inset
+
+Nichtlineare Regelungstechnik 2
+\begin_inset Quotes grd
+\end_inset
+
+ für verschiedene Ingenieurstudiengänge fort.
+ Meine zehnjährige Lehrtätigkeit in diesem Gebiet hat das vorliegende Buch
+ maßgeblich geprägt.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Danksagungen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+- Reinschke, Griewank, Walter
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Es ist mir ein Bedürfnis, zuallererst meinem Lehrer, Herrn Prof.
+ Kurt Reinschke, für seine langjährige Unterstützung zu danken.
+ Besonderer Dank gilt auch Herrn Prof.
+ Andreas Griewank für seine Anregungen zur Beschäftigung mit dem algorithmischen
+ Differenzieren.
+ Ebenso möchte ich Herrn Prof.
+ Wolfgang V.
+ Walter danken, durch den ich in den Jahren 2006 bis 2007 die Vertretung
+ der Professur 
+\begin_inset Quotes gld
+\end_inset
+
+Wissenschaftliches Rechnen und Angewandte Mathematik
+\begin_inset Quotes grd
+\end_inset
+
+ wahrnehmen konnte.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+- Knoll, Voßwinkel, ...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bei der Gestaltung der dem Buch zugrundeliegenden Vorlesung und der Konzeption
+ des Manuskripts haben mich zahlreiche Diplomanden, heutige und ehemalige
+ Mitarbeiter und Doktoranden unterstützt.
+ Besonderer Dank gilt Dr.
+ Carsten Knoll, der das Buch durch zahlreiche Verbesserungsvorschläge erheblich
+ bereichert hat.
+ Außerdem danke ich Dr.
+ Jan Winkler, Dr.
+ Matthias Franke und Prof.
+ Frank Woittennek für die angenehme Zusammenarbeit und die interessanten
+ Diskussionen.
+ Herrn M.Sc.
+ Rick Voßwinkel danke ich für die sehr gewissenhafte Durchsicht des Manuskripts.
+ Mein Dank gebührt auch Dr.
+ Carsten Collon, Dipl.-Ing.
+ Mirko Franke, Dipl.-Ing.
+ Chenzi Huang, Dipl.-Ing.
+ Fabian Paschke, Dipl.-Ing.
+ Klemens Fritzsche, Dipl.-Ing.
+ Gunter Nitzsche und Dipl.-Ing.
+ Robert Huber.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+- Fachkollegen
+\end_layout
+
+\end_inset
+
+Zahlreiche Diskussionen bei Konferenzen, Tagungen und Workshops haben mein
+ Verständnis für nichtlineare Systeme vertieft.
+ Für fachliche Anregungen möchte ich daher Dr.
+ Albrecht Gensior (TU Dresden), Associate Prof.
+ Pranay Goel (Indian Institute of Science Education and Research, Pune),
+ PD Dr.
+ Lutz Gröll (Karlsruher Institut für Technologie), Prof.
+ Alan F.
+ Lynch (University of Alberta, Kanada), Prof.
+ Jaime A.
+ Moreno (Universidad Nacional Autónoma de México), Prof.
+ Joachim Rudolph (Universität des Saarlandes), Prof.
+ Andrea Walther (Universität Paderborn) und Prof.
+ Zeitz (Universität Stuttgart) danken.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+- Familie, Verlage: Springer, de Gruyter
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Frau Eva Hestermann-Beyerle und Frau Birgit Kollmar-Thoni vom Springer-Verlag
+ danke ich für die angenehme Zusammenarbeit.
+ Mein Dank gilt auch dem 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hbox{De~Gruyter}
+\end_layout
+
+\end_inset
+
+-Verlag für die Nutzungsgenehmigung im Zusammenhang mit Kapitel
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cha:Beobachter-Normalform"
+
+\end_inset
+
+.
+ Meiner Frau und meinen Kindern danke ich für ihre Geduld und ihr Verständnis.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace{
+\backslash
+baselineskip}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align right
+Dresden, März 2017
+\begin_inset space \hfill{}
+\end_inset
+
+Klaus Röbenack
+\end_layout
+
+\end_body
+\end_document

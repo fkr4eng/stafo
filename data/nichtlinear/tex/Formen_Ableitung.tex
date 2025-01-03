@@ -1,0 +1,168 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i2) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+load(basic)$
+if get('cartan,'version)=false then load(cartan)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i4) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+x:[x1,x2,x3];
+dx:init_cartan(x);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o3) }
+[x1,x2,x3]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o4) }
+[dx1,dx2,dx3]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+ω:[ω1,ω2,ω3];
+depends(ω,x);
+ω:ω . dx;
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o5) }
+[\omega1,\omega2,\omega3]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o6) }
+[\mathrm{\omega1}\left( x1,x2,x3\right) ,\mathrm{\omega2}\left( x1,x2,x3\right) ,\mathrm{\omega3}\left( x1,x2,x3\right) ]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o7) }
+dx3\,\omega3+dx2\,\omega2+dx1\,\omega1
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i9) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+dω:ext_diff(ω)$
+facsum(%,dx1,dx2,dx3);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o9) }
+dx2\,dx3\,\left( \frac{d}{d\,x2}\,\omega3-\frac{d}{d\,x3}\,\omega2\right) +dx1\,dx3\,\left( \frac{d}{d\,x1}\,\omega3-\frac{d}{d\,x3}\,\omega1\right) +
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\phantom{\parbox{8ex}{\color{labelcolor}(\%o9) }}
+dx1\,dx2\,\left( \frac{d}{d\,x1}\,\omega2-\frac{d}{d\,x2}\,\omega1\right) 
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i11) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+depends([η12,η13,η23],x);
+η:η12*dx1~dx2+η13*dx1~dx3+η23*dx2~dx3;
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o10) }
+[\mathrm{\eta12}\left( x1,x2,x3\right) ,\mathrm{\eta13}\left( x1,x2,x3\right) ,\mathrm{\eta23}\left( x1,x2,x3\right) ]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o11) }
+dx2\,dx3\,\eta23+dx1\,dx3\,\eta13+dx1\,dx2\,\eta12
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}
+\color{red}\bf
+\begin{verbatim}
+(%i13) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+dη:ext_diff(η)$
+factor(%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o13) }
+dx1\,dx2\,dx3\,\left( \frac{d}{d\,x1}\,\eta23-\frac{d}{d\,x2}\,\eta13+\frac{d}{d\,x3}\,\eta12\right) 
+\end{math}
+%%%%%%%%%%%%%%%

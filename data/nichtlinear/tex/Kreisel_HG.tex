@@ -1,0 +1,69 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i3) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[λ1*x2*x3,λ2*x1*x3,λ3*x1*x2]$
+x:[x1,x2,x3]$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Q:factor(ObservabilityMatrix(f,x1,x));
+d:factor(determinant(Q));
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o4) }\quad $}
+\begin{pmatrix}1 & 0 & 0\cr 0 & {x3}\cdot {\lambda1} & {x2}\cdot {\lambda1}\cr {\lambda1}\cdot \left( {{{x2}}^{2}}\cdot {\lambda3}+{{{x3}}^{2}}\cdot {\lambda2}\right)  & 2\cdot {x1}\cdot {x2}\cdot {\lambda1}\cdot {\lambda3} & 2\cdot {x1}\cdot {x3}\cdot {\lambda1}\cdot {\lambda2}\end{pmatrix}
+$
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o5) }\quad $}
+-2\cdot {x1}\cdot {{{\lambda1}}^{2}}\cdot \left( {{{x2}}^{2}}\cdot {\lambda3}-{{{x3}}^{2}}\cdot {\lambda2}\right) \mbox{}
+$
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+invert(Q).[a2,a1,a0]$
+k:ratsimp(%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o7) }\quad $}
+\begin{pmatrix}{a2}\cr -\frac{-{a0}\cdot {x2}+\left( {a2}\cdot {x2}\cdot {{{x3}}^{2}}\cdot {\lambda1}+2\cdot {a1}\cdot {x1}\cdot {x3}\right) \cdot {\lambda2}+{a2}\cdot {{{x2}}^{3}}\cdot {\lambda1}\cdot {\lambda3}}{2\cdot {x1}\cdot {{{x2}}^{2}}\cdot {\lambda1}\cdot {\lambda3}-2\cdot {x1}\cdot {{{x3}}^{2}}\cdot {\lambda1}\cdot {\lambda2}}\cr \frac{-{a0}\cdot {x3}+{a2}\cdot {{{x3}}^{3}}\cdot {\lambda1}\cdot {\lambda2}+\left( {a2}\cdot {{{x2}}^{2}}\cdot {x3}\cdot {\lambda1}+2\cdot {a1}\cdot {x1}\cdot {x2}\right) \cdot {\lambda3}}{2\cdot {x1}\cdot {{{x2}}^{2}}\cdot {\lambda1}\cdot {\lambda3}-2\cdot {x1}\cdot {{{x3}}^{2}}\cdot {\lambda1}\cdot {\lambda2}}\end{pmatrix}\mbox{}
+$
+%%%%%%%%%%%%%%%

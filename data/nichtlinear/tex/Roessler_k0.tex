@@ -1,0 +1,43 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[-x2-x3,x1+a*x2,c+x3*(x1-b)]$
+h:log(x3)$
+x:[x1,x2,x3]$
+n:length(x)$
+\end{verbatim}
+\end{minipage}
+
+\smallskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i9) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Q:ObservabilityMatrix(f,h,x)$
+v:list_matrix_entries(col(invert(Q),n))$
+P:ControllabilityMatrix(f,v,x)$
+k0:P.[a0,a1,a2];
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o9) }\quad $}
+\begin{pmatrix}a\cdot \mathit{a2}+\mathit{a1}\cr \left( 1-{{a}^{2}}\right) \cdot \mathit{a2}-a\cdot \mathit{a1}-\mathit{a0}\cr \mathit{a2}\cdot \mathit{x3}\end{pmatrix}\mbox{}
+$
+%%%%%%%%%%%%%%%

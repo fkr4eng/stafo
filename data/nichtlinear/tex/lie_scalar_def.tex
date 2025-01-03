@@ -1,0 +1,23 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}
+\color{blue}
+\begin{verbatim}
+LieScalar([l]):=block([f,h,x,k,Lfh],
+    if (length(l)<3) or (length(l)>4) then 
+       error ("Aufruf mit 3 oder 4 Argumenten."),
+    f:l[1], /* Vektorfeld */
+    h:l[2], /* Skalarfeld */
+    x:l[3], /* Variable   */
+    if length(l)=3 then k:1 else k:l[4],
+    if not(nonnegintegerp(k)) then 
+       error ("Ordnung k muss natürliche Zahl sein."),
+    if k=0 then return(h)
+    else 
+        Lfh:jacobian([h],x).f,
+        return(LieScalar(f,Lfh,x,k-1))
+)$
+\end{verbatim}
+\end{minipage}
+

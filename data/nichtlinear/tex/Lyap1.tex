@@ -1,0 +1,16 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Lyap(A,Q):=block([n,I,At,M,Qvec,Pvec,P],
+    n:length(A),
+    I:identfor(A),
+    At:transpose(A),
+    M:kronecker_product(I,At)+kronecker_product(At,I),
+    Qvec:list_matrix_entries(transpose(Q)),
+    Pvec:list_matrix_entries(-invert(M).Qvec),
+    P:genmatrix(lambda([i,j],Pvec[i+(j-1)*n]),n,n)
+    )$
+\end{verbatim}
+\end{minipage}

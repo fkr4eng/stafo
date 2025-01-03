@@ -1,0 +1,2516 @@
+
+\chapter[Beobachterentwurf mittels  Linearisierung der Fehlerdynamik]{Beobachterentwurf mittels exakter bzw. näherungsweiser Linearisierung
+der Fehlerdynamik\label{cha:Beobachter-Normalform}}
+
+Normalformen spielen beim Entwurf nichtlinearer Beobachter eine große
+Rolle. Kann man ein System in eine Form überführen, bei der die Nichtlinearitäten
+ausschließlich von den Messgrößen abhängen, ist der Entwurf eines
+Beobachters mit exakt linearer Fehlerdynamik vergleichsweise einfach.
+Eine solche Form ist die Beobachternormalform. Die Transformation
+in diese Form und damit verbunden die Linearisierung des Beobachtungsfehlers
+ist aufgrund restriktiver Existenzbedingungen bzw. einer aufwendigen
+Berechnung in der regelungstechnischen Praxis kaum anzutreffen. Bei
+genauerer Betrachtung eröffnen sich jedoch etliche Möglichkeiten zur
+Berechnung bzw. zur Approximation eines Beobachters mit linearer Fehlerdynamik.
+In diesem Kapitel werden Existenzbedingungen und Berechnungsmethoden
+vorgestellt.\footnote{Das Kapitel basiert sich an dem Übersichtsbeitrag Röbenack, K.: Entwurf
+nichtlinear Beobachter mit linearer und näherungsweise linearer Fehlerdynamik,
+Automatisierungstechnik, De Gruyter-Verlag, Berlin, Boston, Jahrgang~58,
+Heft~9, S.~489-497, für den der De~Gruyter-Verlag freundlicherweise
+eine Nutzungsgenehmigung erteilt hat.}
+
+\section{Linearisierung des Beobachtungsfehlers durch Aufschaltung\label{sec:Linearisierung-durch-Aufschaltung}}
+
+In diesem Abschnitt soll zunächst die grundsätzliche Idee der exakten
+Linearisierung des Beobachtungsfehlers durch Aufschaltung illustriert
+werden. Angenommen, das zu beobachtende System kann in der Form
+\begin{equation}
+\dot{x}=Ax+\alpha(y,u),\quad y=c^{T}x\label{eq:lin-beob-fehler-strecke}
+\end{equation}
+mit dem Zustand~$x$, dem Eingang~$u$, und dem gemessenen Ausgang~$y$
+dargestellt werden. Dabei sei der durch das Paar $(A,c^{T})$ beschriebene
+lineare Teil beobachtbar. Zusätzlich seien alle auftretenden Nichtlinearitäten
+in Abhängigkeit vom Ausgang darstellbar. Diese Nichtlinearitäten werden
+in der Eingangs-Ausgangs-Aufschaltung~$\alpha$ zusammengefasst.
+Setzt man den Beobachter in der Form
+\begin{equation}
+\dot{\hat{x}}=A\hat{x}+\alpha(y,u)+l\cdot\left(y-c^{T}\hat{x}\right)\label{eq:lin-beob-fehler-beobachter}
+\end{equation}
+mit einer Beobachterverstärkung $l\in\R^{n}$ an. so genügt der Beobachtungsfehler
+$\tilde{x}=x-\hat{x}$ der linearen zeitinvarianten Differentialgleichung
+\begin{equation}
+\begin{array}{lcl}
+\dot{\tilde{x}} & = & \dot{x}-\dot{\hat{x}}\\
+ & = & Ax+\alpha(y,u)-A\hat{x}-\alpha(y,u)-l\cdot\left(y-c^{T}\hat{x}\right)\\
+ & = & \left(A-lc^{T}\right)\tilde{x}.
+\end{array}\label{eq:lin-beob-fehler-dynamik}
+\end{equation}
+Über die Verstärkung~$l$ kann man für die Systemmatrix $A-lc^{T}$
+der Fehlerdynamik~(\ref{eq:lin-beob-fehler-dynamik}) ein beliebiges
+charakteristisches Polynom
+
+\begin{equation}
+\det(sI-A+lc^{T})=a_{0}+a_{1}s+\cdots+a_{n-1}s^{n-1}+s^{n}\label{eq:cp}
+\end{equation}
+vorgeben. Diese Herangehensweise soll an zwei Beispielen vorgestellt
+werden:
+
+\begin{example}
+\label{exa:inverses-pendel-motor-nf-beobachter}Wir betrachten das
+Modell des inversen Pendels mit Gleich\-strom\-antrieb aus Beispiel~\ref{exa:inverses-pendel-gleichstrommotor}:
+
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & \frac{mg\ell}{J}\sin x_{1}-\frac{d}{J}x_{2}+\frac{K}{J}x_{3}\\
+\dot{x}_{3} & = & -\frac{K}{L}x_{2}-\frac{R}{L}x_{3}+\frac{1}{L}u\\
+y & = & x_{1}.
+\end{array}\label{eq:inverses-pendel-motor-nf-strecke}
+\end{equation}
+Als Messgröße steht der Winkel~$x_{1}$, der beispielsweise mit einem
+Inkrementgeber erfasst werden kann, zur Verfügung. Die einzige im
+System auftretende Nichtlinearität hängt ausschließlich vom Ausgang~$x_{1}$
+ab. Der Beobachter setzt sich dann aus einer Kopie des Systems, wobei
+die Nichtlinearität vom gemessenen Ausgang gespeist wird, und einem
+linearen Korrekturterm zusammen: 
+\begin{equation}
+\left(\begin{array}{l}
+\dot{\hat{x}}_{1}\\
+\dot{\hat{x}}_{2}\\
+\dot{\hat{x}}_{3}
+\end{array}\right)=\left(\begin{array}{c}
+\hat{x}_{2}\\
+\frac{mg\ell}{J}\sin y-\frac{d}{J}\hat{x}_{2}+\frac{K}{J}\hat{x}_{3}\\
+-\frac{K}{L}\hat{x}_{2}-\frac{R}{L}\hat{x}_{3}+\frac{1}{L}u
+\end{array}\right)+\left(\begin{array}{l}
+l_{1}\\
+l_{2}\\
+l_{3}
+\end{array}\right)\cdot\left(y-\hat{x}_{1}\right)\label{eq:inverses-pendel-motor-nf-beobachter}
+\end{equation}
+Der Vergleich von~(\ref{eq:inverses-pendel-motor-nf-strecke}) und~(\ref{eq:inverses-pendel-motor-nf-beobachter})
+führt auf eine lineare Fehlerdynamik~(\ref{eq:lin-beob-fehler-dynamik}).
+Für ein vorgegebenes charakteristisches Polynom~(\ref{eq:cp}) mit
+den Koeffizienten $a_{0},a_{1},a_{2}>0$ berechnet man durch Koeffizientenvergleich
+oder mit Hilfe der Ackermann-Formel~\cite{acker77,ackermann77} die
+Beobachterverstärkung 
+\begin{equation}
+\begin{array}{lcl}
+l_{1} & = & -\frac{R}{L}-\frac{d}{J}+a_{2},\\
+l_{2} & = & \frac{-JK^{2}L+\left(a_{1}J^{2}-a_{2}dJ+d^{2}\right)L^{2}-J\left(a_{2}J-d\right)LR+J^{2}R^{2}}{J^{2}L^{2}},\\
+l_{3} & = & -\frac{\left(a_{2}J-d\right)K^{2}L^{2}-a_{0}J^{2}L^{3}+JL\left(a_{1}JL-2K^{2}\right)R-a_{2}J^{2}LR^{2}+J^{2}R^{3}}{JKL^{3}}.
+\end{array}\label{eq:inverses-pendel-motor-nf-verstaerkung}
+\end{equation}
+\end{example}
+
+\begin{example}
+\label{exa:inverses-pendel-elastisch}Wir betrachten wiederum einen
+Manipulator in der Form eines inversen Pendels (siehe Abb.~\ref{fig:Inverses-Pendel-elastisch}).
+Der Antrieb erfolgt über ein eingeprägtes Drehmoment~$u$, welches
+den Winkel~$q_{1}$ beeinflusst. Der Antrieb ist über eine elastische
+Welle, die als Torsionsfeder mit der Federkonstanten~$k$ modelliert
+wird, mit dem Manipulatorarm verbunden. Die Position des Manipulatorarms
+wird durch den Relativwinkel~$q_{2}$ beschrieben. Der Manipulator
+habe beim Antrieb das Trägheitsmoment~$J_{1}$ und hinsichtlich des
+Manipulatorarms das Trägheitsmoment~$J_{2}$. Am Ende des Manipulatorarms
+der Länge~$\ell$ befinde sich eine Last mit der Masse~$m$.
+
+Das System hat die kinetische Energie
+\[
+T=\frac{J_{1}}{2}\dot{q}_{1}^{2}+\frac{J_{2}}{2}\left(\dot{q}_{1}+\dot{q}_{2}\right)^{2}
+\]
+und die potentielle Energie
+\[
+V=m\ell\left(\cos(q_{1}+q_{2})-1\right)+\frac{k}{2}q_{2}^{2}.
+\]
+Aus der zugehörigen Bewegungsgleichung erhält man mit $x=(q_{1},\dot{q}_{1},q_{2},\dot{q}_{2})^{T}$
+das Zustandsraummodell
+\begin{equation}
+\left(\begin{array}{l}
+\dot{x}_{1}\\
+\dot{x}_{2}\\
+\dot{x}_{3}\\
+\dot{x}_{4}
+\end{array}\right)=\left(\begin{array}{c}
+x_{2}\\
+\frac{k}{J_{1}}x_{3}+\frac{1}{J_{1}}u\\
+x_{4}\\
+\frac{mg\ell}{J_{2}}\sin(x_{1}+x_{3})-\left(\frac{1}{J_{1}}+\frac{1}{J_{2}}\right)kx_{3}-\frac{u}{J_{1}}
+\end{array}\right).\label{eq:inverses-pendel-elastisch}
+\end{equation}
+Werden die Winkel~$x_{1}$ und~$x_{3}$ oder deren Summe $x_{1}+x_{3}$
+gemessen, dann kann die in~(\ref{eq:inverses-pendel-elastisch})
+auftretende Nichtlinearität $\sin(x_{1}+x_{3})$ beim Beobachterentwurf
+vollständig kompensiert werden~\cite{nicosia88}.
+\end{example}
+\begin{figure}
+\begin{centering}
+\resizebox{0.4\textwidth}{!}{\input{inv_pendel_elastisch.pdftex_t}}
+\par\end{centering}
+\caption{Inverses Pendel, welches elatisch mit dem Antrieb gekoppelt ist\label{fig:Inverses-Pendel-elastisch}}
+\end{figure}
+
+
+\section{Normalfrom-Beobachter\label{sec:Normal-Form-Observer}}
+
+\subsection{Beobachter-Struktur}
+
+Die in Abschnitt~\ref{sec:Linearisierung-durch-Aufschaltung} beschriebene
+Herangehensweise wird nachfolgend systematisiert. In der Regel wird
+das zu untersuchende System nicht unmittelbar in der Form~(\ref{eq:lin-beob-fehler-strecke})
+vorliegen. In etlichen Fällen ist aber eine derartige Darstellung
+in anderen Koordinaten möglich. Dazu wird in diesem Abschnitt die
+Beobachternormalform eingeführt.
+
+Man betrachte ein nichtlineares System 
+\begin{equation}
+\dot{x}=F(x,u),\quad y=h(x).\label{eq:plant}
+\end{equation}
+Die Menge $\mathcal{M}\subseteq\R^{n}$ sei offen und die Menge $\mathcal{U}\subseteq\R^{m}$
+beliebig. Die Abbildungen $F:\mathcal{M}\times\mathcal{U}\to\R^{n}$
+und $h:\mathcal{M}\to\R$ seien ausreichend glatt. Damit ist~$F$
+ein vom Eingang abhängiges Vektorfeld und~$h$ ein Skalarfeld. Angenommen,
+in der Umgebung eines Punktes $p\in\mathcal{M}$ gibt es einen Diffeomorphismus
+\begin{equation}
+z=T(x)\quad\textrm{mit}\quad x=S(z),\label{eq:TS}
+\end{equation}
+der das System~(\ref{eq:plant}) in die Form 
+\begin{equation}
+\dot{z}=Az+\alpha(c^{T}z,u),\quad y=\gamma(c^{T}z)\label{eq:nf}
+\end{equation}
+überführt, wobei das Paar $(A,c^{T})$ in der \emph{dualen} \emph{Brunovský-Normalform}\index{Brunovský-Normalform!duale}\index{Normalform!duale Brunovský-}~\cite{brunovsky70}
+vorliege: 
+\begin{equation}
+A=\left(\begin{array}{cccc}
+0 & 0 & \cdots & 0\\
+1 & 0 & \ddots & \vdots\\
+ & \ddots & \ddots & 0\\
+0 &  & 1 & 0
+\end{array}\right),\quad c^{T}=\left(\begin{array}{cccc}
+0 & \cdots & 0 & 1\end{array}\right).\label{eq:AC}
+\end{equation}
+Die Form~(\ref{eq:nf}) entspricht der \emph{Beobachter\-normal\-form}
+(engl. \emph{observer canonical form})~\cite{zeitz85,zeitz89}\index{Beobachternormalform}\index{Normalform!Beobachter-}
+mit der zusätzlichen Ausgangstransformation~$\gamma$ (siehe Abb.~\ref{fig:Beobachter-Normalform}).
+Die Abbildung~$\gamma$ muss dabei invertierbar sein. Die vektorwertige
+Abbildung~$\alpha$ berücksichtigt die im System auftretenden Nichtlinearitäten.
+Dabei fungiert $\alpha(\gamma^{-1}(y),u)$ als Eingangs-Ausgangs-Aufschaltung. 
+
+\begin{figure}
+\begin{centering}
+\resizebox{0.7\textwidth}{!}{\input{bild-nf2.pdftex_t}}
+\par\end{centering}
+\caption{Beobachternormalform~(\ref{eq:nf}), Quelle:~\cite{roebenack2010at}\label{fig:Beobachter-Normalform}}
+\end{figure}
+
+Für ein System der Form~(\ref{eq:nf}) ist der Beobachterentwurf
+sehr einfach. Ein Beobachter der Form 
+\begin{equation}
+\begin{array}{ccl}
+\dot{\hat{z}} & = & A\hat{z}+\alpha(\gamma^{-1}(y),u)+l(\gamma^{-1}(y)-c^{T}\hat{z})\\
+\hat{x} & = & S(\hat{z})
+\end{array}\label{eq:obs-in-nf}
+\end{equation}
+mit dem Vektor $l\in\R^{n}$ (siehe Abb.~\ref{fig:Normalform-Beobachter})
+führt auf einen Beobachtungsfehler $\tilde{z}=z-\hat{z}$, welcher
+dem linearen zeit\-invarianten Differential\-gleichungs\-system
+\begin{equation}
+\dot{\tilde{z}}=(A-lc^{T})\tilde{z}\label{eq:error-dgl-nf}
+\end{equation}
+genügt. Da das Paar $(A,c^{T})$ beobachtbar ist, lassen sich die
+Eigenwerte von $A-lc^{T}$ beliebig zuweisen. Für ein gewünschtes
+charakteristisches Polynom~(\ref{eq:cp}) der Fehlerdynamik~(\ref{eq:error-dgl-nf})
+ist der Vektor~$l$ entsprechend $l=(a_{0},\ldots,a_{n-1})^{T}$
+zu wählen. Legt man~$l$ derart fest, dass alle Wurzeln von~(\ref{eq:cp})
+in der offenen linken Halbebene liegen, dann ist die Ruhelage $\tilde{z}=0$
+von~(\ref{eq:error-dgl-nf}) exponentiell (und damit auch asymptotisch)
+stabil. 
+
+\begin{figure}
+\begin{centering}
+\resizebox{0.85\textwidth}{!}{\input{bild-nfbeob1.pdftex_t}}
+\par\end{centering}
+\caption{Normalform-Beobachter~(\ref{eq:obs-in-nf})\label{fig:Normalform-Beobachter}}
+\end{figure}
+
+Der Beobachter~(\ref{eq:obs-in-nf}) basiert unmittelbar auf der
+Normalform~(\ref{eq:nf}). Daher nennt man ihn \emph{Normalform-Beobachter}\index{Beobachter!Normalform-}.\index{Normalform-Beobachter}
+Mitunter ist es wünschenswert, den Beobachter~(\ref{eq:obs-in-nf})
+direkt in den Originalkoordinaten zu implementieren:
+\begin{equation}
+\dot{\hat{x}}=F(\hat{x},u)+k_{\infty}(\hat{x},y,u).\label{eq:ons-orig}
+\end{equation}
+Der Korrekturterm hat dann die Form 
+\begin{equation}
+\begin{array}{ccl}
+k_{\infty}(\hat{x},y,u) & = & \left(T^{\prime}(\hat{x})\right)^{-1}\left[\alpha(\gamma^{-1}(y),u)-\alpha(\gamma^{-1}(h(\hat{x})),u)\right.\\
+ &  & \left.+\,l(\gamma^{-1}(y)-\gamma^{-1}(h(\hat{x})))\right].
+\end{array}\label{eq:correction-term-nf-obs}
+\end{equation}
+
+\begin{remark}
+Mit dem beschriebenen Zugang ergibt sich eine Fehlerdynamik, die in
+den transformierten Koordinaten einer linearen zeit\-invarianten
+Differentialgleichung~(\ref{eq:error-dgl-nf}) genügt. Daher spricht
+man auch von einer \emph{exakten Linearisierung des Beobachtungsfehlers}.
+Dieses Konzept ist auch bei Systemen mit mehreren Ausgängen anwendbar~\cite{krener85observer,xia88,xia89}
+und kann mit einer Parameter\-adaption kombiniert werden~\cite{marino1990,marino1992,marino1995,marino1995book}.
+Die Linearisierung des Beobachtungsfehlers entspricht in gewisser
+Weise der vollständigen Linearisierung (Eingangs-Zustands-Linearisierung)
+beim Reglerentwurf. Ähnlich wie bei der Regelung ist auch beim Beobachterentwurf
+mitunter nur eine \emph{partielle Linearisierung des Beobachtungsfehlers}
+möglich. Entsprechende Entwurfsverfahren werden beispielsweise in~\cite{jo2000b,jo2002,roebenack2005syncod,roebenack2006amcs,roebenack2007iet,roebenack2007ndst}
+beschrieben.
+\end{remark}
+
+\begin{remark}
+Mitunter wird für das System~(\ref{eq:nf}) mit dem Beobachter~(\ref{eq:obs-in-nf})
+eine andere Darstellungsform favorisiert. Seien 
+\[
+\check{A}:=A-lc^{T}\quad\mbox{und}\quad\check{\alpha}(z_{n},u):=\alpha(z_{n},u)+lz_{n},
+\]
+wobei der Vektor $l\in\R^{n}$ so zu wählen ist, dass die Matrix~$\check{A}$
+nur Eigenwerte in der linken offenen Halbebene besitzt. Das System~(\ref{eq:nf})
+lässt sich dann in der Form 
+\[
+\begin{array}{ccl}
+\dot{z} & = & Az+\alpha(z_{n},u)\\
+ & = & Az-lc^{T}z+lc^{T}z+\alpha(z_{n},u)\\
+ & = & \check{A}z+\check{\alpha}(\gamma^{-1}(y),u)
+\end{array}
+\]
+angeben. Der Beobachter~(\ref{eq:obs-in-nf}) vereinfacht sich zu
+\[
+\begin{array}{ccl}
+\dot{\hat{z}} & = & A\hat{z}+\alpha(z_{n},u)+l(z_{n}-c^{T}\hat{z})\\
+ & = & (A-lc^{T})\hat{z}+\alpha(z_{n},u)+lz_{n}\\
+ & = & \check{A}\hat{z}+\check{\alpha}(\gamma^{-1}(y),u)
+\end{array}
+\]
+mit $\hat{x}=S(\hat{z})$. Als Fehlerdifferentialgleichung erhält
+man wiederum Gl.~(\ref{eq:error-dgl-nf}), d.\,h. $\dot{\tilde{z}}=\check{A}\tilde{z}$.
+Diese Form von Strecke und Beobachter ist bei verschiedenen neueren
+Zugängen zur exakten bzw. approximativen Linearisierung des Beobachtungsfehlers
+zu finden (siehe~\cite{kazantzis1998,krener2002,xiao2006,deutscher2006,deutscher2007}
+sowie Anmerkung~\ref{rem:Boebachter-mit-Hilfssatz-von-Ljapunov}).
+\end{remark}
+
+\begin{remark}
+\label{rem:endliche-Einstellzeit}Bei der Fehlerdifferentialgleichung~(\ref{eq:error-dgl-nf})
+des Normalformbeobachters~ (\ref{eq:obs-in-nf}) kann man durch geeignete
+Wahl des Vektors $l\in\R^{n}$ die Eigenwerte der Systemmatrix $A-lc^{T}$
+in der komplexen Ebene beliebig weit links anordnen und damit die
+Konvergenzgeschwindigkeit vorgeben. Bei einem Anfangswert $\tilde{z}(0)\neq0$
+wird die Ruhelage $\tilde{z}=0$ von~(\ref{eq:error-dgl-nf}) jedoch
+erst in unendlicher Zeit erreicht. Für lineare Systeme kann man durch
+geeignete Nutzung eines Totzeitgliedes eine endliche Einstellzeit
+vorgeben~\cite{engel2002}. Dieser Zugang lässt sich auch für nichtlineare
+Systeme, die in die Beobachternormalform~(\ref{eq:nf}) transformierbar
+sind, erweitern~\cite{menold2003cdc}.
+\end{remark}
+
+\subsection{Reduzierter Normalform-Beobachter}
+
+Bei der Normalform~(\ref{eq:nf}) lässt sich die letzte Komponente
+des Zustands mit $z_{n}=\gamma^{-1}(y)$ direkt aus dem Ausgang rekonstruieren
+und muss daher nicht geschätzt werden. Folglich ist es naheliegend,
+zur Rekonstruktion der verbleibenden $n-1$ Zustandsgrößen $z_{1},\ldots,z_{n-1}$
+einen \emph{reduzierten} Beobachter\index{Beobachter!reduzierter}
+einzusetzen. 
+
+Die Herleitung eines reduzierten Zustandsbeobachters ist in Analogie
+zum linearen Fall möglich~\cite[Abschnitt~{7.4.2}]{ludyk1995-2}.
+Durch Streichen der letzten Differentialgleichung in der Normalform~(\ref{eq:nf})
+erhält man das System 
+\begin{equation}
+\dot{\bar{z}}=\bar{A}\bar{z}+\bar{\alpha}(\bar{c}^{T}z,u)\label{eq:reduzierte-nf}
+\end{equation}
+mit 
+\[
+\bar{z}=\left(\begin{array}{c}
+z_{1}\\
+\vdots\\
+z_{n-1}
+\end{array}\right)\quad\mbox{und}\quad\bar{\alpha}(z_{n},u)=\left(\begin{array}{c}
+\alpha_{1}(z_{n},u)\\
+\vdots\\
+\alpha_{n-1}(z_{n},u)
+\end{array}\right).
+\]
+Das Paar $(\bar{A},\bar{c}^{T})$ mit $\bar{A}\in\R^{(n-1)\times(n-1)}$
+und $\bar{c}\in\R^{n-1}$ liegt in der dualen Brunovský-Normalform
+der Ordnung $n-1$ vor (siehe Gl.~(\ref{eq:AC})). Der Beobachtungsfehler
+$\tilde{\bar{z}}=\bar{z}-\hat{\bar{z}}$ soll einer linearen zeit\-invarianten
+Differentialgleichung 
+\begin{equation}
+\dot{\tilde{\bar{z}}}=\left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\tilde{\bar{z}}\label{eq:reduziert-error-dgl}
+\end{equation}
+genügen, wobei der Vektor $\bar{l}=(p_{0},\ldots,p_{n-2})^{T}\in\R^{n-1}$
+die Koeffizienten eines vorgegebenen charakteristischen Polynoms vom
+Grad $n-1$ enthält. Der Vergleich von~(\ref{eq:reduzierte-nf})
+und~(\ref{eq:reduziert-error-dgl}) liefert für den Zustand $\hat{\bar{z}}=\bar{z}-\tilde{\bar{z}}$
+die Differentialgleichung
+\begin{equation}
+\dot{\hat{\bar{z}}}=\bar{A}\hat{\bar{z}}+\bar{\alpha}(z_{n},u)+\bar{l}\tilde{\bar{z}}_{n-1}\label{eq:red-nf-beob-schritt1}
+\end{equation}
+mit $\tilde{\bar{z}}_{n-1}=\bar{z}_{n-1}-\hat{\bar{z}}_{n-1}$. In
+dieser Gleichung wird $\bar{z}_{n-1}=z_{n-1}$ benötigt. Diese Größe
+lässt sich aus der letzten Differentialgleichung 
+\[
+\dot{z}_{n}=z_{n-1}+\alpha_{n}(z_{n},u),\quad z_{n}=\gamma^{-1}(y)
+\]
+der Normalform~(\ref{eq:nf}) rekonstruieren: 
+\[
+\bar{z}_{n-1}=z_{n-1}=\frac{\d}{\d t}\left(\gamma^{-1}(y)\right)-\alpha_{n}(\gamma^{-1}(y),u).
+\]
+Durch Einsetzen in~(\ref{eq:red-nf-beob-schritt1}) erhält man 
+\[
+\begin{array}{ccl}
+\dot{\hat{\bar{z}}} & = & \bar{A}\hat{\bar{z}}+\bar{\alpha}(\gamma^{-1}(y),u)+\bar{l}\left(\frac{\d}{\d t}\left(\gamma^{-1}(y)\right)-\alpha_{n}(\gamma^{-1}(y),u)-\bar{c}^{T}\hat{\bar{z}}\right)\\
+ & = & \left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\hat{\bar{z}}+\bar{\alpha}(\gamma^{-1}(y),u)+\bar{l}\left(\frac{1}{\gamma^{\prime}(y)}\dot{y}-\alpha_{n}(\gamma^{-1}(y),u)\right).
+\end{array}
+\]
+Diese Gleichung kann wegen der auf der rechten Seite auftretenden
+Zeit\-ab\-leitung~$\dot{y}$ noch nicht für die Zustandsbeobachtung
+eingesetzt werden. Zur Elimination von~$\dot{y}$ wird für den Beobachter
+die Koordinatentransformation 
+\[
+\begin{array}{ccccc}
+w & = & \hat{\bar{z}} & - & \bar{l}\gamma^{-1}(y)\\
+\hat{\bar{z}} & = & w & + & \bar{l}\gamma^{-1}(y)
+\end{array}
+\]
+eingeführt. Dann gilt 
+\[
+\begin{array}{ccl}
+\dot{w} & = & \frac{\d}{\d t}\left(\hat{\bar{z}}-\bar{l}\gamma^{-1}(y)\right)\\
+ & = & \dot{\hat{\bar{z}}}-\bar{l}\frac{\d}{\d t}\left(\gamma^{-1}(y)\right)\\
+ & = & \left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\hat{\bar{z}}+\bar{\alpha}(\gamma^{-1}(y),u)+\bar{l}\left(\frac{\d}{\d t}\left(\gamma^{-1}(y)\right)-\alpha_{n}(\gamma^{-1}(y),u)\right)-\bar{l}\frac{\d}{\d t}\left(\gamma^{-1}(y)\right)\\
+ & = & \left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\hat{\bar{z}}+\bar{\alpha}(\gamma^{-1}(y),u)-\bar{l}\alpha_{n}(\gamma^{-1}(y),u)\\
+ & = & \left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\left(w+\bar{l}\gamma^{-1}(y)\right)+\bar{\alpha}(\gamma^{-1}(y),u)-\bar{l}\alpha_{n}(\gamma^{-1}(y),u)\\
+ & = & \left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)w+\left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\bar{l}\gamma^{-1}(y)+\bar{\alpha}(\gamma^{-1}(y),u)-\bar{l}\alpha_{n}(\gamma^{-1}(y),u).
+\end{array}
+\]
+Die letzte Gleichung liefert den \emph{reduzierten Normalform-Beobachter}\index{Normalform-Beobachter!reduzierter}
+\begin{equation}
+\dot{w}=\left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)w+\underbrace{\left(\bar{A}-\bar{l}\,\bar{c}^{T}\right)\bar{l}\gamma^{-1}(y)+\bar{\alpha}(\gamma^{-1}(y),u)-\bar{l}\alpha_{n}(\gamma^{-1}(y),u)}_{{\displaystyle \kappa(\gamma^{-1}(y),u)}}\label{eq:red-nf-beob}
+\end{equation}
+mit dem Korrekturterm~$\kappa$, wobei der Originalzustand mittels
+\begin{equation}
+\hat{z}=\left(\begin{array}{c}
+w+\bar{l}\gamma^{-1}(y)\\
+\gamma^{-1}(y)
+\end{array}\right),\quad\hat{x}=S(\hat{z})\label{eq:red-nf-ruecktransf}
+\end{equation}
+rekonstruiert wird. Das zugehörige Strukturbild ist in Abb.~\ref{fig:Reduzierter-Normalformbeobachter}
+dargestellt.
+
+\begin{figure}
+\begin{centering}
+\resizebox{0.85\textwidth}{!}{\input{bild-reduzierter-nf-beob1.pdftex_t}}
+\par\end{centering}
+\caption{Reduzierter Normalformbeobachter~(\ref{eq:red-nf-beob}) mit Rücktransformation~(\ref{eq:red-nf-ruecktransf})\label{fig:Reduzierter-Normalformbeobachter}}
+\end{figure}
+
+
+\section{Existenz und Berechnung der Beobachternormalform}
+
+\subsection{Existenz und Berechnung der Normalform nach Byrnes und Isidori\label{subsec:Berechnung-nach-Byrnes-Isidori}}
+
+Die Schwierigkeit beim Entwurf eines Normalform-Beobachters besteht
+in der Existenz der Normalform~(\ref{eq:nf}) sowie in der konkreten
+Berechnung der Transformation~(\ref{eq:TS}). Für die folgenden Betrachtungen
+ist es zweckmäßig, das zu beobachtende System~(\ref{eq:plant}) in
+der Form 
+\begin{equation}
+\dot{x}=f(x)+g(x,u),\quad y=h(x),\label{eq:plant-fg}
+\end{equation}
+mit den Abbildungen $f:\mathcal{M}\to\R^{n}$ und $g:\mathcal{M}\times\mathcal{U}\to\R^{n}$
+anzugeben. Diese Abbildungen seien durch 
+\[
+f(x)=F(x,0)\quad\mbox{und}\quad g(x,u)=F(x,u)-F(x,0)
+\]
+festgelegt. Die Beobachtbarkeitsmatrix\index{Beobachtbarkeitsmatrix}~$Q_{B}$
+ist die Jacobimatrix der Beobachtbarkeitsabbildung\index{Beobachtbarkeitsabbildung}~$q:\mathcal{M}\to\R^{n}$,
+d.\,h. 
+\begin{equation}
+q(x)=\left(\begin{array}{c}
+h(x)\\
+L_{f}h(x)\\
+\vdots\\
+L_{f}^{n-1}h(x)
+\end{array}\right),\quad Q_{B}(x)=q^{\prime}(x)=\left(\begin{array}{c}
+dh(x)\\
+L_{f}dh(x)\\
+\vdots\\
+L_{f}^{n-1}dh(x)
+\end{array}\right),\label{eq:Q}
+\end{equation}
+vgl. Abschnitt~\ref{subsec:Beobachtbarkeit-autonom}. Der sogenannte
+\emph{Start\-vektor} bzw. das sog. \emph{Start\-vektor\-feld}\index{Startvektorfeld}\footnote{Mit dem Vektorfeld~$v$ wird zyklisch der gesamte Raum für das transformierte
+System aufgespannt.} ist die Lösung des Gleichungssystems
+\begin{equation}
+Q_{B}(x)\,v(x)=\beta(h(x))\,\frac{\partial}{\partial x_{n}}\label{eq:v}
+\end{equation}
+mit einer skalarwertigen Funktion~$\beta$. Der folgende Satz gibt
+die Existenzbedingungen für die Normalform~(\ref{eq:nf}) an~\cite{krener83,marino1990}:
+\begin{theorem}
+\label{thm:existence}In einer Umgebung von $p\in\mathcal{M}$ existiert
+genau dann ein lokaler Diffeomorphismus~(\ref{eq:TS}), der das System~(\ref{eq:plant-fg})
+in die Normalform~(\ref{eq:nf}) mit einem lokalen Diffeomorphismus~$\gamma$
+überführt, wenn für eine geeignete Funktion~$\beta$ mit $\beta(h(p))\neq0$
+die Bedingungen
+\begin{enumerate}
+\item \label{enu:ki1}$\rank\,Q_{B}(p)=n$
+
+\item \label{enu:ki2}$[\ad_{-f}^{i}v,\ad_{-f}^{j}v](x)=0$ für $0\leq i,j\leq n-1$
+\item \label{enu:ki3}$[g,\ad_{-f}^{i}v](x,u)=0$ für $0\leq i\leq n-2$
+\end{enumerate}
+für alle $x$ in einer Umgebung von~$p$ und für alle $u\in\mathcal{U}$
+erfüllt sind. Es gibt einen globalen Diffeomrophismus~(\ref{eq:TS}),
+wenn die Bedingungen~\ref{enu:ki1}-\ref{enu:ki3} in $\mathcal{M}=\R^{n}$
+gelten und zusätzlich
+\begin{enumerate}[start=4]
+\item \label{enu:ki4}$\ad_{-f}^{i}v$ für $0\leq i<n$ vollständige Vektorfelder\index{Vektorfeld!vollständiges}
+sind.
+\end{enumerate}
+\end{theorem}
+Der folgende Beweis widmet sich der Existenz einer lokalen Koordinatentransformation. 
+\begin{svmultproof2}
+\hinreichend\ Die Bedingungen \ref{enu:ki1}-\ref{enu:ki3} seien
+in einer Umgebung von $p\in\mathcal{M}$ erfüllt. Wegen Bedingung~\ref{enu:ki1}
+ist das lineare Gls.~(\ref{eq:v}) (eindeutig) lösbar bezüglich~$v$.
+Zeilenweise kann man Gls.~(\ref{eq:v}) auch in der Form 
+\begin{equation}
+L_{v}L_{f}^{i}h(x)=\left\langle \d L_{f}^{i}h(x),v(x)\right\rangle =\left\{ \begin{array}{ccl}
+0 & \mbox{für} & i=0,\ldots,n-2,\\
+\beta(h(x)) & \mbox{für} & i=n-1.
+\end{array}\right.\label{eq:proof-obsnf-gl0}
+\end{equation}
+schreiben. Wegen 
+\begin{equation}
+\begin{array}{l}
+\left(\begin{array}{c}
+\d h(p)\\
+\vdots\\
+\d L_{f}^{n-1}h(p)
+\end{array}\right)\left(v(p),\,\ad_{-f}v(p),\,\cdots,\,\ad_{-f}^{n-1}v(p)\right)=\\
+=\left(\begin{array}{cccc}
+0 & \cdots & 0 & \beta(h(p))\\
+\vdots & \qdots & \qdots & *\\
+0 & \qdots & \qdots & \vdots\\
+\beta(h(p)) & * & \cdots & *
+\end{array}\right)
+\end{array}\label{eq:proof-obsnf-gl1}
+\end{equation}
+sind die Vektorfelder $v,\ad_{-f}v,\ldots,\ad_{-f}^{n-1}v$ in einer
+Umgebung von~$p$ linear unabhängig (vgl. Lemma~\ref{lem:Lin-Unabh-Kovektoren}).
+In Verbindung mit Bedingung~\ref{enu:ki2} garantiert der Begradigungssatz
+(Satz~\ref{thm:simultane-begradigung-von-VF}) die Existenz eines
+lokalen Diffeomorphismus~(\ref{eq:TS}) mit 
+\begin{equation}
+T_{*}\ad_{-f}^{i}v=\frac{\partial}{\partial z_{i+1}}\quad\mbox{für}\quad i=0,\ldots,n-1.\label{eq:proof-obsnf-gl2}
+\end{equation}
+ Der Diffeomorphismus~(\ref{eq:TS}) transformiert die im System~(\ref{eq:plant-fg})
+auftretenden Abbildungen in die Form 
+\begin{equation}
+\begin{array}{lcl}
+\bar{f}(z) & = & T_{*}f(S(z)),\\
+\bar{g}(z,u) & = & T_{*}g(S(z),u),\\
+\bar{h}(z) & = & h(S(z)).
+\end{array}\label{eq:proof-obsnf-bar-groessen}
+\end{equation}
+Wegen Gls.~(\ref{eq:proof-obsnf-gl1}) gilt
+\begin{equation}
+\frac{\partial}{\partial z_{i+1}}\bar{h}=\left\langle \d h,\ad_{-f}^{i}v\right\rangle =\left\{ \begin{array}{ccl}
+0 & \mbox{für} & i=0,\ldots,n-2,\\
+\beta(h(x)) & \mbox{für} & i=n-1,
+\end{array}\right.\label{eq:proof-obsnf-dh-beta}
+\end{equation}
+d.\,h. der Gradient von~$\bar{h}$ hat die Form 
+\[
+\bar{h}^{\prime}(z)=\left(\begin{array}{cccc}
+0 & \cdots & 0 & *\end{array}\right).
+\]
+Folglich hat die Ausgangsabbildung~$\bar{h}$ die in Gl.~(\ref{eq:nf})
+angegebene Form d.\,h. es besteht nur eine Abhängigkeit von der letzten
+Zustandskomponente~$z_{n}$.
+
+Als nächstes wird das Vektorfeld 
+\[
+\bar{f}=\bar{f}_{1}\frac{\partial}{\partial z_{1}}+\cdots+\bar{f}_{n}\frac{\partial}{\partial z_{n}}
+\]
+betrachtet. Mit~(\ref{eq:proof-obsnf-gl2}) gilt 
+\[
+\begin{array}{ccl}
+\tfrac{\partial}{\partial z_{i+1}} & = & T_{*}\ad_{-f}^{i}v\\
+ & = & T_{*}[-f,\ad_{-f}^{i-1}v]\\
+ & = & [-T_{*}f,T_{*}\ad_{-f}^{i-1}v]\\
+ & = & [-\bar{f},\tfrac{\partial}{\partial z_{i}}]\\
+ & = & \sum_{j=1}^{n}\left(\left(\tfrac{\partial}{\partial z_{i}}\bar{f}_{j}\right)\tfrac{\partial}{\partial z_{j}}\right)
+\end{array}
+\]
+für $i=1,\ldots,n-1$. Ein Vergleich beider Seiten der Gleichung liefert
+\[
+\frac{\partial\bar{f}_{j}}{\partial z_{i}}=\left\{ \begin{array}{ccccc}
+0 & \mbox{für} & j & \neq & i+1\\
+1 & \mbox{für} & j & = & i+1
+\end{array}\right.
+\]
+mit $1\leq i\leq n-1$ und $1\leq j\leq n$. Die $n\times n$-Jacobimatrix
+von~$\bar{f}$ hat folglich die Form 
+\begin{equation}
+\bar{f}^{\prime}(z)=\left(\begin{array}{ccccc|c}
+0 & 0 & \cdots & 0 & 0 & *\\
+1 & 0 &  & \vdots & 0 & *\\
+0 & 1 & \ddots & \vdots & \vdots & \vdots\\
+\vdots & 0 & \ddots & 0 & \vdots & \vdots\\
+0 & \vdots & \ddots & 1 & 0 & *\\
+0 & 0 & \cdots & 0 & 1 & *
+\end{array}\right).\label{eq:proof-obsnf-Form-DF}
+\end{equation}
+
+Bei dem vom Eingang abhängigen Vektorfeld~$\bar{g}$ geht man ähnlich
+vor. Wegen Bedingung~\ref{enu:ki3} und Gl.~(\ref{eq:proof-obsnf-gl2})
+gilt 
+\[
+\begin{array}{ccl}
+0 & = & T_{*}[g,\ad_{-f}^{i}v]\\
+ & = & [T_{*}g,T_{*}\ad_{-f}^{i}v]\\
+ & = & [\bar{g},\frac{\partial}{\partial z_{i+1}}]\\
+ & = & -\sum_{j=1}^{n}\left(\left(\tfrac{\partial}{\partial z_{i+1}}\bar{g}_{j}\right)\tfrac{\partial}{\partial z_{j}}\right)
+\end{array}
+\]
+für $i=0,\ldots,n-2$, d.\,h. 
+\[
+\frac{\partial}{\partial z_{i+1}}\bar{g}_{j}=0\quad\mbox{für}\quad1\leq j\leq n\quad\mbox{und}\quad0\leq i\leq n-2.
+\]
+Die Jacobimatrix von~$\bar{g}$ hat somit die Form 
+\begin{equation}
+\frac{\partial\bar{g}}{\partial z}(z,u)=\left(\begin{array}{ccc|c}
+0 & \cdots & 0 & *\\
+\vdots & \ddots & \vdots & \vdots\\
+0 & \cdots & 0 & *
+\end{array}\right).\label{eq:proof-obsnf-Form-DG}
+\end{equation}
+Aus Gln.~(\ref{eq:proof-obsnf-Form-DF}) und~(\ref{eq:proof-obsnf-Form-DG})
+folgt, dass das kombinierte Vektorfeld $(\bar{f}+\bar{g})$ die in
+Gl.~(\ref{eq:nf}) angegebene Gestalt besitzt.
+
+\notwendig\ Angenommen, es gäbe lokale Diffeomorphismen~(\ref{eq:TS})
+und~$\gamma$, die das System~(\ref{eq:plant}) in einer Umgebung
+des Punktes~$p$ in die Normalform~(\ref{eq:nf}) überführen. Simultan
+wird für das transformierte System~(\ref{eq:nf}) auch die Form~(\ref{eq:proof-obsnf-bar-groessen})
+verwendet. Ohne Einschränkung sei $T(p)=0$ (andernfalls Verschiebung
+des Koordinatensystems). Die Beobachtbarkeitsmatrix der Normalform
+lässt sich leicht berechnen. Zu der Beobachtbarkeitsmatrix~(\ref{eq:Q})
+in den Originalkoordinaten besteht folgender Zusammenhang: 
+\begin{equation}
+\begin{array}{rcl}
+Q_{B}(x) & = & {\displaystyle \frac{\partial}{\partial x}}\left(\begin{array}{c}
+h(x)\\
+\vdots\\
+L_{f}^{n-1}h(x)
+\end{array}\right)\\
+ & = & {\displaystyle \frac{\partial}{\partial z}}\left(\begin{array}{c}
+h(S(z))\\
+\vdots\\
+L_{f}^{n-1}h(S(z))
+\end{array}\right){\displaystyle \frac{\partial z}{\partial x}}\\
+ & = & {\displaystyle \frac{\partial}{\partial z}}\left(\begin{array}{c}
+\bar{h}(z)\\
+\vdots\\
+L_{\bar{f}}^{n-1}\bar{h}(z)
+\end{array}\right){\displaystyle \frac{\partial z}{\partial x}}\\
+ & = & \left.\left(\begin{array}{cccc}
+0 & \cdots & 0 & \gamma^{\prime}(z_{n})\\
+\vdots & \qdots & \qdots & *\\
+0 & \qdots & \qdots & \vdots\\
+\gamma^{\prime}(z_{n}) & * & \cdots & *
+\end{array}\right)\right|_{z=T(x)}\cdot T^{\prime}(x).
+\end{array}\label{eq:proof-obnf-Qx-Qz}
+\end{equation}
+Die Matrizen auf der rechten Seite sind im Punkt~$p$ regulär, weil~$\gamma$
+und~$T$ Diffeomorphismen sind. Damit muss auch die Matrix $Q_{B}(p)$
+regulär sein, d.\,h. Bedingung~\ref{enu:ki1} ist erfüllt. 
+
+Als nächstes transformieren wir das Vektorfeld~$v$ mittels Pushforward
+in die Normalform-Koordinaten: 
+\[
+\bar{v}(z)=T_{*}v(S(z)).
+\]
+In den Originalkoordinaten kann das in Gl.~(\ref{eq:v}) definierte
+Startvektorfeld auch als Lösung von Gl.~(\ref{eq:proof-obsnf-gl0})
+beschrieben werden. Mit Gl.~(\ref{eq:proof-obnf-Qx-Qz}) erhält man
+analog in den transformierten Koordinaten die Darstellung 
+\[
+L_{\bar{v}}L_{\bar{f}}^{i}\bar{h}(z)=\left\langle \d L_{\bar{f}}^{i}\bar{h}(z),\bar{v}(z)\right\rangle =\left\{ \begin{array}{ccl}
+0 & \mbox{für} & i=0,\ldots,n-2,\\
+\gamma^{\prime}(z_{n}) & \mbox{für} & i=n-1.
+\end{array}\right.
+\]
+Daraus folgt $\beta(h(p))=\gamma^{\prime}(0)\neq0$, so dass die Ausgangstransformation~$\gamma$
+ein lokaler Diffeomorphismus ist. Für die Normalform~(\ref{eq:nf})
+lässt sich unmittelbar nachrechnen, dass die Bedingungen 
+\[
+\begin{array}{rclcl}
+[\ad_{-\bar{f}}^{i}\bar{v},\ad_{-\bar{f}}^{j}\bar{v}](z) & = & 0 & \mbox{für} & 0\leq i,j\leq n-1\\{}
+[\bar{g},\ad_{-\bar{f}}^{i}\bar{v}](z,u) & = & 0 & \mbox{für} & 0\leq i\leq n-2
+\end{array}
+\]
+in einer Umgebung von $z=0$ und für alle $u\in\mathcal{U}$ erfüllt
+sind. Aus Proposition~\ref{pro:Lie-Klammer-und-Push-Forward} folgt,
+dass die zugehörigen Bedingungen~\ref{enu:ki2} und~\ref{enu:ki3}
+auch in den Originalkoordinaten erfüllt sind.
+\end{svmultproof2}
+
+Bedingung~\ref{enu:ki1} aus Satz~\ref{thm:existence} ist die lokale
+Beobachtbarkeitsbedingung (siehe Abschnitt~\ref{subsec:Beobachtbarkeit-autonom}
+und Anmerkung~\ref{rem:stetige-Beobachter}). Die Integrabilitätsbedingung\index{Integrabilitätsbedingung}~\ref{enu:ki2}
+ist bei vielen Systemen nicht erfüllt. Allerdings kann man die Klasse
+der in die Normalform~(\ref{eq:nf}) transformierbaren Systeme vergrößern,
+indem man z.\,B. Zeitskalierungen berücksichtigt~\cite{guay2002,respondek2004}\@.
+Bei autonomen Systemen entfällt die Bedingung~\ref{enu:ki3}. 
+
+Selbst wenn die Bedingungen von Satz~\ref{thm:existence} erfüllt
+sind, ist die konkrete Berechnung der Normalform~(\ref{eq:nf}) bzw.
+des Beobachters~(\ref{eq:ons-orig}) in der Regel sehr schwierig.
+Prinzipiell lässt sich dabei wie folgt vorgehen: Ausgehend von der
+Beobachtbarkeitsmatrix~(\ref{eq:Q}) bestimmt man den Startvektor~$v$
+entsprechend Gl.~(\ref{eq:v}) und die Lie-Klammern $\ad_{-f}v,\ldots,\ad_{-f}^{n-1}v$
+für eine geeignete Abbildung~$\beta$. Die Abbildung~$\beta$ ist
+dabei so zu wählen, dass Bedingung~\ref{enu:ki2} des Satzes erfüllt
+ist. Anschließend fasst man die vektorwertigen Gln.~(\ref{eq:proof-obsnf-gl2})
+spaltenweise zu der matrixwertigen Gleichung 
+\begin{equation}
+I=T^{\prime}(x)\cdot\Pi(x)\label{eq:pde-T}
+\end{equation}
+mit
+\begin{equation}
+\Pi(x)=\left(\begin{array}{cccc}
+v(x) & \ad_{-f}v(x) & \cdots & \ad_{-f}^{n-1}v(x)\end{array}\right)\label{eq:PI}
+\end{equation}
+zusammen~\cite{schaffner99}. Die Matrix~$\Pi$ ist dabei die von
+den Vektorfeldern~$f$ und~$v$ erzeugte Steuerbarkeitsmatrix (siehe
+Anmerkung~\ref{rem:Steuerbarkeitsmatrix}). Bei Gl.~(\ref{eq:pde-T})
+handelt es sich um eine partielle Differentialgleichung, die bezüglich~$T$
+zu lösen ist. In \textsc{Maple} steht dazu die Routine \texttt{pdesolve}
+aus der Bibliothek \texttt{PDEtools} zur Verfügung~\cite{chep-terrab1995}. 
+
+Alternativ kann man die gesuchte Koordinatentransformation~(\ref{eq:TS})
+auch unmittelbar auf Basis des im Beweis von Satz~\ref{thm:existence}
+verwendeten Begradigungssatzes berechnen. Dazu bestimmt man die Flüsse
+der in Gl.~(\ref{eq:PI}) auftretenden Vektor\-felder und bildet
+die nachfolgende Flussverknüpfung\index{Fluss!Verkettung} (siehe
+Beweis von Satz~\ref{thm:simultane-begradigung-von-VF}):
+\begin{equation}
+x=S(z)=\varphi_{z_{1}}^{v}\circ\varphi_{z_{2}}^{\ad_{-f}v}\circ\cdots\circ\varphi_{z_{n}}^{\ad_{-f}^{n-1}v}(p).\label{eq:verknuepfung-der-fluesse}
+\end{equation}
+Mit zunehmender Ordnung der Lie-Klammern werden die Vektor\-felder
+$v,ad_{-f}v,\ldots,ad_{-f}^{n-1}v$ in der Regel komplizierter. Bei
+dem potentiell kompliziertesten Vektor\-feld $ad_{-f}^{n-1}v$ benötigt
+man jedoch nicht den allgemeinen Fluss, sondern nur die Lösung einer
+Anfangswertaufgabe, die sich durch geeignete Wahl des Anfangswertes~$p$
+oft vereinfachen lässt. Die Umkehrung von~$S$ liefert die Hintransformation~$T$.
+
+Aus der Kenntnis der Transformation~(\ref{eq:TS}) erhält man die
+Normalform~(\ref{eq:nf}) bzw. die Abbildungen~$\alpha$ und~$\gamma$
+mit Hilfe von Gl.~(\ref{eq:proof-obsnf-bar-groessen}), d.\,h. 
+\[
+Az+\alpha(z_{n},u)=T_{*}F(S(z))=\left(S^{\prime}(z)\right)^{-1}F(S(z))\quad\mbox{und}\quad\gamma(z_{n})=h(S(z)).
+\]
+Zwischen den Funktionen~$\beta$ und~$\gamma$ besteht wegen Gl.~(\ref{eq:proof-obsnf-dh-beta})
+der Zusammenhang 
+\begin{equation}
+\gamma^{\prime}(z_{n})=\beta(h(x))=\beta(h(S(z))).\label{eq:dgamma-beta}
+\end{equation}
+Die Ausgangstransformation~$\gamma$ lässt sich daher bis auf eine
+Integrationskonstante durch 
+\[
+\gamma(z_{n})=\int\beta(h(S(z)))\,\d z_{n}
+\]
+bestimmen.
+
+\begin{example}
+\label{exa:van-der-Pol-Krener-Isidori}Man betrachte den van der Pol-Oszillator
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & -x_{1}+x_{2}(1-x_{1}^{2})+x_{1}u\\
+y & = & x_{1}
+\end{array}\label{eq:vdp}
+\end{equation}
+mit dem zusätzlichen Eingang~$u$ und dem Ausgang~$y$. Das van
+der Pol-System~(\ref{eq:vdp}) wird in der Schaltungstechnik häufig
+zur Beschreibung von Relaxationsschwingungen in Oszillatoren verwendet~\cite{van-der-pol1926,guckenheimer83,prochaska2004}.
+Für $u=0$ enthält die Phasenebene eine instabile Ruhelage im Ursprung
+und einen stabilen Grenzzyklus (siehe Abb.~\ref{fig:Phasenportrait-vdP}).
+\end{example}
+\begin{figure}
+\begin{centering}
+\resizebox{0.85\textwidth}{!}{\input{vdp-sim.pdftex_t}}
+\par\end{centering}
+\caption{Phasenebene des van der Pol-Oszillators~(\ref{eq:vdp}) für $u=0$\label{fig:Phasenportrait-vdP}}
+\end{figure}
+
+Die zum System gehörende Beobachtbarkeitsmatrix ist die Einheitsmatrix.
+Dadurch ergibt sich der Startvektor nach Gl.~(\ref{eq:v}) und die
+daraus berechnete Lie-Klammer:
+\begin{equation}
+v(x)=\left(\begin{array}{c}
+0\\
+\beta(x_{1})
+\end{array}\right),\quad\ad_{-f}v(x)=\left(\begin{array}{c}
+\beta(x_{1})\\
+\left(1-x_{1}^{2}\right)\beta(x_{1})+x_{2}\beta^{\prime}(x_{1})
+\end{array}\right).\label{eq:vdp-Lie-Klammern1}
+\end{equation}
+Zur Überprüfung der Bedingung~\ref{enu:ki2} aus Satz~\ref{thm:existence}
+betrachten wir die weitere Lie-Klammer
+\[
+[v,\ad_{-f}v](x)=\left(\begin{array}{c}
+0\\
+-2\beta(x_{1})\beta^{\prime}(x_{1})
+\end{array}\right).
+\]
+Diese Lie-Klammer ist genau dann die Nullfunktion, wenn~$\beta$
+konstant ist. Mit $\beta(x_{1})\equiv1$ ist auch die Bedingung~\ref{enu:ki3}
+erfüllt, d.\,h. $[g,v]=0$. Die Lie-Klammern~(\ref{eq:vdp-Lie-Klammern1})
+vereinfachen sich zu 
+\begin{equation}
+v(x)=\left(\begin{array}{c}
+0\\
+1
+\end{array}\right)\quad\text{und}\quad\ad_{-f}v(x)=\left(\begin{array}{c}
+1\\
+1-x_{1}^{2}
+\end{array}\right).\label{eq:vdp-Lie-Klammern2}
+\end{equation}
+Zu diesen Vektorfeldern berechnet man die Flüsse
+\[
+\varphi_{z_{1}}^{v}(x)=\left(\begin{array}{c}
+x_{1}\\
+x_{2}+z_{1}
+\end{array}\right)\quad\text{und}\quad\varphi_{z_{2}}^{\ad_{-f}v}(x)=\left(\begin{array}{c}
+x_{1}+z_{2}\\
+x_{2}+(1-x_{1}^{2})z_{2}-x_{1}z_{2}^{2}-\frac{1}{3}z_{2}^{3}
+\end{array}\right).
+\]
+Aus der Flussverkettung~(\ref{eq:verknuepfung-der-fluesse}) erhält
+man für $p=(0,0)^{T}$ die Rücktransformation 
+\[
+\left(\begin{array}{l}
+x_{1}\\
+x_{2}
+\end{array}\right)=S(z)=\varphi_{z_{1}}^{v}\circ\varphi_{z_{2}}^{\ad_{-f}v}(p)=\left(\begin{array}{c}
+z_{2}\\
+z_{1}+z_{2}-\frac{1}{3}z_{2}^{3}
+\end{array}\right).
+\]
+Die zugehörige Hintransformation lautet
+\begin{equation}
+\left(\begin{array}{l}
+z_{1}\\
+z_{2}
+\end{array}\right)=T(x)=\left(\begin{array}{c}
+x_{2}-x_{1}+\frac{1}{3}x_{1}^{3}\\
+x_{1}
+\end{array}\right).\label{eq:vdp-hintransformation}
+\end{equation}
+Durch Anwendung dieser Transformation auf System~(\ref{eq:vdp})
+erhält man die Beobachternormalform
+\begin{equation}
+\left(\begin{array}{l}
+\dot{z}_{1}\\
+\dot{z}_{2}
+\end{array}\right)=\underbrace{\left(\begin{array}{cc}
+0 & 0\\
+1 & 0
+\end{array}\right)}_{{\displaystyle A}}\left(\begin{array}{l}
+z_{1}\\
+z_{2}
+\end{array}\right)+\underbrace{\left(\begin{array}{c}
+uz_{2}-z_{2}\\
+z_{2}-\frac{1}{3}z_{2}^{3}
+\end{array}\right)}_{{\displaystyle \alpha(z_{n},u)}},\quad y=z_{2}.\label{eq:vdp-beobachternormalform}
+\end{equation}
+Daraus ergibt sich unmittelbar der Normalform-Beobachter
+\begin{eqnarray*}
+\left(\begin{array}{l}
+\dot{\hat{z}}_{1}\\
+\dot{\hat{z}}_{2}
+\end{array}\right) & = & \left(\begin{array}{cc}
+0 & 0\\
+1 & 0
+\end{array}\right)\left(\begin{array}{l}
+\hat{z}_{1}\\
+\hat{z}_{2}
+\end{array}\right)+\left(\begin{array}{c}
+uy-y\\
+y-\frac{1}{3}y
+\end{array}\right)+\left(\begin{array}{l}
+a_{0}\\
+a_{1}
+\end{array}\right)(y-\hat{z}_{2})\\
+\hat{x} & = & S(\hat{z})
+\end{eqnarray*}
+nach Gl.~(\ref{eq:obs-in-nf}), wobei das charakteristische Polynom~(\ref{eq:cp})
+der Fehlerdynamik~(\ref{eq:error-dgl-nf}) über die Koeffizienten
+$a_{0},a_{1}>0$ vorgegeben wird. Mit Kenntnis der Koordinatentransformation
+und der Eingangs-Ausgangs-Aufschaltung kann man den Beobachter auch
+in den Originalkoordianten implementieren. Der zum Beobachter~(\ref{eq:ons-orig})
+gehörende Korrekturterm~(\ref{eq:correction-term-nf-obs}) lautet:
+\begin{equation}
+\begin{array}{lcl}
+k_{\infty}(\hat{x},y,u) & = & \left(\begin{array}{cc}
+0 & 1\\
+1 & 1-\hat{x}_{1}^{2}
+\end{array}\right)\left(\left(\begin{array}{c}
+uy-y\\
+y-\frac{1}{3}y^{3}
+\end{array}\right)\!-\!\left(\begin{array}{c}
+u\hat{x}_{1}-\hat{x}_{1}\\
+\hat{x}_{1}-\frac{1}{3}\hat{x}_{1}^{3}
+\end{array}\right)+\left(\begin{array}{c}
+a_{0}\\
+a_{1}
+\end{array}\right)(y-\hat{x}_{1})\right)\end{array}\!.\label{eq:vdp-kinf}
+\end{equation}
+
+\begin{example}
+\label{exa:Roessler-Krener-Isidori}Man betrachte das Rössler-System~\cite{roessler76,roessler79}
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & -x_{2}-x_{3}\\
+\dot{x}_{2} & = & x_{1}+ax_{2}\\
+\dot{x}_{3} & = & c+x_{3}(x_{1}-b)
+\end{array}\label{eq:roessler-attraktor}
+\end{equation}
+mit den Parametern $a,b,c>0$ und der Ausgangsgleichung 
+\begin{equation}
+y=x_{3}.\label{eq:roessler-ausgang1}
+\end{equation}
+System~(\ref{eq:roessler-attraktor}) besitzt für bestimmte Anfangs-
+und Parameterwerte einen chaotischen Attraktor~\cite{jetschke89,arrowsmith90}.
+
+Für den Ausgang~(\ref{eq:roessler-ausgang1}) erhält man die Beobachtbarkeitsmatrix
+\[
+Q_{B}(x)=\left(\begin{array}{ccc}
+0 & 0 & 1\\
+x_{3} & 0 & x_{1}-b\\
+c+2x_{3}(x_{1}-b) & \;-x_{3}\; & -x_{2}-2x_{3}+(x_{1}-b)^{2}
+\end{array}\right).
+\]
+Mit Gl.~(\ref{eq:v}) berechnet man das Startvektorfeld~$v$ mit
+einem noch nicht festgelegten Skalarfeld~$\beta$, welches wegen
+Gl.~(\ref{eq:roessler-ausgang1}) von~$x_{3}$ abhängt:
+\[
+v(x)=\left(\begin{array}{c}
+0\\
+-\frac{\beta(x_{3})}{x_{3}}\\
+0
+\end{array}\right).
+\]
+Dieser Teil der Berechnungen lässt sich ohne Schwierigkeiten mit \textsc{Maxima}
+nachvollziehen, wobei auf die in Alg.~\ref{alg:Berechnung-Beobachtbarkeitsmatrix}
+definierte Routine zur Berechnung der Beobachtbarkeitsmatrix zurückgegriffen
+wird:
+
+\begin{maxima}\input{Roessler_KI1.tex}\end{maxima}
+
+Aus dem Startvektor bestimmt man die durch Lie-Klammern definierten
+Vektorfelder $\ad_{-f}v,\ad_{-f}^{2}v$, bei denen schon vergleichsweise
+große symbolische Ausdrücke auftreten. Zu überprüfen ist die Bedingung~\ref{enu:ki2}
+aus Satz~\ref{thm:existence}. Es gilt $[v,\ad_{-f}v]=0$, $[v,\ad_{-f}^{2}v]=0$
+und 
+\[
+[\ad_{-f}v,\ad_{-f}^{2}v](x)=\left(\begin{array}{c}
+\frac{3}{x_{3}^{2}}\,\beta(x_{3})\,(\beta(x_{3})-x_{3}\beta^{\prime}(x_{3}))\\
+*\\
+0
+\end{array}\right).
+\]
+Der erste Term verschwindet, wenn die Differentialgleichung $\beta(x_{3})-x_{3}\beta^{\prime}(x_{3})=0$
+erfüllt ist. Die allgemeine Lösung lautet $\beta(x_{3})=C_{1}x_{3}$
+mit der Konstanten~$C_{1}$. Für $\beta(x_{3})=x_{3}$ erhält man
+die Vektor\-felder 
+\begin{equation}
+v(x)=\left(\begin{array}{r}
+0\\
+-1\\
+0
+\end{array}\right),\;\ad_{-f}v(x)=\left(\begin{array}{r}
+1\\
+-a\\
+0
+\end{array}\right),\;\ad_{-f}^{2}v(x)=\left(\begin{array}{c}
+a\\
+1-a^{2}\\
+x_{3}
+\end{array}\right).\label{eq:Roessler-Lie-Klammern}
+\end{equation}
+Nach Anpassung von~$\beta$ im \textsc{Maxima}-Skript erhält man
+diese Vektorfelder aus den Spalten der Steuerbarkeitsmatrix (vgl.
+Alg.~\ref{alg:Berechnung-Steuerbarkeitsmatrix}):
+
+\begin{maxima}\input{Roessler_KI2.tex}\end{maxima}
+
+Die Bedingung~\ref{enu:ki2} aus Satz~\ref{thm:existence} ist jetzt
+erfüllt, d.\,h. es gilt zusätzlich $[\ad_{-f}v,\ad_{-f}^{2}v]=0$.
+Aus der Verknüpfung der Flüsse
+\[
+\varphi_{z_{1}}^{v}(x)=\left(\begin{array}{c}
+x_{1}\\
+x_{2}-z_{1}\\
+x_{3}
+\end{array}\right),\quad\varphi_{z_{2}}^{\ad_{-f}v}(x)=\left(\begin{array}{c}
+x_{1}+z_{2}\\
+x_{2}-az_{2}\\
+x_{3}
+\end{array}\right)
+\]
+und
+\[
+\varphi_{z_{3}}^{\ad_{-f}^{2}v}(x)=\left(\begin{array}{c}
+x_{1}+az_{3}\\
+x_{2}+(1-a^{2})z_{3}\\
+x_{3}\exp(z_{3})
+\end{array}\right)
+\]
+erhält man entsprechend Gl.~(\ref{eq:verknuepfung-der-fluesse})
+für den Bezugspunkt $p=(0,0,1)^{T}$ die Koordinaten\-transformation
+\begin{equation}
+\begin{array}{lcl}
+x_{1} & = & z_{2}+az_{3}\\
+x_{2} & = & -z_{1}-az_{2}+(1-a^{2})z_{3}\\
+x_{3} & = & \exp(z_{3})
+\end{array}\label{eq:roessler-S}
+\end{equation}
+mit der Umkehrung 
+\begin{equation}
+\begin{array}{lcl}
+z_{1} & = & -ax_{1}-x_{2}+\ln x3\\
+z_{2} & = & x_{1}-a\ln x_{3}\\
+z_{3} & = & \ln x_{3}
+\end{array}\label{eq:roessler-T}
+\end{equation}
+für $x_{3}>0$, vgl.~\cite{nijmeijer97}. Mit Gl.~(\ref{eq:roessler-S})
+bekommt man die in der Normalform~(\ref{eq:nf}) auftretenden Abbildungen
+\begin{equation}
+\alpha(z_{3})=\left(\begin{array}{c}
+-b+a\e^{z_{3}}+c\e^{-z_{3}}\\
+-z_{3}+ab-\e^{z_{3}}-ac\e^{-z_{3}}\\
+-b+az_{3}+c\e^{-z_{3}}
+\end{array}\right)\quad\mbox{und}\quad\gamma(z_{3})=\exp z_{3}.\label{eq:roessler-alpha-gamma}
+\end{equation}
+Bei Kenntnis von~(\ref{eq:roessler-S}) und~(\ref{eq:roessler-alpha-gamma})
+kann man mit der Umkehrabbildung $z_{3}=\gamma^{-1}(y)=\ln y$ den
+Normalform-Beobachter~(\ref{eq:obs-in-nf}) angeben. 
+\end{example}
+
+\begin{example}
+Für das inverse Pendel mit Gleichstrommotor aus Beispiel~\ref{exa:inverses-pendel-motor-nf-beobachter}
+berechnet man die Beobachtbarkeitsmatrix 
+\[
+Q_{B}(x)=\left(\begin{array}{ccl}
+1 & 0 & 0\\
+0 & 1 & 0\\
+\frac{Mg\ell}{J}\cos x_{1} & -\frac{d}{J} & \frac{K}{J}
+\end{array}\right).
+\]
+Mit der Wahl $\beta=1$ (und damit $\gamma(z_{3})=z_{3}$, vgl. Gl.~(\ref{eq:dgamma-beta}))
+erhält man den Startvektor $v=\tfrac{J}{K}\tfrac{\partial}{\partial x_{3}}$
+und die konstante Matrix 
+\[
+\Pi=\left(\begin{array}{ccc}
+0 & 0 & 1\\
+0 & 1 & -\frac{R}{L}-\frac{d}{J}\\
+\frac{J}{K} & -\frac{JR}{KL} & \frac{JR^{2}}{KL^{2}}-\frac{K}{L}
+\end{array}\right).
+\]
+Daraus erhält man die \textit{lineare} Transformation
+\[
+\left(\begin{array}{c}
+z_{1}\\
+z_{2}\\
+z_{3}
+\end{array}\right)=\left(\begin{array}{ccc}
+0 & 0 & 1\\
+0 & 1 & -\frac{R}{L}-\frac{d}{J}\\
+\frac{J}{K} & -\frac{JR}{KL} & \frac{JR^{2}}{KL^{2}}-\frac{K}{L}
+\end{array}\right)\left(\begin{array}{c}
+x_{1}\\
+x_{2}\\
+x_{3}
+\end{array}\right).
+\]
+Die Anwendung der Transformation auf das System~(\ref{eq:inverses-pendel-motor-nf-strecke})
+führt auf die Eingangs-Ausgangs-Aufschaltung
+\[
+\alpha(y,u)=\frac{1}{JL}\left(\begin{array}{c}
+Mg\ell\sin y+Ku\\
+Mg\ell\sin y-(dR+K^{2})y\\
+-(dL+JR)y
+\end{array}\right),
+\]
+mit der man den Korrekturterm~(\ref{eq:correction-term-nf-obs})
+des Beobachters~(\ref{eq:ons-orig}) berechnen kann. Zwischen dem
+Simulationsterm $F(\hat{x},u)$ und dem Korrekturterm $k_{\infty}(\hat{x},y,u)$
+entfällt der Term $\sin\hat{x}_{1}$, so dass man den schon berechneten
+Beobachter~(\ref{eq:inverses-pendel-motor-nf-beobachter}) mit den
+Verstärkungsfaktoren~(\ref{eq:inverses-pendel-motor-nf-verstaerkung})
+erhält.
+\end{example}
+
+\begin{remark}
+Die in Satz~\ref{thm:existence} formulierten Existenzbedingungen
+sind sehr restriktiv. Für Systeme mit mehreren Ausgängen kann man
+ähnliche Bedingungen angeben~~\cite{krener85observer,xia88,xia89}.
+Diese Restriktionen lassen sich beispielsweise dadurch abschwächen,
+dass man Zeitskalierungen~\cite{guay2002,respondek2004,wang2010}
+zulässt. Anstelle einer reinen Zustandstransformation kann man die
+Auswahl der Normalform-Koordinaten auch vom Eingang und seinen Zeit\-ab\-leitungen
+abhängig machen~\cite{zeitz87,zeitz87correspondence,proychev1993,glumineau1996,plestan1997,mishkov2005}.
+Statt einer statischen Aufschaltung des Ausgangs ist auch eine dynamische
+Aufschaltung denkbar, bei der bestimmte Zeitableitungen des Ausgangs
+berücksichtigt werden. Man spricht dann von einer dynamischen Linearisierung
+des Beobachtungsfehlers~\cite{noh2001,noh2004}. Bei Mehrgrößensystemen
+ist oft ein dezentraler Beobachterentwurf auf der Basis einer Block-Dreicks-Form
+vorteilhaft~\cite{rudolph1994,schaffner97,schaffner97ecc,schaffner98,schaffner99ijss,schaffner99,wang2006}.
+Mitunter ist die exakte Linearisierung des Beobachtungsfehlers erst
+durch Einbettung eines gegebenen nichtlinearen Systems in einen höherdimensionalen
+Raum möglich~\cite{back2002,back2005}. Falls die exakte Linearisierung
+des Beobachtungsfehlers nicht möglich ist, existieren zahlreiche Ansätze,
+um eine näherungseise Linearisierung zu erzielen (siehe~\cite{karahan89,nicosia89,krener91poincare,bortoff95,banaszuk97,moreno2005syncod}
+und Abschnitt~\ref{sec:Approximation-of-observers}).
+\end{remark}
+
+\begin{remark}
+\label{rem:Boebachter-mit-Hilfssatz-von-Ljapunov}Ein anderer, vielversprechender
+Ansatz zur exakten Linearisierung des Beobachtungsfehlers wurde in~\cite{kazantzis1998,krener2002,xiao2006}
+vorgestellt. Dieser Entwurfsansatz basiert auf einem Hilfssatz von
+Ljapunov und lässt in der Normalform eine nicht\-lineare Ausgangsabbildung
+zu. Jedoch ist die Implementierung des Beobachters in der Regel nur
+auf Basis numerischer Näherungsverfahren möglich~\cite{deutscher2006,deutscher2007}.
+\end{remark}
+
+\begin{remark}
+\label{rem:stetige-Beobachter}Die Regularitätsbedingungen aus Satz~\ref{thm:existence}
+(d.\,h. $\beta(h(p))\neq0$ und die Beobachtbarkeitsbedingung~\ref{enu:ki1})
+garantieren, dass die Umkehrabbildungen von~$\gamma$ und~$T$ existieren
+und eine entsprechende Glattheit aufweisen (Satz über die Umkehrabbildung\index{Satz!über die Umkehrabbildung}),
+d.\,h. dass sie Diffeomorphismen sind. Bei manchen Systemen ist die
+Beobachtbarkeitsmatrix zwar in einer punktierten Umgebung von $p\in\mathcal{M}$
+regulär, nicht aber im Punkt~$p$ selber. Dann kann das System~(\ref{eq:plant})
+nicht mit Diffeomorphismen in die Normalform~(\ref{eq:nf}) überführt
+werden, möglicherweise aber mit Semidiffeomorphismen. Unter einem
+\emph{Semidiffeomorphismus}\index{Semidiffeomorphismus} versteht
+man eine \index{Abbildung!bijektive}bijektive glatte Abbildung, deren
+Umkehrabbildung stetig (aber nicht notwendigerweise stetig differenzierbar)
+ist. Ist eine solche semidiffeomorphe Transformation in die Normalform~(\ref{eq:nf})
+möglich, dann ist der Einsatz des Beobachters~(\ref{eq:obs-in-nf})
+denkbar, den man in diesem Fall \emph{stetigen Beobachter}\index{Beobachter!stetiger}
+nennt~\cite{xia97,zeitz98,schaffner99}.
+\end{remark}
+
+
+\subsection{Existenz und Berechnung der Normalform nach Nam\label{subsec:Berechnung-nach-Nam}}
+
+Für die Existenz der Beobachter-Normalform~(\ref{eq:nf}) und die
+konkrete Konstruktion der Koordinatentransformation~(\ref{eq:TS})
+ist Bedingung~\ref{enu:ki2} aus Satz~\ref{thm:existence} entscheidend.
+Dabei fasst man die Spalten der in Gl.~(\ref{eq:PI}) definierten
+Matrix~$\Pi$ als Vektorfelder auf. Eine äquivalente Existenzaussage
+ist auch über die Zeilen der inversen Matrix 
+\begin{equation}
+\left(\begin{array}{c}
+\omega^{1}(x)\\
+\vdots\\
+\omega^{n}(x)
+\end{array}\right):=\Pi^{-1}(x)\label{eq:Pinv}
+\end{equation}
+möglich, wobei man $\omega^{1},\ldots,\omega^{n}:\mathcal{M}\to(\R^{n})^{*}$
+als Kovektorfelder bzw. Differentialformen ersten Grades betrachtet~\cite[Proposition~1]{nam97}:
+\begin{theorem}
+\label{thm:existence-nam}In einer Umgebung von $p\in\mathcal{M}$
+existiert genau dann ein lokaler Diffeomorphismus~(\ref{eq:TS}),
+der das System~(\ref{eq:plant-fg}) in die Normalform~(\ref{eq:nf})
+mit einem lokalen Diffeomorphismus~$\gamma$ überführt, wenn für
+eine geeignete Funktion~$\beta$ mit $\beta(h(p))\neq0$ die Bedingungen
+\begin{enumerate}
+\item \label{enu:nam1}$\rank\,Q_{B}(p)=n$
+
+\item \label{enu:nam2}$\d\omega^{k}(x)=0$ für $1\leq i,j\leq n$
+\item \label{enu:nam3}$(L_{g}\omega^{k}\wedge\d h)(x,u)=0$ für $1\leq i\leq n$
+\end{enumerate}
+für alle $x$ in einer Umgebung von~$p$ und für alle $u\in\mathcal{U}$
+erfüllt sind. 
+\end{theorem}
+Wir zeigen nur eine Richtung. In der umgekehrten Beweisrichtung lassen
+sich die Bedingungen unmittelbar an der Normalform überprüfen.
+\begin{svmultproof2}
+Die Bedingungen~\ref{enu:nam1}-\ref{enu:nam3} seien erfüllt. Aufgrund
+von Bedingung~\ref{enu:nam1} folgen wir zunächst dem Beweis von
+Satz~\ref{thm:existence} bis zu Gl.~(\ref{eq:proof-obsnf-gl2}).
+Diese Gleichung lässt sich in der Matrixform~(\ref{eq:pde-T}) schreiben.
+Daraus ist ersichtlich, dass~(\ref{eq:Pinv}) mit der Jacobimatrix
+der Hintransformation~$T$ übereinstimmen muss. Nach dem Lemma von
+Poincaré\index{Lemma!von Poincaré} (Lemma~\ref{lem:poincare-formen})
+existieren Skalarfelder $t_{1},\ldots,t_{n}$ mit $\d t_{k}=\omega^{k}$
+für $k=1,\ldots,n$. Die Funktionen $t_{1},\ldots,t_{n}$ sind wegen~(\ref{eq:pde-T})
+die Komponenten des Diffeomorphismus~$T$ aus Gl.~(\ref{eq:TS})
+und können durch elementare Integration 
+\[
+t_{k}(x)=\int\limits _{0}^{1}\left(\sum_{i=1}^{n}\omega_{i}^{k}(\tau x+(1-\tau)p)(x_{i}-p_{i})\right)\d\tau
+\]
+aus den Komponenten $\omega_{1}^{k},\ldots,\omega_{n}^{k}$ der Differentialformen~$\omega^{k}$
+bestimmt werden (vgl. Beweis von Lemma~\ref{lem:poincare}).
+
+Zum Verständnis von Bedingung~\ref{enu:nam3} betrachten wir eine
+beliebige Zeile $i\in\{1,\ldots,n\}$ des transformierten Systems:
+\[
+\begin{array}{lcl}
+\dot{z}_{i} & = & \frac{\d}{\d t}t_{i}(x)\\
+ & = & \d t_{i}(x)\cdot\dot{x}\\
+ & = & \d t_{i}(x)\cdot\left(f(x)+g(x,u)\right)\\
+ & = & L_{f}t_{i}(x)+L_{g}t_{i}(x,u).
+\end{array}
+\]
+Die Komponente $L_{g}t_{i}(x,u)$ des Eingangsvektorfeldes darf neben
+dem Eingang nur vom Ausgang, also von $h(x)$ abhängen. Diese gewünschte
+funktionale Abhängigkeit wird über die lineare Abhängigkeit der Gradienten
+geprüft. Wegen
+\[
+\d L_{g}t_{i}(x,u)=L_{g}\d t_{i}(x,u)=L_{g}\omega^{i}(x,u)
+\]
+liegt die gewünschte Struktur genau dann vor, wenn die Kovektoren
+$L_{g}\omega^{i}(x,u)$ und $\d h(x)$ linear abhängig sind. Das wird
+in Bedingung~\ref{enu:nam3} entsprechend Prop.~\ref{prop:Lineare-Unabh-Kovektoren-Keil}
+verifiziert.
+\end{svmultproof2}
+
+Die Überprüfung der linearen Abhängigkeit entsprechend Bedingung~\ref{enu:nam3}
+von Satz~\ref{thm:existence-nam} kann auch ohne Verwendung des Keilprodukts\index{Keilprodukt}\index{Produkt!Keil-},
+also im Sinne klassischen Matrizenrechnung, erfolgen~\cite[Corollary~1]{nam97}:
+\begin{corollary}
+Bedingung~\ref{enu:nam3} von Satz~\ref{thm:existence-nam} ist
+gleichbedeutend mit
+\[
+\rank\left(\begin{array}{c}
+\d h(x,u)\\
+L_{g}\omega^{1}(x,u)\\
+\vdots\\
+L_{g}\omega^{n}(x,u)
+\end{array}\right)=1
+\]
+für alle $x$ in einer Umgebung von~$p$ und für alle $u\in\mathcal{U}$.
+\end{corollary}
+
+\begin{example}
+\label{exa:van-der-pol-nam}Die Regularität der Beobachtbarkeitsmatrix
+des van der Pol-Systems~(\ref{eq:vdp}) aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori}
+wurde bereits überprüft. Aus den Lie-Klammern~(\ref{eq:vdp-Lie-Klammern2})
+ergibt sich
+\begin{equation}
+\Pi(x)=\left(\begin{array}{cc}
+0 & 1\\
+1 & 1-x_{1}^{2}
+\end{array}\right)\quad\text{und}\quad\Pi^{-1}(x)=\left(\begin{array}{cc}
+x_{1}^{2}-1 & 1\\
+1 & 0
+\end{array}\right)=:\left(\begin{array}{c}
+\omega^{1}(x)\\
+\omega^{2}(x)
+\end{array}\right).\label{eq:vdp-nam-omega}
+\end{equation}
+Die Zeilen von~$\Pi^{-1}$ bilden nach Gl.~(\ref{eq:Pinv}) die
+Kovektorfelder~$\omega^{1}$ und~$\omega^{2}$, welche die Bedingung~\ref{enu:nam2}
+des Satzes erfüllen und die Potentiale~$t_{1}$ und~$t_{2}$ besitzen:
+\[
+\begin{array}{lclclcl}
+\omega^{1}(x) & = & (x_{1}^{2}-1,1) & \quad\Rightarrow\quad & t_{1}(x) & = & \frac{1}{3}x_{1}^{3}-x_{1}+x_{2},\\
+\omega^{2}(x) & = & (1,0) & \quad\Rightarrow\quad & t_{2}(x) & = & x_{1}.
+\end{array}
+\]
+Damit erhält man die bereits in Gl.~(\ref{eq:vdp-hintransformation})
+angegebene Hintransformation. Die Integration der Differentialformen
+lässt sich mit der Funktion \texttt{potential} des \textsc{Maxima}-Pakets
+\texttt{vect} durchführen (vgl. Beispiel~\ref{exa:Integration-Differentialform-Poincare}):
+
+\begin{maxima}\input{vdp_beobachter_nam.tex}\end{maxima}
+
+Aus den Kovektorfeldern~(\ref{eq:vdp-nam-omega}) berechnet man die
+Lie-Ableitungen 
+\[
+L_{g}\omega^{1}(x,u)=(u,0)\quad\text{und}\quad L_{g}\omega^{2}(x,u)=(0,0)
+\]
+in Richtung des eingangsabhängigen Vektorfeldes $g(x,u)=x_{1}u\tfrac{\partial}{\partial x_{2}}$.
+Die Kovektorfelder $L_{g}\omega^{1},L_{g}\omega^{2}$ sind linear
+abhängig von $\d h=\d x_{1}$, so dass auch die Bedingung~\ref{enu:nam3}
+erfüllt ist.
+\end{example}
+
+\begin{example}
+\label{exa:Roessler-Nam}Aus den in Gl.~(\ref{eq:Roessler-Lie-Klammern})
+angegebenen Lie-Klammern erhält man nach Gl.~(\ref{eq:PI}) die Matrix
+\[
+\Pi(x)=\left(\begin{array}{ccc}
+0 & 1 & a\\
+-1 & -a & 1-a^{2}\\
+0 & 0 & x_{3}
+\end{array}\right).
+\]
+Aus ihrer Inversen~$\Pi^{-1}$ 
+\[
+\Pi^{-1}(x)=\left(\begin{array}{ccc}
+-a & -1 & \frac{1}{x_{3}}\\
+1 & 0 & -\frac{a}{x_{3}}\\
+0 & 0 & \frac{1}{x_{3}}
+\end{array}\right)=:\left(\begin{array}{c}
+\omega^{1}(x)\\
+\omega^{2}(x)\\
+\omega^{3}(x)
+\end{array}\right)
+\]
+liest man die Kovektorfelder bzw. Differentialformen $\omega^{1},\omega^{2},\omega^{3}$
+ab. Diese Differentialformen sind geschlossen und daher (lokal) exakt.
+Die zugehörigen Potentiale liefern die Transformation~(\ref{eq:roessler-T}).
+\end{example}
+
+\subsection{Berechnung nach Keller und Phelps\label{subsec:Berechnung-nach-Keller}}
+
+Ein völlig anderer Ansatz zur Berechnung der Beobachter-Normalform~(\ref{eq:nf})
+wurde in~\cite{keller86,keller86diss,keller87,phelps1988,phelps1991}
+vorgestellt. Analog zur Aufspaltung des Vektorfeldes~$F$ in die
+Vektorfelder~$f$ und~$g$ in Gl.~(\ref{eq:plant-fg}) zerlegen
+wir auch die Aufschaltung~$\alpha$ des transformierten Systems~(\ref{eq:nf})
+mit 
+\begin{eqnarray}
+Az+\bar{\alpha}(y) & = & T^{\prime}(x)f(x)\label{eq:keller-alpha-f}\\
+\tilde{\alpha}(y,u) & = & T^{\prime}(x)g(x,u)\label{eq:keller-alpha-g}
+\end{eqnarray}
+in einen autonomen Teil~$\bar{\alpha}$ sowie einen eingangsabhängigen
+Teil~$\tilde{\alpha}$ (vgl. Gl.~(\ref{eq:proof-obsnf-bar-groessen})).
+Zusätzlich werden diese Größen in Abhängigkeit von~$y$ statt von~$z_{n}$
+dargestellt. Das ist möglich, da die Ausgangstransformation~$\gamma$
+als Diffeomorphismus angesetzt wurde.
+
+Zur Bestimmung der Komponentenfuntionen $t_{1},\ldots,t_{n}:\mathcal{M}\to\R$
+der Koordinatentransformation 
+\begin{equation}
+z=T(x)=\left(\begin{array}{c}
+t_{1}(x)\\
+\vdots\\
+t_{n}(x)
+\end{array}\right)\label{eq:keller-T-Ansatz}
+\end{equation}
+vergleicht man zeilenweise beide Seiten von Gl.~(\ref{eq:keller-alpha-f}):
+\begin{equation}
+\begin{array}{rclcrcl}
+ &  & \bar{\alpha}_{1}(y) & = & t_{1}^{\prime}(x)f(x) & = & L_{f}t_{1}(x)\\
+t_{1}(x) & + & \bar{\alpha}_{2}(y) & = & t_{2}^{\prime}(x)f(x) & = & L_{f}t_{2}(x)\\
+ &  &  & \vdots &  & \vdots\\
+t_{n-2}(x) & + & \bar{\alpha}_{n-1}(y) & = & t_{n-1}^{\prime}(x)f(x) & = & L_{f}t_{n-1}(x)\\
+t_{n-1}(x) & + & \bar{\alpha}_{n}(y) & = & t_{n}^{\prime}(x)f(x) & = & L_{f}t_{n}(x).
+\end{array}\label{eq:keller-vergleich-alpha-f}
+\end{equation}
+Sukzessives Einsetzen von der letzten bis zur zweiten Gleichung liefert
+eine Darstellung der ersten $n-1$ Komponentenfunktionen: 
+\begin{equation}
+\begin{array}{rcl}
+t_{n-1}(x) & = & L_{f}t_{n}(x)-\bar{\alpha}_{n}(y)\\
+t_{n-2}(x) & = & L_{f}t_{n-1}(x)-\bar{\alpha}_{n-1}(y)\\
+ & = & L_{f}^{2}t_{n}(x)-L_{f}\bar{\alpha}_{n}(y)-\bar{\alpha}_{n-1}(y)\\
+ & \vdots\\
+t_{1}(x) & = & L_{f}t_{2}(x)-\bar{\alpha}_{2}(y)\\
+ & = & L_{f}^{n-1}t_{n}(x)-L_{f}^{n-2}\bar{\alpha}_{n}(y)-\cdots-L_{f}\bar{\alpha}_{3}(y)-\bar{\alpha}_{2}(y).
+\end{array}\label{eq:Keller-trans1}
+\end{equation}
+Die letzte Komponentenfunktion~$t_{n}$ hat die Form 
+\begin{equation}
+z_{n}=t_{n}(x)=\lambda(y),\label{eq:Keller-transn}
+\end{equation}
+wobei~$\lambda=\gamma^{-1}$ die Umkehrfunktion der in der Normalform~(\ref{eq:nf})
+auftretenden Ausgangstransformation~$\gamma$ ist. Die erste Zeile
+von Gl.~(\ref{eq:keller-vergleich-alpha-f}) führt dann auf die partielle
+Differentialgleichung 
+\begin{equation}
+L_{f}^{n}\lambda(y)=L_{f}^{n-1}\bar{\alpha}_{n}(y)+L_{f}^{n-2}\bar{\alpha}_{n-1}(y)+\cdots+L_{f}\bar{\alpha}_{2}(y)+\bar{\alpha}_{1}(y),\label{eq:ncg}
+\end{equation}
+die in~\cite{keller86} als \emph{nichtlineare charakteristische
+Gleichung} bezeichnet wird. Diese Gleichung ist bezüglich der Funktionen
+$\lambda,\bar{\alpha}_{1},\ldots,\bar{\alpha}_{n}$ zu lösen. Dann
+kann man die Koordinatentransformation~(\ref{eq:keller-T-Ansatz})
+explizit angeben: 
+\[
+z=T(x)=\left(\begin{array}{c}
+L_{f}^{n-1}\lambda(y)-L_{f}^{n-2}\bar{\alpha}_{n}(y)-\cdots-L_{f}\bar{\alpha}_{3}(y)-\bar{\alpha}_{2}(y)\\
+L_{f}^{n-2}\lambda(y)-L_{f}^{n-3}\bar{\alpha}_{n}(y)-\cdots-\bar{\alpha}_{3}(y)\\
+\vdots\\
+L_{f}\lambda(y)-\bar{\alpha}_{n}(y)\\
+\lambda(y)
+\end{array}\right).
+\]
+
+In den Originalkoordinaten ist es kaum möglich, Gl.~(\ref{eq:ncg})
+bezüglich der Funktionen $\lambda,\bar{\alpha}_{1},\ldots\bar{\alpha}_{n}$
+zu lösen. Die entscheidende Idee von~\cite{keller86,keller86diss,keller87,phelps1988,phelps1991}
+besteht darin, in einem Zwischenschritt das System~(\ref{eq:plant-fg})
+mit der Beobachtbarkeitsabbildung~$q$ nach Gl.~(\ref{eq:Q}) in
+die Beobachtbarkeitsnormalform\index{Beobachtbarkeitsnormalform}\index{Normalform!Beobachtbarkeits-}
+\begin{equation}
+\left(\begin{array}{c}
+\dot{\xi}_{1}\\
+\vdots\\
+\dot{\xi}_{n-1}\\
+\dot{\xi}_{n}
+\end{array}\right)=\overbrace{\left(\begin{array}{c}
+\xi_{2}\\
+\vdots\\
+\xi_{n}\\
+f_{n}^{*}(\xi)
+\end{array}\right)}^{{\displaystyle f^{*}(\xi)}}+\overbrace{\left(\begin{array}{c}
+g_{1}^{*}(\xi_{1},u)\\
+\vdots\\
+g_{n-1}^{*}(\xi_{1},\ldots,\xi_{n-1},u)\\
+g_{n}^{*}(\xi_{1},\ldots,\xi_{n},u)
+\end{array}\right)}^{{\displaystyle g^{*}(\xi,u)}},\quad y=\xi_{1}\label{eq:beobachtbarkeitsnormalform-keller}
+\end{equation}
+mit
+\[
+\begin{array}{lcl}
+f_{n}^{*}(\xi) & = & L_{f}^{n}h(q^{-1}(\xi))\\
+g_{i}^{*}(\xi_{1},\ldots,\xi_{i},u) & = & L_{g}L_{f}^{i-1}h(q^{-1}(\xi)),\quad i=1,\ldots,n
+\end{array}
+\]
+zu überführen (siehe Abschnitt~\ref{subsec:Beobachterentwurf-mit-eingang}).
+Die spezielle Form der Eingangsvektorfelder ist hinreichend, um die
+gleichmäßige lokale Beobachtbarkeit zu sichern (Korollar~\ref{cor:Beobachtbarkeit-nicht-affin-MISO}). 
+
+In den $\xi$-Koordinaten der Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+berechnet man jetzt die in~(\ref{eq:ncg}) auftretenden Lie-Ableitungen
+in Richtung des transformierten Vektorfeldes~$f^{*}$. Diese kann
+man als Zeitableitungen des autonomes Teil der Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+betrachten, d.\,h. von 
+\begin{equation}
+\dot{\xi}=f^{*}(\xi),\quad y=\xi_{1}.\label{eq:beobachtbarkeitsnormalform-keller-autonom}
+\end{equation}
+Die Berechnung der Normalform wird zunächst für Systeme der Ordnung~$2$
+und~$3$ illustriert. Anschließend wird der allgemeine Fall behandelt.
+
+
+\subsubsection*{Spezialfall: Ordnung~2}
+
+Für ein nur von $\xi_{1}$ (also vom Ausgang) abhängiges Skalarfeld~$\nu$
+haben die Lie-Ableitungen als Zeitableitungen von~(\ref{eq:beobachtbarkeitsnormalform-keller-autonom})
+die Form
+\begin{equation}
+\begin{array}{lcl}
+L_{f^{*}}\nu(\xi_{1}) & = & \frac{\d}{\d t}\nu(\xi_{1})\\
+ & = & \nu^{\prime}(\xi_{1})\dot{\xi}_{1}\\
+ & = & \nu^{\prime}(\xi_{1})\xi_{2}
+\end{array}\label{eq:keller-Lie1}
+\end{equation}
+und
+\[
+\begin{array}{lcl}
+L_{f^{*}}^{2}\nu(\xi_{1}) & = & \frac{\d}{\d t}L_{f^{*}}\nu(\xi_{1})\\
+ & = & \nu^{\prime\prime}(\xi_{1})\dot{\xi}_{1}\xi_{2}+\nu^{\prime}(\xi_{1})\dot{\xi}_{2}\\
+ & = & \nu^{\prime\prime}(\xi_{1})\xi_{2}^{2}+\nu^{\prime}(\xi_{1})f_{2}^{*}(\xi).
+\end{array}
+\]
+Wertet man damit die Gl.~(\ref{eq:ncg}) mit den Lie-Ableitungen
+für $\nu\in\{\lambda,\bar{\alpha}_{1},\bar{\alpha}_{2}\}$ aus, so
+erhält man
+\[
+\lambda^{\prime\prime}(\xi_{1})\xi_{2}^{2}+\lambda^{\prime}(\xi_{1})f_{2}^{*}(\xi)=\bar{\alpha}_{2}^{\prime}(\xi_{1})\xi_{2}+\bar{\alpha}_{1}(\xi_{1}).
+\]
+Diesen Ausdruck kann man nach~$f_{2}^{*}(\xi)$ auflösen:
+\begin{equation}
+f_{2}^{*}(\xi)=\underbrace{\frac{\bar{\alpha}_{1}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}}_{{\displaystyle k_{0}(\xi_{1})}}+\underbrace{\frac{\bar{\alpha}_{2}^{\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}}_{{\displaystyle k}_{1}(\xi_{1})}\,\xi_{2}\underbrace{-\frac{\lambda^{\prime\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}}_{{\displaystyle k}_{2}(\xi_{1})}\,\xi_{2}^{2}.\label{eq:keller-f2}
+\end{equation}
+Man würde zunächst die Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+und damit $f_{2}^{*}(\xi)$ berechnen. Die Faktoren $k_{0},k_{1},k_{2}$
+erhält man mit einem Koeffizientenvergleich bzw. durch Ableitungsbildung
+\[
+k_{0}(\xi)=f_{2}^{*}(\xi),\quad k_{1}(\xi)=\frac{\partial f_{2}^{*}(\xi)}{\partial\xi_{2}},\quad k_{2}(\xi)=\frac{1}{2}\frac{\partial^{2}f_{2}^{*}(\xi)}{\partial\xi_{2}^{2}}
+\]
+ an der Stelle $\xi_{2}=0$. Daraus ergeben sich Gleichungen für die
+gesuchten Funktionen 
+\begin{equation}
+\begin{array}{lcl}
+\lambda^{\prime\prime}(\xi_{1}) & = & -\lambda^{\prime}(\xi_{1})\frac{1}{2}\frac{\partial^{2}f_{2}^{*}(\xi)}{\partial\xi_{2}^{2}},\\
+\bar{\alpha}_{1}(\xi_{1}) & = & \lambda^{\prime}(\xi_{1})f_{2}^{*}(\xi),\\
+\bar{\alpha}_{2}^{\prime}(\xi_{1}) & = & \lambda^{\prime}(\xi_{1})\frac{\partial f_{2}^{*}(\xi)}{\partial\xi_{2}}.
+\end{array}\label{eq:Keller-Funktionen-n2}
+\end{equation}
+
+
+\subsubsection*{Spezialfall: Ordnung~3}
+
+Für $n=3$ haben die Lie-Ableitungen einer nur von $\xi_{1}$ abhängigen
+Funktion die Form~(\ref{eq:keller-Lie1}) sowie
+\[
+\begin{array}{lcl}
+L_{f^{*}}^{2}\nu(\xi_{1}) & = & \frac{\d}{\d t}L_{f^{*}}\nu(\xi_{1})\\
+ & = & \nu^{\prime\prime}(\xi_{1})\dot{\xi}_{1}\xi_{2}+\nu^{\prime}(\xi_{1})\dot{\xi}_{2}\\
+ & = & \nu^{\prime\prime}(\xi_{1})\xi_{2}^{2}+\nu^{\prime}(\xi_{1})\xi_{3}.
+\end{array}
+\]
+und
+\[
+\begin{array}{lcl}
+L_{f^{*}}^{3}\nu(\xi_{1}) & = & \frac{\d}{\d t}L_{f^{*}}^{2}\nu(\xi_{1})\\
+ & = & \nu^{\prime\prime^{\prime}}(\xi_{1})\dot{\xi}_{1}\xi_{2}^{2}+2\nu^{\prime\prime}(\xi_{1})\xi_{2}\dot{\xi}_{2}+\nu^{\prime\prime}(\xi_{1})\dot{\xi}_{1}\xi_{3}+\nu^{\prime}(\xi_{1})\dot{\xi}_{3}\\
+ & = & \nu^{\prime\prime^{\prime}}(\xi_{1})\xi_{2}^{3}+3\nu^{\prime\prime}(\xi_{1})\xi_{2}\xi_{3}+\nu^{\prime}(\xi_{1})f_{3}^{*}(\xi).
+\end{array}
+\]
+Man wertet wiederum Gl.~(\ref{eq:ncg}) mit den Lie-Ableitungen für
+$\nu\in\{\lambda,\bar{\alpha}_{1},\bar{\alpha}_{2},\bar{\alpha}_{3}\}$
+aus. Umstellen nach $f_{3}^{*}(\xi)$ liefert
+\[
+f_{3}^{*}(\xi)\!=\!\frac{\bar{\alpha}_{1}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\!+\!\frac{\bar{\alpha}_{2}^{\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\xi_{2}\!+\!\frac{\bar{\alpha}_{3}^{\prime\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\xi_{2}^{2}\!+\!\frac{\lambda^{\prime\prime\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\xi_{2}^{3}\!+\!\frac{\bar{\alpha}_{3}^{\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\xi_{3}\!-\!3\frac{\lambda^{\prime\prime}(\xi_{1})}{\lambda^{\prime}(\xi_{1})}\xi_{2}\xi_{3}.
+\]
+Aus den Koeffizientenfunktionen zu den Monomen $1,\xi_{2},\xi_{3}$
+und $\xi_{2}\xi_{3}$ berechnet man die Funktionen $\bar{\alpha}_{1},\bar{\alpha}_{2},\bar{\alpha}_{3}$
+und~$\lambda$~\cite{jelali1995bericht}.
+
+\subsubsection*{Allgemeines Vorgehen}
+
+Bei beliebiger Dimension $n\geq2$ bestimmt man zunächst die inverse
+Ausgangstransformation~$\lambda$ durch Lösen der gewöhnlichen Differentialgleichung
+\begin{equation}
+\lambda^{\prime\prime}(\xi_{1})=\lambda^{\prime}(\xi_{1})\,\frac{1}{n}\,\frac{\partial^{2}f_{n}^{*}(\xi)}{\partial\xi_{2}\partial\xi_{n}}.\label{eq:keller-berechnung-inverse-ausgangstransformation}
+\end{equation}
+In ähnlicher Weise ergeben sich die Komponenten der Ausgangsaufschaltung
+\begin{equation}
+\begin{array}{lcl}
+\bar{\alpha}_{1}(\xi_{1}) & = & \lambda^{\prime}(\xi_{1})\cdot f_{n}^{*}(\xi)\\
+\bar{\alpha}_{2}^{\prime}(\xi_{1}) & = & \lambda^{\prime}(\xi_{1})\cdot\frac{\partial f_{n}^{*}(\xi)}{\partial\xi_{2}}\\
+ & \vdots\\
+\bar{\alpha}_{n}^{\prime}(\xi_{1}) & = & \lambda^{\prime}(\xi_{1})\cdot\frac{\partial f_{n}^{*}(\xi)}{\partial\xi_{n}}.
+\end{array}\label{eq:Keller-berechnung-alpha}
+\end{equation}
+Die Funktion~$f_{n}^{*}$ und ihre partiellen Ableitungen sind für
+$\xi_{2}=\cdots=\xi_{n}=0$ auszuwerten. Aus Gln.~(\ref{eq:Keller-trans1})
+und~(\ref{eq:Keller-transn}) bestimmt man die Transformation~$T$
+und kann damit die eingangsabhängige Aufschaltung~$\tilde{\alpha}$
+nach Gl.~(\ref{eq:keller-alpha-g}) berechnen. 
+
+\begin{example}
+\label{exa:van-der-Pol-Keller}Das van der Pol-System~(\ref{eq:vdp})
+aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori} liegt bereits
+in der Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+vor, so dass man mit $\xi=x$ die Funktion $f_{2}^{*}(\xi)=-\xi_{1}+\xi_{2}(1-\xi_{1}^{2})$
+abliest. Mit $\partial^{2}f_{2}^{*}(\xi)/\partial\xi_{2}^{2}\equiv0$
+gilt $\lambda^{\prime\prime}(\xi_{1})\equiv0$. Zweifache Integration
+liefert $\lambda^{\prime}(\xi_{1})=C_{1}$ und $\lambda(\xi_{1})=C_{1}\xi_{1}+C_{0}$
+mit den Konstanten $C_{0},C_{1}\in\R$. Die Wahl $C_{0}=0$ und $C_{1}=1$
+liefert $\lambda(\xi_{1})=\xi_{1}$ bzw. $z_{n}=\lambda(y)$ mit der
+als Ausgangstransformation fungierenden Umkehrabbildung $y=\gamma(z_{n})$.
+Mit Gl.~(\ref{eq:dgamma-beta}) erhält man damit die in Beispiel~\ref{exa:van-der-Pol-Krener-Isidori}
+gewählte Funktion $\beta\equiv1$. Nach Gl.~(\ref{eq:Keller-Funktionen-n2})
+ergeben sich die Komponenten 
+\[
+\bar{\alpha}_{1}(\xi_{1})=1\cdot\left.f_{2}^{*}(\xi)\right|_{\xi_{2}=0}=-\xi_{1}
+\]
+und 
+\[
+\bar{\alpha}_{2}^{\prime}(\xi_{1})=1\cdot\frac{\partial f_{2}^{*}(\xi)}{\partial\xi_{2}}=1-\xi_{1}^{2}\quad\text{\text{bzw.}}\quad\bar{\alpha}_{2}(\xi_{1})=\xi_{1}-\frac{1}{3}\xi_{1}^{3}
+\]
+der Ausgangsaufschaltung
+\[
+\bar{\alpha}(y)=\left(\begin{array}{c}
+-y\\
+y-\frac{1}{3}y^{3}
+\end{array}\right),
+\]
+die mit dem autonomen Teil der in Gl.~(\ref{eq:vdp-beobachternormalform})
+berechneten Aufschaltung übereinstimmt. Aus Gln.~(\ref{eq:Keller-trans1})
+und~(\ref{eq:Keller-transn}) erhält man übereinstimmend mit Gl.~(\ref{eq:vdp-hintransformation})
+die Koordinatentransformation
+\[
+\begin{array}{lcl}
+t_{2}(x) & = & \lambda(x_{1})\\
+ & = & x_{1}\\
+t_{1}(x) & = & L_{f}t_{2}(x)-\bar{\alpha}_{2}(x_{1})\\
+ & = & x_{2}-x_{1}+\frac{1}{3}x_{1}^{3}.
+\end{array}
+\]
+\end{example}
+
+\begin{example}
+Das Rössler-System~(\ref{eq:roessler-attraktor}) aus Beispiel~\ref{exa:Roessler-Krener-Isidori}
+lässt sich mit der Boebachtbarkeitsabbildung
+\[
+q(x)=\left(\begin{array}{c}
+x_{3}\\
+(x_{1}-b)x_{3}+c\\
+(x_{1}-b)\left(c+(x_{1}-b)x_{3}\right)-(x_{2}+x_{3})x_{3}
+\end{array}\right)
+\]
+in die Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+bzw.~(\ref{eq:beobachtbarkeitsnormalform-keller-autonom}) mit
+\[
+\begin{array}{ccl}
+f_{3}^{*}(\xi) & = & ac\frac{\xi_{2}}{\xi_{1}}-c\frac{\xi_{3}}{\xi_{1}}+2c\frac{\xi_{2}^{2}}{\xi_{1}^{2}}+c-b\xi_{1}+a\xi_{3}-a\frac{\xi_{2}^{2}}{\xi_{1}}\\
+ &  & +\,a\xi_{1}^{2}+3\frac{\xi_{2}\xi_{3}}{\xi_{1}}-2\frac{\xi_{2}^{3}}{\xi_{1}^{2}}-\xi_{1}\xi_{2}-\xi_{2}
+\end{array}
+\]
+überführen. Die Differentialgleichung 
+\[
+\lambda^{\prime\prime}(\xi_{1})=\lambda^{\prime}(\xi_{1})\,\frac{1}{n}\,\left.\frac{\partial^{2}f_{n}^{*}(\xi)}{\partial\xi_{2}\partial\xi_{n}}\right|_{\xi_{2}=\xi_{3}=0}=\frac{\lambda^{\prime}(\xi_{1})}{\xi_{1}}
+\]
+hat die allgemeine Lösung $\lambda(\xi_{1})=C_{0}+C_{1}\ln\xi_{1}$.
+Mit der Wahl $C_{0}=0,$ $C_{1}=1$ erhält man $\lambda(\xi_{1})=\ln\xi_{1}$.
+Entsprechend Gl.~(\ref{eq:Keller-berechnung-alpha}) berechnet man
+die Komponenten
+\[
+\bar{\alpha}_{1}(\xi_{1})=\frac{1}{\xi_{1}}\left.f_{3}^{*}(\xi)\right|_{\xi_{2}=\xi_{3}=0}=-b+a\xi_{1}+\frac{c}{\xi_{1}}
+\]
+sowie
+\[
+\begin{array}{lclclcl}
+\bar{\alpha}_{2}^{\prime}(\xi_{1}) & = & -\frac{1}{\xi_{1}}+\frac{ac}{\xi_{1}^{2}}-1 & \quad\Rightarrow\quad & \bar{\alpha}_{2}(\xi_{1}) & = & -\ln\xi_{1}-\frac{ac}{\xi_{1}}-\xi_{1}\\
+\bar{\alpha}_{3}^{\prime}(\xi_{1}) & = & \frac{a}{\xi_{1}}-\frac{c}{\xi_{1}^{2}} & \quad\Rightarrow\quad & \bar{\alpha}_{3}(\xi_{1}) & = & a\ln\xi_{1}+\frac{c}{\xi_{1}}
+\end{array}
+\]
+der Aufschaltung. Mit $z_{3}=\lambda(\xi_{1})=\ln\xi_{1}$ bzw. $\xi_{1}=\gamma(z_{3})=\exp z_{3}$
+erhält man (bis auf konstante Anteile) die in Gl.~(\ref{eq:roessler-alpha-gamma})
+angegebene Ausgangsaufschaltung.
+\end{example}
+
+\begin{remark}
+Das beschriebene Berechnungsverfahren kann auch auf Systeme mit mehreren
+Ausgängen übertragen werden~\cite{keller86diss,phelps1988,phelps1991}.
+Ist man nicht in der Lage, Gl.~(\ref{eq:ncg}) exakt zu lösen, dann
+sind verschiedene Approximationen denkbar, z.\,B. mit Taylorreihen~\cite{jelali1995}
+oder Spline-Funktionen~\cite{bortoff95,lynch97scl}.
+\end{remark}
+
+\subsection{Berechnung nach Li und Tao\label{subsec:Berechnung-nach-Li-Tao}}
+
+Die Berechnung der Ausgangstransformation ist mit Gl.~(\ref{eq:keller-berechnung-inverse-ausgangstransformation})
+möglich. Dadurch kann man ohne wesentliche Einschränkung auf die Transformation~$\gamma$
+verzichten, d.\,h. man setzt $\beta(\cdot)=1$ und bekommt nach Gl.~(\ref{eq:dgamma-beta})
+für $\gamma$ die identische Abbildung.\footnote{Die \emph{identische Abbildung}~$\id$ ist eine Funktion, die genau
+ihr Argument zurückgibt, d.\,h. $\id(x)=x$.} Das Startvektorfeld~$v$ aus Gl.~(\ref{eq:v}) stimmt in diesem
+Fall mit der letzten Spalte der inversen Beobachtbarkeitsmatrix überein.
+Die Form~(\ref{eq:nf}) vereinfacht sich dann zur (eigentlichen)
+Beobachternormalform\index{Beobachternormalform}\index{Normalform!Beobachter-}
+\begin{equation}
+\dot{z}=Az+\alpha(y,u),\quad y=c^{T}z.\label{eq:nf-ohne-gamma}
+\end{equation}
+
+Die Bedingungen aus Satz~\ref{thm:existence} seien für $\beta=1$
+erfüllt. Für das nichtaffine System~(\ref{eq:plant}) mit der Zerlegung~(\ref{eq:plant-fg})
+gilt wegen Bedingung~\ref{enu:ki3} der Zusammenhang
+\[
+\begin{array}{ccl}
+\ad_{-F}v(x,u) & = & -[F,v](x,u)\\
+ & = & -[f,v](x)-[g,v](x,u)\\
+ & = & -[f,v](x)\\
+ & = & \ad_{-f}v(x).
+\end{array}
+\]
+Die gleiche Überlegung kann man bis zur Lie-Klammer
+\begin{equation}
+\begin{array}{ccl}
+\ad_{-F}^{n-1}v(x,u) & = & -[F,\ad_{-F}^{n-2}v](x,u)\\
+ & = & -[F,\ad_{-f}^{n-2}v](x,u)\\
+ & = & -[f,\ad_{-f}^{n-2}v](x)-[g,\ad_{-f}^{n-2}v](x,u)\\
+ & = & -[f,\ad_{-f}^{n-2}v](x)\\
+ & = & \ad_{-f}^{n-1}v(x)
+\end{array}\label{eq:hilfsrechnung-ad-n-1}
+\end{equation}
+fortführen. Mit Gln.~(\ref{eq:pde-T}) und~(\ref{eq:PI}) erhält
+man 
+\[
+\begin{array}{lcl}
+T_{*}\ad_{-F}^{n}v(x,u) & = & T^{\prime}(x)\cdot[-F,\ad_{-F}^{n-1}v](x,u)\\
+ & = & -[T^{\prime}(x)F(x,u),T^{\prime}(x)\ad_{-f}^{n-1}v(x)]\\
+ & = & -[Az+\alpha(z_{n},u),\frac{\partial}{\partial z_{n}}]\\
+ & = & \frac{\partial}{\partial z_{n}}\alpha(z_{n},u).
+\end{array}
+\]
+Dadurch bekommt man die Ableitung der Aufschaltung~$\alpha$, welche
+selber eine vektorwertige Funktion ist:
+\begin{equation}
+\begin{array}{rll}
+\frac{\partial}{\partial z_{n}}\alpha(z_{n},u) & = & T^{\prime}(x)\cdot\ad_{-F}^{n}v(x,u)\\
+ & = & \Pi^{-1}(x)\cdot\ad_{-F}^{n}v(x,u)\\
+ & =: & \left.b(y,u)\right|_{y=h(x)}.
+\end{array}\label{eq:tao-dalpha}
+\end{equation}
+Die komponentenweise Integration
+\begin{equation}
+\alpha(y,u)=\int b(y,u)\,\d y\label{eq:tao-alpha}
+\end{equation}
+liefert (bis auf die Integrationskonstanten) die gesuchte Eingangs-Ausgangs-Aufschaltung~\cite{li1986}.
+Ist das Parameterintegral nicht geschlossen zu ermitteln, so kann
+man die numerische Lösung für jede Komponente $\alpha_{i}(y,u)$ in
+einem zweidimensionalen Kennfeld erfassen. Damit lässt sich der Beobachter
+in der Form~(\ref{eq:ons-orig}) implementieren, wobei in dem Korrekturterm~(\ref{eq:correction-term-nf-obs})
+die inverse Jacobimatrix des Diffeomorphismus~$T$ wegen Gl.~(\ref{eq:pde-T})
+durch die Matrix~$\Pi$ ersetzt werden kann.
+
+\begin{example}
+\label{exa:vdp-Tao}Beim van der Pol-System~(\ref{exa:van-der-Pol-Krener-Isidori})
+aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori} wurde bereits
+$\beta=1$ verwendet. Die in Gl.~(\ref{eq:tao-dalpha}) benötigte
+Lie-Ableitung lautet
+\begin{equation}
+\ad_{-F}^{2}v(x,u)=\left(\begin{array}{c}
+1-x_{1}^{2}\\
+x_{1}^{4}-2x_{1}^{2}+u
+\end{array}\right).\label{eq:vdp-ad-n}
+\end{equation}
+In Verbindung mit der Matrix~$\Pi^{-1}$ aus Gl.~(\ref{eq:vdp-nam-omega})
+erhält man 
+\[
+\frac{\partial}{\partial y}\alpha(y,u)=\left.\Pi^{-1}(x)\cdot\ad_{-F}^{2}v(x,u)\right|_{y=x_{1}}=\left.\left(\begin{array}{c}
+u-1\\
+1-x_{1}^{2}
+\end{array}\right)\right|_{y=x_{1}}=\left(\begin{array}{c}
+u-1\\
+1-y^{2}
+\end{array}\right)
+\]
+und durch Integration nach~$y$ die Eingangs-Ausgangs-Aufschaltung
+\[
+\alpha(y,u)=\left(\begin{array}{c}
+uy-y\\
+y-\frac{1}{3}y^{3}
+\end{array}\right),
+\]
+die bereits in Beispiel~\ref{exa:van-der-Pol-Krener-Isidori} angegeben
+wurde.
+\end{example}
+
+\begin{example}
+\label{exa:Roessler-Tao}Für das Rössler-System~(\ref{eq:roessler-attraktor})
+aus Beispiel~\ref{exa:Roessler-Krener-Isidori} verwenden wir jetzt
+unter Bezug auf die im Beispiel~\ref{exa:Roessler-Tao} berechnete
+Transformation~$\lambda$ den neuen Ausgang 
+\begin{equation}
+y=h(x)=\ln x_{3}.\label{eq:roessler-ausgang2}
+\end{equation}
+Mit dem neuen Ausgang erhält man zwar eine andere Beobachtbarkeitsmatrix
+als mit dem Ausgang~(\ref{eq:roessler-ausgang1}), durch die gleichzeitige
+Normierung der Funktion~$\beta$ jedoch den bereits bekannten Startvektor~$v$
+und damit die gleichen Lie-Klammern~(\ref{eq:Roessler-Lie-Klammern})
+sowie die gleiche Matrix~$\Pi$ wie in Beispiel~\ref{exa:Roessler-Krener-Isidori}.
+Mit der Matrix $\Pi^{-1}$ und der Lie-Klammer
+\begin{equation}
+\ad_{-f}^{3}v(x)=\left(\begin{array}{c}
+a^{2}-1-x_{3}\\
+a(2-a^{2})\\
+ax_{3}-c
+\end{array}\right)\label{eq:roessler-ad-n}
+\end{equation}
+erhält man die Ableitung der Ausgangsaufschaltung:
+\[
+\frac{\partial}{\partial z_{3}}\alpha(z_{3})=\Pi^{-1}(x)\cdot\ad_{-f}^{3}v(x)=\left(\begin{array}{c}
+\frac{ax_{3}^{2}-c}{x_{3}}\\
+\frac{ac-x_{3}-x_{3}^{2}}{x_{3}}\\
+\frac{ax_{3}-c}{x_{3}}
+\end{array}\right).
+\]
+Ersetzt man~$x_{3}$ gemäß Gl.~(\ref{eq:roessler-ausgang2}) durch
+den Ausgang (also $x_{3}=\exp y$), dann liefert die Integration nach~$y$
+die Aufschaltung
+\begin{equation}
+\alpha(y)=\left(\begin{array}{c}
+a\e^{y}+c\e^{-y}\\
+-\e^{y}-ac\e^{-y}-y\\
+c\e^{-y}+ay
+\end{array}\right).\label{eq:roessler-alpha-y2}
+\end{equation}
+Dieses Ergebnis stimmt bis auf die Integrationskonstanten mit der
+Aufschaltung~(\ref{eq:roessler-alpha-gamma}) aus Beispiel~\ref{exa:Roessler-Krener-Isidori}
+überein. Die Berechnung kann leicht mit \textsc{Maxima} nachvollzogen
+werden:
+
+\begin{maxima}\input{Roessler_Tao.tex}\end{maxima}
+
+Mit der Aufschaltung~(\ref{eq:roessler-alpha-y2}) kann man den Korrekturterm~(\ref{eq:correction-term-nf-obs})
+berechnen. Der Beobachter~(\ref{eq:ons-orig}) hat dann die Form
+\[
+\left(\begin{array}{c}
+\dot{\hat{x}}_{1}\\
+\dot{\hat{x}}_{2}\\
+\dot{\hat{x}}_{3}
+\end{array}\right)\!\!=\!\!\left(\begin{array}{c}
+-\hat{x}_{2}-\hat{x}_{3}\\
+\hat{x}_{1}+a\hat{x}_{2}\\
+c+\hat{x}_{3}(\hat{x}_{1}-b)
+\end{array}\right)\!+\!\left(\begin{array}{c}
+\hat{x}_{3}-\e^{y}+(y-\ln\hat{x}_{3})(a_{1}+aa_{2}+a^{2}-1)\\
+\!(y-\ln\hat{x}_{3})(2a-a_{0}+a_{2}-aa_{1}-a^{3}-a^{2}a_{2})\!\\
+c\hat{x}_{3}(\e^{-y}-1)+(y-\ln\hat{x}_{3})\hat{x}_{3}(a+a_{2})
+\end{array}\right)\!.
+\]
+\end{example}
+
+\section{Taylorapproximation\label{sec:Approximation-of-observers}}
+
+In diesem Abschnitt wird eine Klasse von Beobachtern vorgestellt,
+für deren Auslegung weder die direkte Berechnung der Koordinatentransformation~(\ref{eq:TS})
+noch der Normalform~(\ref{eq:nf}) erforderlich ist. Diese Beobachter
+basieren auf verschiedenen Approximationen der Fehlerdynamik~(\ref{eq:error-dgl-nf}).
+Zur Vereinfachung der Darstellung wird auf eine zusätzliche Ausgangstransformation
+verzichtet, d.\,h. man setzt $\beta(\cdot)=1$ und bekommt damit
+für~$\gamma$ die identische Abbildung (vgl. Abschnitt~\ref{subsec:Berechnung-nach-Li-Tao}).
+Man erhält dadurch die eigentliche Beobachter-Normalform~(\ref{eq:nf-ohne-gamma}).
+
+\subsection{Approximation nullter Ordnung mit einem High-Gain-Beobachter\label{subsec:Approximation-nullter-Ordnung}}
+
+Der Beobachter 
+\begin{equation}
+\dot{\hat{x}}=F(\hat{x},u)+k_{0}(\hat{x})(y-h(\hat{x}))\label{eq:highgain}
+\end{equation}
+mit der Beobachterverstärkung $k_{0}:\mathcal{M}\to\R^{n}$ stellt
+eine Erweiterung der klassischen Luenberger-Struktur dar. Die Existenzbedingungen
+von Satz~\ref{thm:existence} seien erfüllt. Dann existiert ein Diffeomorphismus~(\ref{eq:TS}),
+der das System~(\ref{eq:plant}) in die Beobachter-Normalform~(\ref{eq:nf-ohne-gamma})
+überführt. Wendet man diese Transformation auf den Beobachter~(\ref{eq:highgain})
+an, so erhält man 
+\[
+\dot{\hat{z}}=A\hat{z}+\alpha(\hat{z}_{n},u)+\left(S^{\prime}(\hat{z})\right)^{-1}k_{0}(S(\hat{z}))\,(z_{n}-\hat{z}_{n}).
+\]
+Der Beobachtungsfehler $\tilde{z}=z-\hat{z}$ genügt der Differentialgleichung
+\begin{equation}
+\dot{\tilde{z}}=A\tilde{z}+\alpha(z_{n},u)-\alpha(\hat{z}_{n},u)-\left(S^{\prime}(\hat{z})\right)^{-1}k_{0}(S(\hat{z}))\,\tilde{z}_{n}.\label{eq:error-high-gain1}
+\end{equation}
+Mit dem Vektorfeld 
+\begin{equation}
+k_{0}(\hat{x})=k_{0}(S(\hat{z}))=S^{\prime}(\hat{z})\,l,\label{eq:gain-hg-z}
+\end{equation}
+bekommt die Fehlerdynamik~(\ref{eq:error-high-gain1}) die Form 
+\begin{equation}
+\dot{\tilde{z}}=(A-lc^{T})\tilde{z}+\alpha(z_{n},u)-\alpha(\hat{z}_{n},u).\label{eq:error-high-gain-typical}
+\end{equation}
+Durch geeignete Wahl des Vektors $l\in\R^{n}$ kann man dem linearen
+Teil $A-lc^{T}$ von~(\ref{eq:error-high-gain-typical}) ein vorgegebenes
+charakteristisches Polynom~(\ref{eq:cp}) zuweisen. Die Fehlerdynamik~(\ref{eq:error-high-gain-typical})
+besitzt die für High-Gain-Beobachter typische Form, vgl.~\cite{thau1973,raghavan1994,rajamani1998}
+und Kapitel~\ref{chap:High-Gain-Beobachter}. Die in~(\ref{eq:error-high-gain-typical})
+auftretenden Nichtlinearitäten lassen sich als Taylorentwicklung nullter
+Ordnung der Ausgangsaufschaltung $\alpha(z_{n},u)$ bezüglich~$\tilde{z}_{n}$
+auffassen, d.\,h. 
+\[
+\tilde{z}=(A-lc^{T})\tilde{z}+\mathcal{O}(\|\tilde{z}\|).
+\]
+
+Die unterschiedlichen Signalflüsse bei dem Normalform-Beobachter und
+dem High-Gain-Beobachter~(\ref{eq:highgain}) werden aus dem in Abb.~\ref{fig:Wirkungsschemata-NF-und-High-Gain-Beobachter}
+dargestellten Wirkungsschema deutlich.
+
+\begin{figure}
+\begin{centering}
+\resizebox{0.75\textwidth}{!}{\input{bild-nf-high-gain1.pdftex_t}}
+\par\end{centering}
+\caption{Wirkungsschema für Normalform- und High-Gain-Beobachter\label{fig:Wirkungsschemata-NF-und-High-Gain-Beobachter}}
+\end{figure}
+
+Mit der Umkehrabbildung~$T$ von~$S$ kann man die partielle Differentialgleichung~(\ref{eq:pde-T})
+auch gleichwertig in der Form 
+
+\begin{equation}
+S^{\prime}(z)=\left.\Pi(x)\right|_{x=S(z)}\label{eq:pde}
+\end{equation}
+angeben. Auf der Basis von~(\ref{eq:pde}) lässt sich die Beobachterverstärkung~(\ref{eq:gain-hg-z})
+in den Originalkoordinaten angeben:
+\begin{equation}
+k_{0}(\hat{x})=\Pi(\hat{x})\,l=a_{0}v(\hat{x})+a_{1}\ad_{-f}v(\hat{x})+\cdots+a_{n-1}\ad_{-f}^{n-1}v(\hat{x}).\label{eq:gain-hg-x}
+\end{equation}
+
+\begin{example}
+\label{exa:vdp-NF-high-gain}Beim van der Pol-System~(\ref{eq:vdp})
+aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori} erhält man aus
+den Lie-Klammern~(\ref{eq:vdp-Lie-Klammern2}) für den High-Gain-Beobachter~(\ref{eq:highgain})
+die Beobachterverstärkung 
+\begin{equation}
+k_{0}(\hat{x})=a_{0}v(\hat{x})+a_{1}\ad_{-f}v(\hat{x})=\left(\begin{array}{c}
+a_{1}\\
+a_{0}+a_{1}(1-\hat{x}_{1}^{2})
+\end{array}\right)\label{eq:vdp-k0}
+\end{equation}
+mit den Koeffizienten $a_{0},a_{1}>0$ des charakteristischen Polynoms~(\ref{eq:cp}).
+\end{example}
+
+\begin{example}
+\label{exa:roessler-NF-high-gain}Im Fall des Rössler-Systems~(\ref{eq:roessler-attraktor})
+aus Beispiel~\ref{exa:Roessler-Krener-Isidori} mit dem Ausgang~(\ref{eq:roessler-ausgang2})
+aus Beispiel~\ref{exa:Roessler-Tao} berechnet man entsprechend Gl.~(\ref{eq:gain-hg-x})
+die Beobachterverstärkung 
+\begin{equation}
+k_{0}(\hat{x})=\left(\begin{array}{c}
+aa_{2}+a_{1}\\
+(1-a^{2})a_{2}-aa_{1}-a_{0}\\
+a_{2}\hat{x}_{3}
+\end{array}\right).\label{eq:roessler-k0}
+\end{equation}
+Zur Berechnung dieser Verstärkung muss das in Beispiel~\ref{exa:Roessler-Tao}
+verwendete \textsc{Maxima}-Skript nur leicht modifiziert werden:
+
+\begin{maxima}\input{Roessler_k0.tex}\end{maxima}
+\end{example}
+
+im Folgenden wird gezeigt, dass der Beobachter~(\ref{eq:nf-ohne-gamma})
+global konvergiert, sofern die Eingangs-Ausgangs-Aufschaltung einer
+globalen Lipschitz-Bedingung\index{Lipschitz-Bedingung} bezüglich~$y$
+gleichmäßig in~$u$ genügt, d.\,h. wenn es eine Konstante $\rho>0$
+mit 
+\begin{equation}
+\forall y,\hat{y}\in\mathcal{Y}\,\forall u\in\mathcal{U}:\quad\left\Vert \alpha(y,u)-\alpha(\hat{y},u)\right\Vert \leq\rho\left\Vert y-\hat{y}\right\Vert \label{eq:Lipschitz-Bed-Ausgangsaufschaltung}
+\end{equation}
+gibt, wobei $\mathcal{Y}=\{h(x);\,x\in\mathcal{M}\}$.
+\begin{theorem}
+\label{thm:high-gain} Gegeben sei ein System~(\ref{eq:plant}) auf
+$\mathcal{M}=\R^{n}$ zusammen mit dem Beobachter~(\ref{eq:highgain})
+und der Beobachterverstärkung~(\ref{eq:gain-hg-x}). Die Bedingungen~\ref{enu:ki1}-\ref{enu:ki4}
+aus Satz~\ref{thm:existence} seien für $\beta(\cdot)=1$ erfüllt.
+Außerdem genüge die Eingangs-Ausgangs-Aufschaltung~$\alpha$ der
+globalen Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Ausgangsaufschaltung}).
+Dann existiert ein Vektor $l\in\R^{n}$ derart, dass 
+\begin{equation}
+\lim_{t\to\infty}\|\hat{x}(t)-x(t)\|=0\label{eq:nf-fehlerdgl-hg}
+\end{equation}
+ für alle Anfangswerte $x(0),\hat{x}(0)\in\mathcal{M}$ gilt. 
+\end{theorem}
+
+Der Satz wird in~\cite{roebenack2004nolcos,roebenack2007iet} für
+eine spezielle Eigenwertlage ($n$-facher Pol in der linken Halbebene)
+bewiesen. Der hier vorgestellte Beweis beruht auf einer allgemeineren
+Variante der Eigenwertvorgabe~\cite[Abschn.~{IV.A}]{roebenack2012ssd}: 
+\begin{svmultproof2}
+Sind die Bedingungen~\ref{enu:ki1}-\ref{enu:ki4} aus Satz~\ref{thm:existence}
+erfüllt, so existiert eine globale Transformation in die Beobachternormalform~(\ref{eq:nf-ohne-gamma}).
+Die Konvergenzanalyse kann daher in der Beobachternormalform durchgeführt
+werden. Wir zeigen, dass die Ruhelage $\tilde{z}=0$ der Fehlerdifferentialgleichung~(\ref{eq:error-high-gain-typical})
+global asymp\-to\-tisch stabil ist. Die in~(\ref{eq:error-high-gain-typical})
+auftretende Nichtlinearität
+\begin{equation}
+\Delta\alpha(\tilde{z},t):=\alpha(z_{n},u)-\alpha(\hat{z}_{n},u)\label{eq:beweis-nf-hg-nichtlinearitaet}
+\end{equation}
+genügt laut Voraussetzung einer globalen Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Ausgangsaufschaltung})
+mit der Lipschitz-Konstanten $\rho>0$. Die Fehlerdynamik lässt sich
+dann als Verknüpfung zwischen der zeitvarianten Nichtlinearität~(\ref{eq:beweis-nf-hg-nichtlinearitaet})
+und einem linearen zeit\-invarianten System mit der Übertragungsfunktion
+\begin{equation}
+G(s)=c^{T}\left(sI-\left(A-lc^{T}\right)\right)^{-1}\label{eq:bweis-nf-hg-G}
+\end{equation}
+darstellen (siehe Abb.~\ref{fig:Fehlerdynamik-NF-HG}). 
+\begin{figure}
+\begin{centering}
+\resizebox{0.75\textwidth}{!}{\input{bild-nf-high-error.pdftex_t}}
+\par\end{centering}
+\caption{Struktur der Fehlerdynamik~(\ref{eq:error-high-gain-typical}) des
+High-Gain-Beobachters~(\ref{eq:highgain})\label{fig:Fehlerdynamik-NF-HG}}
+\end{figure}
+
+Für den linearen Teil gibt man zunächst (reelle oder paarweise konjugiert
+komplexe) Eigen\-werte $s_{1},\ldots,s_{n}$ mit negativem Realteil
+vor. Daraus erhält man durch Ausmultiplizieren 
+\begin{equation}
+\CP(s)=(s-s_{1})\cdots(s-s_{n})=a_{0}+a_{1}s+\cdots+a_{n-1}s^{n-1}+s^{n}\label{eq:cp-eigenwerte}
+\end{equation}
+der zugehörigen Linearfaktoren die Koeffizienten $a_{0},\ldots,a_{n-1}$
+des charakteristischen Polynoms~(\ref{eq:cp}). Darauf aufbauend
+führen wir die Beobachterverstärkung 
+\begin{equation}
+l^{\epsilon}=\left(\begin{array}{c}
+a_{0}/\epsilon^{n}\\
+a_{1}/\epsilon^{n-1}\\
+\vdots\\
+a_{n-1}/\epsilon
+\end{array}\right)\label{eq:nf-verstaerkung-hg-eps}
+\end{equation}
+mit dem Parameter $\epsilon\in(0,1]$ ein. Für $\epsilon=1$ erhält
+man das charakteristische Polynom~(\ref{eq:cp-eigenwerte}), für
+$\epsilon<1$ dagegen
+\[
+\begin{array}{lrl}
+\CP^{\epsilon}(s) & := & \det(sI-A+l^{\epsilon}c^{T})\\
+ & = & \frac{a_{0}}{\epsilon^{n}}+\frac{a_{1}}{\epsilon^{n-1}}s+\cdots+\frac{a_{n-1}}{\epsilon}s^{n-1}+s^{n}\\
+ & = & \left(s-\frac{s_{1}}{\epsilon}\right)\cdots\left(s-\frac{s_{n}}{\epsilon}\right),
+\end{array}
+\]
+so dass der Parameter~$\epsilon$ für $\epsilon\to0$ eine Streckung
+der Eigenwerte in Richtung~$-\infty$ (also nach links in der komplexen
+Halbebene) bewirkt. Ersetzt man in der Übertragungsfunktion~(\ref{eq:bweis-nf-hg-G})
+die Verstärkung~$l$ durch~$l^{\epsilon}$ aus Gl.~(\ref{eq:nf-verstaerkung-hg-eps}),
+so erhält man die in~$\epsilon$ parametrierte Übertragungsfunktion
+$G^{\epsilon}(s)$ mit $G^{1}(s)=G(s)$. Mit der Form~(\ref{eq:AC})
+ergibt sich die Übertragungsfunktion
+\begin{equation}
+G^{\epsilon}(s)=\frac{1}{\CP^{\epsilon}(s)}\left(\begin{array}{cccc}
+1 & s & \cdots & s^{n-1}\end{array}\right).\label{eq:bweis-nf-hg-G-eps}
+\end{equation}
+Für die $k$-te Komponente des Frequenzgangs~$G^{\epsilon}(j\omega)$
+dieser Übertragungsfunktion gilt
+\[
+\begin{array}{ccl}
+G_{k}^{\epsilon}(j\omega) & = & \frac{\left(j\omega\right)^{k-1}}{\left(j\omega-\frac{s_{1}}{\epsilon}\right)\cdots\left(j\omega-\frac{s_{n}}{\epsilon}\right)}\\
+ & = & \frac{\left(j\omega\right)^{k-1}\epsilon^{n}}{\left(j\omega\epsilon-s_{1}\right)\cdots\left(j\omega\epsilon-s_{n}\right)}\\
+ & = & \frac{\left(j\omega\epsilon\right)^{k-1}\epsilon^{n-k+1}}{\left(j\omega\epsilon-s_{1}\right)\cdots\left(j\omega\epsilon-s_{n}\right)}\\
+ & = & \frac{\left(j\tilde{\omega}\right)^{k-1}\epsilon^{n-k+1}}{\left(j\tilde{\omega}-s_{1}\right)\cdots\left(j\tilde{\omega}-s_{n}\right)}\\
+ & = & G(j\tilde{\omega})\epsilon^{n-k+1}
+\end{array}
+\]
+mit $\tilde{\omega}=\omega\epsilon$. Bei Vorgabe eines stabilen charakteristischen
+Polynoms~(\ref{eq:cp-eigenwerte}) gilt $\|G\|_{\infty}=\|G^{1}\|_{\infty}<\infty$.
+Aus
+\[
+\|G_{k}^{\epsilon}\|_{\infty}=\sup_{\tilde{\omega}}|G_{k}^{\epsilon}(j\tilde{\omega})|=\sup_{\omega}|G_{k}(j\omega)|\epsilon^{n-k+1}=\|G_{k}\|_{\infty}\epsilon^{n-k+1}\to0
+\]
+für $\epsilon\to0$ folgt unmittelbar $\|G^{\epsilon}\|_{\infty}\to0$
+für $\epsilon\to0$. Bei einer Lipschitz-Konstanten $\rho>0$ lässt
+sich der Parameter~$\epsilon$ immer derart wählen, dass $\|G^{\epsilon}\|_{\infty}<1/\rho$,
+so dass die Verstärkung des offenen Kreises kleiner als Eins ist.
+Nach dem Satz von der kleinen Kreisverstärkung\index{Satz!von der kleinen Kreisverstärkung}
+ist daher die Ruhelage $\tilde{z}=0$ des Gesamtsystems global asymptotisch
+stabil (siehe Anhang~\ref{sec:Stabilitaet-im-geschlossenen-Regelkreis}).
+\end{svmultproof2}
+
+\begin{remark}
+Der Beobachter~(\ref{eq:highgain}) mit der Verstärkung~(\ref{eq:gain-hg-x})
+ist in gewisser Weise das Gegenstück zu dem in~\cite{gauthier92,ciccarella93,dalla-mora1997}
+vorgeschlagenen High-Gain-Beobachter (vgl. Abschnitt~\ref{sec:High-Gain-Entwurf-Beobachtbarkeitsnormalform}),
+wobei hier die Beobachternormalform anstelle der Beobachtbarkeitsnormalform
+verwendet wird. Beide Beobachter erfordern eine reguläre Beobachtbarkeitsmatrix,
+was der Bedingung~\ref{enu:ki1} aus Satz~\ref{thm:existence} entspricht.
+Außerdem weisen beide Beobachter strukturelle Einschränkungen hinsichtlich
+des Eingangs auf. Der Bedingung~\ref{enu:ki3} stehen die in~\cite{gauthier81}
+und~\cite[Sect.~{III}]{gauthier92} angegebenen Bedingungen gegenüber.
+Hinsichtlich der Existenz der jeweiligen Normalform weist der Beobachter
+in~\cite{gauthier92} schwächere Existenzbedingungen auf, da dort
+auf die Bedingung~\ref{enu:ki2} verzichtet wird. Der Beobachter~(\ref{eq:highgain})
+mit~(\ref{eq:gain-hg-x}) ist dann besonders sinnvoll, wenn das System
+in der Beobachternormalform einer Lipschitz-Bedingung genügt, nicht
+aber in der Beobachtbarkeitsnormalform. Das wird in Abschnitt~\ref{subsec:Berechnung-nach-Keller}
+deutlich, wo in der Beobachtbarkeitsnormalform~(\ref{eq:beobachtbarkeitsnormalform-keller})
+u.\,a. Terme~$\xi_{2}^{2},\xi_{2}\xi_{3},\xi_{2}^{3}$ usw. auftreten,
+die keiner globalen Lipschitz-Bedingung genügen (siehe Gl.~(\ref{eq:keller-f2})).
+\end{remark}
+
+\subsection{Approximation erster Ordnung mit einem erweiterten Luen\-berger-Beobachter\label{subsec:Luenberger}}
+
+Die folgende Herleitung basiert unmittelbar auf~\cite{bestle83,zeitz87}.
+Wir betrachten einen Beobachter
+\begin{equation}
+\dot{\hat{x}}=F(\hat{x},u)+k_{1}(\hat{x},u)(y-h(\hat{x}))\label{eq:luenberger}
+\end{equation}
+mit Luenberger-Struktur und der Beobachterverstärkung $k_{1}:\mathcal{M}\times\mathcal{U}\to\R^{n}$,
+welche jetzt auch vom Eingang~$u$ abhängen kann. Unter den Bedingungen
+von Satz~\ref{thm:existence} für $\beta(\cdot)=1$ existiert die
+Transformation~(\ref{eq:TS}) in die Beobachternormalform~(\ref{eq:nf-ohne-gamma}).
+Diese Transformation wird auf den Beobachter~(\ref{eq:luenberger})
+angewendet:
+\[
+\dot{\hat{z}}=A\hat{z}+\alpha(\hat{z}_{n},u)+\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}),u)\,(z_{n}-\hat{z}_{n}).
+\]
+In den transformierten Koordinaten erhält man die Fehlerdifferentialgleichung
+\begin{equation}
+\dot{\tilde{z}}=A\tilde{z}+\alpha(z_{n},u)-\alpha(\hat{z}_{n},u)-\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}),u)\,\tilde{z}_{n}.\label{eq:error-luen1}
+\end{equation}
+
+Ohne explizite Kenntnis der Transformation~(\ref{eq:TS}) muss man
+die Abbildung $\alpha(z_{n},u)$ als unbekannt ansehen, obwohl $z_{n}=y$
+und~$u$ gemessen werden. Daher wird $\alpha(z_{n},u)$ entlang der
+Schätztrajektorie~$\hat{z}$ des Beobachters~(\ref{eq:luenberger})
+linearisiert: 
+\[
+\alpha(z_{n},u)=\alpha(\hat{z}_{n},u)+\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u)\tilde{z}_{n}+\mathcal{O}(|\tilde{z}_{n}|^{2}).
+\]
+Die sich daraus ergebende Linearisierung der Fehlerdifferentialgleichung~(\ref{eq:error-luen1})
+hat die Form 
+\begin{equation}
+\dot{\tilde{z}}=A\tilde{z}-\left(\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}),u)-\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u)\right)c^{T}\tilde{z}+\mathcal{O}(\|\tilde{z}\|^{2}).\label{eq:error-luen-linearized}
+\end{equation}
+Die Beobachterverstärkung~$k_{1}$ wird so gewählt, dass die Jacobimatrix
+der linearisierten Fehlerdifferentialgleichung~(\ref{eq:error-luen-linearized})
+das charakteristische Polynom~(\ref{eq:cp}) besitzt, und zwar unabhängig
+vom jeweiligen Arbeitspunkt. Setzt man 
+\begin{equation}
+k_{1}(\hat{x},u)=k_{1}(S(\hat{z}),u)=S^{\prime}(\hat{z})\,l+S^{\prime}(\hat{z})\,\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u),\label{eq:k1z}
+\end{equation}
+ so erzielt man mit der Fehlerdifferentialgleichung 
+\begin{equation}
+\dot{\tilde{z}}=(A-lc^{T})\,\tilde{z}+\mathcal{O}(\|\tilde{z}\|^{2})\label{eq:error-dgl-ordnung-1}
+\end{equation}
+eine approximative Linearisierung des Beobachtungsfehlers.\index{Linearisierung!approximative}
+Dieses Vorgehen ähnelt der in~\cite{baumann86} beschriebenen \emph{erweiterten
+Taylor-Lineariserung}.\index{Linearisierung!erweiterte}
+
+im Folgenden soll die Beobachterverstärkung~(\ref{eq:k1z}) in den
+Originalkoordinaten ausgedrückt werden. Dazu betrachte von dem System
+partieller Differentialgleichungen~(\ref{eq:pde-T}) die einzelnen
+Spalten 
+\[
+T_{*}\ad_{-f}^{i}v=\frac{\partial}{\partial z_{i+1}}\quad\textrm{für}\quad i=0,\ldots,n-1.
+\]
+Mit Gl.~(\ref{eq:hilfsrechnung-ad-n-1}) erhält man 
+\[
+\begin{array}{ccl}
+T_{*}\ad_{-F}^{n}v(\hat{x}) & = & T_{*}\ad_{-f}^{n}v(\hat{x})+T_{*}\ad_{-g}\ad_{-f}^{n-1}v(\hat{x})\\
+ & = & T_{*}[-(f+g),\ad_{-f}^{n-1}v](\hat{x},u)\\
+ & = & [-A\hat{z}+\alpha(\hat{z}_{n},u),\frac{\partial}{\partial\hat{z}_{n}}](\hat{z},u)\\
+ & = & \frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u)
+\end{array}
+\]
+und
+\begin{equation}
+\ad_{-F}^{n}v(\hat{x},u)=\ad_{-f}^{n}v(\hat{x})+\ad_{-g}\ad_{-f}^{n-1}v(\hat{x},u)=S^{\prime}(\hat{z})\,\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u).\label{eq:ad-n}
+\end{equation}
+Zusammen mit~(\ref{eq:gain-hg-z}) und~(\ref{eq:gain-hg-x}) ergibt
+sich die Beobachterverstärkung 
+\begin{equation}
+\begin{array}{lcl}
+k_{1}(\hat{x},u) & = & p_{0}v(\hat{x})+p_{1}\ad_{-f}v(\hat{x})+\cdots+p_{n-1}\ad_{-f}^{n-1}v(\hat{x})\\
+ &  & +\,\ad_{-f}^{n}v(\hat{x})+\ad_{-g}\ad_{-f}^{n-1}v(\hat{x},u).
+\end{array}\label{eq:ackermann}
+\end{equation}
+Die Abhängigkeit der Beobachterverstärkung~(\ref{eq:ackermann})
+vom Eingang~$u$ resultiert aus dem eingangsabhängigen Vektorfeld~$g$.
+Gl.~(\ref{eq:ackermann}) lässt sich als eine Verallgemeinerung der
+Ackermann-Formel~\cite{ackermann77} für nichtlineare Systeme auffassen~\cite{bestle83,zeitz87}.
+Der Beobachter~(\ref{eq:luenberger}) mit der Verstärkung~(\ref{eq:ackermann})
+heißt \emph{erweiterter Luenberger-Beobachter}\index{Beobachter!erweiterter Luenberger-}
+(engl. \emph{extended Luenberger observer}).
+
+Der hier vorgestellte Ansatz unterscheidet sich geringfügig von~\cite{zeitz87}:
+Obwohl das \hbox{System}~(\ref{eq:plant}) ggf. über den Eingang~$u$
+beeinflusst werden kann, hängt die Transformation~(\ref{eq:TS})
+nur vom Zustand~$x$ ab. Dieser Zugang ist aufgrund von Bedingung~\ref{enu:ki3}
+aus Satz~\ref{thm:existence} möglich. Dadurch hängt die Beobachterverstärkung~(\ref{eq:ackermann})
+auch nicht von Zeitableitungen des Eingangs~$u$ ab.
+
+\medskip{}
+
+\begin{example}
+\label{exa:vdp-NF-ELO}Man betrachte das van der Pol-System~(\ref{eq:vdp})
+aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori}. Die Verstärkung~(\ref{eq:ackermann})
+des erweiterten Luenberger-Beobachters~(\ref{eq:luenberger}) erhält
+man aus der Verstärkung~(\ref{eq:vdp-k0}) des High-Gain-Beobachters
+und der Lie-Klammer~(\ref{eq:vdp-ad-n}): 
+\begin{equation}
+k_{1}(\hat{x},u)=\left(\begin{array}{c}
+a_{1}-\hat{x}_{1}+1\\
+a_{0}+a_{1}(1-\hat{x}_{1}^{2})+\hat{x}_{1}^{4}-2\hat{x}_{1}^{2}+u
+\end{array}\right).\label{eq:k1-vdp}
+\end{equation}
+\end{example}
+
+\begin{example}
+\label{exa:roessler-NF-ELO}Beim Rössler-System~(\ref{eq:roessler-attraktor})
+aus Beispiel~\ref{exa:Roessler-Krener-Isidori} mit dem Ausgang~(\ref{eq:roessler-ausgang2})
+aus Beispiel~\ref{exa:Roessler-Tao} erhält man für den erweiterten
+Luenberger-Beobachter~(\ref{eq:luenberger}) die Beobachterverstärkung
+\[
+k_{1}(\hat{x})=\left(\begin{array}{c}
+a\,a_{2}+a_{1}\\
+(1-a^{2})a_{2}-a\,a_{1}-a_{0}\\
+a_{2}\hat{x}_{3}
+\end{array}\right)+\left(\begin{array}{c}
+a^{2}-1-\hat{x}_{3}\\
+a(2-a^{2})\\
+a\hat{x}_{3}-c
+\end{array}\right),
+\]
+die sich aus Gln.~(\ref{eq:roessler-ad-n}) und~(\ref{eq:roessler-k0})
+ergibt. Die Berechnung dieser Verstärkung mit \textsc{Maxima} erfolgt
+ähnlich wie in Beispiel~\ref{exa:roessler-NF-high-gain}:
+
+\begin{maxima}\input{Roessler_k1.tex}\end{maxima}
+\end{example}
+
+Aufgrund seiner Herleitung mittels Linearisierung wird der erweiterte
+Luenberger-Beobachter oft als ein rein lokal konvergierender Beobachter
+verstanden. Ähnlich wie bei Satz~\ref{thm:high-gain} kann man zeigen,
+dass der erweiterte Luenberger-Beobachter~(\ref{eq:luenberger})
+auch ein globaler Beobachter ist, sofern die Eingangs-Ausgangs-Aufschaltung~$\alpha$
+einer globalen Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Ausgangsaufschaltung})
+genügt~\cite{roebenack2007iet}:
+\begin{theorem}
+\label{thm:elo-global} Gegeben sei ein System~(\ref{eq:plant})
+auf $\mathcal{M}=\R^{n}$ zusammen mit dem erweiterten Luenberger-Beobachter~(\ref{eq:luenberger})
+und der Beobachterverstärkung~(\ref{eq:ackermann}). Die Bedingungen
+\ref{enu:ki1}-\ref{enu:ki4} aus Satz~\ref{thm:existence} seien
+für $\beta(\cdot)=1$ erfüllt. Außerdem genüge die Eingangs-Ausgangs-Aufschaltung~$\alpha$
+der globalen Lipschitzbedingung~(\ref{eq:Lipschitz-Bed-Ausgangsaufschaltung}).
+Dann existiert ein Vektor $l\in\R^{n}$ derart, dass 
+\[
+\lim_{t\to\infty}\|\hat{x}(t)-x(t)\|=0
+\]
+ für alle Anfangswerte $x(0),\hat{x}(0)\in\mathcal{M}$ gilt. 
+\end{theorem}
+
+Angenommen, die Voraussetzungen aus Satz~\ref{thm:existence} sind
+für eine geeignete Funktion $\beta\not\equiv1$ erfüllt. Dann überführt
+die Transformation~(\ref{eq:TS}) den Beobachter~(\ref{eq:luenberger})
+in die Form 
+\[
+\dot{\hat{z}}=A\hat{z}+\alpha(\hat{z}_{n},u)+\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}))\,(\gamma(z_{n})-\gamma(\hat{z}_{n}))
+\]
+mit der Ausgangstransformation~$\gamma$. Die Linearisierung der
+zugehörigen Fehlerdifferentialgleichung 
+\[
+\dot{\tilde{z}}=A\tilde{z}+\alpha(z_{n},u)-\alpha(\hat{z}_{n},u)-\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}))\,(\gamma(z_{n})-\gamma(\hat{z}_{n}))
+\]
+entlang der Beobachtertrajektorie~$\hat{z}$ liefert 
+\[
+\dot{\tilde{z}}=A\tilde{z}-\left(\left(S^{\prime}(\hat{z})\right)^{-1}k_{1}(S(\hat{z}),u)\frac{\partial}{\partial\hat{z}_{n}}\gamma(\hat{z}_{n})\!-\!\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u)\right)c^{T}\tilde{z}\!+\!\mathcal{O}\left(\|\tilde{z}\|^{2}\right).
+\]
+Mit der Wahl 
+\[
+k_{1}(\hat{x},u)=k_{1}(S(\hat{z}),u)=\frac{1}{\gamma^{\prime}(\hat{z}_{n})}\left(S^{\prime}(\hat{z})\,l+S^{\prime}(\hat{z})\,\frac{\partial}{\partial\hat{z}_{n}}\alpha(\hat{z}_{n},u)\right)
+\]
+erhält man die näherungsweise lineare Fehlerdifferentialgleichung~(\ref{eq:error-dgl-ordnung-1}).
+Die Terme in der großen Klammer lassen sich mittels Gl.~(\ref{eq:gain-hg-x})
+und~(\ref{eq:ad-n}) in den Orinigalkoordinaten ausdrücken. Zusammen
+mit Gl.~(\ref{eq:dgamma-beta}) erhält man die Beobachterverstärkung
+\begin{equation}
+\begin{array}{lcl}
+k_{1}(\hat{x},u) & = & \frac{1}{\beta(h(\hat{x}))}\left(p_{0}v(\hat{x})+\cdots+p_{n-1}\ad_{-f}^{n-1}v(\hat{x})\right.\\
+ &  & \left.\quad\quad+\,\ad_{-f}^{n}v(\hat{x})+\ad_{-g}\ad_{-f}^{n-1}v(\hat{x},u)\right)
+\end{array}\label{eq:ackermann-mit-ausgangstransformation}
+\end{equation}
+ähnlich wie in~\cite{schaffner99}.
+
+\begin{example}
+\label{exa:Synchronmaschine-ELO}Wir betrachten das Zustandsraummodell
+\begin{equation}
+\begin{array}{lcl}
+\dot{x}_{1} & = & x_{2}\\
+\dot{x}_{2} & = & B_{1}-A_{1}x_{2}-A_{2}x_{3}\sin x_{1}-\tfrac{1}{2}B_{2}\sin(2x_{1})\\
+\dot{x}_{3} & = & u-D_{1}x_{3}+D_{2}\cos x_{1}\\
+y & = & x_{1}
+\end{array}\label{eq:synchronmotor-nfb}
+\end{equation}
+der Synchronmaschine\index{Synchronmaschine} aus Beispiel~\ref{exa:Synchronmaschine-HG}.
+Aus~(\ref{eq:synchronmotor-nfb}) berechnet man die Beobachtbarkeitsmatrix
+und deren Inverse:
+\begin{equation}
+Q_{B}^{-1}(x)=\left(\begin{array}{ccc}
+1 & 0 & 0\\
+0 & 1 & 0\\
+-\frac{A_{2}x_{3}\cos x_{1}+B_{2}\cos(2x_{1})}{A_{2}\sin x_{1}} & -\frac{A_{1}}{A_{2}\sin x_{1}} & -\frac{1}{A_{2}\sin x_{1}}
+\end{array}\right).\label{eq:synchronmotor-inv-beob-mat}
+\end{equation}
+Die einfachste Wahl für die Funktion~$\beta$ ist die einer konstanten
+Funktion: $\beta(x_{1})\equiv1$. Das daraus resultierende Startvektorfeld
+\begin{equation}
+v(x)=\left(\begin{array}{c}
+0\\
+0\\
+-\frac{1}{A_{1}\sin x_{1}}
+\end{array}\right)\label{eq:synchronmotor-va}
+\end{equation}
+ist die letzte Spalte von~(\ref{eq:synchronmotor-inv-beob-mat}).
+Es gilt $[v,\ad_{-f}v]=0$ und $[v,\ad_{-f}^{2}v]=0$, aber 
+\[
+[\ad_{-f}v,\ad_{-f}^{2}v](x)=\left(\begin{array}{c}
+0\\
+\cot x_{1}\\
+*
+\end{array}\right).
+\]
+Die letzte Lie-Klammer ist nur in der ersten Komponente identisch
+Null. Die dritte Komponente ist ein komplizierter Ausdruck. 
+
+Die Bedingung~\ref{enu:ki2} aus Satz~\ref{thm:existence} ist für
+$\beta(x_{1})\equiv1$ offensichtlich nicht erfüllt. Allerdings kann
+man die Vektorfelder $v$, $\ad_{-f}v$ und $\ad_{-f}^{2}v$ symbolisch
+bestimmen, ohne sich hinsichtlich der Wahl der Funktion~$\beta$
+festlegen zu müssen. Für eine beliebige glatte Funktion~$\beta$
+gilt $[v,\ad_{-f}v]=[v,\ad_{-f}^{2}v]=0$ und 
+\end{example}
+\begin{equation}
+[\ad_{-f}v,\ad_{-f}^{2}v](x)=\left(\begin{array}{c}
+0\\
+\frac{\beta(x_{1})}{\sin(x_{1})}\left(\cos(x_{1})\beta(x_{1})-3\sin(x_{1})\beta^{\prime}(x_{1})\right)\\
+*
+\end{array}\right)\label{eq:synchronmotor-Lie-Klammer-VarianteC-1}
+\end{equation}
+mit einem komplizierten Ausdruck in der dritten Komponente. Die zweite
+Komponente verschwindet identisch, wenn~$\beta$ die gewöhnliche
+Differentialgleichung 
+\[
+\cos(x_{1})\beta(x_{1})-3\sin(x_{1})\beta^{\prime}(x_{1})=0
+\]
+erfüllt. Die allgemeine Lösung dieser Differentialgleichung lautet
+$\beta(x_{1})=C_{1}(\sin(x_{1}))^{1/3}$ mit der Konstanten~$C_{1}$.
+Mit $\beta(x_{1})=(\sin(x_{1}))^{1/3}$ vereinfacht sich die Lie-Klammer~(\ref{eq:synchronmotor-Lie-Klammer-VarianteC-1})
+zu 
+\begin{equation}
+[\ad_{-f}v,\ad_{-f}^{2}v](x)=\left(\begin{array}{c}
+0\\
+0\\
+*
+\end{array}\right),\label{eq:motor-Lie-best}
+\end{equation}
+wobei die dritte Komponente weiterhin von Null verschieden ist. Damit
+ist offensichtlich, dass die Integrabilitätsbedingung (Bedingung~\ref{enu:ki2}
+aus Satz~\ref{thm:existence}) mit dem Ausgang $y=x_{1}$ nicht zu
+erfüllen ist.\footnote{Die exakte Linearisierung des Beobachtungsfehlers ist möglich, wenn
+man statt des skalaren Ausgangs $y=x_{1}$ den vektoriellen Ausgang
+$y=(x_{1},x_{2})^{T}$ verwendet~\cite{keller86diss}. Für diesen
+vektoriellen Ausgang wird in~\cite{birk88} ein erweiterten Luenberger-Beobachter
+entworfen. Für den skalaren Ausgang wird in~\cite{roebenack2013wseas}
+eine approximative Linearisierung des Beobachtungsfehlers vorgeschlagen.} (Mit zwei Null\-ein\-trägen in Gl.~(\ref{eq:motor-Lie-best})
+erzielt in gewissem Sinne eine bestmögliche Approximation des Integrabilitätsbedingung.)
+Daher lässt sich kein Normalform-Beobachter~(\ref{eq:ons-orig})
+entwerfen. Allerdings kann man trotzdem einen erweiterten Luenberger-Beobachter~(\ref{eq:luenberger})
+mit der Beobachterverstärkung~(\ref{eq:ackermann-mit-ausgangstransformation})
+angeben. 
+
+\begin{remark}
+Ist das zu überwachende System~(\ref{eq:plant}) (differentiell)
+flach (siehe Abschnitt~\ref{sec:Flache-Systeme}, dann kann man den
+Verlauf des Ausgangs durch eine hinreichend glatte Kurve vorgeben
+(beispielsweise für einen Arbeitspunktwechsel) und daraus die zugehörigen
+Referenzverläufe $x_{\text{ref}}:[0,T]\to\mathcal{M}$ und $u_{\text{ref}}:[0,T]\to\mathcal{U}$
+von Zustand und Eingang auf dem Zeitintervall $[0,T]$ berechnen~\cite{FLMR95ijc,rothfuss97flach,rudolph2003habil}.
+Statt wie in Gl.~(\ref{eq:luenberger}) bzw.~(\ref{eq:ackermann})
+die Beobachterverstärkung $k_{1}(\hat{x},u)$ entlang der Schätztrajektorie~$\hat{x}$
+zu bestimmen, kann man bei einem flachen System auch die (vorab berechneten)
+Referenzverläufe einsetzen, wodurch sich eine zeitvariante Beobachterverstärkung
+$t\mapsto k_{1}(x_{\text{ref}}(t),u_{\text{ref}}(t))$ ergibt. Daraus
+resultiert ein \emph{flachheitsbasierter Folgebeobachter}\index{Folgebeobachter},
+der mittlerweile bei zahlreichen Anwendungen zum Einsatz kommt~\cite{fliess96,bindel2000}.
+\end{remark}
+
+\begin{remark}
+Die beschriebene Entwurfsidee, nämlich die Approximation einer linearen
+Fehlerdynamik entlang der Schätztrajektorie, lässt sich auch auf Systeme
+mit $p>1$ Ausgängen übertragen. Die Linearisierung der Fehlerdynamik
+entlang der Beobachtertrajektorie führt auf einen erweiterten Luenberger-Beobachter~\cite{birk88,birk92},
+dessen (zustands- und eingangsabhängige) Beobachterverstärkung $K_{1}:\mathcal{M}\times\mathcal{U}\to\R^{n\times p}$
+matrixwertig ist.
+\end{remark}
+
+\begin{remark}
+Die Beobachterverstärkungen~(\ref{eq:gain-hg-x}), (\ref{eq:ackermann})
+und~(\ref{eq:ackermann-mit-ausgangstransformation}) mit dem Startvektorfeld~(\ref{eq:v})
+werden durch verschiedene Lie-Ableitungen bzw. Lie-Klammern beschrieben.
+Implementierungen mit Hilfe von Computer-Algebra-Software werden beispielsweise
+in~\cite{birk89,birk90,birk92,rothfuss95} vorgestellt. Die symbolische
+Berechnung dieser Beobachterverstärkungen kann jedoch auf außerordentlich
+große Ausdrücke führen. In diesen Fällen sollte man die benötigten
+Ableitungen nicht durch symbolisches Differenzieren berechnen, sondern
+mit algorithmischem bzw. automatischem Differenzieren~\cite{griewank2008}.
+Die Berechnung der in den Beobachterverstärkungen~(\ref{eq:gain-hg-x}),
+(\ref{eq:ackermann}) und~(\ref{eq:ackermann-mit-ausgangstransformation})
+auftretenden Lie-Klammern mit Hilfe des algorithmuischen Differenzierens
+wird in~\cite{roebenack2003buch,roebenack2004ima,roebenack2004nolcos,roebenack2005habil}
+beschrieben. Ein Anwendungsbeispiel aus der Kristallzüchtung ist in~\cite{lindert-gamm2004,winkler2012ssd}
+zu finden.
+\end{remark}
+
+\subsection{Approximation höherer Ordnung\label{sec:Higher-Order-Approximation}}
+
+Der erweiterte Luenberger-Beobachter liefert die Approximation erster
+Ordnung von einer exakt linearen Fehlerdynamik. Nachfolgend wird ein
+Ansatz zum Erreichen einer höheren Approximationsordnung vorgestellt~\cite{roebenack2004ijc,roebenack2004pamm,roebenack2007ima}.
+Dazu betrachten wir einen Beobachter der Form 
+\begin{equation}
+\dot{\hat{x}}=F(\hat{x},u)+\sum_{i=1}^{N}k_{i}(\hat{x},u)(y-h(\hat{x}))^{i}\label{eq:obs-new}
+\end{equation}
+mit glatten Vektorfeldern $k_{1},\ldots,k_{N}:\mathcal{M}\times\mathcal{U}\to\R^{n}$.
+Sind die Voraussetzungen von Satz~\ref{thm:existence} für $\beta(\cdot)=1$
+erfüllt, dann kann man die Transformation~(\ref{eq:TS}) auf~(\ref{eq:obs-new})
+anwenden und erhält damit die Fehlerdifferentialgleichung 
+\begin{equation}
+\dot{\tilde{z}}=A\tilde{z}+\alpha(z_{n},u)-\alpha(\hat{z}_{n},u)-\left(S^{\prime}(\hat{z})\right)^{-1}\sum_{i=1}^{N}k_{i}(S(\hat{z}),u)\tilde{z}_{n}^{i}.\label{eq:error-dgl-new}
+\end{equation}
+Ähnlich wie im Abschnitt~\ref{subsec:Luenberger} wird jetzt eine
+Reihenentwicklung von $\alpha(z_{n},u)$ entlang der Trajektorie~$\hat{z}$
+des Beobachters betrachtet: 
+\begin{equation}
+\alpha(z_{n},u)=\alpha(\hat{z}_{n},u)+\sum_{i=1}^{N}\frac{\partial^{i}}{i!\,\partial\hat{z}_{n}^{i}}\alpha(\hat{z}_{n},u)\,\tilde{z}_{n}^{i}+\mathcal{O}\left(|\tilde{z}_{n}|^{N+1}\right).\label{eq:alpha-series-expansion}
+\end{equation}
+ Wählt man die Beobachterverstärkung~$k_{1}$ entsprechend Gl.~(\ref{eq:k1z}),
+so erhält man 
+\[
+\begin{array}{lcl}
+\dot{\tilde{z}} & = & \left(A-lc^{T}\right)\tilde{z}\\
+ &  & +\sum_{i=2}^{N}\left[\left(\frac{\partial^{i}}{i!\,\partial\hat{z}_{n}^{i}}\alpha(\hat{z}_{n},u)-\left(S^{\prime}(\hat{z})\right)^{-1}k_{i}(S(\hat{z}),u)\right)\tilde{z}_{n}^{i}\right]+\mathcal{O}\left(\|\tilde{z}\|^{N+1}\right).
+\end{array}
+\]
+Die Nichtlinearitäten sollen bis zur Ordnung~$N$ kompensiert werden.
+Mit 
+\begin{equation}
+k_{i}(\hat{x},u)=\frac{1}{i!}\left.S^{\prime}(\hat{z})\frac{\partial^{i}}{\partial\hat{z}_{n}^{i}}\alpha(\hat{z}_{n},u)\right|_{\hat{z}=T(\hat{x})}\quad\textrm{für}\quad i=2,\ldots,N\label{eq:ki-z-new}
+\end{equation}
+erhält man die gewünschte Fehlerdynamik 
+\begin{equation}
+\dot{\tilde{z}}=\left(A-lc^{T}\right)\tilde{z}+\mathcal{O}\left(\|\tilde{z}\|^{N+1}\right).\label{eq:error-o-N}
+\end{equation}
+ 
+
+Die Beobachterverstärkung~(\ref{eq:ki-z-new}) soll in den Originalkoordinaten
+ausgedrückt werden. Zur Vereinfachung wird die Notation 
+\[
+\alpha^{(j)}(z_{n},u)=\frac{\partial^{j}}{\partial z_{n}^{j}}\alpha(z_{n},u)
+\]
+verwendet und zusätzlich das Vektorfeld~$w$ durch 
+\[
+w(x):=\ad_{-f}^{n-1}v(x)
+\]
+definiert. Die Behauptung 
+\begin{equation}
+S^{\prime}(z)\alpha^{(j)}(z_{n},u)=\ad_{w}^{j-1}\ad_{-F}^{n}v(x,u)\quad\textrm{für}\quad j\geq1\label{eq:claim}
+\end{equation}
+wird mit vollständiger Induktion bewiesen. Wegen~(\ref{eq:ad-n})
+gilt Gl.~(\ref{eq:claim}) für $j=1$:
+\[
+S^{\prime}(z)\alpha^{(1)}(z_{n},u)=\ad_{-F}^{n}v(x,u)=\ad_{w}^{0}\ad_{-F}^{n}v(x,u).
+\]
+Gl.~(\ref{eq:claim}) gelte nun für $j=1,\ldots,i$. Die Differentiation
+liefert 
+\begin{equation}
+\frac{\partial}{\partial z_{n}}\left(S^{\prime}(z)\alpha^{(i)}(z_{n},u)\right)=S^{\prime}(z)\alpha^{(i+1)}(z_{n},u)+\left(\frac{\partial}{\partial z_{n}}S^{\prime}(z)\right)\alpha^{(i)}(z_{n},u).\label{eq:partial}
+\end{equation}
+Da Gl.~(\ref{eq:claim}) nach Induktionsvoraussetzung für $j=i$
+gilt, kann man die linke Seite von Gl.~(\ref{eq:partial}) folgendermaßen
+umformen: 
+\begin{equation}
+\begin{array}{ccl}
+\frac{\partial}{\partial z_{n}}\left(S^{\prime}(z)\alpha^{(i)}(z_{n},u)\right) & = & \frac{\partial}{\partial z_{n}}\left.\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u)\right|_{x=S(z)}\\
+ & = & \left(\frac{\partial}{\partial x}\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u)\right)\frac{\partial}{\partial z_{n}}S(z)\\
+ & = & \left(\frac{\partial}{\partial x}\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u)\right)w(x).
+\end{array}\label{eq:X1}
+\end{equation}
+Außerdem gilt 
+\begin{equation}
+\begin{array}{lcl}
+\frac{\partial}{\partial z_{n}}S^{\prime}(z) & = & \frac{\partial}{\partial z_{n}}\frac{\partial}{\partial z}S(z)\\
+ & = & \frac{\partial}{\partial z}\frac{\partial}{\partial z_{n}}S(z)\\
+ & = & \frac{\partial}{\partial z}\left.w(x)\right|_{x=S(z)}\\
+ & = & w^{\prime}(x)S^{\prime}(z).
+\end{array}\label{eq:NR}
+\end{equation}
+Nutzt man die Induktionsvoraussetzung~(\ref{eq:claim}) ein weiteres
+Mal für $j=i$ sowie Gl.~(\ref{eq:NR}), dann bekommt man für den
+zweiten Summanden auf der rechten Seite von Gl.~(\ref{eq:partial})
+den Ausdruck 
+\begin{equation}
+\begin{array}{ccl}
+\left(\frac{\partial}{\partial z_{n}}S^{\prime}(z)\right)\alpha^{(i)}(z_{n},u) & = & w^{\prime}(x)S^{\prime}(z)\alpha^{(i)}(z_{n},u)\\
+ & = & w^{\prime}(x)S^{\prime}(z)\left(S^{\prime}(z)\right)^{-1}\ad_{w}^{i-1}ad_{-F}^{n}v(x,u)\\
+ & = & w^{\prime}(x)\,\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u).
+\end{array}\label{eq:X2}
+\end{equation}
+Die Gln.~(\ref{eq:partial}), (\ref{eq:X1}) und~(\ref{eq:X2})
+liefern
+\[
+\begin{array}{ccl}
+S^{\prime}(z)\alpha^{(i+1)}(z_{n},u) & = & \frac{\partial}{\partial z_{n}}\left(S^{\prime}(z)\alpha^{(i)}(z_{n},u)\right)-\left(\frac{\partial}{\partial z_{n}}S^{\prime}(z)\right)\alpha^{(i)}(z_{n},u)\\
+ & = & \left(\frac{\partial}{\partial x}\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u)\right)w(x)-w^{\prime}(x)\,\ad_{w}^{i-1}\ad_{-F}^{n}v(x,u)\\
+ & = & \ad_{w}^{i}\ad_{-F}^{n}v(x,u),
+\end{array}
+\]
+womit Gl.~(\ref{eq:claim}) bewiesen wäre. Folglich hat die Beobachterverstärkung~(\ref{eq:ki-z-new})
+in den Originalkoordinaten die Form 
+\begin{equation}
+\begin{array}{lcl}
+k_{i}(\hat{x},u) & = & \frac{1}{i!}\ad_{w}^{i-1}\ad_{-F}^{n}v(\hat{x},u)\\
+ & = & \frac{1}{i!}\left(\ad_{w}^{i-1}\ad_{-f}^{n}v(\hat{x})+\ad_{w}^{i-1}\ad_{-g}\ad_{-f}^{n-1}v(\hat{x},u)\right).
+\end{array}\label{eq:ki-x-new}
+\end{equation}
+für $i\geq2$. Für die Beobachterverstärkung~$k_{2}$, die einer
+Approximation zweiter Ordnung entspricht, erhält man 
+\[
+\begin{array}{lcl}
+k_{2}(\hat{x},u) & = & \frac{1}{2}\ad_{w}\ad_{-F}^{n}v(\hat{x},u)\\
+ & = & \frac{1}{2}[w,\ad_{-F}^{n}v](\hat{x},u)\\
+ & = & \frac{1}{2}[\ad_{-f}^{n-1}v,\ad_{-f}^{n}v+\ad_{-g}\ad_{-f}^{n-1}v](\hat{x},u).
+\end{array}
+\]
+Bei einem System ohne Stelleingriff vereinfacht sich diese Beobachterverstärkung
+zu 
+\begin{equation}
+k_{2}(\hat{x})=\frac{1}{2}[\ad_{-f}^{n-1}v,\ad_{-f}^{n}v](\hat{x}),\label{eq:k2-unforced}
+\end{equation}
+siehe~\cite{roebenack2004pamm}. Ist~(\ref{eq:k2-unforced}) identisch
+mit dem Nullvektor, dann ist die Ausgangsaufschaltung des betrachteten
+Systems linear~\cite[Prop.~2]{krener83}.
+
+\begin{example}
+\label{exa:vdp-hoehere-Ordnung}Beim van der Pol-System~(\ref{eq:vdp})
+aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori} erhält man mit
+$w(\hat{x})=\ad_{-f}v(\hat{x})$ aus Gl.~(\ref{eq:vdp-Lie-Klammern2})
+die Beobachterverstärkungen
+\begin{equation}
+k_{2}(\hat{x})=\left(\begin{array}{c}
+-\hat{x}_{1}\\
+\hat{x}_{1}(\hat{x}_{1}^{2}-1)
+\end{array}\right),\;k_{3}(\hat{x})=\frac{1}{3}\left(\begin{array}{c}
+-1\\
+\hat{x}_{1}^{2}-1
+\end{array}\right)\label{eq:vdp-k23}
+\end{equation}
+und $k_{j}(\hat{x})=(0,0)^{T}$ für $j\geq4$. Da $\alpha(y,u)$ ein
+Polynom in~$y$ ist, bricht die Taylor\-entwicklung von~(\ref{eq:alpha-series-expansion})
+nach endlich vielen Termen ab. Außerdem hängen die Vektor\-felder
+von~(\ref{eq:vdp-k23}) nicht vom Eingang ab, da $u$ nur als Faktor
+zur ersten Potenz von~$y$ auftritt (siehe Gl.~(\ref{eq:vdp-beobachternormalform})).
+Man kann unmittelbar nachrechnen, dass der Korrektorterm~(\ref{eq:vdp-kinf})
+des Normalformbeobachters aus Beispiel~\ref{exa:van-der-Pol-Krener-Isidori}
+übereinstimmt mit dem Korrekturterm des Beobachters~(\ref{eq:obs-new})
+bei Verwendung der Beobachterverstärkungen~(\ref{eq:k1-vdp}) und~(\ref{eq:vdp-k23}).
+In diesem Beispiel führt der beschriebene Reihenansatz mit endlich
+vielen Termen auf eine exakt lineare Fehlerdynamik.
+\end{example}
+
+\begin{example}
+\label{exa:roessler-hoehere-Ordnung}Im Fall des Rössler-Systems~(\ref{eq:roessler-attraktor})
+aus Beispiel~\ref{exa:Roessler-Krener-Isidori} mit dem Ausgang~(\ref{eq:roessler-ausgang2})
+aus Beispiel~\ref{exa:Roessler-Tao} erhält man für den Beobachter~(\ref{eq:obs-new})
+die Beobachterverstärkungen 
+\[
+k_{i}(\hat{x})=\frac{1}{i!}\left(\begin{array}{c}
+-\hat{x}_{3}\\
+0\\
+(-1)^{i}c
+\end{array}\right)\quad\mbox{für}\quad i\geq2.
+\]
+\end{example}
+
+Mit Gl.~(\ref{eq:ki-x-new}) lassen sich die Beobachterverstärkungen
+$k_{2},\ldots,k_{N}$ direkt bestimmen. Zur Berechnung dieser Beobachterverstärkungen
+ist weder eine explizite Berechnung der Koordinatentransformation~(\ref{eq:TS})
+noch die konkrete Kenntnis der Normalform~(\ref{eq:nf}) bzw.~(\ref{eq:nf-ohne-gamma})
+erforderlich. Die Integrabilitätsbedingung~\ref{enu:ki2} aus Satz~\ref{thm:existence}
+wird benötigt, um die Jacobimatrix~$S^{\prime}(\hat{z})$ entsprechend
+Gl.~(\ref{eq:pde}) durch~$\Pi(\hat{x})$ ersetzen zu können. Die
+Beobachterverstärkungen $k_{1},\ldots,k_{N}$ lassen sich auch dann
+mit den Gln.~(\ref{eq:ackermann}) und~(\ref{eq:ki-x-new}) berechnen,
+wenn die Bedingung~\ref{enu:ki2} verletzt ist.
+
+\medskip{}
+
+\begin{remark}
+Aus theoretischer Sicht ist es problemlos möglich, die vorgestellte
+Approximation höherer Ordnung auch bei Systemen mit mehreren Ausgängen
+durchzuführen~\cite{roebenack2005ifac}. Bei der Taylorentwicklung
+der Eingangs-Ausgangs-Aufschaltung müssen dann allerdings auch die
+partiellen Ableitungen nach den verschiedenen Ausgängen berücksichtigt
+werden. Dadurch erhält man tensorwertige Beobachterverstärkungen
+\[
+K_{2}:\mathcal{M}\times\mathcal{U}\to\R^{n\times p\times p},\;K_{3}:\mathcal{M}\times\mathcal{U}\to\R^{n\times p\times p\times p},\;\ldots,
+\]
+deren Speicherbedarf nur in wenigen Anwendungesfällen zu rechtfertigen
+ist.
+\end{remark}
+
+\nocite{nijmeijer99,Corliss2001}
+
+\nocite{jakubczyk85}
+\nocite{meurer2005syncod}
+
+\bibliographystyle{babalpha}
+\bibliography{dynamic}
+

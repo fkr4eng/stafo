@@ -1,0 +1,72 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i4) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[x2,(m2*sin(x3)*(l*x4^2+g*cos(x3)))/(m1+
+   m2*sin(x3)^2),x4,
+   -(sin(x3)*(l*m2*cos(x3)*x4^2+g*m2+g*m1))/
+   (l*(m1+m2*sin(x3)^2))]$
+h:x1$
+x:[x1,x2,x3,x4]$
+\end{verbatim}
+\end{minipage}
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Qb:trigsimp(ObservabilityMatrix(f,h,x))$
+\end{verbatim}
+\end{minipage}
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+determinant(Qb)$
+subst([x3=0,x4=0],%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+$\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o7) }\quad $}
+\frac{{{g}^{2}}\cdot {{\mathit{m2}}^{2}}}{{{\mathit{m1}}^{2}}}\mbox{}
+$
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i8) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+k:invert(Qb).[a3,a2,a1,a0]$
+\end{verbatim}
+\end{minipage}

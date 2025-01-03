@@ -1,0 +1,22 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+ObservabilityMap(f,h,x):=block([i,n],
+    n:length(x),
+    makelist(LieScalar(f,h,x,i),i,0,n-1)
+    )$
+\end{verbatim}
+\end{minipage}
+
+\medskip
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+ObservabilityMatrix(f,h,x):=jacobian(ObservabilityMap(f,h,x),x)$
+\end{verbatim}
+\end{minipage}

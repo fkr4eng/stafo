@@ -1,0 +1,27 @@
+\begin{picture}(0,0)%
+\includegraphics{kommutierende-fluesse-gamma1}%
+\end{picture}%
+\setlength{\unitlength}{2569sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(4724,3686)(939,-4453)
+\put(1471,-3459){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$x$}%
+}}}}
+\put(1108,-2684){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$[f,g](x)$}%
+}}}}
+\put(2753,-4344){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$\varphi^f_{\sqrt{t}}$}%
+}}}}
+\put(4869,-3579){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$\varphi^g_{\sqrt{t}}$}%
+}}}}
+\put(4299,-1658){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$\varphi^{-f}_{\sqrt{t}}$}%
+}}}}
+\put(2311,-1801){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,.56,0}$\varphi^{-g}_{\sqrt{t}}$}%
+}}}}
+\put(1658,-2462){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{.56,0,.56}$\gamma_{\sqrt{t}}(x)$}%
+}}}}
+\end{picture}%

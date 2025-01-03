@@ -1,0 +1,83 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[x2,(m0*sin(x1))/(J1-I2),-(m0*sin(x1))/(J1-I2)];
+g:[0,-1/(J1-I2),J1/(I2*(J1-I2))];
+x:[x1,x2,x3];
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o3) }\quad $}
+[\mathit{x2},\frac{\mathit{m0}\cdot \mathrm{sin}\left( \mathit{x1}\right) }{\mathit{J1}-\mathit{I2}},-\frac{\mathit{m0}\cdot \mathrm{sin}\left( \mathit{x1}\right) }{\mathit{J1}-\mathit{I2}}]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o4) }\quad $}
+[0,-\frac{1}{\mathit{J1}-\mathit{I2}},\frac{\mathit{J1}}{\mathit{I2}\cdot \left( \mathit{J1}-\mathit{I2}\right) }]
+\end{math}
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o5) }\quad $}
+[\mathit{x1},\mathit{x2},\mathit{x3}]\mbox{}
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i6) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+Qs:ControllabilityMatrix(f,g,x);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o6) }\quad $}
+\begin{pmatrix}0 & -\frac{1}{\mathit{J1}-\mathit{I2}} & 0\cr -\frac{1}{\mathit{J1}-\mathit{I2}} & 0 & -\frac{\mathit{m0}\cdot \mathrm{cos}\left( \mathit{x1}\right) }{{{\left( \mathit{J1}-\mathit{I2}\right) }^{2}}}\cr \frac{\mathit{J1}}{\mathit{I2}\cdot \left( \mathit{J1}-\mathit{I2}\right) } & 0 & \frac{\mathit{m0}\cdot \mathrm{cos}\left( \mathit{x1}\right) }{{{\left( \mathit{J1}-\mathit{I2}\right) }^{2}}}\end{pmatrix}\mbox{}
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i8) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+orthogonal_complement(col(Qs,1),col(Qs,2))$
+factor(%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+\noindent
+\begin{math}\displaystyle
+\parbox{8ex}{$\color{labelcolor}\mathrm{\tt (\%o8) }\quad $}
+\mathrm{span}\left( \begin{pmatrix}0\cr \mathit{J1}\cdot \left( \mathit{J1}-\mathit{I2}\right) \cr \mathit{I2}\cdot \left( \mathit{J1}-\mathit{I2}\right) \end{pmatrix}\right) \mbox{}
+\end{math}
+%%%%%%%%%%%%%%%
+

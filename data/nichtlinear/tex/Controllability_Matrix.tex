@@ -1,0 +1,12 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+ControllabilityMatrix(f,g,x):=block([i,n,L],
+    n:length(x),
+    L:makelist(LieBracket(-f,g,x,i),i,0,n-1),
+    transpose(apply(matrix,L))
+    )$
+\end{verbatim}
+\end{minipage}

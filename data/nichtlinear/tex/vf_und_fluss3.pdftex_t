@@ -1,0 +1,27 @@
+\begin{picture}(0,0)%
+\includegraphics{vf_und_fluss3}%
+\end{picture}%
+\setlength{\unitlength}{2693sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(6638,3577)(638,-5364)
+\put(3278,-3162){\makebox(0,0)[rb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$f(x)$}%
+}}}}
+\put(6570,-3529){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$f(z)$}%
+}}}}
+\put(4643,-4302){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$f(y)$}%
+}}}}
+\put(1306,-2536){\makebox(0,0)[lb]{\smash{{\SetFigFont{11}{13.2}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$\mathcal{M}\subseteq\R^n$}%
+}}}}
+\put(5671,-4156){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$\begin{array}{rcl}z&=&\varphi_t(y)\\&=&\varphi_{s+t}(x)\end{array}$}%
+}}}}
+\put(3871,-3695){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$y=\varphi_s(x)$}%
+}}}}
+\put(2198,-3974){\makebox(0,0)[lb]{\smash{{\SetFigFont{10}{12.0}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,.82}$x$}%
+}}}}
+\end{picture}%

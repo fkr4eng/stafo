@@ -1,0 +1,69 @@
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i4) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+f:[x2,(m*G*l*sin(x3)-d*x2+K*x3)/J,-(K*x2+R*x3)/L]$
+g:[0,0,(1/L)]$
+x:[x1,x2,x3]$
+\end{verbatim}
+\end{minipage}
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i5) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+D:ratsimp(makelist(LieBracket(-f,g,x,i),i,0,1));
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+
+%\[\displaystyle
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o5) }
+%\parbox{10ex}{$\color{labelcolor}\mathrm{\tt (\%o5) }\quad $}
+[[0,0,\frac{1}{L}],[0,\frac{l\cdot m\cdot \mathrm{cos}\left( \mathit{x3}\right) \cdot G+K}{J\cdot L},-\frac{R}{{{L}^{2}}}]]\mbox{}
+%\]
+\end{math}
+%%%%%%%%%%%%%%%
+
+
+\noindent
+%%%%%%%%%%%%%%%
+%%% INPUT:
+\begin{minipage}[t]{8ex}\color{red}\bf
+\begin{verbatim}
+(%i7) 
+\end{verbatim}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}\color{blue}
+\begin{verbatim}
+apply(matrix,D)$
+nullspace(%);
+\end{verbatim}
+\end{minipage}
+%%% OUTPUT:
+\begin{math}\displaystyle
+Proviso: \mathrm{notequal}\left( L,0\right) \;\wedge\; \mathrm{notequal}\left( \left( K+l\cdot m\cdot \mathrm{cos}\left( \mathit{x3}\right) \cdot G\right) \cdot L,0\right)
+\end{math}
+
+%\[\displaystyle
+\begin{math}\displaystyle
+\parbox{8ex}{\color{labelcolor}(\%o7) }
+%\parbox{10ex}{$\color{labelcolor}\mathrm{\tt (\%o7) }\quad $}
+\mathrm{span}\left( \begin{pmatrix}\left( K+l\cdot m\cdot \mathrm{cos}\left( \mathit{x3}\right) \cdot G\right) \cdot L\cr 0\cr 0\end{pmatrix}\right)
+\end{math}
+%\]
+%%%%%%%%%%%%%%%

@@ -1,0 +1,327 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass svmono
+\begin_preamble
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage{tikz-cd}
+\usepackage{chapterbib}
+\usepackage{makeidx}
+\usepackage{multicol}
+%\usepackage{footmisc}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{babelbib}
+\usepackage{textgreek}
+\usepackage{units}
+\usepackage{listings}
+
+% Rahmen für Maxima-Code
+\usepackage[framemethod=tikz]{mdframed}
+\mdfsetup{%
+ outerlinewidth = 2,
+ roundcorner=10pt}
+
+% Rahmen für Maxima-Code
+\newmdenv[ %
+ outerlinewidth = 0.5 pt,%
+ roundcorner = 5 pt,%
+ backgroundcolor = gray!05,%
+ innertopmargin = \topskip,%
+ splittopskip = \topskip,%
+]{maxima}
+
+
+% Kommentare während Manuskripterstellung
+% Ausgabe kann mit option "disable" ausgeschaltet werden!
+%\usepackage[textsize=tiny,textwidth=30mm]{todonotes}
+
+
+
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\V}{{\mathbb{V}}}
+\newcommand{\NN}{{\mathbb{N}_0}}
+\newcommand{\spann}{{\operatorname{span}}}
+\newcommand{\id}{{\operatorname{id}}}
+\newcommand{\im}{{\operatorname{im}}}
+\newcommand{\inv}{{\operatorname{inv}}}
+\newcommand{\ad}{{\operatorname{ad}}}
+\newcommand{\Ad}{{\operatorname{Ad}}}
+\newcommand{\adj}{{\operatorname{adj}}}
+%\newcommand{\rank}{{\mathrm{rank}}}
+\newcommand{\rank}{{\operatorname{rang}}}
+\newcommand{\corank}{{\operatorname{corang}}}
+\newcommand{\CP}{{\operatorname{cp}}}
+\newcommand{\diag}{{\operatorname{diag}}}
+\renewcommand{\d}{{\mathrm{d}}}
+\newcommand{\e}{{\mathrm{e}}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\qdots}{\includegraphics{qdots}}
+\newcommand{\VEC}{{\mathrm{vec}\,}}
+\newcommand{\hinreichend}{\glqq$\Rightarrow$\grqq}
+\newcommand{\notwendig}{\glqq$\Leftarrow$\grqq}
+%\renewcommand{\OE}{O.E.}
+\newcommand{\partiald}[2]{\frac{\partial#1}{\partial#2}}
+
+\renewcommand{\emph}[1]{\textbf{\em #1}}
+\renewcommand{\arraystretch}{1.15}
+
+%\providecommand{\propositionname}{Proposition}
+%\newcommand{\propositionname}{Proposition}
+
+\hyphenation{Vektor-raum Unter-vektor-raum Vektor-feld Vektor-felder
+Kovektor-feld Kovektor-felder Push-forward Pull-back Teil-system}
+
+\sloppy
+\def\theoremname{Satz}
+%\def\corollaryname{Folgerung}
+
+\newtheorem{aufgabe}{Aufgabe}[chapter]
+\newtheorem{loesung}{Lösung zu Aufgabe}[chapter]
+ 
+% Umgebungsdefinition fuer Beweis
+\def\halmos{\hbox{\quad\rlap{$\sqcap$}$\sqcup$}\vspace{2mm}}
+ % ... aus dem Netz, ergaenzt mit qed-Zeichen (halmos)
+ \newenvironment{proofsketch}[1][\textmd{\textit{Beweisskizze}}.]{\begin{trivlist}
+ \item[\hskip \labelsep {\bfseries #1}]}
+ {\halmos\end{trivlist}}
+
+% für Maxima-Code
+\definecolor{labelcolor}{RGB}{100,0,0}
+
+% Minus-Zeichen als Unicode)
+\DeclareUnicodeCharacter{2212}{-}
+
+
+% Kommentare während Manuskripterstellung
+%\newcounter{todocounter}
+%\newcommand{\todonum}[2][]
+%{\stepcounter{todocounter}\todo[#1]{\thetodocounter:#2}}
+%\newcommand{\td}[1]{\todonum[size=\small,color=orange!50]{ #1}}
+
+% optional
+%\newcommand{\tdo}[1]{\todonum[size=\tiny,color=blue!30]{ #1}}%\todo[, #1]{#2}}
+\end_preamble
+\options deutsch,german,sectrefs,envcountsame,envcountchap
+\use_default_options false
+\begin_modules
+enumitem
+\end_modules
+\maintain_unincluded_children true
+\language ngerman
+\language_package default
+\inputencoding utf8x
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement h
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Stichwortverzeichnis
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 3cm
+\rightmargin 2.5cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language german
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Front Matter
+
+\end_layout
+
+\begin_layout Title
+Nichtlineare Regelungssysteme
+\end_layout
+
+\begin_layout Subtitle
+Theorie und Anwendung der exakten Linearisierung
+\end_layout
+
+\begin_layout Author
+Klaus Röbenack
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "vorwort.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Main Matter
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand include
+filename "einleitung.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "grundlagen.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "diffgeo.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "regler_grundlagen.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "regler_varianten.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "highgain.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "beobachter.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "anhang.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "symbol.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset index_print
+LatexCommand printindex
+type "idx"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
