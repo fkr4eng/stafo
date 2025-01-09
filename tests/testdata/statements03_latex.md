@@ -1,0 +1,57 @@
+- There is a class: 'real number'.
+- There is a class: 'complex number'.
+- There is a class: 'Signal'.
+- There is a class 'komplexwertige Funktion'
+- There is a class 'reellwertige Funktion'
+
+- 's' is an instance of 'complex number'
+- 'e' is an instance of 'complex number'
+- There is a class: 'Variable'
+- There is a class: 'Operator'
+- There is a class: 'Eingangssignal'.
+- 'Eingangssignal' is a subclass of 'Signal'.
+- There is a class: 'Ausgangssignal'.
+- 'Ausgangssignal' is a subclass of 'Signal'.
+- There is a class: 't'
+- 't' is an instance of 'Variable'
+- There is a class: 'Übertragungsglied'.
+- There is a property: 'stabil'
+- There is a property: 'zeitinvariant'
+
+- There is an if-then-statement:
+    - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt: \begin{equation} \label{eq:VerschPrinzip} \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)). \end{equation}'
+    - formalized setting:
+        - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'
+        - 'ein Übertragungsglied' has the property 'stabil'.
+        - 'u' is an instance of 'Eingangssignal'
+        - 'phi' is an instance of 'Operator'
+        - 'nu' is an instance of 'Ausgangssignal'
+    - formalized premise:
+        - There is an equation:
+            - full source code: '\(\nu(t) = \varphi(u(t))\)'
+            - source code of left hand side: '\(\nu(t)\)'
+            - source code of right hand side: '\(\varphi(u(t))\)'
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the application of the operator '\(\varphi\)'.
+    - formalized assertion:
+        - 'ein Übertragungsglied' has the property 'zeitinvariant'.
+
+
+- There is a unary operator 'Laplace Transformation'
+- 'Laplace Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  \(f : \mathbb{R} \to \mathbb{R}\) in den Raum der komplexwertigen Funktionen  \(F : \mathbb{C} \to \mathbb{C}\)'
+- // I am not sure how to model 'Raum der ... Funktionen'. It seems to be a set of functions. However, I do not know how to represent this.
+- There is a general statement:
+    - formalized setting:
+        - 'F' is an instance of 'komplexwertige Funktion'
+        - 'f' is an instance of 'reellwertige Funktion'
+        - 'x' is an instance of 'real number'
+        - 'y' is an instance of 'real number'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: '\(F(s) = \int\limits_0^\infty f(t)*e^{-st} dt\)'
+            - source code of left hand side: '\(F(s)\)'
+            - source code of right hand side: '\(\int\limits_0^\infty f(t)*e^{-st} dt\)'
+            - reference: 'eq:LaplaceHin'
+        - There is an equation:
+            - source code of left hand side: 'y(x)'
+            - source code of right hand side: '\frac{d}{dx} (f(x))'
+- 'Laplace Transformation' has defining formula 'eq:LaplaceHin'.

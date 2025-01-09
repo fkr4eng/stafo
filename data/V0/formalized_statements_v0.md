@@ -147,7 +147,7 @@
         - There is a unary operator: 'phi'
     - formalized assertion:
         - There is an equation:
-            - full source code: '\(t \mapsto f_\nu(t) = \varphi(t \mapsto f_u(t)) \qquad \text{bzw.} \qquad f_\nu = \varphi(f_u)\)'
+            - full source code: '\(t \mapsto f_\nu(t) = \varphi(t \mapsto f_u(t))\)'
             - source code of left hand side: '\(t \mapsto f_\nu(t)\)'
             - source code of right hand side: '\(\varphi(t \mapsto f_u(t))\)'
             - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the mapping arrow
@@ -237,6 +237,9 @@
     - formalized setting:
         - 'ein Übertragungsglied' is an instance of 'Übertragungsglied'
         - 'ein Übertragungsglied' has the property 'stabil'.
+        - 'u' is an instance of 'Eingangssignal'
+        - 'phi' is an instance of 'Operator'
+        - 'nu' is an instance of 'Ausgangssignal'
     - formalized premise:
         - There is an equation:
             - full source code: '\(\nu(t) = \varphi(u(t))\)'
@@ -281,6 +284,7 @@
         - 'g' is an instance of 'Gewichtsfunktion'
         - 'u' is an instance of 'Eingangssignal'
         - 'nu' is an instance of 'Ausgangssignal'
+        - 'tau' is an instance of 'real number'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(\nu(t) = \int_0^t g(t-\tau)u(\tau)\mathrm{d}\tau\)'
@@ -311,6 +315,7 @@
     - formalized setting:
         - 'h' is an instance of 'Übergangsfunktion'
         - 'g' is an instance of 'Gewichtsfunktion'
+        - 'tau' is an instance of 'real number'
     - formalized assertion:
         - There is an equation:
             - full source code: '\(h(t) = \int_0^t g(\tau) \mathrm{d}\tau\)'
@@ -474,9 +479,9 @@
             - formalized right hand side: 'x_n'
             - reference: 'eq:DglSysAllgemein_n_1'
         - There is an equation:
-            - full source code: '\(\dot x_n = \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)\)'
+            - full source code: '\(\dot x_n = \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ & + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)\)'
             - source code of left hand side: \dot x_n
-            - source code of right hand side: \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ &\hphantom{= \frac{1}{a_n}} + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)
+            - source code of right hand side: \frac{1}{a_n}\left(-a_{n-1} x_n - \ldots - a_2 x_3 - a_1 x_2 - a_0 x_1 \right.\\ & + \left.  b_m u^{(m)} + b_{m-1} u^{(m-1)} + \ldots + b_2 \ddot u + b_1 \dot u + b_0 u\right)
             - reference: 'eq:DglSysAllgemein_n'
         - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_1'
         - 'gls1' 'hat Gleichungsreferenz' 'eq:DglSysAllgemein_2'
@@ -511,7 +516,7 @@
         - There is an equation:
             - full source code: '\(F(s) = \int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
             - source code of left hand side: '\(F(s)\)'
-            - source code of right hand side: '\(\int\limits_0^\infty f(t)\mathrm{e}^{-st}\df t\)'
+            - source code of right hand side: '\(\int\limits_0^\infty f(t)*e^{-st} dt\)'
             - reference: 'eq:LaplaceHin'
 - 'Laplace Transformation' has defining formula 'eq:LaplaceHin'.
 
@@ -693,6 +698,8 @@
         - 'j' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
+            - source code of left hand side: '$f^{(i)}(t)$'
+            - source code of right hand side: '$s^i F(s) - \sum\limits_{j=0}^{i-1}s^{i-1-j} f^{(j)}(+0)$'
             - formalized left hand side: 'Laplace Transformation'('höhere Zeitableitung'('f(t)', 'i'))
             - formalized right hand side: 's'^'i' * 'F(s)' - sum(j=0, i-1, 's'^(i-1-j) * 'f'^(j)(+0))
             - // I am not sure how to model the sum in a formalized way.
@@ -701,11 +708,14 @@
     - formalized setting:
         - 'f' is an instance of 'reellwertige Funktion'
         - 'F' is an instance of 'komplexwertige Funktion'
+        - 't' is an instance of 'real number'
+        - 'tau' is an instance of 'real number'
     - formalized assertion:
         - // Not sure how to model 'Integration im Zeitbereich'
         - There is an equation:
             - // Not sure how to model the left hand side in a formalized way.
-            - formalized right hand side: 'F(s)' / 's'
+            - source code of left hand side: '\int\limits_0^t f(\tau)\df\tau'
+            - source code of right hand side: 'F(s) / s'
 - There is a general statement:
     - full source code: '$f(t-\tau)$,\newline \small $\tau > 0$, $f(t) = 0$ f.~$t < 0$ &$F(s) \mathrm{e}^{-s\tau}$ &Verschiebung nach rechts'
     - formalized setting:

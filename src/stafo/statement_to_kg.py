@@ -6,11 +6,25 @@ import subprocess
 import copy
 import deepdiff
 import sympy as sp
+from sympy.parsing.latex import parse_latex, parse_latex_lark
+from sympy.external import import_module
 from sympy.parsing.sympy_parser import T
 from numbers import Real
 import pyirk as p
 
+lark = import_module("lark")
+if lark:
+    from lark import Transformer, Token, Tree
+else:
+    print("lark parser not found!")
+
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
+import stafo.utils as u
+
+try:
+    ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
+except:
+    ma_path = ""
 
 
 def get_md_lines(fpath) -> list[str]:
@@ -26,6 +40,9 @@ class ConversionManager:
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
         self.eq_reference_dict = {}
+        self.ds = {}
+
+        self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
 
         if force_key_tuple is None:
             self.get_keys()
@@ -459,7 +476,7 @@ class ConversionManager:
                 new_item_name = f"it stm "
             elif len(general_statement) > 0:
                 additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
-                new_item_name = f"g stm "
+                new_item_name = f"gen stm "
             additional_content = self.get_sub_content(self.lines[i+1:])
             temp_dict = {"items": {}, "relations": {}}
             # note: statement name only allowed as first line in statement to prevent mid parsing name changes
@@ -468,7 +485,7 @@ class ConversionManager:
                 assert name_given == False, "multiple name assignments for statement is not supported"
                 new_item_name += f"{self.strip(name[0])}"
                 name_given = True
-            new_item_name +=  f" l.{i}"
+            new_item_name +=  f"l.{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 if len(full_source) > 0:
@@ -867,17 +884,17 @@ class ConversionManager:
                     context["comments"] = v["comments"]
 
                 if "formal_set" in v.keys():
-                    context["setting"] = self.get_statement_context_recursively(v[f"formal_set"])
+                    context["setting"] = self.get_statement_context_recursively(v, v[f"formal_set"])
                 elif "source_set" in v.keys():
                     context["setting"] = [f'cm1.create_expression({v["source_set"]})']
 
                 if "formal_pre" in v.keys():
-                    context["premise"] = self.get_statement_context_recursively(v[f"formal_pre"])
+                    context["premise"] = self.get_statement_context_recursively(v, v[f"formal_pre"])
                 elif "source_pre" in v.keys():
                     context["premise"] = [f'cm1.create_expression({v["source_pre"]})']
 
                 if "formal_ass" in v.keys():
-                    context["assertion"] = self.get_statement_context_recursively(v[f"formal_ass"])
+                    context["assertion"] = self.get_statement_context_recursively(v, v[f"formal_ass"])
                 elif "source_ass" in v.keys():
                     context["assertion"] = [f'cm1.create_expression({v["source_ass"]})']
                 res = render_template("statement_template.py", context)
@@ -960,7 +977,7 @@ class ConversionManager:
         del context["rel"][0] # get rid of R1, since we use the entity.update method
         return context
 
-    def get_statement_context_recursively(self, subdict:dict, recursion_depth=1):
+    def get_statement_context_recursively(self, statement_item, subdict:dict, recursion_depth=1):
         # output
         out = []
         # insertion index makes sure that item creation happens before relations are added, that reference said items
@@ -969,7 +986,7 @@ class ConversionManager:
             # if key == "other":
             if "equation" in key or "math_relation" in key:
                 if value["type"] in ["equation", "mathematical relation"]:
-                    res = self.render_math_relation(value, recursion_depth)
+                    res = self.render_math_relation(statement_item, value, recursion_depth)
                     for l in res.split("\n"):
                         # adapt equation to context manager
                         if len(l) > 0 and not "snippet" in l:
@@ -977,7 +994,7 @@ class ConversionManager:
                 else:
                     raise TypeError()
             elif "OR" in key or "AND" in key or "NOT" in key:
-                res = self.get_statement_context_recursively(subdict["items"][key], recursion_depth+1)
+                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], recursion_depth+1)
                 context = {
                     "content": res,
                     "logic_operator": key.split("_")[0],
@@ -1016,7 +1033,7 @@ class ConversionManager:
                             out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
         return out
 
-    def render_math_relation(self, eq_dict, recursion_depth):
+    def render_math_relation(self, statement_item, eq_dict, recursion_depth):
         context = {"key": eq_dict["key"], "rel": [], "rd": recursion_depth}
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
@@ -1029,16 +1046,172 @@ class ConversionManager:
         elif eq_dict["type"] == "mathematical relation":
             context["rsgn"] = f'"{eq_dict["rel_sign"]}"'
 
-        if "lhs_formal" in eq_dict.keys():
+
+
+        #! TODO WIP
+        if "lhs_formal" in eq_dict.keys() and "rhs_formal" in eq_dict.keys():
             context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"])
-        elif "lhs_source" in eq_dict.keys():
-            context["lhs_source"] = eq_dict["lhs_source"]
-        if "rhs_formal" in eq_dict.keys():
             context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"])
-        elif "rhs_source" in eq_dict.keys():
-            context["rhs_source"] = eq_dict["rhs_source"]
+        elif "lhs_source" in eq_dict.keys() and "rhs_source" in eq_dict.keys():
+            try:
+                context["lhs_formal"] = self.process_latex(statement_item, eq_dict["lhs_source"])
+                context["rhs_formal"] = self.process_latex(statement_item, eq_dict["rhs_source"])
+            except:
+                print(f"warning: rendering '{eq_dict}' failed")
+                context["lhs_source"] = eq_dict["lhs_source"]
+                context["rhs_source"] = eq_dict["rhs_source"]
+        else:
+            try:
+                context["full_source"] = self.process_latex(statement_item, eq_dict["full_source"])
+            except:
+                context["full_source"] = eq_dict["full_source"]
         res = render_template("math_relation_template.py", context)
         return res
+
+    def process_latex(self, statement_item, latex_og):
+        self.sp_to_irk_map = {
+            sp.Add: lambda *args: "(" + "+".join(args) + ")",
+            sp.Mul: lambda *args: "(" + "*".join(args) + ")",
+            sp.Pow: lambda *args: "(" + "**".join(args) + ")",
+            sp.Sum: """ma.I5441["sum over index"]""",
+            sp.Integral: """ma.I5442["general integral"]""",
+            sp.Tuple: lambda *args: tuple(args),
+            sp.Derivative: lambda *args: f"""ma.derivative({", ".join(u.flatten(args))})"""
+        }
+
+        # add local variables to lookup
+        lookup = copy.deepcopy(self.d["items"])
+        # todo this needs to be recursive if we talk about nested statements
+        for formal in ["formal_set", "formal_pre", "formal_ass"]:
+            if formal in statement_item.keys():
+                lookup.update(statement_item[formal]["items"])
+
+        # strip
+        latex = latex_og.replace('$', '')
+        latex = re.sub(r"^\\[(]", "", latex)
+        latex = re.sub(r"\\[)]$", "", latex)
+        if "=" in latex:
+            res = ""
+            for term in latex.split("="):
+                res_term = self.convert_latex_to_irklike_str(term, lookup)
+                res += res_term + "="
+            res = res[:-1] # remove last =
+        else:
+            res = self.convert_latex_to_irklike_str(latex, lookup)
+
+        return res
+
+    def convert_latex_to_irklike_str(self, latex, item_lookup):
+        # 0. convert to sympy
+        sp_expr = parse_latex_lark(latex)
+        # ambiguous result
+        if isinstance(sp_expr, Tree):
+            sp_expr = sp_expr.children[0]
+            print(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
+
+        # 1. identify smybols and function in expr
+        sp_atoms = []
+        # symbols (and numbers, will get rid of later)
+        sp_atoms.extend(list(sp_expr.atoms()))
+        # symbols that work as functions, e.g. f in f(x)
+        sp_atoms.extend([type(a) for a in list(sp_expr.atoms(sp.Function))])
+
+        # 2. map those to existing pyirk items
+
+        if not "item_symbol_map" in self.ds:
+            self.ds["item_symbol_map"] = p.aux.OneToOneMapping()
+        item_symbol_map = self.ds["item_symbol_map"]
+
+        for atom in sp_atoms:
+            if isinstance(atom, sp.Number):
+                continue
+            for key, value in item_lookup.items():
+                # todo this name compare is potentially dangerous
+                if atom.name == key:
+                    # check if item or symbol already exist in dict
+                    if value["key"] in item_symbol_map.a.keys() or atom in item_symbol_map.b.keys():
+                        old_atom = item_symbol_map.a[value["key"]]
+                        old_key = item_symbol_map.b[atom]
+                        msg = f"new (uri, symbol) pair {value['key'], atom} in collision with existing pair {old_key, old_atom}"
+                        assert old_atom == atom, msg
+                        assert old_key == value["key"], msg
+                    else:
+                        item_symbol_map.add_pair(value["key"], atom)
+                    break
+            else:
+                raise ValueError(f"no item found for {atom}")
+        # 3. traverse tree
+        res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup)
+        return res
+
+    def convert_sympy_to_irklike_str(self, sp_expr, item_lookup):
+        key_item_interpr = self.get_item_dict_key_interpreter()
+        def _get_irk_for_sp(sp_expr, args):
+            # Symbols
+            if isinstance(sp_expr, sp.Symbol):
+                # key = self.ds["item_symbol_map"].b[sp_expr]
+                # return self.build_reference(key_item_interpr[key])
+                if sp_expr.name in self.d["items"]:
+                    res = self.build_reference(sp_expr.name)
+                else:
+                    res = "cm1." + self.build_reference(sp_expr.name, local_dict={"items": item_lookup})
+                return res
+            # callable custom Funktions e.g. f(x)
+            elif isinstance(type(sp_expr), sp.core.function.UndefinedFunction):
+                # this typing is a little weird
+                # f(x) -type-> f -type-> sp.core.function.UndefinedFunction
+                sp_expr = type(sp_expr)
+                # key = self.ds["item_symbol_map"].b[sp_expr]
+                # function_type = self.build_reference(key_item_interpr[key])
+                if sp_expr.name in self.d["items"]:
+                    function_type = self.build_reference(sp_expr.name)
+                else:
+                    function_type = "cm1." + self.build_reference(sp_expr.name, local_dict={"items": item_lookup})
+                return f"""{function_type}({", ".join(args)})"""
+            # numbers
+            elif isinstance(sp_expr, (int, float, complex, sp.Number)):
+                if sp_expr == 0:
+                    return """ma.I5000["scalar zero"]"""
+                elif sp_expr == 1:
+                    return """ma.I5001["scalar one"]"""
+                else:
+                    return str(u.number_type_convert(sp_expr))
+            # callable generic function e.g. add
+            else:
+                sp_type = type(sp_expr)
+                try:
+                    irk_type = self.sp_to_irk_map[sp_type]
+                except KeyError:
+                    msg = f"For {sp_type} there is no IRK-type defined yet"
+                    raise NotImplementedError(msg)
+
+                if sp_type == sp.Sum:
+                    # sympy syntax: sp.Sum(expr, (index_var, start, stop))
+                    args = (args[0], args[1][0], f"""ma.I5440["limits"]({", ".join(args[1][1:])})""")
+                elif sp_type == sp.Integral:
+                    # sympy syntax: sp.Integral(expr, (index_var, start, stop))
+                    # limits are specified
+                    if len(args[1]) > 1:
+                        args = (args[0], args[1][0], f"""ma.I5440["limits"]({", ".join(args[1][1:])})""")
+                        irk_type = """ma.I5443["definite integral"]"""
+                    # no limits are given
+                    else:
+                        args = (args[0], args[1][0])
+                        irk_type = """ma.I5444["indefinite integral"]"""
+
+                if type(irk_type) == str:
+                    return f"""{irk_type}({", ".join(args)})"""
+                else:
+                    return irk_type(*args)
+
+        def _get_args_for_sp(sp_expr):
+            return sp_expr.args
+
+        tt = u.TreeTraverser(apply_func=_get_irk_for_sp, get_args_func=_get_args_for_sp)
+        res = tt.run(sp_expr)
+        return res
+
+
 
     def replace_expr(self, expr):
         try:

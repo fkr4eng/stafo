@@ -20,6 +20,7 @@ activate_ips_on_exception()
 
 TEST_DATA1_FPATH = os.path.join(TESTA_DATA_DIR, "statements01.md")
 TEST_DATA2_FPATH = os.path.join(TESTA_DATA_DIR, "statements02_ring.md")
+TEST_DATA3_FPATH = os.path.join(TESTA_DATA_DIR, "statements03_latex.md")
 
 # todo this is not very elegant
 MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
@@ -64,6 +65,15 @@ class Test_00_Core(unittest.TestCase):
             .object,
             mod.I2002,
         )
+
+    def test_r02__render_latex_equations(self):
+        res_mod_fpath = s2k.main(TEST_DATA3_FPATH, create_key_tuple(50))
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        int_res = """cm1.new_math_relation(lhs=cm1.F(I2005["s"]), rsgn="==", rhs=ma.I5443["definite integral"](((I2006["e"]**(-1*I2005["s"]*I2011["t"]))*cm1.f(I2011["t"])), I2011["t"], ma.I5440["limits"](ma.I5000["scalar zero"], ma.I4291["infinity"]))"""
+        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
+        self.assertIn(int_res, res)
+        self.assertIn(deriv_res, res)
 
 
 class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):

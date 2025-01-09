@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
+import sympy as sp
 
 
 # TODO: this assumes package to be installed with pip install -e .
@@ -65,3 +66,37 @@ def get_nested_value(data, keys):
         return data
     except Exception as e:
         raise e
+
+class TreeTraverser:
+    def __init__(self, apply_func, get_args_func):
+        self.apply_func = apply_func
+        self.get_args_func = get_args_func
+
+    def run(self, node):
+        args = [self.run(arg) for arg in self.get_args_func(node)]
+        return self.apply_func(node, args)
+
+def number_type_convert(n):
+    if isinstance(n, sp.Number):
+        if isinstance(n, sp.Integer):
+            return int(n)
+        elif isinstance(n, sp.Float):
+            return float(n)
+        elif isinstance(n, sp.core.numbers.Infinity):
+            return """ma.I4291["infinity"]"""
+        else:
+            raise NotImplementedError(f"sympy type {type(n)} not supported")
+    else:
+        return n
+
+def flatten(iterable):
+    ret = []
+    _unpack(ret, iterable)
+    return ret
+
+def _unpack(ret, iterable):
+    if isinstance(iterable, (tuple, list)):
+        for i in iterable:
+            _unpack(ret, i)
+    else:
+        return ret.append(iterable)

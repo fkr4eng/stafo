@@ -1,4 +1,5 @@
 {% if context.snip %}# {{context.snip}} {% endif %}
-{% if context.lhs_formal %}{{context.key}} = cm{{context.rd}}.new_math_relation(lhs={{context.lhs_formal}}, rsgn={{context.rsgn}}, rhs={{context.rhs_formal}}, force_key="{{context.key}}")
-{% else %}{{context.key}} = cm{{context.rd}}.new_math_relation(lhs=p.create_expression("{{context.lhs_source}}"), rsgn={{context.rsgn}}, rhs=p.create_expression("{{context.rhs_source}}"), force_key="{{context.key}}")
+{% if context.rhs_formal is defined %}{{context.key}} = cm{{context.rd}}.new_math_relation(lhs={{context.lhs_formal}}, rsgn={{context.rsgn}}, rhs={{context.rhs_formal}}, force_key="{{context.key}}")
+{% elif context.rhs_source is defined %}{{context.key}} = cm{{context.rd}}.new_math_relation(lhs=p.create_expression("{{context.lhs_source}}"), rsgn={{context.rsgn}}, rhs=p.create_expression("{{context.rhs_source}}"), force_key="{{context.key}}")
+{% elif context.full_source is defined %}{{context.key}} = cm{{context.rd}}.create_expression("{{context.full_source}}")
 {% endif %}
