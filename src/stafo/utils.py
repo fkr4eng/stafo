@@ -100,3 +100,8 @@ def _unpack(ret, iterable):
             _unpack(ret, i)
     else:
         return ret.append(iterable)
+
+class MyDict(dict):
+    def __missing__(self, key):
+        print(f"warning: {key} was not found, return 'ut' instead")
+        return "ut"

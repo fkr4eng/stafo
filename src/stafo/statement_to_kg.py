@@ -46,10 +46,10 @@ class ConversionManager:
         self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
         self.ocse = p.irkloader.load_mod_from_path(ocse_path, prefix="ocse", reuse_loaded=True)
 
-        self.irk_module_names = {"builtins": "p",
+        self.irk_module_names = u.MyDict({"builtins": "p",
                             "control_theory": "ct",
                             "math": "ma",
-                            "agents": "ag"}
+                            "agents": "ag"})
 
         self.entity_matching_report = ""
 
