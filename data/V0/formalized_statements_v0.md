@@ -4,6 +4,9 @@
 - There is a class: 'integer number'.
 - There is a class: 'complex number'.
 
+- 'real number' is a subclass of 'complex number'
+- 'integer number' is a subclass of 'real number'
+
 - There is a relation: 'is subset of'
 - The type of argument1 of 'is subset of' is 'set'
 - The result type of 'is subset of' is 'set'
@@ -24,6 +27,8 @@
 
 - 'e' is an instance of 'real number'
 - 'e' has the verbal description 'euler number'
+
+- There is a class 'mathematical operation'
 
 - // snippet(1)
 - New section: 'Elementare Grundbegriffe'
@@ -160,6 +165,7 @@
 
 - // snippet(18)
 - There is a class: 'Operator'
+- 'Operator' is a subclass of 'mathematical operation'
 - 'Operator' has the verbal description: 'Ein \\emph{Operator} ist eine Abbildung von einem Funktionenraum in einen anderen Funktionenraum.'
 - // I am not sure how to model 'Funktionenraum'. It seems to be a set of functions. However, I do not know how to represent this.
 - The type of argument1 of 'Operator' is 'Funktion'.
@@ -1583,7 +1589,7 @@
 - The result type of 'has set of poles' is 'set of poles'
 
 - There is a class: 'open left half plane'
-- 'open left half plane' is a subclass of 'set'
+- 'open left half plane' is an instance of 'set'
 
 
 

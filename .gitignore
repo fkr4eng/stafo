@@ -17,7 +17,7 @@ output_no_error.py
 .ac_candidates.txt
 
 ignored_content/
-
+match_history/
 snapshots/
 
 
