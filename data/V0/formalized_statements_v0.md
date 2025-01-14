@@ -40,16 +40,16 @@
 - // snippet(3)
 - There is a class: 'Steuerung'.
 - 'Steuerung' has the verbal description 'Unter einer Steuerung versteht man eine Einrichtung, die aus dem Verlauf der Sollgrößen den erforderlichen Verlauf der Stellgrößen a priori berechnet.'
-- 'Steuerung' has the alternative label 'feedforward control'
+- 'Steuerung' has the alternative english label 'feedforward control'
 
 - // snippet(4)
 - There is a class: 'Regelung'.
 - 'Regelung' has the verbal description 'Unter einer Regelung versteht man eine Einrichtung, in die die Regelgrößen zurückgeführt und in geeigneter Art und Weise ausgewertet werden. Auf Basis dieses Vergleiches erfolgt eine Korrektur der Stellgrößen, die darauf abzieht, den Verlauf der Regelgrößen dem Verlauf der Sollgrößen anzugleichen.'
-- 'Regelung' has the alternative label 'feedback control'
+- 'Regelung' has the alternative english label 'feedback control'
 
 - // snippet(5)
 - There is a class: 'Regelstrecke'.
-- 'Regelstrecke' has the alternative label 'plant'
+- 'Regelstrecke' has the alternative english label 'plant'
 
 - // snippet(6i)
 - // ignored content
@@ -85,9 +85,9 @@
 
 - // snippet(11)
 - There is a class: 'Größe'
-- 'Größe' has the alternative label 'physical quantity'
+- 'Größe' has the alternative english label 'physical quantity'
 - There is a class: 'Variable'
-- 'Variable' has the alternative label 'mathematical variable'
+- 'Variable' has the alternative english label 'mathematical variable'
 - 'Signal' is a subclass of 'Zeitlicher Verlauf'
 - There is a relation: 'beschreibt Größe'
 - The type of argument1 of 'beschreibt Größe' is 'Signal'
@@ -104,10 +104,10 @@
 
 
 - // snippet(14)
-- 'Funktion' has the alternative label 'function'
+- 'Funktion' has the alternative english label 'function'
 
 - There is a class: 'Definitionsbereich'
-- 'Definitionsbereich' has the alternative label 'domain of definition'
+- 'Definitionsbereich' has the alternative english label 'domain of definition'
 - 'Definitionsbereich' is a subclass of 'set'.
 
 - There is a relation: 'has domain'.
@@ -115,14 +115,14 @@
 - The result type of 'has domain' is 'Definitionsbereich'.
 
 - There is a class: 'Wertebereich'
-- 'Wertebereich' has the alternative label 'range'
+- 'Wertebereich' has the alternative english label 'range'
 - 'Wertebereich' is a subclass of 'set'
 - There is a relation: 'has range'.
 - The type of argument1 of 'has range' is 'Funktion'.
 - The result type of 'has range' is 'Wertebereich'.
 
 - There is a relation: 'beschreibt'
-- 'beschreibt' has the alternative label 'describes'
+- 'beschreibt' has the alternative english label 'describes'
 - The type of argument1 of 'beschreibt' is 'Funktion'.
 - The result type of 'beschreibt' is 'Signal'.
 
@@ -186,9 +186,9 @@
 
 - // snippet(21)
 - There is a class: 'abhängige Variable'
-- 'abhängige Variable' has the alternative label 'dependent variable'
+- 'abhängige Variable' has the alternative english label 'dependent variable'
 - There is a class: 'unabhängige Variable'
-- 'unabhängige Variable' has the alternative label 'independent variable'
+- 'unabhängige Variable' has the alternative english label 'independent variable'
 - There is an explanation:
     - verbal summary: 'One also says that \( x \) is the \emph{dependent variable} and \( t \) is the \emph{independent variable} and symbolizes this by \( x(t) \). Implicitly, one then assumes that there is a functional relationship between \( t \) and \( x \).'
     - related to: 'Signal'
@@ -237,7 +237,7 @@
 - // snippet(27)
 - There is a property: 'stabil'
 - There is a property: 'zeitinvariant'
-- 'zeitinvariant' has the alternative label 'time-invariant'
+- 'zeitinvariant' has the alternative english label 'time-invariant'
 - There is an if-then-statement:
     - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt: \begin{equation} \label{eq:VerschPrinzip} \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)). \end{equation}'
     - formalized setting:
@@ -265,7 +265,7 @@
 - There is a class: 'lineares Übertragungsglied'
 - There is a class: 'Gewichtsfunktion'
 - 'Gewichtsfunktion' is a subclass of 'Funktion'
-- 'Gewichtsfunktion' has the alternative label 'impulse response'
+- 'Gewichtsfunktion' has the alternative english label 'impulse response'
 - 'Gewichtsfunktion' has the verbal description 'Das Übertragungsverhalten linearer Übertragungsglieder lässt sich eindeutig durch die sogenannte \emph{Gewichtsfunktion} charakterisieren.'
 - 'Gewichtsfunktion' is associated to 'lineares Übertragungsglied'
 - // I am not sure how to model the term 'Übertragungsverhalten'. It seems to be a property of 'lineares Übertragungsglied'. However, it is not clear to me what this property represents.
@@ -281,7 +281,7 @@
 
 - // snippet(32)
 - There is a binary operator: 'Faltung'
-- 'Faltung' has the alternative label 'convolution'
+- 'Faltung' has the alternative english label 'convolution'
 - The type of argument1 of 'Faltung' is 'Gewichtsfunktion'
 - The type of argument2 of 'Faltung' is 'Eingangssignal'
 - The result type of 'Faltung' is 'Ausgangssignal'
@@ -303,11 +303,11 @@
 - 'Einheitssprung' is an instance of 'Eingangssignal'.
 - There is a class: 'Übergangsfunktion'
 - 'Übergangsfunktion' is a subclass of 'Funktion'
-- 'Übergangsfunktion' has the alternative label 'Einheitssprungantwort'
-- 'Übergangsfunktion' has the alternative label 'step response'
+- 'Übergangsfunktion' has the alternative german label 'Einheitssprungantwort'
+- 'Übergangsfunktion' has the alternative english label 'step response'
 - 'Übergangsfunktion' has the verbal description 'Etwas anschaulicher ist die \emph{Übergangsfunktion} des Übertragungsgliedes, auch \emph{Einheitssprungantwort} des Übertragungsgliedes als Reaktion auf einen Sprung des Eingangs von 0 auf 1 zum Zeitpunkt  \(t = 0\) (sog.\,\emph{Einheitssprung}) genannt.'
 - // I am not sure how to model 'als Reaktion auf einen Sprung des Eingangs von 0 auf 1 zum Zeitpunkt \(t = 0\)'. It seems to be a condition. However, it is not clear to me how to represent this condition.
-- 'Einheitssprung' has the alternative label 'unit step'
+- 'Einheitssprung' has the alternative english label 'unit step'
 - 'Einheitssprung' has the verbal description 'Sprung des Eingangs von 0 auf 1 zum Zeitpunkt \(t = 0\)'
 - 'Übergangsfunktion' has input signal 'Einheitssprung'
 - 'Übergangsfunktion' is associated to 'Übertragungsglied'
@@ -428,9 +428,9 @@
 
 - // manually added (3)
 - There is a class: 'Gleichung'
-- 'Gleichung' has the alternative label 'equation'
+- 'Gleichung' has the alternative english label 'equation'
 - There is a class: 'Gleichungssystem'
-- 'Gleichungssystem' has the alternative label 'system of equations'
+- 'Gleichungssystem' has the alternative english label 'system of equations'
 - There is a relation: 'hat Gleichung'
 - The type of argument1 of 'hat Gleichung' is 'Gleichungssystem'
 - The result type of 'hat Gleichung' is 'Gleichung'
@@ -448,7 +448,7 @@
 - There is a class 'reellwertige Funktion'
 - There is a class: 'Zeitbereich'
 - There is a unary operator: 'Zeitableitung'
-- 'Zeitableitung' has the alternative label 'time derivative'
+- 'Zeitableitung' has the alternative english label 'time derivative'
 - The type of argument1 of 'Zeitableitung' is 'reellwertige Funktion'
 - The result type of 'Zeitableitung' is 'reellwertige Funktion'
 - 'Zeitableitung' is associated to 'Zeitbereich'
@@ -532,7 +532,7 @@
 - 's' is an instance of 'complex number'
 - 's' is associated to 'Laplace Transformation'
 - There is a class: 'imaginary unit'
-- 'imaginary unit' has the alternative label 'j'
+- 'imaginary unit' has the alternative english label 'j'
 - 'imaginary unit' is an instance of 'complex number'
 - There is a general statement:
     - formalized setting:
@@ -551,9 +551,9 @@
 - 'Laplace Transformation' has the alternative associated LaTeX notation '\(F(s) = \mathcal{L}\left\{f(t)\right\}\)'
 
 - // snippet(50)
-- 'Zeitbereich' has the alternative label 'time domain'
+- 'Zeitbereich' has the alternative english label 'time domain'
 - There is a class: 'Bildbereich'
-- 'Bildbereich' has the alternative label 'image domain'
+- 'Bildbereich' has the alternative english label 'image domain'
 - 'reellwertige Funktion' is a subclass of 'Funktion'
 - 'komplexwertige Funktion' is a subclass of 'Funktion'
 - 'Zeitbereich' is associated to 'reellwertige Funktion'
@@ -610,7 +610,7 @@
 
 - // snippet(53)
 - There is a binary operator 'höhere Zeitableitung'
-- 'höhere Zeitableitung' has the alternative label 'higher order time derivative'
+- 'höhere Zeitableitung' has the alternative english label 'higher order time derivative'
 - The type of argument1 of 'höhere Zeitableitung' is 'reellwertige Funktion'
 - The type of argument2 of 'höhere Zeitableitung' is 'integer number'
 - The result type of 'höhere Zeitableitung' is 'reellwertige Funktion'
@@ -789,7 +789,7 @@
 - // snippet(61)
 - There is a class: 'Übertragungsfunktion'
 - 'Übertragungsfunktion' is a subclass of 'komplexwertige Funktion'
-- 'Übertragungsfunktion' has the alternative label 'transfer function'
+- 'Übertragungsfunktion' has the alternative english label 'transfer function'
 - 'Übertragungsfunktion' has the associated LaTeX notation  'G(s)'
 - 'Übertragungsfunktion' has the verbal description 'Diesen Ausdruck bezeichnet man als \emph{Übertragungsfunktion} des durch die Dgl.~\eqref{eq:DglAllgemeinLinear} beschriebenen linearen Übertragungsgliedes.'
 - 'Übertragungsfunktion' is associated to 'lineares Übertragungsglied'
@@ -849,14 +849,14 @@
 
 - // manually added (4)
 - There is a class: 'Zähler'
-- 'Zähler' has the alternative label 'numerator'
+- 'Zähler' has the alternative english label 'numerator'
 - There is a relation: 'hat Zähler'
 - The type of argument1 of 'hat Zähler' is 'Funktion'
 - The result type of 'hat Zähler' is 'Zähler'
 - 'hat Zähler' is functional
 
 - There is a class: 'Nenner'
-- 'Nenner' has the alternative label 'denominator'
+- 'Nenner' has the alternative english label 'denominator'
 - There is a relation: 'hat Nenner'
 - The type of argument1 of 'hat Nenner' is 'Funktion'
 - The result type of 'hat Nenner' is 'Nenner'
@@ -870,7 +870,7 @@
 
 - // snippet(65)
 - There is a unary operator: 'charakteristisches Polynom'
-- 'charakteristisches Polynom' has the alternative label 'characteristic polynomial'
+- 'charakteristisches Polynom' has the alternative english label 'characteristic polynomial'
 - 'charakteristisches Polynom' is associated to 'Übertragungsfunktion'
 - The type of argument1 of 'charakteristisches Polynom' is 'Übertragungsfunktion'
 - The result type of 'charakteristisches Polynom' is 'Polynom'
@@ -885,40 +885,40 @@
             - formalized left hand side: 'N1'
             - formalized right hand side: 'charakteristisches Polynom'('G')
 - There is a class: 'Nullstelle'
-- 'Nullstelle' has the alternative label 'zero'
+- 'Nullstelle' has the alternative english label 'zero'
 - There is a relation: 'hat Nullstelle'
-- 'hat Nullstelle' has the alternative label 'has zero'
+- 'hat Nullstelle' has the alternative english label 'has zero'
 - The type of argument1 of 'hat Nullstelle' is 'Übertragungsfunktion'
 - The result type of 'hat Nullstelle' is 'Nullstelle'
 - 'Nullstelle' has the verbal description 'Die Nullstellen des Zählers von  \(G(s)\) werden als \emph{Nullstellen} der Übertragungsfunktion bezeichnet'
 - There is a class: 'Polstelle'
-- 'Polstelle' has the alternative label 'Pol'
-- 'Polstelle' has the alternative label 'pole'
+- 'Polstelle' has the alternative german label 'Pol'
+- 'Polstelle' has the alternative english label 'pole'
 - There is a relation: 'hat Polstelle'
-- 'hat Polstelle' has the alternative label 'has pole'
+- 'hat Polstelle' has the alternative english label 'has pole'
 - The type of argument1 of 'hat Polstelle' is 'Übertragungsfunktion'
 - The result type of 'hat Polstelle' is 'Polstelle'
 - 'Polstelle' has the verbal description 'die Nullstellen des Nenners von  \(G(s)\) (= des charakteristischen Polynoms) als \emph{Polstellen} oder \emph{Pole} der Übertragungsfunktion.'
 
 - // manually added (5)
 - There is a unary operator: 'Re'
-- 'Re' has the alternative label 'Realteil'
-- 'Re' has the alternative label 'real part'
+- 'Re' has the alternative german label 'Realteil'
+- 'Re' has the alternative english label 'real part'
 - The type of argument1 of 'Re' is 'complex number'
 - The result type of 'Re' is 'real number'
 
 - There is a unary operator: 'Im'
-- 'Im' has the alternative label 'Imaginärteil'
-- 'Im' has the alternative label 'imaginary part'
+- 'Im' has the alternative german label 'Imaginärteil'
+- 'Im' has the alternative english label 'imaginary part'
 - The type of argument1 of 'Im' is 'complex number'
 - The result type of 'Im' is 'real number'
 
 
 - // snippet(66)
 - There is a property: 'instabil'
-- 'instabil' has the alternative label 'unstable'
+- 'instabil' has the alternative english label 'unstable'
 - 'instabil' is applicable to 'Übertragungsglied'
-- 'stabil' has the alternative label 'unstable'
+- 'stabil' has the alternative english label 'unstable'
 - 'stabil' is applicable to 'Übertragungsglied'
 - There is a general statement:
     - full source code: 'Die Polstellen sind entscheidend für das Stabilitätsverhalten des durch  \(G(s)\) repräsentierten Systems: Ist der Realteil mindestens einer Polstelle größer oder gleich null, so ist das System instabil.'
@@ -938,8 +938,8 @@
 
 - // snippet(67)
 - There is a relation: 'hat relativen Grad'
-- 'hat relativen Grad' has the alternative label 'hat Polüberschuss'
-- 'hat relativen Grad' has the alternative label 'has relative degree'
+- 'hat relativen Grad' has the alternative german label 'hat Polüberschuss'
+- 'hat relativen Grad' has the alternative english label 'has relative degree'
 - The type of argument1 of 'hat relativen Grad' is 'Übertragungsfunktion'
 - The result type of 'hat relativen Grad' is 'integer number'
 - 'hat relativen Grad' is functional
@@ -965,7 +965,7 @@
 
 - // snippet(68)
 - There is a property: 'streng proper'
-- 'streng proper' has the alternative label 'strictly proper'
+- 'streng proper' has the alternative english label 'strictly proper'
 - 'streng proper' is applicable to 'Übertragungsfunktion'
 - There is an if-then-statement:
     - formalized setting:
@@ -1012,7 +1012,7 @@
 
 - // snippet(69)
 - There is a property: 'differenzierend'
-- 'differenzierend' has the alternative label 'differentiating'
+- 'differenzierend' has the alternative english label 'differentiating'
 - 'differenzierend' is applicable to 'Übertragungsfunktion'
 - There is an if-then-statement:
     - formalized setting:
@@ -1034,7 +1034,7 @@
 - // ignored content
 - // snippet(73)
 - There is a class: 'Bildfunktion'
-- 'Bildfunktion' has the alternative label 'image function'
+- 'Bildfunktion' has the alternative english label 'image function'
 - 'Bildfunktion' is a subclass of 'komplexwertige Funktion'
 - There is a relation: 'hat Bildfunktion'
 - The type of argument1 of 'hat Bildfunktion' is 'Funktion'
@@ -1062,10 +1062,10 @@
 
 - // snippet(74)
 - There is a class: 'Regeldifferenz'
-- 'Regeldifferenz' has the alternative label 'control error'
+- 'Regeldifferenz' has the alternative english label 'control error'
 - 'Regeldifferenz' has the associated LaTeX notation '\(e(t)\)'
 - There is a class: 'bleibende Regelabweichung'
-- 'bleibende Regelabweichung' has the alternative label 'steady-state error'
+- 'bleibende Regelabweichung' has the alternative english label 'steady-state error'
 - 'bleibende Regelabweichung' has the associated LaTeX notation '\(e_\infty\)'
 - 'bleibende Regelabweichung' has the verbal description '... der Wert  \(e_\infty\) der Regelabweichung, welcher sich für große  \(t\) einstellt'
 - There is a relation 'hat bleibende Regelabweichung'
@@ -1099,7 +1099,7 @@
 - 'lineare zeitinvariante Übertragungsglieder' is a subclass of 'lineares Übertragungsglied'
 - 'lineare zeitinvariante Übertragungsglieder' has the property 'zeitinvariant'
 - There is a class: 'Frequenzgang'
-- 'Frequenzgang' has the alternative label 'frequency response'
+- 'Frequenzgang' has the alternative english label 'frequency response'
 - There is a relation: 'hat Frequenzgang'
 - The type of argument1 of 'hat Frequenzgang' is 'lineare zeitinvariante Übertragungsglieder'
 - The result type of 'hat Frequenzgang' is 'Frequenzgang'
@@ -1129,12 +1129,12 @@
 - New section: 'Die Sprungantwort'
 - There is a class: 'Sprungantwort'
 - 'Sprungantwort' is a subclass of 'Ausgangssignal'
-- 'Sprungantwort' has the alternative label 'step response'
+- 'Sprungantwort' has the alternative english label 'step response'
 
 - // snippet(80)
 - 'Sprungantwort' has the verbal description: 'Der Verlauf der Ausgangsgröße  \(\nu\) eines Systems als Reaktion auf eine sprungförmige Änderung des Eingangs  \(u\) wird \emph{Sprungantwort} genannt.'
 - There is a class: 'Sprung'
-- 'Sprung' has the alternative label 'step'
+- 'Sprung' has the alternative english label 'step'
 - 'Sprung' is a subclass of 'Signal'
 - 'Sprung' has the associated LaTeX notation: '\(1/s\)'
 - There is a general statement:
@@ -1151,8 +1151,8 @@
 
 - // snippet(81)
 - There is a class: 'Gleichgewichtszustand'
-- 'Gleichgewichtszustand' has the alternative label 'Ruhelage'
-- 'Gleichgewichtszustand' has the alternative label 'equilibrium state'
+- 'Gleichgewichtszustand' has the alternative german label 'Ruhelage'
+- 'Gleichgewichtszustand' has the alternative english label 'equilibrium state'
 - There is a general statement:
     - full source code: 'Dabei wird davon ausgegangen, dass sich das Übertragungsglied zunächst im Gleichgewichtszustand (in einer Ruhelage) befindet, der Ausgang also den konstanten Wert  \(V_0\) und der Eingang den konstanten Wert  \(U_0\) habe. Zum Zeitpunkt  \(t_0\) springt der Eingang dann um  \(U_S\) auf den Wert  \(U_\infty\)'
     - formalized setting:
@@ -1206,7 +1206,7 @@
 
 - // snippet(85)
 - There is a class: 'Einheitssprungantwort'
-- 'Einheitssprungantwort' has the alternative label 'unit step response'
+- 'Einheitssprungantwort' has the alternative english label 'unit step response'
 - 'Einheitssprungantwort' is a subclass of 'Sprungantwort'
 - There is a general statement:
     - full source code: 'Auf einen Einheitssprung reagieren lineare zeitinvariante Systeme mit der \emph{Übergangsfunktion} $h$.'
@@ -1255,17 +1255,17 @@
 - There is a property 'hat stationären Endwert'
 - 'hat stationären Endwert' is applicable to 'Übertragungsglied'
 - There is a class: 'integrierend wirkende Strecke'
-- 'integrierend wirkende Strecke' has the alternative label 'Strecke ohne Ausgleich'
-- 'integrierend wirkende Strecke' has the alternative label 'Integrale Strecke'
-- 'integrierend wirkende Strecke' has the alternative label 'Strecke mit I-Verhalten'
-- 'integrierend wirkende Strecke' has the alternative label 'I-Strecke'
+- 'integrierend wirkende Strecke' has the alternative german label 'Strecke ohne Ausgleich'
+- 'integrierend wirkende Strecke' has the alternative german label 'Integrale Strecke'
+- 'integrierend wirkende Strecke' has the alternative german label 'Strecke mit I-Verhalten'
+- 'integrierend wirkende Strecke' has the alternative german label 'I-Strecke'
 - 'integrierend wirkende Strecke' is a subclass of 'Übertragungsglied'
 - 'integrierend wirkende Strecke' does not have the property 'hat stationären Endwert'
 - There is a class: 'proportional wirkende Strecke'
-- 'proportional wirkende Strecke' has the alternative label 'Strecke mit Ausgleich'
-- 'proportional wirkende Strecke' has the alternative label 'Proportionalstrecke'
-- 'proportional wirkende Strecke' has the alternative label 'Strecke mit P-Verhalten'
-- 'proportional wirkende Strecke' has the alternative label 'P-Strecke'
+- 'proportional wirkende Strecke' has the alternative german label 'Strecke mit Ausgleich'
+- 'proportional wirkende Strecke' has the alternative german label 'Proportionalstrecke'
+- 'proportional wirkende Strecke' has the alternative german label 'Strecke mit P-Verhalten'
+- 'proportional wirkende Strecke' has the alternative german label 'P-Strecke'
 - 'proportional wirkende Strecke' is a subclass of 'Übertragungsglied'
 - 'proportional wirkende Strecke' has the property 'hat stationären Endwert'
 - There is a class: 'allpasshaltige Strecke'
@@ -1354,42 +1354,42 @@
 - // snippet(92i)
 - // ignored content
 - // snippet(93)
-- 'Eingangssignal' has the alternative label 'input variable'
+- 'Eingangssignal' has the alternative english label 'input variable'
 - 'Eingangssignal' has the associated LaTeX notation '\(u\)'
-- 'Ausgangssignal' has the alternative label 'output variable'
+- 'Ausgangssignal' has the alternative english label 'output variable'
 - 'Ausgangssignal' has the associated LaTeX notation '\(\nu\)'
 - There is a class: 'Anfangswert der Eingangsgröße'
-- 'Anfangswert der Eingangsgröße' has the alternative label 'initial value of the input variable'
+- 'Anfangswert der Eingangsgröße' has the alternative english label 'initial value of the input variable'
 - 'Anfangswert der Eingangsgröße' has the associated LaTeX notation '\(U_0\)'
 - There is a class: 'Sprunghöhe der Eingangsgröße'
-- 'Sprunghöhe der Eingangsgröße' has the alternative label 'step height of the input variable'
+- 'Sprunghöhe der Eingangsgröße' has the alternative english label 'step height of the input variable'
 - 'Sprunghöhe der Eingangsgröße' has the associated LaTeX notation '\(U_S\)'
 - // I am unsure how to model 'Werte der Ausgangsgröße im Beharrungszustand vor und nach dem Sprung'. It seems to be a pair of values. However, it is not clear to me how to represent this.
 - There is a class: 'Überschwingweite'
 - 'Überschwingweite' is a subclass of 'real number'
-- 'Überschwingweite' has the alternative label 'overshoot'
+- 'Überschwingweite' has the alternative english label 'overshoot'
 - 'Überschwingweite' has the associated LaTeX notation '\(\nu_m\)'
 - There is a relation: 'hat Überschwingweite'
 - The type of argument1 of 'hat Überschwingweite' is 'Sprungantwort'.
 - The result type of 'hat Überschwingweite' is 'Überschwingweite'.
 - There is a class: 'Toleranzbereich'
 - 'Toleranzbereich' is a subclass of 'real number'
-- 'Toleranzbereich' has the alternative label 'specified tolerance limit'
+- 'Toleranzbereich' has the alternative english label 'specified tolerance limit'
 - 'Toleranzbereich' has the associated LaTeX notation '\(2\cdot\Delta\nu_{s}\)'
 - There is a class: 'Totzeit'
-- 'Totzeit' has the alternative label 'dead-time'
+- 'Totzeit' has the alternative english label 'dead-time'
 - 'Totzeit' has the associated LaTeX notation '\(T_t\)'
 - There is a relation: 'hat Totzeit'
 - The type of argument1 of 'hat Totzeit' is 'Sprungantwort'.
 - The result type of 'hat Totzeit' is 'Totzeit'.
 - There is a class: 'Anschwingzeit'
-- 'Anschwingzeit' has the alternative label 'step response time'
+- 'Anschwingzeit' has the alternative english label 'step response time'
 - 'Anschwingzeit' has the associated LaTeX notation '\(T_{sr}\)'
 - There is a relation: 'hat Anschwingzeit'
 - The type of argument1 of 'hat Anschwingzeit' is 'Sprungantwort'.
 - The result type of 'hat Anschwingzeit' is 'Anschwingzeit'.
 - There is a class: 'Einschwingzeit'
-- 'Einschwingzeit' has the alternative label 'settling time'
+- 'Einschwingzeit' has the alternative english label 'settling time'
 - 'Einschwingzeit' has the associated LaTeX notation '\(T_s\)'
 - There is a relation: 'hat Einschwingzeit'
 - The type of argument1 of 'hat Einschwingzeit' is 'Sprungantwort'.
@@ -1405,10 +1405,10 @@
     - related to: 'Sprungantwort'
 - // I am unsure how to model the reference to the figure.
 - There is a property: 'schwingungsfähig'
-- 'schwingungsfähig' has the alternative label 'oscillatory'
+- 'schwingungsfähig' has the alternative english label 'oscillatory'
 - 'schwingungsfähig' is applicable to 'Übertragungsglied'
 - There is a property: 'nicht schwingungsfähig'
-- 'nicht schwingungsfähig' has the alternative label 'non-oscillatory'
+- 'nicht schwingungsfähig' has the alternative english label 'non-oscillatory'
 - 'nicht schwingungsfähig' is applicable to 'Übertragungsglied'
 - There is an if-then-statement:
     - full source code: 'Es kommt zu einem Überschwingen der Ausgangsgröße, danach pendelt sich der stationäre Endwert langsam ein. Es handelt sich um ein sogenanntes \emph{schwingungsfähiges} System.'
@@ -1546,8 +1546,8 @@
 
 - // snippet(102)
 - There is a class: 'Verzögerungszeit'
-- 'Verzögerungszeit' has the alternative label 'Zeitkonstante'
-- 'Verzögerungszeit' has the alternative label 'time constant'
+- 'Verzögerungszeit' has the alternative german label 'Zeitkonstante'
+- 'Verzögerungszeit' has the alternative english label 'time constant'
 - 'Verzögerungszeit' has the associated LaTeX notation 'tau'
 - There is a relation: 'hat Verzögerungszeit'
 - The type of argument1 of 'hat Verzögerungszeit' is 'Sprungantwort'
@@ -1627,7 +1627,7 @@
 
 - // snippet(107)
 - There is a class: 'Wendezeit'
-- 'Wendezeit' has the alternative label 'inflection time'
+- 'Wendezeit' has the alternative english label 'inflection time'
 - 'Wendezeit' has the associated LaTeX notation '\(T_w\)'
 - There is a relation: 'hat Wendezeit'
 - The type of argument1 of 'hat Wendezeit' is 'Sprungantwort'
@@ -1733,19 +1733,19 @@
 
 - // snippet(109)
 - There is a class: 'Verzugszeit'
-- 'Verzugszeit' has the alternative label 'equivalent dead time'
+- 'Verzugszeit' has the alternative english label 'equivalent dead time'
 - 'Verzugszeit' has the associated LaTeX notation '\(T_e\)'
 - There is a relation: 'hat Verzugszeit'
 - The type of argument1 of 'hat Verzugszeit' is 'Sprungantwort'
 - The result type of 'hat Verzugszeit' is 'Verzugszeit'
 - There is a class: 'Ausgleichszeit'
-- 'Ausgleichszeit' has the alternative label 'equivalent time constant'
-- 'Ausgleichszeit' has the alternative label 'balancing time'
+- 'Ausgleichszeit' has the alternative english label 'equivalent time constant'
+- 'Ausgleichszeit' has the alternative english label 'balancing time'
 - 'Ausgleichszeit' has the associated LaTeX notation '\(T_b\)'
 - There is a relation: 'hat Ausgleichszeit'
 - The type of argument1 of 'hat Ausgleichszeit' is 'Sprungantwort'
 - The result type of 'hat Ausgleichszeit' is 'Ausgleichszeit'
-- 'Wendepunkt' has the alternative label 'inflection point'
+- 'Wendepunkt' has the alternative english label 'inflection point'
 - 'Wendepunkt' has the associated LaTeX notation '\(P\)'
 
 - // snippet(110)
@@ -1860,17 +1860,17 @@
 
 - // snippet(116)
 - There is a class: 'Regelgröße'
-- 'Regelgröße' has the alternative label 'controlled variable'
+- 'Regelgröße' has the alternative english label 'controlled variable'
 - 'Regelgröße' has the associated LaTeX notation '\(x\)'
 - There is a class: 'Gleichgewichtswert der Regelgröße'
 - 'Gleichgewichtswert der Regelgröße' has the associated LaTeX notation '\(X_0\)'
 - There is a class: 'Führungsgröße'
-- 'Führungsgröße' has the alternative label 'reference variable'
+- 'Führungsgröße' has the alternative english label 'reference variable'
 - 'Führungsgröße' has the associated LaTeX notation '\(w\)'
 - There is a class: 'Gleichgewichtswert der Führungsgröße'
 - 'Gleichgewichtswert der Führungsgröße' has the associated LaTeX notation '\(W_0\)'
 - There is a class: 'Sollwert'
-- 'Sollwert' has the alternative label 'desired value'
+- 'Sollwert' has the alternative english label 'desired value'
 - 'Sollwert' has the associated LaTeX notation '\(X_d\)'
 - There is a class: 'Führungssprungantwort'
 - 'Führungssprungantwort' has the verbal description '... die Reaktion der Regelgröße  \(x\) ausgehend vom Gleichgewichtswert  \(X_0\) auf eine sprungförmige Änderung der Führungsgröße  \(w\) vom Gleichgewichtswert  \(W_0\) auf den Sollwert  \(X_d\), die sog.\,Führungssprungantwort'
@@ -1882,10 +1882,10 @@
 
 - // snippet(118)
 - There is a class: 'Störgröße'.
-- 'Störgröße' has the alternative label 'disturbance variable'.
+- 'Störgröße' has the alternative english label 'disturbance variable'.
 - 'Störgröße' has the associated LaTeX notation '\(z\)'.
 - There is a class: 'Abweichung im Beharrungszustand'.
-- 'Abweichung im Beharrungszustand' has the alternative label 'steady state deviation'.
+- 'Abweichung im Beharrungszustand' has the alternative english label 'steady state deviation'.
 - 'Abweichung im Beharrungszustand' has the associated LaTeX notation '\(\Delta X_\infty\)'.
 - There is a relation: 'hat Abweichung im Beharrungszustand'.
 - The type of argument1 of 'hat Abweichung im Beharrungszustand' is 'Regelgröße'.
@@ -1893,14 +1893,14 @@
 - 'Überschwingweite' has the alternative associated LaTeX notation '\(x_{m}\)'.
 - 'Toleranzbereich' has the alternative associated LaTeX notation '\(2\cdot\Delta x_{s}\)'.
 - There is a class: 'Anregelzeit'.
-- 'Anregelzeit' has the alternative label 'control rise time'.
+- 'Anregelzeit' has the alternative english label 'control rise time'.
 - 'Anregelzeit' has the associated LaTeX notation '\(T_{cr}\)'.
 - 'Anregelzeit' has the verbal description 'Zeit, bis Regelgröße das erste Mal (nach Verlassen) wieder in das Toleranzband einläuft'.
 - There is a relation: 'hat Anregelzeit'.
 - The type of argument1 of 'hat Anregelzeit' is 'Regelgröße'.
 - The result type of 'hat Anregelzeit' is 'Anregelzeit'.
 - There is a class: 'Ausregelzeit'.
-- 'Ausregelzeit' has the alternative label 'control settling time'.
+- 'Ausregelzeit' has the alternative english label 'control settling time'.
 - 'Ausregelzeit' has the associated LaTeX notation '\(T_{cs}\)'.
 - 'Ausregelzeit' has the verbal description 'Zeit, bis Regelgröße das erste Mal (nach Verlassen) dauerhaft im Toleranzband verbleibt'.
 - There is a relation: 'hat Ausregelzeit'.
