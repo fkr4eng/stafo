@@ -36,6 +36,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> is associated to <arg2>.
 - <arg1> has an alternative german label <arg2>.
 
+Behind the definition of new objects, such as class, property, relation, unary operator, binary operator, you specify the language the name is in by adding @en for english and @de for german.
 
 ## Complex Formalized Statements
 
@@ -117,7 +118,7 @@ The following Complex Formalized Statements are allowed:
     - source code of right hand side: <arg3>.
     - formalized left hand side: <expression1>
     - formalized right hand side: <expression2>.
-    - // for the formalized expression, the following symbols are allowed: + (addition), - (subtraction), * (multiplication), / (division), ^ (power)
+    - // for the formalized expression, the following symbols are allowed: + (addition), - (subtraction), * (multiplication), / (division), ** (power)
 
 - // The following equation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
 - There is a system of equations:

@@ -50,7 +50,7 @@ class ConversionManager:
                             "control_theory": "ct",
                             "math": "ma",
                             "agents": "ag"})
-
+        self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
 
         if force_key_tuple is None:
@@ -78,7 +78,7 @@ class ConversionManager:
                 new.append(self.strip(v))
             return tuple(new)
         elif isinstance(s, str):
-            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "")
+            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "").rstrip()
         else:
             raise TypeError(s)
 
@@ -193,6 +193,18 @@ class ConversionManager:
                     "R22": True,
                     "prefix": "p",
                 },
+                "has english label": {
+                    "key": "R1__en",
+                    "R1": "has label  en",
+                    "R22": True,
+                    "prefix": "p",
+                },
+                "has german label": {
+                    "key": "R1__de",
+                    "R1": "has label  de",
+                    "R22": True,
+                    "prefix": "p",
+                },
                 "has the verbal description": {
                     "key": "R2",
                     "R1": "has description",
@@ -280,10 +292,17 @@ class ConversionManager:
                     "R1": "does not have property",
                     "prefix": "p",
                 },
-                "has the alternative label": {
-                    "key": "R77",
-                    "R1": "has alternative label",
+                "has the alternative german label": {
+                    "key": "R77__de",
+                    "R1": "has alternative label  de",
                     "prefix": "p",
+                    "render": "R77__has_alternative_label__de",
+                },
+                "has the alternative english label": {
+                    "key": "R77__en",
+                    "R1": "has alternative label  en",
+                    "prefix": "p",
+                    "render": "R77__has_alternative_label__en",
                 },
                 "is associated to": {
                     "key": "R58",
@@ -315,7 +334,8 @@ class ConversionManager:
             "alternative verbal description?
         """
         for key, value in self.d["relations"].items():
-            self.d["relations"][key]["render"] = f'{value["key"]}__{value["R1"].replace(" ", "_")}'
+            if not "render" in self.d["relations"][key].keys():
+                self.d["relations"][key]["render"] = f'{value["key"]}__{value["R1"].replace(" ", "_")}'
 
 
         self.comment_pattern = re.compile(r"- //")
@@ -395,6 +415,16 @@ class ConversionManager:
         Returns:
             dict: current dict d
         """
+        # first check for language indicator
+        lang_pat = re.compile(r"(?<=@)\w\w")
+        res = re.findall(lang_pat, line)
+        if res:
+            language = res[0]
+            line = line.split("@")[0]
+        else:
+            language = self.default_language
+
+
         comment = re.findall(self.comment_pattern, line)
         new_section = re.findall(self.new_section_pattern, line)
         new_class = re.findall(self.class_pattern, line)
@@ -416,7 +446,7 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 1286
+        self.stop_at_line = 903
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -426,19 +456,19 @@ class ConversionManager:
             return d
         # new class?
         elif len(new_class) > 0:
-            self.add_new_item(d, self.strip(new_class[0]), {"R4": 'p.I2["Metaclass"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(d, self.strip(new_class[0]), language, {"R4": 'p.I2["Metaclass"]'}, skip_entity_order=skip_entity_order)
         # new property?
         elif len(new_property) > 0:
-            self.add_new_item(d, self.strip(new_property[0]), {"R4": 'p.I54["mathematical property"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(d, self.strip(new_property[0]), language, {"R4": 'p.I54["mathematical property"]'}, skip_entity_order=skip_entity_order)
         # new relation?
         elif len(new_relation) > 0:
-            self.add_new_rel(d, self.strip(new_relation[0]))
+            self.add_new_rel(d, self.strip(new_relation[0]), language)
         elif len(new_general_operator) > 0:
-            self.add_new_item(d, self.strip(new_general_operator[0]), {"R3": 'p.I6["mathematical operation"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(d, self.strip(new_general_operator[0]), language, {"R3": 'p.I6["mathematical operation"]'}, skip_entity_order=skip_entity_order)
         elif len(new_unary_operator) > 0:
-            self.add_new_item(d, self.strip(new_unary_operator[0]), {"R4": 'p.I7["mathematical operation with arity 1"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(d, self.strip(new_unary_operator[0]), language, {"R4": 'p.I7["mathematical operation with arity 1"]'}, skip_entity_order=skip_entity_order)
         elif len(new_binary_operator) > 0:
-            self.add_new_item(d, self.strip(new_binary_operator[0]), {"R4": 'p.I8["mathematical operation with arity 2"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(d, self.strip(new_binary_operator[0]), language, {"R4": 'p.I8["mathematical operation with arity 2"]'}, skip_entity_order=skip_entity_order)
         elif len(type_of_arg_1) > 0:
             # todo R8, R9, R11 should just be in general relation parsing instead of here
             arg1, arg2 = self.strip(type_of_arg_1[0])
@@ -566,7 +596,7 @@ class ConversionManager:
                 for index, diff in enumerate(diff_list):
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
-            d = self.add_new_item(d, new_item_name, additional_context, skip_entity_order=skip_entity_order)
+            d = self.add_new_item(d, new_item_name, language, additional_context, skip_entity_order=skip_entity_order)
             # this should not be used any other way, but just to be sure, reset this
             self.new_item_name = None
         elif len(explanation) > 0:
@@ -607,13 +637,52 @@ class ConversionManager:
                             arg2 = self.eq_reference_dict[arg2]["key"]
                     # instance of
                     if v["key"] == "R4":
-                        self.add_new_item(d, arg1, {"R3": None, "R4": arg2}, skip_entity_order=skip_entity_order)
+                        self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, skip_entity_order=skip_entity_order)
                     # subclass of
                     elif v["key"] == "R3":
-                        self.add_new_item(d, arg1, {"R3": arg2, "R4": None}, skip_entity_order=skip_entity_order)
+                        self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None}, skip_entity_order=skip_entity_order)
+                    # alternative label
+                    elif "R77" in v["key"]:
+                        if arg1 in d["items"]:
+                            tag = "items"
+                        elif arg1 in d["relations"]:
+                            tag = "relations"
+                        else:
+                            raise ParserError(f"{arg1} is neider item nor relation in d")
+
+                        # try to match alternative label with existing KG
+                        existing_item = p.ds.get_item_by_label(arg2)
+                        # automatically created items don't count
+                        if existing_item and "a" in existing_item.short_key:
+                            existing_item = None
+                        if existing_item:
+                            key = existing_item.short_key
+                            prefix = self.irk_module_names[existing_item.base_uri.split('/')[-1]]
+                            self.entity_matching_report += f"matched '{arg1}' with {prefix}.{key}[{existing_item.R1}]\n"
+                            # now we need to replace the old key from the item declaration order with the existing key
+                            self.entity_order.remove(d[tag][arg1]["key"])
+                            self.entity_order.append(key)
+                            d[tag][arg1]["key"] = key
+                            d[tag][arg1]["R1"] = existing_item.R1.value
+                            d[tag][arg1]["prefix"] = prefix
+                            # add the alternative label in the correct language
+                            if existing_item.__getattr__(f"R1__has_label__{language}") is None:
+                                # d[tag][arg1][f"R77__{language}"] = arg1
+                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1)
+                            # remove default R4 typing and possible duplicate types
+                            r4_label = d[tag][arg1]["R4"].split('"')[1]
+                            if "Metaclass" in d[tag][arg1]["R4"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
+                                del d[tag][arg1]["R4"]
+
+                        else:
+                            # previously only different language tag added
+                            if not "R1" in d[tag][arg1].keys() and language == self.default_language:
+                                d[tag][arg1]["R1"] = arg1
+                            else:
+                                self.add_relation_inplace(d[tag][arg1], v["key"], arg2)
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
-                            self.add_new_item(d, arg1, skip_entity_order=skip_entity_order)
+                            self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
                             print(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
@@ -643,50 +712,6 @@ class ConversionManager:
                     elif v["key"] == "R37":
                         # resolve if this is def for property or concept or something else?
                         raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
-                        process_next_line = True
-                        additional_content = []
-                        k = i
-                        additional_context = {"R4": 'p.I20["mathematical definition"]'}
-                        while process_next_line:
-                            k += 1
-                            if self.lines[k].startswith(" ") and "-" in self.lines[k]:
-                                additional_content.append(self.lines[k])
-                            else:
-                                process_next_line = False
-                                #todo this could result in problem, if definition is last in file with no new line at end
-                        # setting
-                        # todo this data structure should be a list rather than dict for if there are multiple lines in scope
-                        try:
-                            obj_type = self.d["items"][arg1][self.applicable_to_key]
-                            s = obj_type.split('"')[1]
-                            p = "p.uq_instance_of"
-                            o = obj_type
-                        except KeyError:
-                            s = "obj"
-                            p = "p.instance_of"
-                            o = 'p.I12["mathematical object"]'
-                            print(f"pls check def: {i, line, additional_content, additional_context}")
-                        additional_context["setting"] = {"s": s, "p": p, "o": o}
-                        # premise
-                        ## with this temp dict, we cover the non existing subject 'arg1' that refers to the subject in setting
-                        temp_dict = None
-                        if any(["arg1" in s for s in additional_content]):
-                            temp_dict = {"items": {"arg1": {}}, "relations": {}}
-                        additional_context["premise"] = self.recurse_nested_statements(additional_content, i, temp_dict)
-                        # assertion
-                        if self.d["items"][arg1]["R4"] == 'p.I54["mathematical property"]':
-                            p = 'p.R16["has property"]'
-                        else:
-                            raise NotImplementedError()
-                            # p = 'p.R30["is secondary instance of"]'
-                            # print(f"pls check def: {i, line, additional_content, p}") # todo does this make sense?
-                        o = f'{self.d["items"][arg1]["key"]}["{arg1}"]'
-                        additional_context["assertion"] = {"s": s, "p": p, "o": o}
-
-                        new_item_name = f"definition of {arg1}"
-                        d = self.add_new_item(d, new_item_name, additional_context)
-                        d["items"][arg1][v["key"]] = self.build_reference(new_item_name)
-                        break
                     else:
                         print(f"maybe? not processed line {i}: {line}")
 
@@ -695,7 +720,14 @@ class ConversionManager:
 
         return d
 
-    def add_new_item(self, d, label, additional_relations:dict={}, skip_entity_order=False):
+    def get_r1_key(self, language, force_suffix=False):
+        if language != self.default_language or force_suffix:
+            r1_key = f"R1__{language}"
+        else:
+            r1_key = "R1"
+        return r1_key
+
+    def add_new_item(self, d, label, language, additional_relations:dict={}, skip_entity_order=False):
         prefix = False
         # check if item already exists in KG
         existing_item = p.ds.get_item_by_label(label)
@@ -711,7 +743,11 @@ class ConversionManager:
             key = self.item_keys.pop()
 
         if label not in d["items"].keys():
-            d["items"][label] = {"key": key, "R1": label, "snip": self.current_snippet, "prefix": prefix}
+            r1_key = self.get_r1_key(language)
+            d["items"][label] = {"key": key, r1_key: label, "snip": self.current_snippet, "prefix": prefix}
+            # also add R1 key for internal referencing, even though it might not be the desired language
+            if "R1" not in d["items"][label].keys():
+                d["items"][label]["R1"] = label
         else:
             key = d["items"][label]["key"]
         for k, v in additional_relations.items():
@@ -719,10 +755,8 @@ class ConversionManager:
                 irk_label = v.split('"')[1] # todo this should be try-except-ed
                 v_item = p.ds.get_item_by_label(irk_label)
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
-                #! the default typing is sometimes incorrect, therefore is instance and is subclass might throw exc.
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
                     continue
-                    # if new and old information is the same, just skip
                     try:
                         if p.is_subclass_of(existing_item, v_item):
                             continue
@@ -745,7 +779,7 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_new_rel(self, d, label, additional_relations:dict={}):
+    def add_new_rel(self, d, label, language, additional_relations:dict={}):
         prefix = False
         # check if relation already exists in KG
         existing_rel = p.ds.get_item_by_label(label.lower())
@@ -758,9 +792,10 @@ class ConversionManager:
             key = self.relation_keys.pop()
 
         if label not in d["relations"].keys():
+            r1_key = self.get_r1_key(language)
             d["relations"][label] = {
                 "key": key,
-                "R1": label,
+                r1_key: label,
                 "render": f"""{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet,
                 "prefix": prefix}
@@ -969,7 +1004,10 @@ class ConversionManager:
             else:
                 raise TypeError()
             v = self.d[tag][name]
-            if not v["prefix"]:
+            if v["prefix"]:
+                # remove all duplicate relations for matched entities
+                v = self.prune_dict(v)
+            else:
                 entity_declaration += f'{key} = p.create_{tag[:-1]}(R1__has_label="{v["R1"]}")\n'
             context = self.built_simple_context(v)
             context["name"] = self.build_reference(name)
@@ -1024,9 +1062,22 @@ class ConversionManager:
             f.write(self.entity_matching_report)
         return fpath
 
+    def prune_dict(self, value_dict):
+        matched_item = p.ds.get_item_by_label(value_dict["R1"])
+        existing_rel_keys = [rel.split("#")[-1] for rel in matched_item.get_relations().keys()]
+        del_keys = []
+        for k, v in value_dict.items():
+            if "R1" == k:
+                continue
+            if k in existing_rel_keys:
+                del_keys.append(k)
+        for k in del_keys:
+            del value_dict[k]
+        return value_dict
+
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
-        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R81", "R82"]
+        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R77__en", "R77__de", "R81", "R82"]
 
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
@@ -1081,10 +1132,11 @@ class ConversionManager:
                             l.append(f'"{v}"')
                     string = f"[{', '.join(l)}]"
                     context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
-            # sort the relations in ascending number oder
-            context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
-
-        del context["rel"][0] # get rid of R1, since we use the entity.update method
+        # sort the relations in ascending number oder
+        context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
+        # get rid of R1, since we use the entity.update method
+        while context["rel"] and "R1__" in context["rel"][0]:
+            del context["rel"][0]
         return context
 
     def get_statement_context_recursively(self, statement_item, subdict:dict, recursion_depth=1):
@@ -1378,7 +1430,7 @@ class ConversionManager:
         if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
             s = self.build_reference("s")
             dt = self.build_reference("höhere Zeitableitung")
-            return f"""{s}**cm1.i * cm1.F({s}) - ma.I5441["sum over index"]({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), cm.j, ma.I5440["limits"](0, cm1.i-1))"""
+            return f"""{s}**cm1.i * cm1.F({s}) - ma.I5441["sum over index"]({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), cm1.j, ma.I5440["limits"](0, cm1.i-1))"""
         else:
             return '"' + eq + '"'
 

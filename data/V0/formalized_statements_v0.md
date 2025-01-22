@@ -1,8 +1,8 @@
 - // manually added (1)
-- There is a class: 'set'.
-- There is a class: 'real number'.
-- There is a class: 'integer number'.
-- There is a class: 'complex number'.
+- There is a class: 'set' @en
+- There is a class: 'real number' @en
+- There is a class: 'integer number' @en
+- There is a class: 'complex number' @en
 
 - 'real number' is a subclass of 'complex number'
 - 'integer number' is a subclass of 'real number'

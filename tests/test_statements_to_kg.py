@@ -23,6 +23,7 @@ TEST_DATA1_FPATH = os.path.join(TESTA_DATA_DIR, "statements01.md")
 TEST_DATA2_FPATH = os.path.join(TESTA_DATA_DIR, "statements02_ring.md")
 TEST_DATA3_FPATH = os.path.join(TESTA_DATA_DIR, "statements03_latex.md")
 TEST_DATA4_FPATH = os.path.join(TESTA_DATA_DIR, "statements04_matching.md")
+TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
 
 # todo this is not very elegant
 MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
@@ -89,6 +90,27 @@ class Test_00_Core(unittest.TestCase):
         self.assertNotIn('p.create_item(R1__has_label="real number"', res)
         # replaced entities should not be updated
         self.assertNotIn('["real number"].update_relations', res)
+
+    def test_m02__multilingual_match(self):
+        res_mod_fpath = s2k.main(TEST_DATA5_FPATH, create_key_tuple(20))
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        # test entity matching succeeded, existing item got new alt labels
+        real_part_item = p.ds.get_item_by_label("real part")
+        alt_labels = [rel.object.value for rel in real_part_item.get_relations("R77")]
+        self.assertIn("Re", alt_labels)
+        self.assertIn("Realteil", alt_labels)
+
+        denom_item = p.ds.get_item_by_label("denominator")
+        alt_labels2 = [rel.object.value for rel in denom_item.get_relations("R77")]
+        self.assertIn("Nenner", alt_labels2)
+
+        # test no duplicate information was added
+        self.assertNotIn("R8__has_domain_of_argument_1=", res)
+        self.assertNotIn("R4__is_instance_of=", res)
+
 
 class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
     """
