@@ -53,6 +53,8 @@ class ConversionManager:
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
 
+        self.exsiting_labels_dict = p.get_label_to_item_dict()
+
         if force_key_tuple is None:
             self.get_keys()
         # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
@@ -651,7 +653,7 @@ class ConversionManager:
                             raise ParserError(f"{arg1} is neider item nor relation in d")
 
                         # try to match alternative label with existing KG
-                        existing_item = p.ds.get_item_by_label(arg2)
+                        existing_item = self.get_existing_item(arg2)
                         # automatically created items don't count
                         if existing_item and "a" in existing_item.short_key:
                             existing_item = None
@@ -730,7 +732,7 @@ class ConversionManager:
     def add_new_item(self, d, label, language, additional_relations:dict={}, skip_entity_order=False):
         prefix = False
         # check if item already exists in KG
-        existing_item = p.ds.get_item_by_label(label)
+        existing_item = self.get_existing_item(label)
         # todo find a save way to match different languages, .lower() has problems
         # automatically created items don't count
         if existing_item and "a" in existing_item.short_key:
@@ -757,20 +759,6 @@ class ConversionManager:
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
                     continue
-                    try:
-                        if p.is_subclass_of(existing_item, v_item):
-                            continue
-                    except:
-                        pass
-                    try:
-                        if p.is_instance_of(existing_item, v_item):
-                            continue
-                    except:
-                        pass
-                    if k == "R3":
-                        k = "R46"
-                    elif k == "R4":
-                        k = "R30"
             self.add_relation_inplace(d["items"][label], k, v)
             if v == None:
                 if k in d["items"][label].keys():
@@ -896,6 +884,12 @@ class ConversionManager:
                 pass
             i += 1
         return temp_dict
+
+    def get_existing_item(self, label):
+        if label in self.exsiting_labels_dict.keys():
+            return self.exsiting_labels_dict[label]
+        else:
+            return None
 
     def build_reference(self, arg2, local_dict={}):
         """return dual readable version of entity if possible (might be literal): I1234["something"]

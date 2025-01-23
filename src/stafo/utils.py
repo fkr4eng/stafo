@@ -2,7 +2,8 @@ import os
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 import sympy as sp
-
+from functools import wraps
+from time import time
 
 # TODO: this assumes package to be installed with pip install -e .
 BASE_DIR = Path(__file__).parents[2].as_posix()
@@ -105,3 +106,16 @@ class MyDict(dict):
     def __missing__(self, key):
         print(f"warning: {key} was not found, return 'ut' instead")
         return "ut"
+
+
+
+def timing(f):
+    @wraps(f)
+    def wrap(*args, **kw):
+        ts = time()
+        result = f(*args, **kw)
+        te = time()
+        print('func:%r args:[%r, %r] took: %2.4f sec' % \
+          (f.__name__, repr(args)[:20], repr(kw)[:20], te-ts))
+        return result
+    return wrap
