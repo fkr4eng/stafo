@@ -143,7 +143,7 @@ class MainManager:
 
         look_ahead_latex_source = self.get_look_ahead_latex_source(i)
         context = self.create_context(new_latex_source, look_ahead_latex_source)
-        message = render_template("prompt01_template.md", context)
+        message = render_template("prompt01_template_german.md", context)
 
         # do not make an llm-call if snippet should be ignored
         self.snippet_object = LatexSourceSnippet(new_latex_source)
@@ -166,12 +166,6 @@ class MainManager:
             with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
                 fp.write(self.statement_source)
             print(f"{self.statement_fpath} written")
-
-            with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
-                fp.write(self.statement_source)
-            print(f"{self.statement_fpath} written")
-
-
 
         # this should be joined via the empty string to recreate the original latex code
         self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
@@ -266,6 +260,27 @@ class MainManager:
 
         return res
 
+    def llm_task(self):
+        self.get_data()
+        task_pattern = re.compile(r"- // llm:?(.+)")
+        res = re.findall(task_pattern, self.statement_source)
+        if len(res) == 0:
+            print("no llm command (- // llm: do something) found.")
+        elif len(res) == 1:
+            context = {
+                "statements": self.statement_source
+            }
+            message = render_template("task_template.md", context)
+            response = model.generate_content(message, generation_config=self.llm_config)
+            self.statement_source = "\n".join((self.statement_source, response.text))
+            print(f"Response:\n\n{response.text}")
+            # IPS()
+            with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
+                fp.write(self.statement_source)
+            print(f"{self.statement_fpath} written")
+        elif len(res) > 1:
+            raise NotImplementedError("No support for mutiple commands.")
+        self.statement_source
 
 # split without consuming the delimiter
 
@@ -411,6 +426,9 @@ def interactive_mode(dev_mode, tex_fpath, statement_fpath, snapshot_fpath):
     mm = MainManager(dev_mode, tex_fpath, statement_fpath, snapshot_fpath, interactive_mode=True)
     mm.do_next_query_iteration()
 
+def llm_command(dev_mode, statement_fpath):
+    mm = MainManager(dev_mode, tex_fpath=None, statement_fpath=statement_fpath, snapshot_fpath=None, interactive_mode=True)
+    mm.llm_task()
 
 def evaluate_token_tracking(fpath: str):
     try:

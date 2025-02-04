@@ -27,6 +27,10 @@ def main():
         nargs=3,
     )
 
+    parser.add_argument(
+        "-llm", "--llm-command",
+        help=f"execute // llm: request in statement file", metavar="STATEMENT_FILE",
+    )
 
     parser.add_argument(
         "-c", "--convert-statements-to-kg",
@@ -61,5 +65,7 @@ def main():
     elif (statement_file := args.convert_statements_to_kg) is not None:
         from . import statement_to_kg
         statement_to_kg.main(statement_file)
+    elif args.llm_command:
+        core.llm_command(dev_mode, statement_fpath=args.llm_command)
     else:
         core.main(dev_mode=dev_mode)
