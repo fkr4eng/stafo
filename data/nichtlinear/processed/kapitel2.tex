@@ -1,5 +1,4 @@
-
-
+\snippet{1i}
 \chapter{Mathematische Grundlagen\label{cha:Grundlagen}}
 Dieser Abschnitt soll dem Leser einige Grundlagen der linearen Abgebra
 sowie der Vektoranalysis in Erinnerung rufen. Dabei finden auch erste
@@ -10,11 +9,14 @@ die für regelungstheoretische Anwendungen in den folgenden Abschnitten
 des Buches von besonderer Bedeutung sind. Zur Festigung und Vertiefung
 der behandelten Konzepte seien dem Leser die Lehrbücher~\cite{arnold2001,kerner2007}
 empfohlen.
-
+\snippet{2}
 \section{Lineare Algebra\label{sec:Lineare-Algebra}}
-
-Sei ${\mathbb{R}}$ die Menge der reellen Zahlen. Der $n$-dimensionale reelle
+\snippet{3}
+Sei ${\mathbb{R}}$ die Menge der reellen Zahlen.
+\snippet{4}
+Der $n$-dimensionale reelle
 Vektorraum wird mit ${\mathbb{R}}^{n}$ bezeichnet, seine Elemente heißen \textbf{\em Vektoren}.
+\snippet{5}
 Ein Vektor $x\in{\mathbb{R}}^{n}$ wird oft in der Form eines Spaltenvektors
 \begin{equation}
 x=\left(\begin{array}{c}
@@ -23,10 +25,12 @@ x_{1}\\
 x_{n}
 \end{array}\right)\label{eq:vektor-x}
 \end{equation}
-mit den Komponenten $x_{1},\ldots,x_{n}\in{\mathbb{R}}$ dargestellt. Zur Unterscheidung
+mit den Komponenten $x_{1},\ldots,x_{n}\in{\mathbb{R}}$ dargestellt.
+\snippet{6}
+Zur Unterscheidung
 von Zeilenvektoren spricht man hier auch von \textbf{\em kontravarianten
 Vektoren}.
-
+\snippet{7}
 Die $n$ Einheitsvektoren
 \[
 e_{1}=\left(\begin{array}{c}
@@ -42,21 +46,26 @@ e_{1}=\left(\begin{array}{c}
 \end{array}\right)
 \]
 bilden eine Basis des~${\mathbb{R}}^{n}$, die sogenannte \textbf{\em kanonische
-Basis} oder \textbf{\em Standardbasis}. Jeder Vektor~(\ref{eq:vektor-x})
+Basis} oder \textbf{\em Standardbasis}.
+\snippet{8}
+Jeder Vektor~(\ref{eq:vektor-x})
 lässt sich eindeutig als Linearkombination der Basisvektoren darstellen:
 \[
 x=x_{1}e_{1}+\cdots+x_{n}e_{n}.
 \]
+\snippet{9}
 Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear
 hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$
 ist die Menge aller Linearkombinationen dieser Vektoren:
 \[
 {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} .
 \]
+\snippet{10}
 Die lineare Hülle ist damit ein \textbf{\em Untervektorraum}, \textbf{\em Unterraum}
 bzw. \textbf{\em Teilraum} (engl. \textbf{\em subspace}) des~${\mathbb{R}}^{n}$, d.\,h.
 eine nichtleere Teilmenge des~${\mathbb{R}}^{n}$, welche selber ein Vektorraum
 ist.
+\snippet{11}
 
 Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch
 \begin{equation}

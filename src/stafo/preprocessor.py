@@ -80,6 +80,9 @@ class Preprocessor():
                     return s
                 content = re.sub(pattern, get_repl, content)
 
+        # remove header
+        if "begin{document}" in content:
+            content = content.split("begin{document}")[-1]
 
         with open(self.new_path, "wt", encoding="utf-8") as f:
             f.write(content)
