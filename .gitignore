@@ -19,7 +19,7 @@ output_no_error.py
 ignored_content/
 match_history/
 snapshots/
-
+data/nichtlinear/raw/
 
 # tex related files
 *.log

@@ -36,6 +36,7 @@ def get_md_lines(fpath) -> list[str]:
 
 
 class ConversionManager:
+    @u.timing
     def __init__(self, statements_fpath: str, force_key_tuple: tuple=None):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
@@ -60,6 +61,8 @@ class ConversionManager:
         # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
         else:
             self.item_keys, self.relation_keys = force_key_tuple
+
+        self.stop_at_line = 42
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -167,7 +170,7 @@ class ConversionManager:
     ####################################################################################################################
     # init formal natural language parser
     ####################################################################################################################
-
+    @u.timing
     def step1_init(self):
 
         self.applicable_to_key = "R78"
@@ -294,6 +297,12 @@ class ConversionManager:
                     "R1": "does not have property",
                     "prefix": "p",
                 },
+                "has the alternative label": {
+                    "key": "R77",
+                    "R1": "has alternative label",
+                    "prefix": "p",
+                    "render": "R77__has_alternative_label",
+                },
                 "has the alternative german label": {
                     "key": "R77__de",
                     "R1": "has alternative label  de",
@@ -378,7 +387,7 @@ class ConversionManager:
     ####################################################################################################################
     # parse formal natural language
     ####################################################################################################################
-
+    @u.timing
     def step2_parse_fnl(self):
         """iterate lines, add items and relations to dictionary
         first process lines that add items and some with special patterns, later process general relations (s p o)"""
@@ -448,7 +457,6 @@ class ConversionManager:
 
 
         # debug
-        self.stop_at_line = 903
         if i == self.stop_at_line:
             1
         if len(comment) > 0:
@@ -583,7 +591,7 @@ class ConversionManager:
                     temp_dict = copy.deepcopy(temp_dict)
                     # pass this item name down the recursion chain to the point where equations are added so we can find them later
                     self.new_item_name = new_item_name + "__" + f"formal_{formal[0]}"
-                    temp_dict = self.recurse_nested_statements(self.strip(additional_content[ii+1:]), i+ii+2, temp_dict)
+                    temp_dict = self.recurse_nested_statements(additional_content[ii+1:], i+ii+2, temp_dict)
                     additional_context[f"formal_{formal[0]}"] = temp_dict
             # now differentiate between the dicts
             formal_keys = [key for key in additional_context.keys() if "formal" in key]
@@ -612,7 +620,15 @@ class ConversionManager:
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
-                res = re.findall(f"(?<=- )(.+?)(?: {k}:? )(.+?)(?=\\.$|$)", self.strip(line))
+                # todo if two relations are similar, eg. 'has element' and 'has element type' this might fail
+                if k in line and f"'{k}" in line:
+                    rel = f"'{k}'"
+                    string = line
+                else:
+                    rel = k
+                    string = self.strip(line)
+
+                res = re.findall(f"(?<=- )(.+?)(?: {rel}:? )(.+?)(?=\\.$|$)", string)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2, d)
@@ -729,6 +745,7 @@ class ConversionManager:
             r1_key = "R1"
         return r1_key
 
+    # @u.timing
     def add_new_item(self, d, label, language, additional_relations:dict={}, skip_entity_order=False):
         prefix = False
         # check if item already exists in KG
@@ -976,7 +993,7 @@ class ConversionManager:
     ####################################################################################################################
     # rendering
     ####################################################################################################################
-
+    @u.timing
     def render(self) -> str:
         """
         :returns: path of rendered module
@@ -1220,13 +1237,29 @@ class ConversionManager:
                 context["rhs_source"] = eq_dict["rhs_source"]
         else:
             try:
-                context["full_source"] = self.process_latex(statement_item, eq_dict["full_source"])
+                res = self.process_latex(statement_item, eq_dict["full_source"], full=True)
+                if hasattr(res, "__len__"):
+                    context["lhs_formal"] = res[0]
+                    context["rhs_formal"] = res[1]
+                else:
+                    context["full_source"] = res
+
             except:
                 context["full_source"] = eq_dict["full_source"]
         res = render_template("math_relation_template.py", context)
         return res
 
-    def process_latex(self, statement_item, latex_og):
+    def process_latex(self, statement_item, latex_og, full=False):
+        """process latex input and return string conforming with pyirk notation
+
+        Args:
+            statement_item (dict): the statement hierarchically above the latex snippet
+            latex_og (str): latex snippet
+            full (bool, optional): Flag, set to True if evaluating full_source. Defaults to False.
+
+        Returns:
+            str: pyrik string
+        """
         self.sp_to_irk_map = {
             sp.Add: lambda *args: "(" + "+".join(args) + ")",
             sp.Mul: lambda *args: "(" + "*".join(args) + ")",
@@ -1248,13 +1281,17 @@ class ConversionManager:
         latex = latex_og.replace('$', '')
         latex = re.sub(r"^\\[(]", "", latex)
         latex = re.sub(r"\\[)]$", "", latex)
-        if "=" in latex:
-            res = ""
-            for term in latex.split("="):
-                res_term = self.convert_latex_to_irklike_str(term, lookup)
-                res += res_term + "="
-            res = res[:-1] # remove last =
-        else:
+        only_term = True
+        if full:
+            rel_signs = ["<=", ">=", "<", ">", "="]
+            for rs in rel_signs:
+                if rs in latex:
+                    only_term = False
+                    res = []
+                    for term in latex.split(rs):
+                        res.append(self.convert_latex_to_irklike_str(term, lookup))
+
+        if only_term:
             res = self.convert_latex_to_irklike_str(latex, lookup)
 
         return res
@@ -1264,7 +1301,7 @@ class ConversionManager:
         sp_expr = parse_latex_lark(latex)
         # ambiguous result
         if isinstance(sp_expr, Tree):
-            # todo this is a easy fix, but might prove troublesome in the future, beware of the warning
+            # todo this is an easy fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
             # print(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
 
@@ -1428,7 +1465,7 @@ class ConversionManager:
         else:
             return '"' + eq + '"'
 
-
+@u.timing
 def main(statements_fpath: str, force_key_tuple=None):
     convm = ConversionManager(statements_fpath, force_key_tuple)
     convm.step1_init()
