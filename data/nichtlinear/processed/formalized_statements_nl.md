@@ -13,6 +13,9 @@
 - There is a relation: 'has element type'
 - 'has element type' has the verbal description 'specifies what types of elements appear in this set'
 - The type of argument1 of 'has element type' is 'set'
+- There is a binary operator: 'element of sequence'
+- There is a class: 'sequence'
+- The type of argument1 of 'element of sequence' is 'sequence'
 
 - // snippet(2)
 - New section: "Lineare Algebra".
@@ -95,60 +98,31 @@
     - formalized setting:
         - 'x' is an instance of 'vector'
         - 'b' is an instance of 'basis'
-        - 'e_i' is an instance of 'unit vector'
-        - 'x_i' is an instance of 'vector component'
-        - 'x' 'has vector component' 'x_i'
         - 'n' is an instance of 'integer number'
         - 'i' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
             - full source code: $x=x_{1}e_{1}+\cdots+x_{n}e_{n}$
-            - source code of left hand side: $x$
-            - source code of right hand side: $\sum_{i=1}^n x_i e_i$
+            - formalized left hand side: x
+            - formalized right hand side: \sum_{i=1}^n 'element of sequence'(x, i) * 'element of sequence'(b, i)
 - // comment: the word "eindeutig" in the german text is important. It means that the linear combination is unique. This aspect is not captured by the formalized statements yet. It might be possible to express this by adding another general statement which says that if there are two such linear combinations, then they must be equal.
 
-- // llm: please provide a suggestion for the implementation of the previous comment
-
-
-
-
-To capture the uniqueness of the linear combination, we can add a new general statement as follows:
-
-```
 - There is a general statement:
-    - full source code: If a vector x can be represented as two linear combinations of basis vectors, these linear combinations must be equal.
+    - full source code:  If a vector x can be represented as two linear combinations of basis vectors, these linear combinations must be identical.
     - formalized setting:
-        - 'Rn' is an instance of 'n-dimensional real vector space'
-        - 'Rn' 'has dimension' 'n'
-        - 'Rn' 'has element' 'x'
         - 'x' is an instance of 'vector'
         - 'b' is an instance of 'basis'
-        - 'b' 'is a subset of' 'Rn'
-        - 'e_i' is an instance of 'unit vector'
-        - 'b' 'has element' 'e_i' // Clarify that e_i belongs to the basis b
-        - 'x_i' is an instance of 'vector component'
-        - 'x' 'has vector component' 'x_i'
-        - 'y_i' is an instance of 'real number' // Introduce a second set of coefficients
         - 'n' is an instance of 'integer number'
         - 'i' is an instance of 'integer number'
+        - 'c' is an instance of 'sequence'  // Represents coefficients
+        - 'd' is an instance of 'sequence'  // Represents another set of coefficients
         - There is an equation:
-            - full source code: $x = \sum_{i=1}^n x_i e_i$
-            - source code of left hand side: $x$
-            - source code of right hand side: $\sum_{i=1}^n x_i e_i$
+            - full source code: x = \sum_{i=1}^n 'element of sequence'(c, i) * 'element of sequence'(b, i)
         - There is an equation:
-            - full source code: $x = \sum_{i=1}^n y_i e_i$
-            - source code of left hand side: $x$
-            - source code of right hand side: $\sum_{i=1}^n y_i f_i$
-
+            - full source code: x = \sum_{i=1}^n 'element of sequence'(d, i) * 'element of sequence'(b, i)
     - formalized assertion:
         - For all 'i' from 1 to 'n':
             - There is an equation:
-                - full source code: $x_i = y_i$
-                - source code of left hand side: $x_i$
-                - source code of right hand side: $y_i$
-```
-
-This statement expresses that if a vector `x` can be represented by two linear combinations of basis vectors (potentially the same basis vectors with different coefficients, or even different basis vectors within the same basis), then for each corresponding term in the summation, the terms must be equal.  This implies uniqueness when combined with the previous statement about the existence of such a linear combination.  If the basis is the same (`e_i` = `f_i`), it directly implies `x_i` = `y_i`.
+                - full source code: 'element of sequence'(c, i) = 'element of sequence'(d, i)
 
 
-This implementation allows for the possibility of different basis vectors within the same basis `b`.  If we want to restrict it to the case where the basis vectors are the same in both linear combinations, we can simply remove `f_i` and `y_i` and replace the second equation with  `x = sum_{i=1}^n y_i e_i` and the assertion with `x_i = y_i`.

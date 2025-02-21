@@ -1,3 +1,7 @@
+- // snippet(1)
+- New section: 'Elementare Grundbegriffe'
+- New subsection: 'Das Grundanliegen der Regelungstechnik'
+
 - // manually added (1)
 - There is a class: 'set' @en
 - There is a class: 'real number' @en
@@ -30,9 +34,6 @@
 
 - There is a class 'mathematical operation'
 
-- // snippet(1)
-- New section: 'Elementare Grundbegriffe'
-- New subsection: 'Das Grundanliegen der Regelungstechnik'
 
 - // snippet(2i)
 - // ignored content
@@ -1906,3 +1907,7 @@
 - There is a relation: 'hat Ausregelzeit'.
 - The type of argument1 of 'hat Ausregelzeit' is 'Regelgröße'.
 - The result type of 'hat Ausregelzeit' is 'Ausregelzeit'.
+- // snippet(119)
+- New section: 'Bode-Diagramm'
+- // The LaTeX comment '% \label{sec:das-bodediagramm}' was ignored.
+- // The content of the environment 'RstHinweisBox' was ignored because I do not know how to model it.
