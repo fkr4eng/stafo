@@ -42,6 +42,7 @@
 - 'n-dimensional real vector space' has the alternative german label '$n$-dimensionaler reeller Vektorraum'
 - 'n-dimensional real vector space' is an instance of 'vector space'
 - There is a class: 'vector' @en
+- 'vector' is a subclass of 'sequence'
 - 'vector' has the alternative german label 'Vektor'
 - 'vector space' 'has element type' 'vector'
 - There is a relation: 'has dimension'
@@ -123,6 +124,7 @@
     - formalized assertion:
         - For all 'i' from 1 to 'n':
             - There is an equation:
-                - full source code: 'element of sequence'(c, i) = 'element of sequence'(d, i)
+                - formalized left hand side: 'element of sequence'(c, i)
+                - formalized right hand side: 'element of sequence'(d, i)
 
 

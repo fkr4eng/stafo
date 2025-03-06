@@ -367,6 +367,7 @@ class ConversionManager:
         self.if_then_pattern = re.compile(r"There is an if-then-statement")
         self.general_statement_pattern = re.compile(r"There is a general statement")
         self.explanation_pattern = re.compile(r"There is an explanation")
+        self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
@@ -426,7 +427,15 @@ class ConversionManager:
         Returns:
             dict: current dict d
         """
-        # first check for language indicator
+
+        # first deal with comments
+        comment = re.findall(self.comment_pattern, line)
+        if len(comment) > 0:
+            return d
+        else:
+            line = line.split("//")[0].rstrip()
+
+        # second check for language indicator
         lang_pat = re.compile(r"(?<=@)\w\w")
         res = re.findall(lang_pat, line)
         if res:
@@ -436,7 +445,6 @@ class ConversionManager:
             language = self.default_language
 
 
-        comment = re.findall(self.comment_pattern, line)
         new_section = re.findall(self.new_section_pattern, line)
         new_class = re.findall(self.class_pattern, line)
         new_property = re.findall(self.property_pattern, line)
@@ -454,13 +462,12 @@ class ConversionManager:
         if_then = re.findall(self.if_then_pattern, line)
         general_statement = re.findall(self.general_statement_pattern, line)
         explanation = re.findall(self.explanation_pattern, line)
+        for_loop = re.findall(self.for_pattern, line)
 
 
         # debug
         if i == self.stop_at_line:
             1
-        if len(comment) > 0:
-            return d
         elif len(new_section) > 0:
             # print(f"skip section mark line {i}, {line}")
             return d
@@ -579,10 +586,10 @@ class ConversionManager:
                     additional_context["comments"].append(full_source[0])
                     continue
                 # todo depricated source code of scopes
-                source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
-                source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
-                if source_pre: additional_context["source_pre"] = source_pre[0]
-                if source_ass: additional_context["source_ass"] = source_ass[0]
+                # source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
+                # source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
+                # if source_pre: additional_context["source_pre"] = source_pre[0]
+                # if source_ass: additional_context["source_ass"] = source_ass[0]
                 formal = re.findall(r"(?<=formalized )(set|pre|ass)", l)
                 if formal:
                     # in order for new relations in assertion to relate to the subject created in setting, the dict
@@ -617,6 +624,22 @@ class ConversionManager:
                 res= re.findall(self.explanation_pattern_dict["verbal"], l)
                 if res: verbal_sum = self.strip(res[0])
             self.d["items"][related_to][self.d["relations"]["has explanation"]["key"]] = verbal_sum
+        elif len(for_loop) > 0:
+            index_var, start, stop = self.strip(for_loop[0])
+            additional_content = self.get_sub_content(self.lines[i+1:])
+            temp_dict = {"items": {}, "relations": {}}
+            temp_dict = self.recurse_nested_statements(additional_content, i, temp_dict)
+            key = self.item_keys.pop()
+            for_dict = {
+                "key": key,
+                "snip": self.current_snippet,
+                "items": temp_dict["items"],
+                "index_var": index_var,
+                "start": start,
+                "stop": stop,
+                }
+            # d = self.add_new_item(d, f"for_loop_{i}", language, temp_dict, skip_entity_order=skip_entity_order)
+            d["items"][f"for_loop_{i}"] = for_dict
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
@@ -1176,6 +1199,24 @@ class ConversionManager:
                     "indent": " " * 4 * recursion_depth,
                     }
                 out.append(render_template("and_or_not_template.py", context))
+            elif "for_loop" in key:
+                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], recursion_depth)
+                if value["start"].isnumeric():
+                    start = int(value["start"])
+                else:
+                    start = f"""cm{recursion_depth}.{value["start"]}"""
+                if value["stop"].isnumeric():
+                    stop = int(value["stop"])
+                else:
+                    stop = f"""cm{recursion_depth}.{value["stop"]}"""
+                context = {
+                    "content": res,
+                    "indent": " " * 4 * recursion_depth,
+                    "start": start,
+                    "stop": stop,
+                    "index_var": f"""cm{recursion_depth}.{value["index_var"]}""",
+                    }
+                out.append(render_template("integer_range_template.py", context))
             else:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
