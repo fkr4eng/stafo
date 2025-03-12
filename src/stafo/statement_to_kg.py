@@ -14,15 +14,15 @@ import pyirk as p
 import datetime as dt
 from string import ascii_letters
 
+from .logging import logger
 lark = import_module("lark")
 if lark:
     from lark import Transformer, Token, Tree
 else:
-    print("lark parser not found!")
+    logger.error("lark parser not found!")
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
-
 
 ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
 ocse_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
@@ -63,7 +63,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 41
+        self.stop_at_line = 124
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -409,7 +409,7 @@ class ConversionManager:
                 continue
             # indeted lines should be processed somewhere down below
             elif line.startswith(" "):
-                # print(f"line {i} skipped: {line}")
+                logger.debug(f"line {i} skipped: {line}")
                 pass
             # existing relations
             else:
@@ -470,7 +470,6 @@ class ConversionManager:
         if i == self.stop_at_line:
             1
         if len(new_section) > 0:
-            # print(f"skip section mark line {i}, {line}")
             return d
         # new class?
         elif len(new_class) > 0:
@@ -491,7 +490,7 @@ class ConversionManager:
             # todo R8, R9, R11 should just be in general relation parsing instead of here
             arg1, arg2 = self.strip(type_of_arg_1[0])
             if arg2 not in self.d["items"].keys():
-                print(f"unknown type: {arg2}")
+                logger.info(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R8", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -501,7 +500,7 @@ class ConversionManager:
         elif len(type_of_arg_2) > 0:
             arg1, arg2 = self.strip(type_of_arg_2[0])
             if arg2 not in self.d["items"].keys():
-                print(f"unknown type: {arg2}")
+                logger.info(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R9", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -511,7 +510,7 @@ class ConversionManager:
         elif len(type_of_result) > 0:
             arg1, arg2 = self.strip(type_of_result[0])
             if arg2 not in self.d["items"].keys():
-                print(f"unknown type: {arg2}")
+                logger.info(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R11", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -719,7 +718,7 @@ class ConversionManager:
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
-                            print(f"dummy item {arg1} added")
+                            logger.info(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
                         elif arg1 in d["relations"]:
@@ -749,10 +748,10 @@ class ConversionManager:
                         # resolve if this is def for property or concept or something else?
                         raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
                     else:
-                        print(f"maybe? not processed line {i}: {line}")
+                        logger.warning(f"maybe? not processed line {i}: {line}")
 
             else:
-                print(f"not processed line {i}: {line}")
+                logger.warning(f"not processed line {i}: {line}")
 
         return d
 
@@ -1082,7 +1081,7 @@ class ConversionManager:
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)
-        print(f"{count} new entities written to {fpath}.")
+        logger.info(f"{count} new entities written to {fpath}.")
         t = dt.datetime.now().strftime("_%Y_%m_%d__%H_%M_%S")
         os.makedirs("match_history", exist_ok=True)
         with open(f"match_history/matched_entities_{t}.txt", "wt", encoding="utf-8") as f:
@@ -1266,7 +1265,7 @@ class ConversionManager:
                 what = "rhs_source"
                 context["rhs_formal"] = self.process_latex(statement_item, eq_dict["rhs_source"])
             except Exception as e:
-                print(f"warning: rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
+                logger.warning(f"rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
                 context["lhs_source"] = eq_dict["lhs_source"]
                 context["rhs_source"] = eq_dict["rhs_source"]
         else:
@@ -1279,7 +1278,7 @@ class ConversionManager:
                     context["full_source"] = res
 
             except Exception as e:
-                print(f'warning: rendering failed for {eq_dict["full_source"]} due to {type(e)}: {e}')
+                logger.warning(f"rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
                 context["full_source"] = eq_dict["full_source"]
         res = render_template("math_relation_template.py", context)
         return res
@@ -1356,11 +1355,14 @@ class ConversionManager:
     def convert_latex_to_irklike_str(self, latex, item_lookup, var_map):
         # 1. convert to sympy
         sp_expr = parse_latex_lark(latex)
+        if len(sp_expr.free_symbols) > 5:
+            # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
+            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
         # ambiguous result
         if isinstance(sp_expr, Tree):
             # todo this is an easy fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
-            # print(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
+            logger.warning(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
 
         # 2. traverse tree
         res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map)
@@ -1442,7 +1444,7 @@ class ConversionManager:
         try:
             parsed_expr = sp.parse_expr(expr)
         except:
-            print(f"sympy parsing failed for {expr}")
+            logger.info(f"sympy parsing failed for {expr}, defering to lookup")
             return self.get_expr_from_lookup(expr)
         repl_list, subs_list = [], []
         repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
@@ -1492,6 +1494,7 @@ class ConversionManager:
             dt = self.build_reference("höhere Zeitableitung")
             return f"""{s}**cm1.i * cm1.F({s}) - ma.I5441["sum over index"]({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), cm1.j, ma.I5440["limits"](0, cm1.i-1))"""
         else:
+            logger.warning("expression lookup failed")
             return '"' + eq + '"'
 
 @u.timing
