@@ -1,5 +1,6 @@
 - There is a class: 'real number'.
 - There is a class: 'complex number'.
+- There is a class: 'integer number'.
 - There is a class: 'Signal'.
 - There is a class 'komplexwertige Funktion'
 - There is a class 'reellwertige Funktion'
@@ -28,16 +29,16 @@
         - 'nu' is an instance of 'Ausgangssignal'
     - formalized premise:
         - There is an equation:
-            - full source code: '\(\nu(t) = \varphi(u(t))\)'
-            - source code of left hand side: '\(\nu(t)\)'
-            - source code of right hand side: '\(\varphi(u(t))\)'
-            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the application of the operator '\(\varphi\)'.
+            - full source code: 'nu(t) == phi(u(t))'
+            - source code of left hand side: 'nu'('t')
+            - source code of right hand side: 'phi'('u'('t'))
+            - // I cannot generate the formalized left hand side and formalized right hand side because I do not know how to represent the application of the operator '\varphi'.
     - formalized assertion:
         - 'ein Übertragungsglied' has the property 'zeitinvariant'.
 
 
 - There is a unary operator 'Laplace Transformation'
-- 'Laplace Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  \(f : \mathbb{R} \to \mathbb{R}\) in den Raum der komplexwertigen Funktionen  \(F : \mathbb{C} \to \mathbb{C}\)'
+- 'Laplace Transformation' has the verbal description 'Dabei handelt es sich um eine spezielle Abbildung vom Raum der reellwertigen Funktionen  f : \mathbb{R} \to \mathbb{R} in den Raum der komplexwertigen Funktionen  F : \mathbb{C} \to \mathbb{C}'
 - // I am not sure how to model 'Raum der ... Funktionen'. It seems to be a set of functions. However, I do not know how to represent this.
 - There is a general statement:
     - formalized setting:
@@ -47,11 +48,38 @@
         - 'y' is an instance of 'real number'
     - formalized assertion:
         - There is an equation:
-            - full source code: '\(F(s) = \int\limits_0^\infty f(t)*e^{-st} dt\)'
-            - source code of left hand side: '\(F(s)\)'
-            - source code of right hand side: '\(\int\limits_0^\infty f(t)*e^{-st} dt\)'
+            - full source code: F(s) == \int\limits_0^\infty f(t)*e^{-st} dt
+            - source code of left hand side: F(s)
+            - source code of right hand side: \int\limits_0^\infty f(t)*e^{-st} dt
             - reference: 'eq:LaplaceHin'
         - There is an equation:
-            - source code of left hand side: 'y(x)'
-            - source code of right hand side: '\frac{d}{dx} (f(x))'
+            - source code of left hand side: y(x)
+            - source code of right hand side: \frac{d}{dx} (f(x))
 - 'Laplace Transformation' has defining formula 'eq:LaplaceHin'.
+- There is a class: 'vector'
+- There is a class: 'basis'
+- There is a class: 'sequence'
+- There is a binary operator: 'element of sequence'
+- There is a general statement:
+    - formalized setting:
+        - 'x' is an instance of 'vector'
+        - 'b' is an instance of 'basis'
+        - 'n' is an instance of 'integer number'
+        - 'i' is an instance of 'integer number'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: x == \sum_{i=1}^n ('element of sequence'(x, i) * 'element of sequence'(b, i))
+
+- There is a general statement:
+    - full source code:  If a vector x can be represented as two linear combinations of basis vectors, these linear combinations must be identical.
+    - formalized setting:
+        - 'x' is an instance of 'vector'
+        - 'b' is an instance of 'basis'
+        - 'n' is an instance of 'integer number'
+        - 'i' is an instance of 'integer number'
+        - 'c' is an instance of 'sequence'  // Represents coefficients
+        - 'd' is an instance of 'sequence'  // Represents another set of coefficients
+    - formalized assertion:
+        - For all 'i' from 1 to 'n':
+            - There is an equation:
+                - full source code: 'element of sequence'(c, i) == 'element of sequence'(d, i)

@@ -91,7 +91,7 @@
         - 's' 'has element type' 'unit vector'
         - 's' has the verbal description 'set of all n unit vectors'
         - There is an equation:
-            - full source code: 'b' = 's'
+            - full source code: 'b' == 's'
 
 - // snippet(8)
 - There is a general statement:
@@ -103,9 +103,8 @@
         - 'i' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
-            - full source code: $x=x_{1}e_{1}+\cdots+x_{n}e_{n}$
-            - formalized left hand side: x
-            - formalized right hand side: \sum_{i=1}^n 'element of sequence'(x, i) * 'element of sequence'(b, i)
+            - // full source code: $x=x_{1}e_{1}+\cdots+x_{n}e_{n}$
+            - full source code: x == \sum_{i=1}^n ('element of sequence'(x, i) * 'element of sequence'(b, i))
 - // comment: the word "eindeutig" in the german text is important. It means that the linear combination is unique. This aspect is not captured by the formalized statements yet. It might be possible to express this by adding another general statement which says that if there are two such linear combinations, then they must be equal.
 
 - There is a general statement:
@@ -118,13 +117,13 @@
         - 'c' is an instance of 'sequence'  // Represents coefficients
         - 'd' is an instance of 'sequence'  // Represents another set of coefficients
         - There is an equation:
-            - full source code: x = \sum_{i=1}^n 'element of sequence'(c, i) * 'element of sequence'(b, i)
+            - source code of left hand side: x
+            - source code of right hand side: \sum_{i=1}^n ('element of sequence'(c, i) * 'element of sequence'(b, i))
         - There is an equation:
-            - full source code: x = \sum_{i=1}^n 'element of sequence'(d, i) * 'element of sequence'(b, i)
+            - full source code: x == \sum_{i=1}^n ('element of sequence'(d, i) * 'element of sequence'(b, i))
     - formalized assertion:
         - For all 'i' from 1 to 'n':
             - There is an equation:
-                - formalized left hand side: 'element of sequence'(c, i)
-                - formalized right hand side: 'element of sequence'(d, i)
+                - full source code: 'element of sequence'(c, i) == 'element of sequence'(d, i)
 
 

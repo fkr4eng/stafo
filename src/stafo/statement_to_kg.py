@@ -12,6 +12,7 @@ from sympy.parsing.sympy_parser import T
 from numbers import Real
 import pyirk as p
 import datetime as dt
+from string import ascii_letters
 
 lark = import_module("lark")
 if lark:
@@ -62,7 +63,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 42
+        self.stop_at_line = 41
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -94,7 +95,7 @@ class ConversionManager:
 
         """
         s = s.replace('"', "'")
-        s = s.replace("^", "**") # replace power operator
+        # s = s.replace("^", "**") # replace power operator
         symbol_pattern = re.compile(r"'.+?'")
         def repl_func(matchobj):
             return matchobj.group(0).replace(" ", "_").replace("-", "_")
@@ -468,7 +469,7 @@ class ConversionManager:
         # debug
         if i == self.stop_at_line:
             1
-        elif len(new_section) > 0:
+        if len(new_section) > 0:
             # print(f"skip section mark line {i}, {line}")
             return d
         # new class?
@@ -551,12 +552,7 @@ class ConversionManager:
                     if res:
                         if name == "reference":
                             self.eq_reference_dict[self.strip(res[0])] = {"key": key, "statement_name": self.new_item_name}
-                        elif "formal" in name:
-                            # here we need to be careful, since operators might have spaces in their name. These need
-                            # to be converted to not mess with the equation parser
-                            eq_dict[name] = self.strip_formal_eq(res[0])
-                        else:
-                            eq_dict[name] = self.strip(res[0])
+                        eq_dict[name] = res[0]
             d["items"][item_name] = eq_dict
 
         # statements
@@ -638,7 +634,6 @@ class ConversionManager:
                 "start": start,
                 "stop": stop,
                 }
-            # d = self.add_new_item(d, f"for_loop_{i}", language, temp_dict, skip_entity_order=skip_entity_order)
             d["items"][f"for_loop_{i}"] = for_dict
         else:
             for k, v in self.d["relations"].items():
@@ -794,7 +789,10 @@ class ConversionManager:
             key = d["items"][label]["key"]
         for k, v in additional_relations.items():
             if isinstance(v, str) and len(v) > 0:
-                irk_label = v.split('"')[1] # todo this should be try-except-ed
+                try:
+                    irk_label = v.split('"')[1] # todo this should be try-except-ed
+                except Exception as e:
+                    continue
                 v_item = p.ds.get_item_by_label(irk_label)
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
@@ -812,7 +810,6 @@ class ConversionManager:
         # check if relation already exists in KG
         existing_rel = p.ds.get_item_by_label(label.lower())
         if existing_rel:
-            # key = f"{self.irk_module_names[existing_rel.base_uri.split('/')[-1]]}.{existing_rel.short_key}"
             key = existing_rel.short_key
             prefix = self.irk_module_names[existing_rel.base_uri.split('/')[-1]]
             self.entity_matching_report += f"matched '{label}' with {prefix}.{key}[{existing_rel.R1}]\n"
@@ -939,8 +936,6 @@ class ConversionManager:
         if arg2 in self.d["items"].keys():
             arg2v = self.d["items"][arg2]
             key = arg2v['key']
-            # if int(key[1:]) < 1000:
-            #     arg2 = f"""p.{key}["{arg2v['R1']}"]"""
             if arg2v["prefix"]:
                 arg2 = f"""{arg2v["prefix"]}.{key}["{arg2v['R1']}"]"""
             else:
@@ -950,8 +945,6 @@ class ConversionManager:
         elif arg2 in self.d["relations"].keys():
             arg2v = self.d["relations"][arg2]
             key = arg2v['key']
-            # if int(key[1:]) < 1000:
-            #     arg2 = f"""p.{key}["{arg2v['R1']}"]"""
             if arg2v["prefix"]:
                 arg2 = f"""{arg2v["prefix"]}.{key}["{arg2v['R1']}"]"""
             else:
@@ -1273,7 +1266,7 @@ class ConversionManager:
                 what = "rhs_source"
                 context["rhs_formal"] = self.process_latex(statement_item, eq_dict["rhs_source"])
             except Exception as e:
-                # print(f"warning: rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
+                print(f"warning: rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
                 context["lhs_source"] = eq_dict["lhs_source"]
                 context["rhs_source"] = eq_dict["rhs_source"]
         else:
@@ -1285,7 +1278,8 @@ class ConversionManager:
                 else:
                     context["full_source"] = res
 
-            except:
+            except Exception as e:
+                print(f'warning: rendering failed for {eq_dict["full_source"]} due to {type(e)}: {e}')
                 context["full_source"] = eq_dict["full_source"]
         res = render_template("math_relation_template.py", context)
         return res
@@ -1322,23 +1316,45 @@ class ConversionManager:
         latex = latex_og.replace('$', '')
         latex = re.sub(r"^\\[(]", "", latex)
         latex = re.sub(r"\\[)]$", "", latex)
+
+        # substitute all custom expressions with variables, so lark can parse them.
+        # lark does not recognize multi-char-variables
+        # we need to replace each variable with a single character var name
+        # latex = "\\sum_{'i'=1}^'n' ('element of sequence'('c', 'i') * 'element of sequence'('b', 'i'))"
+        string_with_vars_removed = re.sub(r"'.+?'", "", latex)
+        open_vars = list(set(ascii_letters) - set(string_with_vars_removed))
+        var_map = u.OneToOneMapping()
+        def repl_func(matchobj):
+            long_var = self.strip(matchobj.group(0))
+            if not long_var in var_map.a.keys():
+                var_map.add_pair(long_var, open_vars.pop())
+            return var_map.a[long_var]
+        latex = re.sub(r"'.+?'", repl_func, latex)
+
         only_term = True
         if full:
-            rel_signs = ["<=", ">=", "<", ">", "="]
+            rel_signs = ["<=", ">=", "<", ">", "=="] # todo change '=' to '==' to distinguish sum{i=1} = x
             for rs in rel_signs:
                 if rs in latex:
                     only_term = False
                     res = []
                     for term in latex.split(rs):
-                        res.append(self.convert_latex_to_irklike_str(term, lookup))
+                        res.append(self.convert_latex_to_irklike_str(term, lookup, var_map))
 
         if only_term:
-            res = self.convert_latex_to_irklike_str(latex, lookup)
+            res = self.convert_latex_to_irklike_str(latex, lookup, var_map)
 
         return res
 
-    def convert_latex_to_irklike_str(self, latex, item_lookup):
-        # 0. convert to sympy
+    def clean_latex_var(self, latex):
+        l = self.strip(latex)
+        # \mathcal, \mathrm
+        ignore_commands = ["\\\\mathcal", "\\\\mathrm"]
+        pat = re.compile(f"(?:{'|'.join(ignore_commands)})" + r"{(.+?)}")
+        l = re.sub(pat, lambda mo: mo.group(1), l)
+
+    def convert_latex_to_irklike_str(self, latex, item_lookup, var_map):
+        # 1. convert to sympy
         sp_expr = parse_latex_lark(latex)
         # ambiguous result
         if isinstance(sp_expr, Tree):
@@ -1346,64 +1362,36 @@ class ConversionManager:
             sp_expr = sp_expr.children[0]
             # print(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
 
-        # 1. identify smybols and function in expr
-        sp_atoms = []
-        # symbols (and numbers, will get rid of later)
-        sp_atoms.extend(list(sp_expr.atoms()))
-        # symbols that work as functions, e.g. f in f(x)
-        sp_atoms.extend([type(a) for a in list(sp_expr.atoms(sp.Function))])
-
-        # 2. map those to existing pyirk items
-
-        if not "item_symbol_map" in self.ds:
-            self.ds["item_symbol_map"] = p.aux.OneToOneMapping()
-        item_symbol_map = self.ds["item_symbol_map"]
-
-        for atom in sp_atoms:
-            if isinstance(atom, sp.Number):
-                continue
-            for key, value in item_lookup.items():
-                # todo this name compare is potentially dangerous
-                if atom.name == key:
-                    # check if item or symbol already exist in dict
-                    if value["key"] in item_symbol_map.a.keys() or atom in item_symbol_map.b.keys():
-                        old_atom = item_symbol_map.a[value["key"]]
-                        old_key = item_symbol_map.b[atom]
-                        msg = f"new (uri, symbol) pair {value['key'], atom} in collision with existing pair {old_key, old_atom}"
-                        assert old_atom == atom, msg
-                        assert old_key == value["key"], msg
-                    else:
-                        item_symbol_map.add_pair(value["key"], atom)
-                    break
-            else:
-                raise ValueError(f"no item found for {atom}")
-        # 3. traverse tree
-        res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup)
+        # 2. traverse tree
+        res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map)
         return res
 
-    def convert_sympy_to_irklike_str(self, sp_expr, item_lookup):
-        key_item_interpr = self.get_item_dict_key_interpreter()
+    def convert_sympy_to_irklike_str(self, sp_expr, item_lookup, var_map):
         def _get_irk_for_sp(sp_expr, args):
             # Symbols
             if isinstance(sp_expr, sp.Symbol):
-                # key = self.ds["item_symbol_map"].b[sp_expr]
-                # return self.build_reference(key_item_interpr[key])
-                if sp_expr.name in self.d["items"]:
-                    res = self.build_reference(sp_expr.name)
+                if sp_expr.name in var_map.b.keys():
+                    og_var_name = var_map.b[sp_expr.name]
                 else:
-                    res = "cm1." + self.build_reference(sp_expr.name, local_dict={"items": item_lookup})
+                    og_var_name = sp_expr.name
+                if og_var_name in self.d["items"]:
+                    res = self.build_reference(og_var_name)
+                else:
+                    res = "cm1." + self.build_reference(og_var_name, local_dict={"items": item_lookup})
                 return res
             # callable custom Funktions e.g. f(x)
             elif isinstance(type(sp_expr), sp.core.function.UndefinedFunction):
                 # this typing is a little weird
                 # f(x) -type-> f -type-> sp.core.function.UndefinedFunction
                 sp_expr = type(sp_expr)
-                # key = self.ds["item_symbol_map"].b[sp_expr]
-                # function_type = self.build_reference(key_item_interpr[key])
-                if sp_expr.name in self.d["items"]:
-                    function_type = self.build_reference(sp_expr.name)
+                if sp_expr.name in var_map.b.keys():
+                    og_var_name = var_map.b[sp_expr.name]
                 else:
-                    function_type = "cm1." + self.build_reference(sp_expr.name, local_dict={"items": item_lookup})
+                    og_var_name = sp_expr.name
+                if og_var_name in self.d["items"]:
+                    function_type = self.build_reference(og_var_name)
+                else:
+                    function_type = "cm1." + self.build_reference(og_var_name, local_dict={"items": item_lookup})
                 return f"""{function_type}({", ".join(args)})"""
             # numbers
             elif isinstance(sp_expr, (int, float, complex, sp.Number)):
