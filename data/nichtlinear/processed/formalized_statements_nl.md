@@ -13,9 +13,15 @@
 - There is a relation: 'has element type'
 - 'has element type' has the verbal description 'specifies what types of elements appear in this set'
 - The type of argument1 of 'has element type' is 'set'
+- The type of argument1 of 'has element type' is 'sequence'
 - There is a binary operator: 'element of sequence'
 - There is a class: 'sequence'
 - The type of argument1 of 'element of sequence' is 'sequence'
+- The type of argument2 of 'element of sequence' is 'integer number'
+- 'element of sequence' has the verbal description 'Operator that returns the i-th element of a sequence'
+- There is a class: 'Sequence of coefficients'
+- 'Sequence of coefficients' is a subclass of 'sequence'
+- // todo all instances of 'Sequence of coefficients' have element type 'real number'
 
 - // snippet(2)
 - New section: "Lineare Algebra".
@@ -114,8 +120,10 @@
         - 'b' is an instance of 'basis'
         - 'n' is an instance of 'integer number'
         - 'i' is an instance of 'integer number'
-        - 'c' is an instance of 'sequence'  // Represents coefficients
-        - 'd' is an instance of 'sequence'  // Represents another set of coefficients
+        - 'c' is an instance of 'sequence of coefficients'
+        - 'c' 'has element type' 'real number'
+        - 'd' is an instance of 'sequence of coefficients'
+        - 'd' 'has element type' 'real number'
         - There is an equation:
             - source code of left hand side: x
             - source code of right hand side: \sum_{i=1}^n ('element of sequence'(c, i) * 'element of sequence'(b, i))
@@ -126,4 +134,29 @@
             - There is an equation:
                 - full source code: 'element of sequence'(c, i) == 'element of sequence'(d, i)
 
+
+
+- // snippet(9)
+- There is a class: 'linear hull' @en
+- 'linear hull' has the alternative german label 'lineare Hülle'
+- 'linear hull' has the alternative english label 'linear span'
+- 'linear hull' is an instance of 'set'
+- 'linear hull' has the associated LaTeX notation ${\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\}$.
+- There is a general statement:
+    - full source code: Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die Menge aller Linearkombinationen dieser Vektoren: \[ {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} . \]
+    - formalized setting:
+        - 'r' is an instance of 'integer number'
+        - 'n' is an instance of 'integer number'
+        - 'v' is an instance of 'sequence'
+        - 'v' has the verbal description 'sequence of r vectors from Rn'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - // inferred knowledge: The LaTeX code implies that the alpha_i are real numbers.
+        - 'alpha' is an instance of 'sequence'
+        - 'alpha' has the verbal description 'sequence of r real numbers'
+        - 'i' is an instance of 'integer number'
+    - formalized assertion:
+        - 'lh' is an instance of 'linear hull'
+        - There is an equation:
+            - full source code: lh == { \sum_{i=1}^r ('element of sequence'(alpha, i) * 'element of sequence'(v, i)) }
 
