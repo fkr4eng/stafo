@@ -1,0 +1,123 @@
+### **References**
+
+- <span id="page-12-0"></span>1. Moore, G. E. Cramming more components onto integrated circuits. *Electron. Mag* **38**, 114–117 (1965).
+- <span id="page-12-1"></span>2. von Neumann, J. First draf of a report on the EDVAC. *IEEE Ann. Hist. Comput.* **15**, 27–75 (1993).
+- **Tis is an exact copy of the original typescript draf written by von Neumann in 1945, with typographical errors corrected**.
+- <span id="page-12-2"></span>3. *NVIDIA Launches the World's First Graphics Processing Unit: GeForce 256* [http://www.nvidia.com/object/IO\\_20020111\\_5424.html](http://www.nvidia.com/object/IO_20020111_5424.html) (NVIDIA, accessed 30 July 2018).
+- <span id="page-12-3"></span>4. Jouppi, N. P. et al. In-datacenter performance analysis of a tensor processing unit. In *44th Int. Symp. Computer Architecture (ISCA)* 1–12 (ACM, 2017).
+- <span id="page-12-4"></span>5. Kautz, W. H. Cellular logic-in-memory arrays. *IEEE Trans*. *Comput. C* **18**, 719–727 (1969).
+- <span id="page-12-5"></span>6. Wolf, S. A. et al. Spintronics: a spin-based electronics vision for the future. *Science* **294**, 1488–1495 (2001).
+- 7. Ovshinsky, S. R. Reversible electrical switching phenomena in disordered structures. *Phys. Rev. Lett.* **21**, 1450–1453 (1968).
+- 8. Yang, J. J. et al. Memristive switching mechanism for metal/oxide/metal nanodevices. *Nat. Nanotechnol.* **3**, 429–433 (2008).
+- <span id="page-12-6"></span>9. Mikolajick, T. et al. FeRAM technology for high density applications. *Microelectron. Reliab.* **41**, 947–950 (2001).
+- <span id="page-12-7"></span>10. Chua, L. Memristor—the missing circuit element. *IEEE Trans. Circuit Teory* **18**, 507–519 (1971).
+- <span id="page-12-8"></span>11. Strukov, D. B., Snider, G. S., Stewart, D. R. & Williams, R. S. Te missing memristor found. *Nature* **453**, 80–83 (2008).
+- <span id="page-12-9"></span>12. Pi, S. et al. Memristor crossbar arrays with 6-nm half-pitch and 2-nm critical dimension. *Nat. Nanotechnol.* **14**, 35–39 (2019).
+- <span id="page-12-10"></span>13. Choi, B. J. et al. High-speed and low-energy nitride memristors. *Adv. Funct. Mater.* **26**, 5290–5296 (2016).
+- <span id="page-12-11"></span>14. Hu, M., Strachan, J. P., Li, Z. & Williams, S. R. Dot-product engine as computing memory to accelerate machine learning algorithms. In *17th Int. Symp. Quality Electronic Design (ISQED)* 374–379 (IEEE, 2016).
+- <span id="page-12-12"></span>15. Yao, P. et al. Face classifcation using electronic synapses. *Nat. Commun.* **8**, 15199 (2017).
+- <span id="page-12-13"></span>16. Li, C. et al. Analogue signal and image processing with large memristor crossbars. *Nat. Electron.* **1**, 52–59 (2018).
+- <span id="page-12-34"></span>17. Li, C. et al. Efcient and self-adaptive in-situ learning in multilayer memristor neural networks. *Nat. Commun.* **9**, 2385 (2018).
+- <span id="page-12-55"></span>18. Li, C. et al. Long short-term memory networks in memristor crossbar arrays. *Nat. Mach. Intell.* **1**, 49–57 (2019).
+- <span id="page-12-14"></span>19. Hu, M. et al. Memristor-based analog computation and neural network classifcation with a dot product engine. *Adv. Mater.* **30**, 1705914 (2018).
+- <span id="page-12-15"></span>20. Prezioso, M. et al. Training and operation of an integrated neuromorphic network based on metal–oxide memristors. *Nature* **521**, 61–64 (2015).
+- <span id="page-12-16"></span>21. Sheridan, P. M. et al. Sparse coding with memristor networks. *Nat. Nanotechnol.* **12**, 784–789 (2017).
+- <span id="page-12-17"></span>22. Wang, Z. et al. Capacitive neural network with neuro-transistors. *Nat. Commun.* **9**, 3208 (2018).
+- <span id="page-12-18"></span>23. Waser, R. & Aono, M. Nanoionics-based resistive switching memories. *Nat. Mater.* **6**, 833–840 (2007).
+- 24. Valov, I., Waser, R., Jameson, J. R. & Kozicki, M. N. Electrochemical metallization memories—fundamentals, applications, prospects. *Nanotechnology* **22**, 254003 (2011).
+- 25. Yang, J. J., Strukov, D. B. & Stewart, D. R. Memristive devices for computing. *Nat. Nanotechnol.* **8**, 13–24 (2013).
+- 26. Jeong, D. S., Kim, K. M., Kim, S., Choi, B. J. & Hwang, C. S. Memristors for energy‐efcient new computing paradigms. *Adv. Electron. Mater* **2**, 1600090 (2016).
+- 27. Burr, G. W. et al. Neuromorphic computing using non-volatile memory. *Adv. Phys. X* **2**, 89–124 (2017).
+- 28. Lee, J. & Lu, W. D. On‐demand reconfguration of nanomaterials: when electronics meets ionics. *Adv. Mater.* **30**, 1702770 (2018).
+- <span id="page-12-19"></span>29. Yang, Y. & Huang, R. Probing memristive switching in nanoionic devices. *Nat. Electron.* **1**, 274–287 (2018).
+- <span id="page-12-20"></span>30. Silver, D. et al. Mastering the game of Go with deep neural networks and tree search. *Nature* **529**, 484–489 (2016).
+- <span id="page-12-23"></span>31. Pickett, M. D., Medeiros-Ribeiro, G. & Williams, R. S. A scalable neuristor built with Mott memristors. *Nat. Mater.* **12**, 114–117 (2013).
+- <span id="page-12-54"></span>32. Tuma, T., Pantazi, A., Le Gallo, M., Sebastian, A. & Elefheriou, E. Stochastic phase-change neurons. *Nat. Nanotechnol.* **11**, 693–699 (2016).
+- <span id="page-12-24"></span>33. Wang, Z. et al. Memristors with difusive dynamics as synaptic emulators for neuromorphic computing. *Nat. Mater.* **16**, 101–108 (2017).
+- <span id="page-12-25"></span>34. Yang, J. J. et al. High switching endurance in TaO*x* memristive devices. *Appl. Phys. Lett.* **97**, 232102 (2010).
+- <span id="page-12-26"></span>35. Wright, C. D., Hosseini, P. & Vazquez Diosdado, J. A. Beyond von-Neumann computing with nanoscale phase-change memory devices. *Adv. Funct. Mater.* **23**, 2248–2254 (2013).
+- <span id="page-12-22"></span>36. Jiang, H. et al. Sub-10 nm Ta channel responsible for superior performance of a HfO2 memristor. *Sci. Rep.* **6**, 28525 (2016).
+- <span id="page-12-27"></span>37. Choi, S. et al. SiGe epitaxial memory for neuromorphic computing with reproducible high performance based on engineered dislocations. *Nat. Mater.* **17**, 335–340 (2018).
+- <span id="page-12-21"></span>38. Chen, J.-Y. et al. Dynamic evolution of conducting nanoflament in resistive switching memories. *Nano Lett.* **13**, 3671–3677 (2013).
+- <span id="page-12-28"></span>39. van de Burgt, Y. et al. A non-volatile organic electrochemical device as a low-voltage artifcial synapse for neuromorphic computing. *Nat. Mater.* **16**, 414–418 (2017).
+- <span id="page-12-29"></span>40. Boniardi, M. & Ielmini, D. Physical origin of the resistance drif exponent in amorphous phase change materials. *Appl. Phys. Lett.* **98**, 243506 (2011).
+- <span id="page-12-30"></span>41. Yi, W. et al. Quantized conductance coincides with state instability and excess noise in tantalum oxide memristors. *Nat. Commun.* **7**, 11142 (2016).
+- <span id="page-12-31"></span>42. Lastras-Montaño, M. A. & Cheng, K. T. Resistive random-access memory based on ratioed memristors. *Nat. Electron.* **1**, 466–472 (2018).
+- <span id="page-12-32"></span>43. Alibart, F., Gao, L., Hoskins, B. D. & Strukov, D. B. High precision tuning of state for memristive devices by adaptable variation-tolerant algorithm. *Nanotechnology* **23**, 075201 (2012).
+- <span id="page-12-33"></span>44. Ambrogio, S. et al. Equivalent-accuracy accelerated neural-network training using analogue memory. *Nature* **558**, 60–67 (2018).
+- <span id="page-12-35"></span>45. Shafee, A. et al. ISAAC: A convolutional neural network accelerator with in-situ analog arithmetic in crossbars. in *2016 ACM/IEEE 43rd Int. Symp. Comp. Archit. (ISCA)* 14–26 (IEEE, 2016).
+- <span id="page-12-36"></span>46. Jiang, H. et al. Pulse-width modulation based dot-product engine for neuromorphic computing system using memristor crossbar array. In *2018 IEEE Int. Symp. Circuits and Systems (ISCAS)* [https://doi.org/10.1109/](https://doi.org/10.1109/ISCAS.2018.8351276) [ISCAS.2018.8351276](https://doi.org/10.1109/ISCAS.2018.8351276) (IEEE, 2018).
+- <span id="page-12-37"></span>47. Burr, G. W. et al. Experimental demonstration and tolerancing of a large-scale neural network (165 000 synapses) using phase-change memory as the synaptic weight element. *IEEE Trans. Electron Devices* **62**, 3498–3507 (2015).
+- <span id="page-12-38"></span>48. Woo, J. & Yu, S. Resistive memory-based analog synapse: the pursuit for linear and symmetric weight update. *IEEE Nanotechnol. Mag.* **12**, 36–44 (2018).
+- <span id="page-12-39"></span>49. Gokmen, T. & Vlasov, Y. Acceleration of deep neural network training with resistive cross-point devices: design considerations. *Front. Neurosci.* **10**, 33 (2016).
+- <span id="page-12-40"></span>50. Suri, M. et al. Phase change memory as synapse for ultra-dense neuromorphic systems: application to complex visual pattern extraction. In *2011 Int. Electron Devices Meeting (IEDM)* 4.4.1–4.4.4 (IEEE, 2011).
+- <span id="page-12-41"></span>51. Hsu, C.-W. et al. 3D vertical TaO*x*/TiO2 RRAM with over 103 self-rectifying ratio and sub-µA operating current. In *2013 Int. Electron Devices Meeting (IEDM)* 10.4.1–10.4.4 (IEEE, 2013).
+- <span id="page-12-42"></span>52. Jang, J.-W., Park, S., Burr, G. W., Hwang, H. & Jeong, Y.-H. Optimization of conductance change in Pr(1−*<sup>x</sup>*)Ca*x*MnO3-based synaptic devices for neuromorphic systems. *IEEE Electron Device Lett.* **36**, 457–459 (2015).
+- <span id="page-12-43"></span>53. Merrikh-Bayat, F. et al. High-performance mixed-signal neurocomputing with nanoscale foating-gate memory cell arrays. *IEEE Trans. Neural Netw. Learn. Syst.* **29**, 4782–4790 (2018).
+- <span id="page-12-44"></span>54. Li, C. et al. Tree-dimensional crossbar arrays of self-rectifying Si/SiO2/Si memristors. *Nat. Commun.* **8**, 15666 (2017).
+- <span id="page-12-45"></span>55. Woo, J., Peng, X., & Yu, S. Design considerations of selector device in cross-point RRAM array for neuromorphic computing. In *2018 IEEE Int. Symp. Circuits and Systems (ISCAS)* [https://doi.org/10.1109/](https://doi.org/10.1109/ISCAS.2018.8351735) [ISCAS.2018.8351735](https://doi.org/10.1109/ISCAS.2018.8351735) (IEEE, 2018).
+- <span id="page-12-46"></span>56. Wang, W. et al. Learning of spatiotemporal patterns in a spiking neural network with resistive switching synapses. *Sci. Adv.* **4**, eaat4752 (2018).
+- <span id="page-12-47"></span>57. Hebb, D. O. *Te Organization of Behavior*. (Wiley, New York, 1949).
+- <span id="page-12-48"></span>58. Sourikopoulos, I. et al. A 4-fJ/spike artifcial neuron in 65 nm CMOS technology. *Front. Neurosci.* **11**, 123 (2017).
+- <span id="page-12-49"></span>59. Indiveri, G., Chicca, E. & Douglas, R. J. A VLSI array of low-power spiking neurons and bistable synapses with spike-timing dependent plasticity. *IEEE Trans. Neur. Netw.* **17**, 211–221 (2006).
+- <span id="page-12-50"></span>60. Benjamin, B. V. et al. Neurogrid: a mixed-analog-digital multichip system for large-scale neural simulations. *Proc. IEEE* **102**, 699–716 (2014).
+- <span id="page-12-51"></span>61. Furber, S. B., Galluppi, F., Temple, S. & Plana, L. A. Te SpiNNaker Project. *Proc. IEEE* **102**, 652–665 (2014).
+- <span id="page-12-52"></span>62. Merolla, P. A. et al. A million spiking-neuron integrated circuit with a scalable communication network and interface. *Science* **345**, 668–673 (2014).
+- <span id="page-12-53"></span>63. Davies, M. Putting the 'learning' in machine learning processors: an introduction to the Loihi neuromorphic research chip. *Zenodo* [https://doi.](https://doi.org/10.5281/zenodo.1313406) [org/10.5281/zenodo.1313406](https://doi.org/10.5281/zenodo.1313406) (2018).
+
+- <span id="page-13-33"></span>64. Jo, S. H. et al. Nanoscale memristor device as synapse in neuromorphic systems. *Nano Lett.* **10**, 1297–1301 (2010).
+- <span id="page-13-41"></span>65. Ohno, T. et al. Short-term plasticity and long-term potentiation mimicked in single inorganic synapses. *Nat. Mater.* **10**, 591–595 (2011).
+- 66. Yu, S., Wu, Y., Jeyasingh, R., Kuzum, D. & Wong, H.-S. P. An electronic synapse device based on metal oxide resistive switching memory for neuromorphic computation. *IEEE Trans. Elect. Dev.* **58**, 2729–2737 (2011).
+- 67. Wang, Z. Q. et al. Synaptic learning and memory functions achieved using oxygen ion migration/difusion in an amorphous InGaZnO memristor. *Adv. Funct. Mater.* **22**, 2759–2765 (2012).
+- <span id="page-13-34"></span>68. La Barbera, S., Vuillaume, D. & Alibart, F. Filamentary switching: synaptic plasticity through device volatility. *ACS Nano* **9**, 941–949 (2015).
+- <span id="page-13-35"></span>69. Stoliar, P. et al. A leaky‐integrate‐and‐fre neuron analog realized with a Mott insulator. *Adv. Funct. Mater.* **27**, 1604740 (2017).
+- 70. Al-Shedivat, M., Naous, R., Cauwenberghs, G. & Salama, K. N. Memristors empower spiking neurons with stochasticity. *IEEE Trans. Emerg. Sel. Topics Circuits Syst.* **5**, 242–253 (2015).
+- 71. Mehonic, A. & Kenyon, A. J. Emulating the electrical activity of the neuron using a silicon oxide RRAM cell. *Front. Neurosci.* **10**, 57 (2016).
+- <span id="page-13-36"></span>72. Zhang, X. et al. An artifcial neuron based on a threshold switching memristor. *IEEE Elect. Dev. Lett.* **39**, 308–311 (2018).
+- <span id="page-13-37"></span>73. Pantazi, A., Woźniak, S., Tuma, T. & Elefheriou, E. All-memristive neuromorphic computing with level-tuned neurons. *Nanotechnology* **27**, 355205 (2016).
+- <span id="page-13-44"></span>74. Wang, Z. et al. Fully memristive neural networks for pattern classifcation with unsupervised learning. *Nat. Electron.* **1**, 137–145 (2018).
+- <span id="page-13-38"></span>75. Pedretti, G. et al. Memristive neural network for on-line learning and tracking with brain-inspired spike timing dependent plasticity. *Sci. Rep.* **7**, 5288 (2017).
+- <span id="page-13-39"></span>76. Kim, S. et al. Experimental demonstration of a second-order memristor and its ability to biorealistically implement synaptic plasticity. *Nano Lett.* **15**, 2203–2211 (2015).
+- <span id="page-13-40"></span>77. Jerry, M., Parihar, A., Grisafe, B., Raychowdhury, A. & Datta, S. Ultra-low power probabilistic IMT neurons for stochastic sampling machine. In *2017 Symp. VLSI Technology (VLSIT)* T186–T187 (IEEE, 2017).
+- <span id="page-13-42"></span>78. Lai, Q. et al. Analog memory capacitor based on feld-confgurable ion-doped polymers. *Appl. Phys. Lett.* **95**, 213503 (2009).
+- <span id="page-13-43"></span>79. Nefci, E., Das, S., Pedroni, B., Kreutz-Delgado, K. & Cauwenberghs, G. Event-driven contrastive divergence for spiking neuromorphic systems. *Front. Neurosci.* **7**, 272 (2014).
+- <span id="page-13-45"></span>80. Xia, Q. et al. Memristor−CMOS hybrid integrated circuits for reconfgurable logic. *Nano Lett.* **9**, 3640–3645 (2009).
+- <span id="page-13-46"></span>81. Pi, S., Lin, P. & Xia, Q. Cross point arrays of 8 nm × 8 nm memristive devices fabricated with nanoimprint lithography. *J. Vacuum Sci. Technol. B* **31**, 06FA02 (2013).
+- <span id="page-13-47"></span>82. Shulaker, M. et al. Tree-dimensional integration of nanotechnologies for computing and data storage on a single chip. *Nature* **547**, 74–78 (2017).
+- <span id="page-13-48"></span>83. Jang, J. et al. Vertical cell array using TCAT(Terabit Cell Array Transistor) technology for ultra high density NAND fash memory. In *2009 Symp. VLSI Technology (VLSIT)* 192–193 (IEEE, 2009).
+- <span id="page-13-49"></span>84. Clarke, P. Report: TSMC to ofer embedded ReRAM in 2019. *eeNews* [http://www.eenewsanalog.com/news/report-tsmc-ofer-embedded](http://www.eenewsanalog.com/news/report-tsmc-offer-embedded-reram-2019)[reram-2019](http://www.eenewsanalog.com/news/report-tsmc-offer-embedded-reram-2019) (2017).
+- <span id="page-13-50"></span>85. Yoon, J. H. et al. An artifcial nociceptor based on a difusive memristor. *Nat. Commun.* **9**, 417 (2018).
+- <span id="page-13-51"></span>86. Gao, L. et al. Digital-to-analog and analog-to-digital conversion with metal oxide memristors for ultra-low power computing. In *2013 IEEE/ACM Int. Symp. Nanoscale Architectures (NANOARCH)* 19–22 (IEEE, 2013).
+- <span id="page-13-0"></span>87. Pi, S., Ghadiri-Sadrabadi, M., Bardin, J. C. & Xia, Q. Nanoscale memristive radiofrequency switches. *Nat. Commun.* **6**, 7519 (2015).
+- <span id="page-13-1"></span>88. Li, Z. et al. Experimental demonstration of a defect-tolerant nanocrossbar demultiplexer. *Nanotechnology* **19**, 165203 (2008).
+- <span id="page-13-2"></span>89. Bayat, F. M. Implementation of multilayer perceptron network with highly uniform passive memristive crossbar circuits. *Nat. Commun.* **9**, 2331 (2018).
+- <span id="page-13-3"></span>90. Du, C. et al. Reservoir computing using dynamic memristors for temporal information processing. *Nat. Commun.* **8**, 2204 (2017).
+- <span id="page-13-4"></span>91. Serb, A. et al. Unsupervised learning in probabilistic neural networks with multi-state metal-oxide memristive synapses. *Nat. Commun.* **7**, 12611 (2016).
+- <span id="page-13-5"></span>92. Midya, R. et al. Anatomy of Ag/Hafnia-based selectors with 1010 nonlinearity. *Adv. Mater.* **29**, 1604457 (2017).
+- <span id="page-13-6"></span>93. Srinivasan, V. S. S. et al. Punchthrough-diode-based bipolar RRAM selector by Si epitaxy. *IEEE Electron Dev. Lett.* **33**, 1396–1398 (2012).
+- <span id="page-13-7"></span>94. Huang, J.-J., Tseng, Y.-M., Hsu, C.-W. & Hou, T.-H. Bipolar nonlinear Ni/ TiO2/Ni selector for 1S1R crossbar array applications. *IEEE Electron Dev. Lett.* **32**, 1427–1429 (2011).
+- <span id="page-13-8"></span>95. Shin, J. et al. TiO2-based metal–insulator–metal selection device for bipolar resistive random access memory cross-point application. *J. Appl. Phys.* **109**, 033712 (2011).
+- <span id="page-13-9"></span>96. Govoreanu, B. et al. High-performance metal–insulator–metal tunnel diode selectors. *IEEE Electron Dev. Lett.* **35**, 63–65 (2014).
+- <span id="page-13-10"></span>97. Woo, J. et al. Electrical and reliability characteristics of a scaled (∼30nm) tunnel barrier selector (W/Ta2O5/TaOx/TiO2/TiN) with excellent performance (JMAX>107A/cm2 ). In *2014 Symp. VLSI Technology (VLSIT)* (IEEE, 2014); <https://doi.org/10.1109/VLSIT.2014.6894431>
+- <span id="page-13-11"></span>98. Lee, W. et al. Varistor-type bidirectional switch (JMAX>107A/cm2 , selectivity ∼104 ) for 3D bipolar resistive memory arrays. In *2012 Symp. VLSI Technology (VLSIT)* 37–38 (IEEE, 2012).
+- <span id="page-13-12"></span>99. Choi, B. J. et al. Trilayer tunnel selectors for memristor memory cells. *Adv. Mater.* **28**, 356 (2016).
+- <span id="page-13-13"></span>100. Kawahara, A. et al. An 8 Mb multi-layered cross-point ReRAM macro with 443 MB/s write throughput. *IEEE J. Solid-State Circuits* **48**, 178 (2013).
+- <span id="page-13-14"></span>101. *MIEC\* Access Device for 3D-Crosspoint Nonvolatile Memory Arrays* (IBM, 2013); [https://researcher.watson.ibm.com/researcher/fles/us-gwburr/](https://researcher.watson.ibm.com/researcher/files/us-gwburr/MIECOverviewPublicDomain_Jan2013_3.pdf) [MIECOverviewPublicDomain\\_Jan2013\\_3.pdf](https://researcher.watson.ibm.com/researcher/files/us-gwburr/MIECOverviewPublicDomain_Jan2013_3.pdf)
+- <span id="page-13-15"></span>102. Govoreanu, B. et al. Termally stable integrated Se-based OTS selectors with >20MA/cm2 current drive, >3.103 half-bias nonlinearity, tunable threshold voltage and excellent endurance. In *2017 Symp. VLSI Technology (VLSIT)* T92–T93 (IEEE, 2017).
+- <span id="page-13-16"></span>103. Ohba, K. et al. Cross point Cu-ReRAM with BC-doped selector. In *2018 IEEE Int. Memory Workshop (IMW)* (IEEE, 2018); [https://doi.org/10.1109/](https://doi.org/10.1109/IMW.2018.8388824) [IMW.2018.8388824](https://doi.org/10.1109/IMW.2018.8388824)
+- <span id="page-13-17"></span>104. Yasuda, S. et al. A cross point Cu-ReRAM with a novel OTS selector for storage class memory applications. In *2017 Symp. VLSI Technology (VLSIT)* T30–T31 (IEEE, 2017).
+- <span id="page-13-18"></span>105. Yang, H. et al. Novel selector for high density non-volatile memory with ultra-low holding voltage and 107 on/of ratio. In *2015 VLSI Technology Symp. (VLSIT)* T130–T131 (IEEE, 2015).
+- <span id="page-13-19"></span>106. Kim, S. G. et al. Breakthrough of selector technology for cross-point 25-nm ReRAM. In *2017 Int. Electron Devices Meeting (IEDM)* 2.1.1-2.1.4 (IEEE, 2017).
+- <span id="page-13-20"></span>107. Son, M. et al. Excellent selector characteristics of nanoscale VO2 for high-density bipolar ReRAM applications. *IEEE Electron Device Lett.* **32**, 1579–1581 (2011).
+- <span id="page-13-21"></span>108. Kim, W. G. et al. NbO2-based low power and cost efective 1S1R switching for high density cross point ReRAM application. In *2014 Symp. VLSI Technology (VLSIT)* (IEEE, 2014); [https://doi.org/10.1109/](https://doi.org/10.1109/VLSIT.2014.6894405) [VLSIT.2014.6894405](https://doi.org/10.1109/VLSIT.2014.6894405)
+- <span id="page-13-22"></span>109. Cha, E. et al. Nanoscale (∼10nm) 3D vertical ReRAM and NbO2 threshold selector with TiN electrode. In *2013 Int. Electron Devices Meeting (IEDM)* 10.5.1–10.5.4 (IEEE, 2013).
+- <span id="page-13-23"></span>110. Lee, M.-J. et al. Highly-scalable threshold switching select device based on chalcogenide glasses for 3D nanoscaled memory arrays. In *2012 Int. Electron Devices Meeting (IEDM)* 2.6.1–2.6.3. (IEEE, 2012).
+- <span id="page-13-24"></span>111. Sun, J. et al. Physically transient threshold switching device based on magnesium oxide for security application. *Small* **14**, 1800945 (2018).
+- <span id="page-13-25"></span>112. Jo, S. H., Kumar, T., Narayanan, S., Lu, W. D. & Nazarian, H. 3D-stackable crossbar resistive memory based on feld assisted superlinear threshold (FAST) selector. In 2*014 Int. Electron Devices Meeting (IEDM)* 6.7.1–6.7.4 (IEEE, 2014).
+- <span id="page-13-26"></span>113. Ji, L. et al. Integrated one diode–one resistor architecture in nanopillar SiO*x* resistive switching memory by nanosphere lithography. *Nano Lett.* **2**, 14 (2014).
+- <span id="page-13-27"></span>114. Wang, G. High‐performance and low‐power rewritable SiO*x* 1 kbit one diode–one resistor crossbar memory array. *Adv. Mater.* **25**, 4789 (2013).
+- <span id="page-13-28"></span>115. Govoreanu, B. Vacancy-modulated conductive oxide resistive RAM (VMCO-RRAM): an area-scalable switching current, self-compliant, highly nonlinear and wide on/of-window resistive switching cell. In *2013 Int. Electron Devices Meeting (IEDM)* 10.2.1–10.2.4 (IEEE, 2013).
+- <span id="page-13-29"></span>116. Song, M. Self-selective characteristics of nanoscale VO*x* devices for high-density ReRAM applications. *IEEE Electron Dev. Lett.* **33**, 718 (2012).
+- <span id="page-13-30"></span>117. Lu, D. et al. Investigations of conduction mechanisms of the self-rectifying n<sup>+</sup>Si-HfO2-Ni RRAM devices. *IEEE Trans. Electron Dev* **61**, 2294–2301 (2014).
+- <span id="page-13-31"></span>118. Wang, M. J., Gao, S., Zeng, F., Song, C. & Pan, F. Unipolar resistive switching with forming-free and self-rectifying efects in Cu/HfO2/n-Si devices. *AIP Adv.* **6**, 025007 (2016).
+- <span id="page-13-32"></span>119. Kim, K.-H., Jo, S. H., Gaba, S. & Lu, W. Nanoscale resistive memory with intrinsic diode characteristics and long endurance. *Appl. Phys. Lett.* **96**, 053106 (2010).

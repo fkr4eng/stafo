@@ -14,7 +14,7 @@ import pyirk as p
 import datetime as dt
 from string import ascii_letters
 
-from .logging import logger
+from .stafo_logging import logger
 lark = import_module("lark")
 if lark:
     from lark import Transformer, Token, Tree
@@ -25,7 +25,8 @@ from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set
 import stafo.utils as u
 
 ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-ocse_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
+ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
+ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
 
 
 
@@ -38,15 +39,19 @@ def get_md_lines(fpath) -> list[str]:
 
 class ConversionManager:
     @u.timing
-    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None):
+    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"]):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
         self.eq_reference_dict = {}
         self.ds = {}
 
-        self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
-        self.ocse = p.irkloader.load_mod_from_path(ocse_path, prefix="ocse", reuse_loaded=True)
+        if "ma" in load_irk_modules:
+            self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
+        if "ct" in load_irk_modules:
+            self.ct = p.irkloader.load_mod_from_path(ct_path, prefix="ct", reuse_loaded=True)
+        if "ag" in load_irk_modules:
+            self.ag = p.irkloader.load_mod_from_path(ag_path, prefix="ag", reuse_loaded=True)
 
         self.irk_module_names = u.MyDict({"builtins": "p",
                             "control_theory": "ct",
@@ -58,7 +63,7 @@ class ConversionManager:
         self.exsiting_labels_dict = p.get_label_to_item_dict()
 
         if force_key_tuple is None:
-            self.get_keys()
+            self.get_keys(num_keys)
         # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
         else:
             self.item_keys, self.relation_keys = force_key_tuple
@@ -117,12 +122,12 @@ class ConversionManager:
         else:
             raise TypeError(s)
 
-    def get_keys(self):
+    def get_keys(self, num_keys):
         """
         generate pyirk keys
         """
-        self.item_keys = [p.generate_new_key("I") for i in range(1000)]
-        self.relation_keys = [p.generate_new_key("R") for i in range(1000)]
+        self.item_keys = [p.generate_new_key("I") for i in range(num_keys)]
+        self.relation_keys = [p.generate_new_key("R") for i in range(num_keys)]
 
     def get_indent(self, line:str):
         """get indentation (number of spaces) of string"""
@@ -335,6 +340,40 @@ class ConversionManager:
                     "key": "R30",
                     "R1": "is secondary instance of",
                     "prefix": "p",
+                },
+                "has title": {
+                    "key": "R8434",
+                    "R1": "has title",
+                    "R22": True,
+                    "prefix": "ag",
+                },
+                "has authors": {
+                    "key": "R8433",
+                    "R1": "has authors",
+                    "prefix": "ag",
+                },
+                "has year": {
+                    "key": "R8435",
+                    "R1": "has year",
+                    "R22": True,
+                    "prefix": "ag",
+                },
+                "has family name": {
+                    "key": "R7781",
+                    "R1": "has family name",
+                    "R22": True,
+                    "prefix": "ag",
+                },
+                "has given name": {
+                    "key": "R7782",
+                    "R1": "has given name",
+                    "prefix": "ag",
+                },
+                "has google scholar author ID": {
+                    "key": "R3476",
+                    "R1": "has google scholar author ID",
+                    "R22": True,
+                    "prefix": "ag",
                 },
 
             }}
@@ -790,8 +829,9 @@ class ConversionManager:
             if isinstance(v, str) and len(v) > 0:
                 try:
                     irk_label = v.split('"')[1] # todo this should be try-except-ed
+                    #! why are we doing this? This way I cant add string values -> Those are not added here but later
                 except Exception as e:
-                    continue
+                    pass
                 v_item = p.ds.get_item_by_label(irk_label)
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
@@ -861,7 +901,11 @@ class ConversionManager:
                     assert type(d[key]) == list, f"{d[key]} should be a list."
                     d[key].append(value)
                 else:
-                    d[key] = [value]
+                    if isinstance(value, list):
+                        # this is (only?) used in the memristor example when building the dict directly without fnl
+                        d[key] = value
+                    else:
+                        d[key] = [value]
 
         # key is probably a special key such as 'comment' or 'formal_set'
         else:
@@ -1103,8 +1147,8 @@ class ConversionManager:
 
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
-        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R77__en", "R77__de", "R81", "R82"]
-
+        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R77__en", "R77__de", "R81", "R82", "R3476", "R7781", "R7782", "R8434"]
+        # todo declare this at the top
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
@@ -1155,7 +1199,13 @@ class ConversionManager:
                         if res:
                             l.append(str(v))
                         else:
-                            l.append(f'"{v}"')
+                            ref = self.build_reference(v)
+                            if ref == v:
+                                # this means, that there is no reference and the origi-> quote the string
+                                l.append(f'"{v}"')
+                            else:
+                                l.append(f'{ref}')
+
                     string = f"[{', '.join(l)}]"
                     context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
         # sort the relations in ascending number oder
