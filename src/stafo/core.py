@@ -282,6 +282,9 @@ class MainManager:
             raise NotImplementedError("No support for mutiple commands.")
         self.statement_source
 
+def llm_api(message):
+    return model.generate_content(message, generation_config=genai.GenerationConfig(temperature=0)).text
+
 # split without consuming the delimiter
 
 def nonconsuming_regex_split(pattern, string):

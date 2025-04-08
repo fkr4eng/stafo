@@ -19,9 +19,9 @@
 - The type of argument1 of 'element of sequence' is 'sequence'
 - The type of argument2 of 'element of sequence' is 'integer number'
 - 'element of sequence' has the verbal description 'Operator that returns the i-th element of a sequence'
-- There is a class: 'Sequence of coefficients'
-- 'Sequence of coefficients' is a subclass of 'sequence'
-- // todo all instances of 'Sequence of coefficients' have element type 'real number'
+- There is a class: 'sequence of coefficients'
+- 'sequence of coefficients' is a subclass of 'sequence'
+- // todo all instances of 'sequence of coefficients' have element type 'real number'
 
 - // snippet(2)
 - New section: "Lineare Algebra".
