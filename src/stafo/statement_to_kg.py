@@ -518,7 +518,7 @@ class ConversionManager:
 
         # debug
         if i == self.stop_at_line:
-            1
+            44
         if len(new_section) > 0:
             return d
         # new class?

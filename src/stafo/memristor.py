@@ -183,6 +183,45 @@ def main():
                 with open(temp_path, "wt", encoding="utf-8") as f:
                     json.dump(CM.d, f)
 
+        # examine the stacks
+        for i, row in df.iterrows():
+            # message = f"Following is the description of a memristor stack. If possible, return a list of the chemical\
+            #     compounds in order, separated by comma with no spaces. if not return an empty string.\n {row["Stack"]}"
+
+            # if os.path.isfile(llm_cache_path):
+            #     cached_llm_container.load_cache(llm_cache_path)
+            # res = cached_llm_container.llm_api(message)
+            # cached_llm_container.save_cache(llm_cache_path)
+            # for compound in res.split(","):
+
+            cit_numbers = []
+            for cn in row["Source"].split(","):
+                try:
+                    cit_numbers.append(int(cn))
+                except ValueError:
+                    pass
+
+            # skip row if no stack present
+            if row["Stack"].count("/") < 2:
+                continue
+            # multiple stacks in row
+            for stack in row["Stack"].strip().split(","):
+                stack = stack.replace("*", "")
+                # todo do something with *
+                d = {"R4": CM.build_reference("memristor stack", CM.d)}
+                CM.add_new_item(CM.d, stack, "en", d)
+                for cn in cit_numbers:
+                    CM.add_relation_inplace(CM.d["items"][citation_dict[cn]], CM.d["relations"]["has memristor stack"]["key"], stack)
+
+                for compound in stack.split("/"):
+                    d = {"R4": CM.build_reference("stack component", d)}
+                    CM.add_new_item(CM.d, compound, "en", d)
+                    CM.add_relation_inplace(CM.d["items"][stack], CM.d["relations"]["has stack component"]["key"], compound)
+
+
+
+
+
         CM.render()
 
         # with open(table_path, "rt", encoding="utf-8") as f:
