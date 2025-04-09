@@ -1,0 +1,6 @@
+- // snippet (1)
+- There is a class: 'memristor stack'
+- There is a class: 'stack component'
+- There is a relation: 'has stack component'
+- The type of argument1 of 'has stack component' is 'memristor stack'
+- The result type of 'has stack component' is 'stack component'

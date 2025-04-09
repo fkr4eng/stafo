@@ -4,9 +4,8 @@
 |--|--|--|--|--|--|-----------------------------------------------------------------------------------------------------------|
 |--|--|--|--|--|--|-----------------------------------------------------------------------------------------------------------|
 
-| Mechanism                  | Selector geometry                                         | Non-linearity | Operation<br>voltage<br>(V)a | Max.                               | Speed (ns)b |       | Endurance     | I–V      |
+| Mechanism                  | Selector geometry                                         | Non-linearity | Operation<br>voltage<br>(V)a | Max. current<br>density<br>(A cm−2<br>)                              | Speed (ns)b ton tof |       | Endurance     | I–V   symmetry   |
 |----------------------------|-----------------------------------------------------------|---------------|------------------------------|------------------------------------|-------------|-------|---------------|----------|
-|                            |                                                           |               |                              | current<br>density<br>(A cm−2<br>) | ton         | tof   |               | symmetry |
 | Bidirectional selectors    |                                                           |               |                              |                                    |             |       |               |          |
 | Si PN junction             | Punch through NPN diodes93                                | 250–4,700c    | –3 to 3.8                    | >106                               | <10         | NR    | NR            | No       |
 | Schottky barrier           | Ni/TiO2/Ni94                                              | 1×104         | ±2.4                         | 1×105                              | NR          | NR    | 103<br>(d.c.) | Yes      |
