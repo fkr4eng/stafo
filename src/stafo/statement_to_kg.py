@@ -46,6 +46,8 @@ class ConversionManager:
         self.eq_reference_dict = {}
         self.ds = {}
 
+        self.load_irk_modules = load_irk_modules
+
         if "ma" in load_irk_modules:
             self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
         if "ct" in load_irk_modules:
@@ -375,6 +377,11 @@ class ConversionManager:
                     "R22": True,
                     "prefix": "ag",
                 },
+                "cites": {
+                    "key": "R8440",
+                    "R1": "cites",
+                    "prefix": "ag",
+                },
 
             }}
         """
@@ -386,7 +393,11 @@ class ConversionManager:
         """
         for key, value in self.d["relations"].items():
             if not "render" in self.d["relations"][key].keys():
-                self.d["relations"][key]["render"] = f'{value["key"]}__{value["R1"].replace(" ", "_")}'
+                if value["prefix"] != "p":
+                    prefix = value["prefix"] + "__"
+                else:
+                    prefix = ""
+                self.d["relations"][key]["render"] = f'{prefix}{value["key"]}__{value["R1"].replace(" ", "_")}'
 
 
         self.comment_pattern = re.compile(r"- //")
@@ -1109,16 +1120,14 @@ class ConversionManager:
                 res = render_template("statement_template.py", context)
                 output += res + "\n\n"
 
-        try:
-            ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
-        except:
-            ct_path = ""
-
         pyirk_context = {"uri_name": f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}",
-                         "ct_path": ct_path,
+                        #  "ct_path": ct_path,
                          "irk_module_names": self.irk_module_names,
                          "entity_declaration": entity_declaration,
                          "content": output}
+
+        for mod in self.load_irk_modules:
+            pyirk_context[f"{mod}_path"] = getattr(self, mod).__file__
 
         res = render_template("pyirk_template.py", pyirk_context)
 

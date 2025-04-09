@@ -3,9 +3,15 @@ import sympy as sp
 
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
+{% if context.ct_path %}
 {{context.irk_module_names.control_theory}} = p.irkloader.load_mod_from_path(r"{{context.ct_path}}", prefix="{{context.irk_module_names.control_theory}}")
-{{context.irk_module_names.math}} = {{context.irk_module_names.control_theory}}.ma
-{{context.irk_module_names.agents}} = {{context.irk_module_names.math}}.ag
+{% endif %}
+{% if context.ma_path %}
+{{context.irk_module_names.math}} = p.irkloader.load_mod_from_path(r"{{context.ma_path}}", prefix="{{context.irk_module_names.math}}")
+{% endif %}
+{% if context.ag_path %}
+{{context.irk_module_names.agents}} = p.irkloader.load_mod_from_path(r"{{context.ag_path}}", prefix="{{context.irk_module_names.agents}}")
+{% endif %}
 
 __URI__ = "irk:/ocse/0.2/{{context.uri_name}}"
 
