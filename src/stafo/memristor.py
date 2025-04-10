@@ -15,11 +15,16 @@ from .statement_to_kg import ConversionManager
 
 llm_cache_path = "llm_cache.pcl"
 
+omt_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "omt")), "omt.py")
+omt_load_dict = {"path": omt_path, "prefix": "omt", "module_name": "omt"}
+
 def main():
-    CM = ConversionManager(os.path.join(BASE_DIR, "data/memristor/formalized_statements.md"), num_keys=1000, load_irk_modules=["ag"])
+    CM = ConversionManager(os.path.join(BASE_DIR, "data/memristor/formalized_statements.md"), num_keys=1000,
+        load_irk_modules=["ag"], additional_modules=[omt_load_dict])
     CM.step1_init()
     CM.step2_parse_fnl()
     CM.current_snippet = "mem"
+    CM.default_language = "en"
     # step 1
     # parse Bibliography and return Authors and Titles
 
@@ -116,8 +121,8 @@ def main():
                     cached_llm_container.load_cache(llm_cache_path)
                 res = cached_llm_container.llm_api(message)
                 cached_llm_container.save_cache(llm_cache_path)
+                # print(res)
 
-                print(res)
                 if "`json" in res:
                     res = res.replace("`json", "").replace("`", "")
                 info = json.loads(res)
@@ -206,24 +211,26 @@ def main():
                 continue
             # multiple stacks in row
             for stack in row["Stack"].strip().split(","):
-                stack = stack.replace("*", "")
+                stack = stack.strip().replace("*", "")
                 # todo do something with *
                 d = {"R4": CM.build_reference("memristor stack", CM.d)}
                 CM.add_new_item(CM.d, stack, "en", d)
                 for cn in cit_numbers:
                     CM.add_relation_inplace(CM.d["items"][citation_dict[cn]], CM.d["relations"]["has memristor stack"]["key"], stack)
 
-                for compound in stack.split("/"):
+                for i, compound in enumerate(stack.split("/")):
                     d = {"R4": CM.build_reference("stack component", d)}
                     CM.add_new_item(CM.d, compound, "en", d)
-                    CM.add_relation_inplace(CM.d["items"][stack], CM.d["relations"]["has stack component"]["key"], compound)
+                    q = [{CM.d["relations"]["has position"]["key"]: i,
+                         CM.d["relations"]["is at outer position"]["key"]: (i==0 or i==len(stack.split("/"))-1)}]
+                    CM.add_relation_inplace(CM.d["items"][stack], CM.d["relations"]["has stack component"]["key"], compound, qualifier=q)
 
 
 
 
 
         CM.render()
-
+    1
         # with open(table_path, "rt", encoding="utf-8") as f:
         #     table_content = f.read()
         # col_heads = []
