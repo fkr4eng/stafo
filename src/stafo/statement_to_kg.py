@@ -13,6 +13,7 @@ from numbers import Real
 import pyirk as p
 import datetime as dt
 from string import ascii_letters
+from typing import Union
 
 from .stafo_logging import logger
 lark = import_module("lark")
@@ -39,7 +40,7 @@ def get_md_lines(fpath) -> list[str]:
 
 class ConversionManager:
     @u.timing
-    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"]):
+    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"], additional_modules=[]):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
@@ -59,6 +60,12 @@ class ConversionManager:
                             "control_theory": "ct",
                             "math": "ma",
                             "agents": "ag"})
+        # todo unify the loading of different modules
+        self.additional_modules = additional_modules
+        for am in additional_modules:
+            p.irkloader.load_mod_from_path(am["path"], prefix=am["prefix"], reuse_loaded=True)
+            self.irk_module_names[am["module_name"]] = am["prefix"]
+
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
 
@@ -174,6 +181,9 @@ class ConversionManager:
         for k,v in d["items"].items():
             rel_dict[v["key"]] = k
         return rel_dict
+
+    def get_qualifier_name(self, relation_R1:str):
+        return relation_R1.lower().replace(" ", "_")
 
     ####################################################################################################################
     # init formal natural language parser
@@ -419,6 +429,7 @@ class ConversionManager:
         self.general_statement_pattern = re.compile(r"There is a general statement")
         self.explanation_pattern = re.compile(r"There is an explanation")
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
+        self.qualifier_pattern = re.compile(r"(?<=- )(.+?)(?= is a qualifier)")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
@@ -514,6 +525,7 @@ class ConversionManager:
         general_statement = re.findall(self.general_statement_pattern, line)
         explanation = re.findall(self.explanation_pattern, line)
         for_loop = re.findall(self.for_pattern, line)
+        qualifier = re.findall(self.qualifier_pattern, line)
 
 
         # debug
@@ -684,6 +696,10 @@ class ConversionManager:
                 "stop": stop,
                 }
             d["items"][f"for_loop_{i}"] = for_dict
+        elif len(qualifier) > 0:
+            rel = self.strip(qualifier[0])
+            if rel in self.d["relations"].keys():
+                self.d["relations"][rel]["is_qualifier"] = True
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
@@ -847,7 +863,13 @@ class ConversionManager:
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
                     continue
-            self.add_relation_inplace(d["items"][label], k, v)
+            if isinstance(v, list):
+                # this is (only?) used when setting the dictionary directly instead of from fnl
+                for vv in v:
+                    self.add_relation_inplace(d["items"][label], k, vv)
+            else:
+                self.add_relation_inplace(d["items"][label], k, v)
+            # possibility to delete previously set relations (eg. change R3 -> R4)
             if v == None:
                 if k in d["items"][label].keys():
                     del d["items"][label][k]
@@ -882,7 +904,7 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_relation_inplace(self, d:dict, key:str, value:str):
+    def add_relation_inplace(self, subject_dict:dict, key:str, obj:str, qualifier:dict={}):
         """add a relation between subject and object to a given dict (inplace)
 
         Args:
@@ -890,14 +912,18 @@ class ConversionManager:
             key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
         """
-        # try type conversion in case of literals (numbers) -> will be pr
+        # try type conversion in case of literals (numbers)
         try:
-            value = int(value)
+            obj = int(obj)
         except:
             try:
-                value = float(value)
+                obj = float(obj)
             except:
                 pass
+
+        object_dict = {"object": obj, "q": []}
+        if qualifier:
+            object_dict["q"].extend(qualifier)
 
         self.rel_interpr = self.get_rel_dict_key_interpreter()
         if key in self.rel_interpr.keys():
@@ -905,23 +931,26 @@ class ConversionManager:
 
             # relation is functional: only one object, might be overwriting old one
             if "R22" in relation.keys() and relation["R22"] == True:
-                d[key] = value
+                subject_dict[key] = object_dict
             # relation is not functional: make list or append to it
             else:
-                if key in d.keys():
-                    assert type(d[key]) == list, f"{d[key]} should be a list."
-                    d[key].append(value)
-                else:
-                    if isinstance(value, list):
-                        # this is (only?) used in the memristor example when building the dict directly without fnl
-                        d[key] = value
+                if key in subject_dict.keys():
+                    assert type(subject_dict[key]) == list, f"{subject_dict[key]} should be a list."
+                    for i, d in enumerate(subject_dict[key]):
+                        # maybe same object already exists and we just add a qualifier
+                        # todo write test for this qualifier update
+                        if object_dict["object"] == d["object"]:
+                            subject_dict[key][i]["q"].extend(object_dict["q"])
+                            break
                     else:
-                        d[key] = [value]
+                        subject_dict[key].append(object_dict)
+                else:
+                    subject_dict[key] = [object_dict]
 
         # key is probably a special key such as 'comment' or 'formal_set'
         else:
             assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
-            d[key] = value
+            subject_dict[key] = object_dict
 
     def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.
@@ -1124,7 +1153,8 @@ class ConversionManager:
                         #  "ct_path": ct_path,
                          "irk_module_names": self.irk_module_names,
                          "entity_declaration": entity_declaration,
-                         "content": output}
+                         "content": output,
+                         "additional_modules": self.additional_modules}
 
         for mod in self.load_irk_modules:
             pyirk_context[f"{mod}_path"] = getattr(self, mod).__file__
@@ -1168,14 +1198,20 @@ class ConversionManager:
         for key, value in value_dict.items():
             if key.startswith("R"):
                 # first some exceptions
-                if key == "R6":
+                if key == "R1" or "R1__" in key:
+                    # background: R1 is handled differently during item creation, so it doesnt yet get a dict but still a string
+                    # reason: R1 is queried very often -> each location would need to change
+                    # todo unify!
+                    value = {"object": value, "q": []}
+                elif key == "R6":
                     # the object of this relation is a reference string that appears in the 'reference' key of some equation item
                     # todo find this equation
                     pass
                 elif (key == "R4" or key == "R3"):
-                    if "p.I2[" in value:
+                    # this already assumes that R4 and R4 are functional
+                    if "p.I2[" in value["object"]:
                         self.entity_matching_report += f'Unmatched entity: {self.build_reference(value_dict["R1"])}\n'
-                    if ("p.I6" in value or "p.I7" in value or "p.I8" in value or "p.I9" in value):
+                    if ("p.I6" in value["object"] or "p.I7" in value["object"] or "p.I8" in value["object"] or "p.I9" in value["object"]):
                         # operators need custom call method
                         context["extra"].append(f'{self.build_reference(value_dict["R1"])}.add_method(p.create_evaluated_mapping, "_custom_call")')
 
@@ -1191,32 +1227,71 @@ class ConversionManager:
                     # R22 rels are not lists, for easier processing, put them in a list
                     if type(value) == list:
                         value = value[0]
+                    qualifier_list = value["q"]
+                    value = value["object"]
                     res = re.findall(r"[R|I]\d+", str(value))
                     if not quotes and len(res) == 0:
                         # then maybe the object of rel was set before the item was introduced (order in FNL)
                         if value in self.d["items"].keys():
                             value = self.build_reference(value)
-                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
+                    if qualifier_list:
+                        for qualifier_dict in qualifier_list:
+                            q_str = "["
+                            for rel_key, qual_value in qualifier_dict.items():
+                                q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]]["R1"])}({self.build_reference(qual_value)}), """
+                            q_str += "]"
+                            context["extra"].append(
+                                f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})')
+                    else:
+                        context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
                 # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
                 else:
                     # we need to manually construct a string here instead of a list, since we might want python objects
                     # and not strings of python objects inside that list: ['p.12[..]'] would be bad
                     l = []
-                    for v in value:
-                        res = re.findall(r"[R|I]\d+", str(v))
-                        # if v is an item, then we nee
-                        if res:
-                            l.append(str(v))
-                        else:
-                            ref = self.build_reference(v)
-                            if ref == v:
-                                # this means, that there is no reference and the origi-> quote the string
-                                l.append(f'"{v}"')
+                    for v_dict in value:
+                        v = v_dict["object"]
+                        q_list = v_dict["q"]
+                        if q_list:
+                            # handle object
+                            res = re.findall(r"[R|I]\d+", str(v))
+                            # if v is an item, then we nee
+                            if res:
+                                obj = str(v)
                             else:
-                                l.append(f'{ref}')
+                                ref = self.build_reference(v)
+                                if ref == v:
+                                    # this means, that there is no reference item -> quote the string
+                                    obj = f'"{v}"'
+                                else:
+                                    obj = f'{ref}'
+                            # handle qualifier
+                            for q_dict in q_list:
+                                q_str = "["
+                                for rel_key, qual_value in q_dict.items():
+                                    q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]]["R1"])}({self.build_reference(qual_value)}), """
+                                q_str += "]"
+                                context["extra"].append(
+                                    f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {obj}, qualifiers={q_str})'
+                                    )
+                        else:
 
-                    string = f"[{', '.join(l)}]"
-                    context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
+                            res = re.findall(r"[R|I]\d+", str(v))
+                            # if v is an item, then we nee
+                            if res:
+                                l.append(str(v))
+                            else:
+                                ref = self.build_reference(v)
+                                if ref == v:
+                                    # this means, that there is no reference and the origi-> quote the string
+                                    l.append(f'"{v}"')
+                                else:
+                                    l.append(f'{ref}')
+                    if l:
+                        string = f"[{', '.join(l)}]"
+                        context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
+            elif key == "is_qualifier" and value == True:
+                context["extra"].append(f"""{self.get_qualifier_name(value_dict["R1"])} = p.QualifierFactory({self.build_reference(value_dict["R1"])})""")
         # sort the relations in ascending number oder
         context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
         # get rid of R1, since we use the entity.update method

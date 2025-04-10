@@ -4,7 +4,6 @@ import sympy as sp
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
 {% if context.ct_path %}
-{{context.irk_module_names.control_theory}} = p.irkloader.load_mod_from_path(r"{{context.ct_path}}", prefix="{{context.irk_module_names.control_theory}}")
 {% endif %}
 {% if context.ma_path %}
 {{context.irk_module_names.math}} = p.irkloader.load_mod_from_path(r"{{context.ma_path}}", prefix="{{context.irk_module_names.math}}")
@@ -12,6 +11,10 @@ from ipydex import IPS, activate_ips_on_exception  # noqa
 {% if context.ag_path %}
 {{context.irk_module_names.agents}} = p.irkloader.load_mod_from_path(r"{{context.ag_path}}", prefix="{{context.irk_module_names.agents}}")
 {% endif %}
+
+{% for irk_module in context.additional_modules %}
+{{irk_module.module_name}} = p.irkloader.load_mod_from_path(r"{{irk_module.path}}", prefix="{{irk_module.prefix}}")
+{% endfor %}
 
 __URI__ = "irk:/ocse/0.2/{{context.uri_name}}"
 

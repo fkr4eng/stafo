@@ -30,3 +30,50 @@ For manual reviewing the created snippets it is recommended to read the pdf file
 ## Next Development Steps:
 
 - deal with (many, consecutive) ignored snippets: do not waste LLM-calls on them
+
+
+
+## Qualifiers:
+d = {
+    "items": {
+        "bob": {
+            "R1": "bob",
+            "R4": {
+                "object": I7435["human"],
+                "q": []
+            }
+            "R1111": [
+                {
+                    "object": "Dresden",
+                    "q": [
+                        {
+                            R1111: 2000,
+                            R2222: 2002
+                        },
+                        {
+                            R1111: 2002,
+                            R2222: 2004
+                        },
+                    ]
+                },
+                {
+                    "object": "Wien",
+                    "q": [
+                        {
+                            R1111: 2005,
+                            R2222: 2007
+                        },
+                        {
+                            R1111: 2008,
+                            R2222: 2010
+                        },
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+R1111["lives_in"]
+R2222["from"]
+R3333["to"]
