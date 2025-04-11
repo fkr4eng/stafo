@@ -190,14 +190,6 @@ def main():
 
         # examine the stacks
         for i, row in df.iterrows():
-            # message = f"Following is the description of a memristor stack. If possible, return a list of the chemical\
-            #     compounds in order, separated by comma with no spaces. if not return an empty string.\n {row["Stack"]}"
-
-            # if os.path.isfile(llm_cache_path):
-            #     cached_llm_container.load_cache(llm_cache_path)
-            # res = cached_llm_container.llm_api(message)
-            # cached_llm_container.save_cache(llm_cache_path)
-            # for compound in res.split(","):
 
             cit_numbers = []
             for cn in row["Source"].split(","):
