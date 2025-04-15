@@ -372,7 +372,7 @@ def auto_tex_snippet_numbering(src_fpath):
     Process a LaTeX source file and enumerate all snippets consecutively.
 
     e.g.
-    \snippet{XX} -> \snippet{123}
+    \\snippet{XX} -> \\snippet{123}
     """
     with open(src_fpath, "rt", encoding="utf-8") as fp:
         src = fp.read()
