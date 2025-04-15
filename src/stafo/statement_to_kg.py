@@ -15,6 +15,8 @@ import datetime as dt
 from string import ascii_letters
 from typing import Union
 
+import tomllib
+
 from .stafo_logging import logger
 lark = import_module("lark")
 if lark:
@@ -25,10 +27,19 @@ else:
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
 
-ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
-ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
+if os.path.isfile(CONFIG_PATH):
+    with open(CONFIG_PATH, "rb") as fp:
+        config_data = tomllib.load(fp)
 
+    ma_path = os.path.join(config_data["ocse_path"], "math1.py")
+    ct_path = os.path.join(config_data["ocse_path"], "control_theory1.py")
+    ag_path = os.path.join(config_data["ocse_path"], "agents1.py")
+
+else:
+
+    ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
+    ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
+    ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
 
 
 def get_md_lines(fpath) -> list[str]:
