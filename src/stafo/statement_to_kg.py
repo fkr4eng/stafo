@@ -51,7 +51,14 @@ def get_md_lines(fpath) -> list[str]:
 
 class ConversionManager:
     @u.timing
-    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"], additional_modules=None):
+    def __init__(
+        self,
+        statements_fpath: str,
+        force_key_tuple: tuple = None,
+        num_keys=1000,
+        load_irk_modules=["ct", "ma"],
+        additional_modules=None,
+    ):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
@@ -125,7 +132,6 @@ class ConversionManager:
         def repl_func(matchobj):
             return matchobj.group(0).replace(" ", "_").replace("-", "_")
         return self.strip(re.sub(symbol_pattern, repl_func, s))
-
 
     def strip_math(self, s):
         if isinstance(s, list):
@@ -204,11 +210,11 @@ class ConversionManager:
 
         self.applicable_to_key = "R78"
         # {items:
-            # {"set":
-            #   {"key": I1234, "R2": ..., "R4": ...},
-            # "finite":
-            #   {...}
-            # },
+        # {"set":
+        #   {"key": I1234, "R2": ..., "R4": ...},
+        # "finite":
+        #   {...}
+        # },
         # relations: {}
         # }
         self.d = {
@@ -420,7 +426,6 @@ class ConversionManager:
                     prefix = ""
                 self.d["relations"][key]["render"] = f'{prefix}{value["key"]}__{value["R1"].replace(" ", "_")}'
 
-
         self.comment_pattern = re.compile(r"- //")
         self.new_section_pattern = re.compile(r"New.+?section")
         self.class_pattern = re.compile(r"(?<=There is a class)(?::? )(.+)")                 # sometimes : is forgotten
@@ -517,7 +522,6 @@ class ConversionManager:
         else:
             language = self.default_language
 
-
         new_section = re.findall(self.new_section_pattern, line)
         new_class = re.findall(self.class_pattern, line)
         new_property = re.findall(self.property_pattern, line)
@@ -537,7 +541,6 @@ class ConversionManager:
         explanation = re.findall(self.explanation_pattern, line)
         for_loop = re.findall(self.for_pattern, line)
         qualifier = re.findall(self.qualifier_pattern, line)
-
 
         # debug
         if i == self.stop_at_line:
@@ -1035,7 +1038,6 @@ class ConversionManager:
             else:
                 arg2 = f"""{key}["{arg2v['R1']}"]"""
 
-
         elif arg2 in self.d["relations"].keys():
             arg2v = self.d["relations"][arg2]
             key = arg2v['key']
@@ -1139,7 +1141,8 @@ class ConversionManager:
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
-                else: context["snip"] = ""
+                else:
+                    context["snip"] = ""
                 if "comments" in v.keys():
                     context["comments"] = v["comments"]
 
@@ -1202,10 +1205,12 @@ class ConversionManager:
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
-        else: context["snip"] = ""
+        else:
+            context["snip"] = ""
         if "comments" in value_dict.keys():
             context["comments"] = value_dict["comments"]
-        else: context["comments"] = ""
+        else:
+            context["comments"] = ""
         for key, value in value_dict.items():
             if key.startswith("R"):
                 # first some exceptions
@@ -1388,7 +1393,8 @@ class ConversionManager:
         context = {"key": eq_dict["key"], "rel": [], "rd": recursion_depth}
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
-        else: context["snip"] = ""
+        else:
+            context["snip"] = ""
         if "comments" in eq_dict.keys():
             context["comments"] = eq_dict["comments"]
 
@@ -1396,8 +1402,6 @@ class ConversionManager:
             context["rsgn"] = '"=="'
         elif eq_dict["type"] == "mathematical relation":
             context["rsgn"] = f'"{eq_dict["rel_sign"]}"'
-
-
 
         #! TODO WIP
         if "lhs_formal" in eq_dict.keys() and "rhs_formal" in eq_dict.keys():
@@ -1582,8 +1586,6 @@ class ConversionManager:
         tt = u.TreeTraverser(apply_func=_get_irk_for_sp, get_args_func=_get_args_for_sp)
         res = tt.run(sp_expr)
         return res
-
-
 
     def replace_expr(self, expr):
         try:
