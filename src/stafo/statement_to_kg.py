@@ -51,7 +51,7 @@ def get_md_lines(fpath) -> list[str]:
 
 class ConversionManager:
     @u.timing
-    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"], additional_modules=[]):
+    def __init__(self, statements_fpath: str, force_key_tuple: tuple=None, num_keys=1000, load_irk_modules=["ct", "ma"], additional_modules=None):
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
@@ -72,8 +72,8 @@ class ConversionManager:
                             "math": "ma",
                             "agents": "ag"})
         # todo unify the loading of different modules
-        self.additional_modules = additional_modules
-        for am in additional_modules:
+        self.additional_modules = u.ensure_list(additional_modules)
+        for am in self.additional_modules:
             p.irkloader.load_mod_from_path(am["path"], prefix=am["prefix"], reuse_loaded=True)
             self.irk_module_names[am["module_name"]] = am["prefix"]
 

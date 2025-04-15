@@ -108,6 +108,21 @@ class MyDict(dict):
         return "ut"
 
 
+def ensure_list(obj):
+    """
+    Converts `None` to empty list, otherwise converts any sequence to list.
+
+    Motivation: define an empty list as default value for an argument is error-prone.
+    Reason: empty list is created once when the function-object is created but not when it is called.
+    Recommended way is to use `None` as default value. However, later in the code we only want to handle
+    list-instances.
+    """
+    if obj is None:
+        return []
+    else:
+        return list(obj)
+
+
 
 def timing(f):
     @wraps(f)
