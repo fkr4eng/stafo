@@ -8,6 +8,12 @@
 `pip install -e .`
 
 
+
+### Configuration
+
+Copy `./_example_config.toml` to `./.git_config.toml` and adapt the content.
+
+
 ## Usage
 
 - Overview:
