@@ -930,6 +930,7 @@ class ConversionManager:
             value (str): object, in general the result of self.build_reference
         """
         # try type conversion in case of literals (numbers)
+        # TODO: This will convert any float to int. This is probably not intended
         try:
             obj = int(obj)
         except:
