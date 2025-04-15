@@ -4,6 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 import sympy as sp
 from functools import wraps
 from time import time
+import tomllib
 
 # TODO: this assumes package to be installed with pip install -e .
 BASE_DIR = Path(__file__).parents[2].as_posix()
@@ -12,6 +13,13 @@ TESTA_DATA_DIR = os.path.join(BASE_DIR, "tests", "testdata")
 
 # config file starts with .git_config to prevent nextcloud synchronizing it to (unencrypted) cloud
 CONFIG_PATH = os.path.join(BASE_DIR, ".git_config.toml")
+
+if os.path.isfile(CONFIG_PATH):
+    with open(CONFIG_PATH, "rb") as fp:
+        config_data = tomllib.load(fp)
+
+else:
+    config_data = {}
 
 
 class ParserError(Exception):

@@ -27,16 +27,12 @@ else:
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
 
-if os.path.isfile(CONFIG_PATH):
-    with open(CONFIG_PATH, "rb") as fp:
-        config_data = tomllib.load(fp)
-
-    ma_path = os.path.join(config_data["ocse_path"], "math1.py")
-    ct_path = os.path.join(config_data["ocse_path"], "control_theory1.py")
-    ag_path = os.path.join(config_data["ocse_path"], "agents1.py")
+if u.config_data:
+    ma_path = os.path.join(u.config_data["ocse_path"], "math1.py")
+    ct_path = os.path.join(u.config_data["ocse_path"], "control_theory1.py")
+    ag_path = os.path.join(u.config_data["ocse_path"], "agents1.py")
 
 else:
-
     ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
     ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
     ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
@@ -411,6 +407,37 @@ class ConversionManager:
                     "key": "R8440",
                     "R1": "cites",
                     "prefix": "ag",
+                },
+
+                # TODO: These should be read from omt
+                "has element symbol": {
+                    "key": "R2060",
+                    "R1": "has element symbol",
+                    "prefix": "omt",
+                },
+
+                "has atomic number": {
+                    "key": "R2061",
+                    "R1": "has atomic number",
+                    "prefix": "omt",
+                },
+
+                "has group number": {
+                    "key": "R2062",
+                    "R1": "has group number",
+                    "prefix": "omt",
+                },
+
+                "has melting temperature": {
+                    "key": "R2063",
+                    "R1": "has melting temperature",
+                    "prefix": "omt",
+                },
+
+                "has boiling temperature": {
+                    "key": "R2064",
+                    "R1": "has boiling temperature",
+                    "prefix": "omt",
                 },
 
             }}
@@ -930,14 +957,14 @@ class ConversionManager:
             value (str): object, in general the result of self.build_reference
         """
         # try type conversion in case of literals (numbers)
-        # TODO: This will convert any float to int. This is probably not intended
         try:
-            obj = int(obj)
-        except:
-            try:
+            if obj == int(obj):
+                obj = int(obj)
+            elif obj == float(obj):
                 obj = float(obj)
-            except:
-                pass
+        except:
+            # object seems not to be a number
+            pass
 
         object_dict = {"object": obj, "q": []}
         if qualifier:
@@ -1110,8 +1137,10 @@ class ConversionManager:
     # rendering
     ####################################################################################################################
     @u.timing
-    def render(self) -> str:
+    def render(self, final_replacements: list = None) -> str:
         """
+        :param final_replacements:  None or list of (old, new)-tuples
+
         :returns: path of rendered module
         """
         self.rel_interpr = self.get_rel_dict_key_interpreter()
@@ -1179,6 +1208,9 @@ class ConversionManager:
 
         res = render_template("pyirk_template.py", pyirk_context)
 
+        if final_replacements:
+            res = self._final_replacements(res, final_replacements)
+
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)
@@ -1188,6 +1220,18 @@ class ConversionManager:
         with open(f"match_history/matched_entities_{t}.txt", "wt", encoding="utf-8") as f:
             f.write(self.entity_matching_report)
         return fpath
+
+    def _final_replacements(self, txt: str, rplmts: list):
+        """
+        It might be useful to apply some replacements to the rendered template before writing it as output
+        file.
+        """
+        old: str
+        new: str
+        for old, new in rplmts:
+            txt = txt.replace(old, new)
+        return txt
+
 
     def prune_dict(self, value_dict):
         matched_item = p.ds.get_item_by_label(value_dict["R1"])
