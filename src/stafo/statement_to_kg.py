@@ -58,12 +58,15 @@ class ConversionManager:
         num_keys=1000,
         load_irk_modules=["ct", "ma"],
         additional_modules=None,
+        mod_uri=None,
     ):
+
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
         self.eq_reference_dict = {}
         self.ds = {}
+        self.mod_uri = mod_uri
 
         self.load_irk_modules = load_irk_modules
 
@@ -152,8 +155,8 @@ class ConversionManager:
         """
         generate pyirk keys
         """
-        self.item_keys = [p.generate_new_key("I") for i in range(num_keys)]
-        self.relation_keys = [p.generate_new_key("R") for i in range(num_keys)]
+        self.item_keys = [p.generate_new_key("I", mod_uri=self.mod_uri) for i in range(num_keys)]
+        self.relation_keys = [p.generate_new_key("R", mod_uri=self.mod_uri) for i in range(num_keys)]
 
     def get_indent(self, line:str):
         """get indentation (number of spaces) of string"""
