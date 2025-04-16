@@ -4,7 +4,11 @@ from jinja2 import Environment, FileSystemLoader
 import sympy as sp
 from functools import wraps
 from time import time
-import tomllib
+try:
+    # this will be part of standard library for python >= 3.11
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 # TODO: this assumes package to be installed with pip install -e .
 BASE_DIR = Path(__file__).parents[2].as_posix()

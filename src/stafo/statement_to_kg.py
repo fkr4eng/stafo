@@ -15,7 +15,11 @@ import datetime as dt
 from string import ascii_letters
 from typing import Union
 
-import tomllib
+try:
+    # this will be part of standard library for python >= 3.11
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 from .stafo_logging import logger
 lark = import_module("lark")
@@ -50,38 +54,39 @@ class ConversionManager:
     def __init__(
         self,
         statements_fpath: str,
+        load_irk_modules: list[dict]=None,
+        mod_uri=None,
         force_key_tuple: tuple = None,
         num_keys=1000,
-        load_irk_modules=["ct", "ma"],
-        additional_modules=None,
-        mod_uri=None,
     ):
+        """create a ConversionManager object for conversion of formal natural language to pyrik
+
+        Args:
+            statements_fpath (str): path to the fnl markdown file
+            load_irk_modules (list[dict], optional): list of irk modules to load. each list entry is a dict with the \
+                keys "path", "module_name", "prefix". Defaults to None.
+            mod_uri (_type_, optional): uri for the module. Defaults to None (which means "auto_import_<statments_fpath>).
+            force_key_tuple (tuple, optional): tuple of pyirk keys to create entities with. Defaults to None.
+            num_keys (int, optional): number of keys to create at start. Defaults to 1000.
+        """
 
         self.statements_fpath = statements_fpath
         self.lines = get_md_lines(statements_fpath)
         self.entity_order = []
         self.eq_reference_dict = {}
         self.ds = {}
-        self.mod_uri = mod_uri
+        if mod_uri is None:
+            self.mod_uri = f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
+        else:
+            self.mod_uri = mod_uri
 
+        self.irk_module_names = u.MyDict({"builtins": "p"})
+        self.loaded_modules = Container()
         self.load_irk_modules = load_irk_modules
-
-        if "ma" in load_irk_modules:
-            self.ma = p.irkloader.load_mod_from_path(ma_path, prefix="ma", reuse_loaded=True)
-        if "ct" in load_irk_modules:
-            self.ct = p.irkloader.load_mod_from_path(ct_path, prefix="ct", reuse_loaded=True)
-        if "ag" in load_irk_modules:
-            self.ag = p.irkloader.load_mod_from_path(ag_path, prefix="ag", reuse_loaded=True)
-
-        self.irk_module_names = u.MyDict({"builtins": "p",
-                            "control_theory": "ct",
-                            "math": "ma",
-                            "agents": "ag"})
-        # todo unify the loading of different modules
-        self.additional_modules = u.ensure_list(additional_modules)
-        for am in self.additional_modules:
-            p.irkloader.load_mod_from_path(am["path"], prefix=am["prefix"], reuse_loaded=True)
-            self.irk_module_names[am["module_name"]] = am["prefix"]
+        for load_dict in load_irk_modules:
+            mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+            self.loaded_modules.__setattr__(load_dict["prefix"], mod)
+            self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
 
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
@@ -1196,15 +1201,11 @@ class ConversionManager:
                 res = render_template("statement_template.py", context)
                 output += res + "\n\n"
 
-        pyirk_context = {"uri_name": f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}",
-                        #  "ct_path": ct_path,
-                         "irk_module_names": self.irk_module_names,
+        pyirk_context = {"uri_name": self.mod_uri,
                          "entity_declaration": entity_declaration,
                          "content": output,
-                         "additional_modules": self.additional_modules}
-
-        for mod in self.load_irk_modules:
-            pyirk_context[f"{mod}_path"] = getattr(self, mod).__file__
+                         "load_irk_modules": self.load_irk_modules
+                        }
 
         res = render_template("pyirk_template.py", pyirk_context)
 
@@ -1694,7 +1695,9 @@ class ConversionManager:
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None):
-    convm = ConversionManager(statements_fpath, force_key_tuple)
+    ct_load_dict = {"path": ct_path, "prefix": "ct", "module_name": "control_theory"}
+    ma_load_dict = {"path": ma_path, "prefix": "ma", "module_name": "math"}
+    convm = ConversionManager(statements_fpath, force_key_tuple, load_irk_modules=[ct_load_dict, ma_load_dict])
     convm.step1_init()
     convm.step2_parse_fnl()
     mod_fpath = convm.render()
