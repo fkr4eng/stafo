@@ -75,10 +75,6 @@ class ConversionManager:
         self.entity_order = []
         self.eq_reference_dict = {}
         self.ds = {}
-        if mod_uri is None:
-            self.mod_uri = f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
-        else:
-            self.mod_uri = mod_uri
 
         self.irk_module_names = u.MyDict({"builtins": "p"})
         self.loaded_modules = Container()
@@ -94,10 +90,16 @@ class ConversionManager:
         self.exsiting_labels_dict = p.get_label_to_item_dict()
 
         if force_key_tuple is None:
-            self.get_keys(num_keys)
+            self.get_keys(num_keys, uri=None) # todo hand over correct uri, see also below (self.mod_uri)
         # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
         else:
             self.item_keys, self.relation_keys = force_key_tuple
+
+        if mod_uri is None:
+            self.mod_uri = f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
+        else:
+            self.mod_uri = mod_uri
+        # todo move this before key creation and fix warning "keys based on builtins"
 
         self.stop_at_line = 124
 
@@ -152,12 +154,12 @@ class ConversionManager:
         else:
             raise TypeError(s)
 
-    def get_keys(self, num_keys):
+    def get_keys(self, num_keys, uri):
         """
         generate pyirk keys
         """
-        self.item_keys = [p.generate_new_key("I", mod_uri=self.mod_uri) for i in range(num_keys)]
-        self.relation_keys = [p.generate_new_key("R", mod_uri=self.mod_uri) for i in range(num_keys)]
+        self.item_keys = [p.generate_new_key("I", mod_uri=uri) for i in range(num_keys)]
+        self.relation_keys = [p.generate_new_key("R", mod_uri=uri) for i in range(num_keys)]
 
     def get_indent(self, line:str):
         """get indentation (number of spaces) of string"""
