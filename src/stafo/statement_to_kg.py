@@ -80,6 +80,7 @@ class ConversionManager:
         self.loaded_modules = Container()
         self.load_irk_modules = load_irk_modules
         for load_dict in load_irk_modules:
+            assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
             mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
             self.loaded_modules.__setattr__(load_dict["prefix"], mod)
             self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
