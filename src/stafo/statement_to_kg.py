@@ -992,7 +992,11 @@ class ConversionManager:
                         # maybe same object already exists and we just add a qualifier
                         # todo write test for this qualifier update
                         if object_dict["object"] == d["object"]:
-                            subject_dict[key][i]["q"].extend(object_dict["q"])
+                            # check if exact qualifier already exists, prevent adding duplicates
+                            for qual_dict in object_dict["q"]:
+                                if qual_dict not in subject_dict[key][i]["q"]:
+                                    subject_dict[key][i]["q"].append(qual_dict)
+                            # subject_dict[key][i]["q"].extend(object_dict["q"])
                             break
                     else:
                         subject_dict[key].append(object_dict)
