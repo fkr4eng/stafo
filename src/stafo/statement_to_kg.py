@@ -31,15 +31,15 @@ else:
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
 
-if u.config_data:
-    ma_path = os.path.join(u.config_data["ocse_path"], "math1.py")
-    ct_path = os.path.join(u.config_data["ocse_path"], "control_theory1.py")
-    ag_path = os.path.join(u.config_data["ocse_path"], "agents1.py")
+# if u.config_data:
+#     ma_path = os.path.join(u.config_data["ocse_path"], "math1.py")
+#     ct_path = os.path.join(u.config_data["ocse_path"], "control_theory1.py")
+#     ag_path = os.path.join(u.config_data["ocse_path"], "agents1.py")
 
-else:
-    ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-    ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
-    ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
+# else:
+#     ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
+#     ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
+#     ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
 
 
 def get_md_lines(fpath) -> list[str]:
@@ -64,7 +64,7 @@ class ConversionManager:
         Args:
             statements_fpath (str): path to the fnl markdown file
             load_irk_modules (list[dict], optional): list of irk modules to load. each list entry is a dict with the \
-                keys "path", "module_name", "prefix". Defaults to None.
+                keys "uri", "module_name", "prefix". Defaults to None.
             mod_uri (_type_, optional): uri for the module. Defaults to None (which means "auto_import_<statments_fpath>).
             force_key_tuple (tuple, optional): tuple of pyirk keys to create entities with. Defaults to None.
             num_keys (int, optional): number of keys to create at start. Defaults to 1000.
@@ -76,12 +76,14 @@ class ConversionManager:
         self.eq_reference_dict = {}
         self.ds = {}
 
+        # we use this module name to prefix dict to map the existing-entity-uris to the prefixes that need be rendered
         self.irk_module_names = u.MyDict({"builtins": "p"})
         self.loaded_modules = Container()
         self.load_irk_modules = load_irk_modules
         for load_dict in load_irk_modules:
             assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
-            mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+            # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+            mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
             self.loaded_modules.__setattr__(load_dict["prefix"], mod)
             self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
 
@@ -97,7 +99,7 @@ class ConversionManager:
             self.item_keys, self.relation_keys = force_key_tuple
 
         if mod_uri is None:
-            self.mod_uri = f"auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
+            self.mod_uri = f"irk:/ocse/0.2/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
         else:
             self.mod_uri = mod_uri
         # todo move this before key creation and fix warning "keys based on builtins"
@@ -1702,9 +1704,9 @@ class ConversionManager:
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None):
-    ct_load_dict = {"path": ct_path, "prefix": "ct", "module_name": "control_theory"}
-    ma_load_dict = {"path": ma_path, "prefix": "ma", "module_name": "math"}
-    convm = ConversionManager(statements_fpath, force_key_tuple, load_irk_modules=[ct_load_dict, ma_load_dict])
+    ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
+    ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
+    convm = ConversionManager(statements_fpath, load_irk_modules=[ct_load_dict, ma_load_dict])
     convm.step1_init()
     convm.step2_parse_fnl()
     mod_fpath = convm.render()

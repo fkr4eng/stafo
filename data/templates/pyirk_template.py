@@ -4,10 +4,10 @@ import sympy as sp
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
 {% for load_dict in context.load_irk_modules %}
-{{load_dict.prefix}} = p.irkloader.load_mod_from_path(r"{{load_dict.path}}", prefix="{{load_dict.prefix}}")
+{{load_dict.prefix}} = p.irkloader.load_mod_from_uri(r"{{load_dict.uri}}", prefix="{{load_dict.prefix}}")
 {% endfor %}
 
-__URI__ = "irk:/ocse/0.2/{{context.uri_name}}"
+__URI__ = "{{context.uri_name}}"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
