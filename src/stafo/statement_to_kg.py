@@ -49,13 +49,18 @@ def get_md_lines(fpath) -> list[str]:
     return lines
 
 
+
+# TODO: improve handling of default value of mod_uri
+# -> move ocse-dependent code to its own module
+# -> make mod_uri a required argument (?)
 class ConversionManager:
     @u.timing
     def __init__(
         self,
         statements_fpath: str,
         load_irk_modules: list[dict]=None,
-        mod_uri=None,
+        # TODO: improve this; see comment above class definition
+        mod_uri="__stafo_default_uri__",  # This will be replaced by a system-dependent hardcoded URI below
         force_key_tuple: tuple = None,
         num_keys=1000,
     ):
@@ -92,17 +97,22 @@ class ConversionManager:
 
         self.exsiting_labels_dict = p.get_label_to_item_dict()
 
-        if force_key_tuple is None:
-            self.get_keys(num_keys, uri=None) # todo hand over correct uri, see also below (self.mod_uri)
-        # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
-        else:
-            self.item_keys, self.relation_keys = force_key_tuple
-
-        if mod_uri is None:
+        # TODO: improve this; see comment above class definition
+        if mod_uri == "__stafo_default_uri__":
+            # (this construction allows to distinguish between `None` and <no-value-provided>)
             self.mod_uri = f"irk:/ocse/0.2/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
         else:
             self.mod_uri = mod_uri
-        # todo move this before key creation and fix warning "keys based on builtins"
+
+        # create a KeyManager instance which might be needed below (create keys before module is loaded)
+        if self.mod_uri is not None and self.mod_uri not in p.ds.uri_keymanager_dict:
+            p.ds.uri_keymanager_dict[self.mod_uri] = p.KeyManager()
+
+        if force_key_tuple is None:
+            self.get_keys(num_keys, uri=self.mod_uri) # todo hand over correct uri, see also below (self.mod_uri)
+        # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
+        else:
+            self.item_keys, self.relation_keys = force_key_tuple
 
         self.stop_at_line = 124
 
@@ -161,6 +171,7 @@ class ConversionManager:
         """
         generate pyirk keys
         """
+        # note: this usually makes use of our manually created KeyManager-instance (see __init__)
         self.item_keys = [p.generate_new_key("I", mod_uri=uri) for i in range(num_keys)]
         self.relation_keys = [p.generate_new_key("R", mod_uri=uri) for i in range(num_keys)]
 
@@ -1703,10 +1714,10 @@ class ConversionManager:
             return '"' + eq + '"'
 
 @u.timing
-def main(statements_fpath: str, force_key_tuple=None):
+def main(statements_fpath: str, force_key_tuple=None, mod_uri="__stafo_default_uri__"):
     ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
     ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
-    convm = ConversionManager(statements_fpath, load_irk_modules=[ct_load_dict, ma_load_dict])
+    convm = ConversionManager(statements_fpath, load_irk_modules=[ct_load_dict, ma_load_dict], mod_uri=mod_uri)
     convm.step1_init()
     convm.step2_parse_fnl()
     mod_fpath = convm.render()

@@ -33,6 +33,7 @@ ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=True)
 tests/test_statements_to_kg.py::Test_02_FeatureRequest::test_c01__render_order_ring_problem
 """
 
+TEST_URI = "irk://stafo/unittest"
 
 def create_key_tuple(number):
     item_keys = [f"I{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
@@ -90,6 +91,20 @@ class Test_00_Core(unittest.TestCase):
         self.assertNotIn('p.create_item(R1__has_label="real number"', res)
         # replaced entities should not be updated
         self.assertNotIn('["real number"].update_relations', res)
+
+    def test_m01b__ensure_no_key_warning(self):
+        # this failed for pyirk < 0.15.1
+        self.assertTrue(hasattr(p.settings, "STRICT"))
+        p.settings.STRICT = True
+
+        # passing None as mod_uri should trigger a warning
+        with self.assertRaises(Warning) as wrn:
+            s2k.main(TEST_DATA4_FPATH, create_key_tuple(20), mod_uri=None)
+
+        self.assertIn("key based on module irk:/builtins", wrn.exception.args[0])
+
+        # passing a valid uri should avoid the warning
+        s2k.main(TEST_DATA4_FPATH, create_key_tuple(20), mod_uri=TEST_URI)
 
     def test_m02__multilingual_match(self):
         res_mod_fpath = s2k.main(TEST_DATA5_FPATH, create_key_tuple(20))
