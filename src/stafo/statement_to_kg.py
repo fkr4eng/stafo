@@ -95,7 +95,10 @@ class ConversionManager:
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
 
-        self.exsiting_labels_dict = p.get_label_to_item_dict()
+        # TODO: improve handling of duplicate labels (current strategy: making them at least explicit)
+        # TODO: move OCSE-dependent code to its own module
+        expected_ocse_duplicate_labels = ["linearity", "strict nonlinearity"]
+        self.existing_labels_dict = p.get_label_to_item_dict(known_duplicates=expected_ocse_duplicate_labels)
 
         # TODO: improve this; see comment above class definition
         if mod_uri == "__stafo_default_uri__":
@@ -1076,8 +1079,8 @@ class ConversionManager:
         return temp_dict
 
     def get_existing_item(self, label):
-        if label in self.exsiting_labels_dict.keys():
-            return self.exsiting_labels_dict[label]
+        if label in self.existing_labels_dict.keys():
+            return self.existing_labels_dict[label]
         else:
             return None
 
