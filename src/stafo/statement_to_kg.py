@@ -839,6 +839,9 @@ class ConversionManager:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
                                 self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1)
                             # remove default R4 typing and possible duplicate types
+                            # TODO: this currently fails (see `pytest -sk test_m02`)
+                            # Reason: `d[tag][arg1]["R4"]` is a dict like `{'object': 'p.I2["Metaclass"]', 'q': []}`
+                            # but a string is expected
                             r4_label = d[tag][arg1]["R4"].split('"')[1]
                             if "Metaclass" in d[tag][arg1]["R4"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
                                 del d[tag][arg1]["R4"]
