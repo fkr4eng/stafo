@@ -40,6 +40,17 @@ def create_key_tuple(number):
     relation_keys = [f"R{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
     return (item_keys, relation_keys)
 
+def get_key_by_name(res_mod_path, name):
+    with open(res_mod_path, "rt", encoding="utf-8") as f:
+        content = f.read()
+    res = re.findall(f'[I|R]\d+(?= = p.create_\w+?\(R1__has_label="{name}")', content)
+    assert len(res) == 1, f"{name} not unique in mod. result: {res}"
+    return res[0]
+
+def get_item_by_name(res_mod_path, name, mod):
+    key = get_key_by_name(res_mod_path, name)
+    item = getattr(mod, key)
+    return item
 
 class HousekeeperMixin(GeneralHousekeeperMixin):
     pass
@@ -63,11 +74,13 @@ class Test_00_Core(unittest.TestCase):
         res_mod_fpath = s2k.main(TEST_DATA2_FPATH, create_key_tuple(40))
         # ensure that the result can be loaded without errors
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+        A = get_item_by_name(res_mod_fpath, "A", mod)
+        rel_key = get_key_by_name(res_mod_fpath, "has some relation to")
         self.assertEqual(
-            mod.I2003.get_relations()["irk:/ocse/0.2/auto_import_statements02_ring#R2000"][0]
-            .object.get_relations()["irk:/ocse/0.2/auto_import_statements02_ring#R2000"][0]
+            A.get_relations(f"irk:/ocse/0.2/auto_import_statements02_ring#{rel_key}")[0]
+            .object.get_relations(f"irk:/ocse/0.2/auto_import_statements02_ring#{rel_key}")[0]
             .object,
-            mod.I2003,
+            A,
         )
 
     def test_r02__render_latex_equations(self):
