@@ -655,7 +655,7 @@ class ConversionManager:
                 rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i+i_plus])[0])
                 for k, v in self.d["items"][arg1].items():
                     if v == self.build_reference(rarg1):
-                        d["items"][arg1][k] = self.build_reference(rarg2)
+                        d["items"][arg1][k]["object"] = self.build_reference(rarg2)
                 i_plus += 1
                 if not self.lines[i+i_plus].startswith(" "):
                     # indentation ended
@@ -842,8 +842,8 @@ class ConversionManager:
                             # TODO: this currently fails (see `pytest -sk test_m02`)
                             # Reason: `d[tag][arg1]["R4"]` is a dict like `{'object': 'p.I2["Metaclass"]', 'q': []}`
                             # but a string is expected
-                            r4_label = d[tag][arg1]["R4"].split('"')[1]
-                            if "Metaclass" in d[tag][arg1]["R4"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
+                            r4_label = d[tag][arg1]["R4"]["object"].split('"')[1]
+                            if "Metaclass" in d[tag][arg1]["R4"]["object"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
                                 del d[tag][arg1]["R4"]
 
                         else:
@@ -1201,7 +1201,7 @@ class ConversionManager:
             res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
-            if "R4" in v.keys() and (v["R4"] == 'p.I15["implication proposition"]' or v["R4"] == 'p.I17["equivalence proposition"]' or v["R4"] == 'p.I14["mathematical proposition"]'):
+            if "R4" in v.keys() and (v["R4"]["object"] == 'p.I15["implication proposition"]' or v["R4"]["object"] == 'p.I17["equivalence proposition"]' or v["R4"]["object"] == 'p.I14["mathematical proposition"]'):
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
@@ -1291,7 +1291,7 @@ class ConversionManager:
                 # first some exceptions
                 if key == "R1" or "R1__" in key:
                     # background: R1 is handled differently during item creation, so it doesnt yet get a dict but still a string
-                    # reason: R1 is queried very often -> each location would need to change
+                    # reason: R1 is queried very often -> each location in the code would need to change
                     # todo unify!
                     value = {"object": value, "q": []}
                 elif key == "R6":
@@ -1373,8 +1373,9 @@ class ConversionManager:
                                 l.append(str(v))
                             else:
                                 ref = self.build_reference(v)
-                                if ref == v:
+                                if ref == v or key in keys_that_want_literals:
                                     # this means, that there is no reference and the origi-> quote the string
+                                    # or v was matched to an existing entity and now we want the alt. label instead of exsiting entity
                                     l.append(f'"{v}"')
                                 else:
                                     l.append(f'{ref}')
@@ -1438,7 +1439,7 @@ class ConversionManager:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
                     # todo decide uq_instance_of vs instance_of
-                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]}))')
+                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]["object"]}))')
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
