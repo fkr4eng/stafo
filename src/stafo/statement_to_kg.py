@@ -103,7 +103,7 @@ class ConversionManager:
         # TODO: improve this; see comment above class definition
         if mod_uri == "__stafo_default_uri__":
             # (this construction allows to distinguish between `None` and <no-value-provided>)
-            self.mod_uri = f"irk:/ocse/0.2/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
+            self.mod_uri = f"irk:/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
         else:
             self.mod_uri = mod_uri
 
