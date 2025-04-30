@@ -43,7 +43,8 @@ def create_key_tuple(number):
 def get_key_by_name(res_mod_path, name):
     with open(res_mod_path, "rt", encoding="utf-8") as f:
         content = f.read()
-    res = re.findall(f'[I|R]\d+(?= = p.create_\w+?\(R1__has_label="{name}")', content)
+    pattern = r'[I|R]\d+(?= = p.create_\w+?\(R1__has_label="' + name + r'")'
+    res = re.findall(pattern, content)
     assert len(res) == 1, f"{name} not unique in mod. result: {res}"
     return res[0]
 
@@ -77,8 +78,8 @@ class Test_00_Core(unittest.TestCase):
         A = get_item_by_name(res_mod_fpath, "A", mod)
         rel_key = get_key_by_name(res_mod_fpath, "has some relation to")
         self.assertEqual(
-            A.get_relations(f"irk:/ocse/0.2/auto_import_statements02_ring#{rel_key}")[0]
-            .object.get_relations(f"irk:/ocse/0.2/auto_import_statements02_ring#{rel_key}")[0]
+            A.get_relations(f"{mod.__URI__}#{rel_key}")[0]
+            .object.get_relations(f"{mod.__URI__}#{rel_key}")[0]
             .object,
             A,
         )
