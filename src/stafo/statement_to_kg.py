@@ -983,50 +983,62 @@ class ConversionManager:
             key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
         """
-        # try type conversion in case of literals (numbers)
-        try:
-            if obj == int(obj):
-                obj = int(obj)
-            elif obj == float(obj):
-                obj = float(obj)
-        except:
-            # object seems not to be a number
-            pass
-
-        object_dict = {"object": obj, "q": []}
-        if qualifier:
-            object_dict["q"].extend(qualifier)
-
-        self.rel_interpr = self.get_rel_dict_key_interpreter()
-        if key in self.rel_interpr.keys():
-            relation = self.d["relations"][self.rel_interpr[key]]
-
-            # relation is functional: only one object, might be overwriting old one
-            if "R22" in relation.keys() and relation["R22"] == True:
-                subject_dict[key] = object_dict
-            # relation is not functional: make list or append to it
+        # todo test and evaluate if this fucks anything up
+        # if the key is not a pyirk key (e.g. comment, formal_ass, ...) we dont want the nested dict structure
+        if not re.findall("R\d+", key):
+            # afaik comments is the only key that requires a list here
+            if key == "comments":
+                if not "comments" in subject_dict.keys():
+                    subject_dict[key] = []
+                subject_dict[key].append(obj)
             else:
-                if key in subject_dict.keys():
-                    assert type(subject_dict[key]) == list, f"{subject_dict[key]} should be a list."
-                    for i, d in enumerate(subject_dict[key]):
-                        # maybe same object already exists and we just add a qualifier
-                        # todo write test for this qualifier update
-                        if object_dict["object"] == d["object"]:
-                            # check if exact qualifier already exists, prevent adding duplicates
-                            for qual_dict in object_dict["q"]:
-                                if qual_dict not in subject_dict[key][i]["q"]:
-                                    subject_dict[key][i]["q"].append(qual_dict)
-                            # subject_dict[key][i]["q"].extend(object_dict["q"])
-                            break
-                    else:
-                        subject_dict[key].append(object_dict)
-                else:
-                    subject_dict[key] = [object_dict]
-
-        # key is probably a special key such as 'comment' or 'formal_set'
+                subject_dict[key] = obj
+        # regular pyirk keys
         else:
-            assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
-            subject_dict[key] = object_dict
+            # try type conversion in case of literals (numbers)
+            try:
+                if obj == int(obj):
+                    obj = int(obj)
+                elif obj == float(obj):
+                    obj = float(obj)
+            except:
+                # object seems not to be a number
+                pass
+
+            object_dict = {"object": obj, "q": []}
+            if qualifier:
+                object_dict["q"].extend(qualifier)
+
+            self.rel_interpr = self.get_rel_dict_key_interpreter()
+            if key in self.rel_interpr.keys():
+                relation = self.d["relations"][self.rel_interpr[key]]
+
+                # relation is functional: only one object, might be overwriting old one
+                if "R22" in relation.keys() and relation["R22"] == True:
+                    subject_dict[key] = object_dict
+                # relation is not functional: make list or append to it
+                else:
+                    if key in subject_dict.keys():
+                        assert type(subject_dict[key]) == list, f"{subject_dict[key]} should be a list."
+                        for i, d in enumerate(subject_dict[key]):
+                            # maybe same object already exists and we just add a qualifier
+                            # todo write test for this qualifier update
+                            if object_dict["object"] == d["object"]:
+                                # check if exact qualifier already exists, prevent adding duplicates
+                                for qual_dict in object_dict["q"]:
+                                    if qual_dict not in subject_dict[key][i]["q"]:
+                                        subject_dict[key][i]["q"].append(qual_dict)
+                                # subject_dict[key][i]["q"].extend(object_dict["q"])
+                                break
+                        else:
+                            subject_dict[key].append(object_dict)
+                    else:
+                        subject_dict[key] = [object_dict]
+
+            # key is probably a special key such as 'comment' or 'formal_set'
+            else:
+                assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
+                subject_dict[key] = object_dict
 
     def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.
