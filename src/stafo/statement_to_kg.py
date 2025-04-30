@@ -1449,6 +1449,7 @@ class ConversionManager:
                         if not isinstance(vv, list):
                             vv = [vv]
                         for vvv in vv:
+                            vvv = vvv["object"]
                             # some exceptions when not to add cm.
                             # in case of literals (numbers)
                             if isinstance(vvv, Real):
@@ -1580,14 +1581,14 @@ class ConversionManager:
     def convert_latex_to_irklike_str(self, latex, item_lookup, var_map):
         # 1. convert to sympy
         sp_expr = parse_latex_lark(latex)
-        if len(sp_expr.free_symbols) > 5:
-            # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
-            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
         # ambiguous result
         if isinstance(sp_expr, Tree):
             # todo this is an easy fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
             logger.warning(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
+        if len(sp_expr.free_symbols) > 5:
+            # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
+            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
 
         # 2. traverse tree
         res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map)
