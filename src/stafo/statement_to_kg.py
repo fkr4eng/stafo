@@ -120,6 +120,8 @@ class ConversionManager:
 
         self.stop_at_line = 124
 
+        self.q_ident = "qq:"
+
     def sp_to_us(self, s):
         """space to underscore"""
         return s.replace(" ", "_")
@@ -779,11 +781,13 @@ class ConversionManager:
                 else:
                     rel = k
                     string = self.strip(line)
-
+                string, *qual_string = string.split(self.q_ident)
                 res = re.findall(f"(?<=- )(.+?)(?: {rel}:? )(.+?)(?=\\.$|$)", string)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2, d)
+
+                    q_dict = self.resolve_qualifiers(qual_string)
                     # first check for some special relation that require special attention
                     # todo having this explicite relation name here is very unelegant, pls change
                     if k == "is associated to" or k == "hat Gleichungsreferenz" or k == "has defining formula":
@@ -808,9 +812,13 @@ class ConversionManager:
                     # instance of
                     if v["key"] == "R4":
                         self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, skip_entity_order=skip_entity_order)
+                        if qual_string:
+                            logger.warning(f"line {line} has qualifiers for R4, which is neglected")
                     # subclass of
                     elif v["key"] == "R3":
                         self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None}, skip_entity_order=skip_entity_order)
+                        if qual_string:
+                            logger.warning(f"line {line} has qualifiers for R3, which is neglected")
                     # alternative label
                     elif "R77" in v["key"]:
                         if arg1 in d["items"]:
@@ -838,7 +846,7 @@ class ConversionManager:
                             # add the alternative label in the correct language
                             if existing_item.__getattr__(f"R1__has_label__{language}") is None:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
-                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1)
+                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict)
                             # remove default R4 typing and possible duplicate types
                             # TODO: this currently fails (see `pytest -sk test_m02`)
                             # Reason: `d[tag][arg1]["R4"]` is a dict like `{'object': 'p.I2["Metaclass"]', 'q': []}`
@@ -852,20 +860,20 @@ class ConversionManager:
                             if not "R1" in d[tag][arg1].keys() and language == self.default_language:
                                 d[tag][arg1]["R1"] = arg1
                             else:
-                                self.add_relation_inplace(d[tag][arg1], v["key"], arg2)
+                                self.add_relation_inplace(d[tag][arg1], v["key"], arg2, q_dict)
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
                             logger.info(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
-                            self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in d["relations"]:
-                            self.add_relation_inplace(d["relations"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(d["relations"][arg1], v["key"], arg2, q_dict)
                         # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
                         elif arg1 in self.d["items"]:
-                            self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in self.d["relations"]:
-                            self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2, q_dict)
                         else:
                             raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
 
@@ -892,6 +900,25 @@ class ConversionManager:
                 logger.warning(f"not processed line {i}: {line}")
 
         return d
+
+    def resolve_qualifiers(self, qualifiers):
+        # syntax qq: q1 v1, q2 v2, qq: q3 v3        q1 and q2 are a group and apply together -> they go into a list
+        dict_list = []
+        for q_str in qualifiers:
+            d = {}
+            for k, v in self.d["relations"].items():
+                if k in q_str and f"'{k}" in q_str:
+                    rel = f"'{k}'"
+                    string = q_str
+                else:
+                    rel = k
+                    string = self.strip(q_str)
+                res = re.findall(f"(?: ?)(?:{rel}:? )(.+?)(?=,|qq:|\\.$|$)", string)
+                for obj in res:
+                    d[v["key"]] = self.strip(obj)
+            dict_list.append(d)
+
+        return dict_list
 
     def get_r1_key(self, language, force_suffix=False):
         if language != self.default_language or force_suffix:
@@ -976,24 +1003,29 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_relation_inplace(self, subject_dict:dict, key:str, obj:str, qualifier:dict={}):
+    def add_relation_inplace(self, subject_dict:dict, rel_key:str, obj:str, qualifier:Union[dict, list[dict]]={}):
         """add a relation between subject and object to a given dict (inplace)
 
         Args:
             d (dict): the dict in which the subject resides
-            key (str): relation key (e.g. R16)
+            rel_key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
+            qualifiers (list or dict): qualifiers for the relation. dict has to have the structure \
+                {"R1234": <value>,"R2345": <value>}. If multiple qualifiers appear in the same dict, that means they \
+                both apply to the relation at the same time. if multiple qualifiers apply independant of each other \
+                or the same qualifier applies multiple times, use a list of dicts: [{"R1234": 1}, {"R1234": 2}]. \
+                Defaults to {}.
         """
         # todo test and evaluate if this fucks anything up
         # if the key is not a pyirk key (e.g. comment, formal_ass, ...) we dont want the nested dict structure
-        if not re.findall("R\d+", key):
+        if not re.findall("R\d+", rel_key):
             # afaik comments is the only key that requires a list here
-            if key == "comments":
+            if rel_key == "comments":
                 if not "comments" in subject_dict.keys():
-                    subject_dict[key] = []
-                subject_dict[key].append(obj)
+                    subject_dict[rel_key] = []
+                subject_dict[rel_key].append(obj)
             else:
-                subject_dict[key] = obj
+                subject_dict[rel_key] = obj
         # regular pyirk keys
         else:
             # try type conversion in case of literals (numbers)
@@ -1011,35 +1043,35 @@ class ConversionManager:
                 object_dict["q"].extend(qualifier)
 
             self.rel_interpr = self.get_rel_dict_key_interpreter()
-            if key in self.rel_interpr.keys():
-                relation = self.d["relations"][self.rel_interpr[key]]
+            if rel_key in self.rel_interpr.keys():
+                relation = self.d["relations"][self.rel_interpr[rel_key]]
 
                 # relation is functional: only one object, might be overwriting old one
                 if "R22" in relation.keys() and relation["R22"] == True:
-                    subject_dict[key] = object_dict
+                    subject_dict[rel_key] = object_dict
                 # relation is not functional: make list or append to it
                 else:
-                    if key in subject_dict.keys():
-                        assert type(subject_dict[key]) == list, f"{subject_dict[key]} should be a list."
-                        for i, d in enumerate(subject_dict[key]):
+                    if rel_key in subject_dict.keys():
+                        assert type(subject_dict[rel_key]) == list, f"{subject_dict[rel_key]} should be a list."
+                        for i, d in enumerate(subject_dict[rel_key]):
                             # maybe same object already exists and we just add a qualifier
                             # todo write test for this qualifier update
                             if object_dict["object"] == d["object"]:
                                 # check if exact qualifier already exists, prevent adding duplicates
                                 for qual_dict in object_dict["q"]:
-                                    if qual_dict not in subject_dict[key][i]["q"]:
-                                        subject_dict[key][i]["q"].append(qual_dict)
+                                    if qual_dict not in subject_dict[rel_key][i]["q"]:
+                                        subject_dict[rel_key][i]["q"].append(qual_dict)
                                 # subject_dict[key][i]["q"].extend(object_dict["q"])
                                 break
                         else:
-                            subject_dict[key].append(object_dict)
+                            subject_dict[rel_key].append(object_dict)
                     else:
-                        subject_dict[key] = [object_dict]
+                        subject_dict[rel_key] = [object_dict]
 
             # key is probably a special key such as 'comment' or 'formal_set'
             else:
-                assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
-                subject_dict[key] = object_dict
+                assert not rel_key.startswith("R"), f"is {rel_key} maybe a relation key that should be in d[relations]?"
+                subject_dict[rel_key] = object_dict
 
     def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.

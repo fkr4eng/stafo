@@ -24,6 +24,7 @@ TEST_DATA2_FPATH = os.path.join(TESTA_DATA_DIR, "statements02_ring.md")
 TEST_DATA3_FPATH = os.path.join(TESTA_DATA_DIR, "statements03_latex.md")
 TEST_DATA4_FPATH = os.path.join(TESTA_DATA_DIR, "statements04_matching.md")
 TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
+TEST_DATA6_FPATH = os.path.join(TESTA_DATA_DIR, "statements06_qualifier.md")
 
 # todo this is not very elegant
 # MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
@@ -158,6 +159,34 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertNotIn("R8__has_domain_of_argument_1=", res)
         self.assertNotIn("R4__is_instance_of=", res)
 
+    def test_q01__qualifier(self):
+        CM = s2k.ConversionManager(TEST_DATA6_FPATH, num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        # check for the qualifier Factory
+        self.assertTrue(isinstance(mod.has_position, p.QualifierFactory))
+
+        # check validity of qualifiers
+        stack1 = get_item_by_name(res_mod_fpath, "stack1", mod)
+        rel_key = get_key_by_name(res_mod_fpath, "has stack component")
+        stms = stack1.get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms), 2)
+        self.assertEqual(len(stms[0].qualifiers), 2)
+        self.assertEqual(stms[0].qualifiers[0].relation.R1.value, "has position")
+        self.assertEqual(stms[0].qualifiers[0].object, 0)
+
+        stack2 = get_item_by_name(res_mod_fpath, "stack2", mod)
+        stms2 = stack2.get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms2), 2)
+        self.assertEqual(len(stms2[0].qualifiers), 1)
+        self.assertEqual(stms2[0].qualifiers[0].relation.R1.value, "has position")
+        self.assertEqual(stms2[0].qualifiers[0].object, 0)
+        self.assertEqual(len(stms2[1].qualifiers), 1)
+        self.assertEqual(stms2[1].qualifiers[0].relation.R1.value, "is at outer position")
+        self.assertEqual(stms2[1].qualifiers[0].object, True)
 
     # todo test qualifiers
     # todo test direct dict approach
