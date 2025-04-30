@@ -58,7 +58,7 @@ class ConversionManager:
     def __init__(
         self,
         statements_fpath: str,
-        load_irk_modules: list[dict]=None,
+        load_irk_modules: list[dict]=[],
         # TODO: improve this; see comment above class definition
         mod_uri="__stafo_default_uri__",  # This will be replaced by a system-dependent hardcoded URI below
         force_key_tuple: tuple = None,
@@ -85,12 +85,13 @@ class ConversionManager:
         self.irk_module_names = u.MyDict({"builtins": "p"})
         self.loaded_modules = Container()
         self.load_irk_modules = load_irk_modules
-        for load_dict in load_irk_modules:
-            assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
-            # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
-            mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
-            self.loaded_modules.__setattr__(load_dict["prefix"], mod)
-            self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
+        if load_irk_modules:
+            for load_dict in load_irk_modules:
+                assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
+                # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+                mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
+                self.loaded_modules.__setattr__(load_dict["prefix"], mod)
+                self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
 
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
@@ -1249,7 +1250,7 @@ class ConversionManager:
 
         if final_replacements:
             res = self._final_replacements(res, final_replacements)
-
+        # todo run black?
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)
@@ -1732,6 +1733,12 @@ class ConversionManager:
         else:
             logger.warning("expression lookup failed")
             return '"' + eq + '"'
+
+    def run(self):
+        self.step1_init()
+        self.step2_parse_fnl()
+        res = self.render()
+        return res
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None, mod_uri="__stafo_default_uri__"):
