@@ -26,8 +26,10 @@ TEST_DATA4_FPATH = os.path.join(TESTA_DATA_DIR, "statements04_matching.md")
 TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
 
 # todo this is not very elegant
-MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=True)
+# MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
+# ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=False)
+ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
+ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
 
 """
 tests/test_statements_to_kg.py::Test_02_FeatureRequest::test_c01__render_order_ring_problem
@@ -57,24 +59,29 @@ class HousekeeperMixin(GeneralHousekeeperMixin):
     pass
 
 
-class Test_00_Core(unittest.TestCase):
+class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
     def setUp(self) -> None:
         return super().setUp()
 
+    def tearDown(self):
+        return super().tearDown()
+
     def test_a01__base(self):
         # do the conversion
-        res_mod_fpath = s2k.main(TEST_DATA1_FPATH)
+        CM = s2k.ConversionManager(TEST_DATA1_FPATH, num_keys=10)
+        res_mod_fpath = CM.run()
 
         # ensure that the result can be loaded without errors
 
-        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
     # test_r stands for render :)
     def test_r01__render_order_ring_problem(self):
-        res_mod_fpath = s2k.main(TEST_DATA2_FPATH, create_key_tuple(40))
+        CM = s2k.ConversionManager(TEST_DATA2_FPATH, num_keys=40)
+        res_mod_fpath = CM.run()
         # ensure that the result can be loaded without errors
-        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
         A = get_item_by_name(res_mod_fpath, "A", mod)
         rel_key = get_key_by_name(res_mod_fpath, "has some relation to")
         self.assertEqual(
@@ -85,17 +92,27 @@ class Test_00_Core(unittest.TestCase):
         )
 
     def test_r02__render_latex_equations(self):
-        res_mod_fpath = s2k.main(TEST_DATA3_FPATH, create_key_tuple(50))
+        CM = s2k.ConversionManager(TEST_DATA3_FPATH, [ma_load_dict, ct_load_dict], num_keys=50)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
+
+        # check 1. equation with integral
         int_res_pattern = r"""cm1.new_math_relation\(lhs=cm1.F\(I\d+\["s"\]\), rsgn="==", rhs=ma.I5443\["definite integral"\]\(\(\(I\d+\["e"\]\*\*\(-1\*I\d+\["s"\]\*I\d+\["t"\]\)\)\*cm1.f\(I\d+\["t"\]\)\), I\d+\["t"\], ma.I5440\["limits"\]\(ma.I5000\["scalar zero"\], ma.I4291\["infinity"\]\)\)"""
-        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
         int_res = re.findall(int_res_pattern, res)
         self.assertEqual(len(int_res), 1)
+
+        # check 2. equation with derivative
+        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
         self.assertIn(deriv_res, res)
 
+        # check comments (source code before parsing)
+        comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"
+        self.assertIn(comment, res)
+
     def test_m01__match_entities(self):
-        res_mod_fpath = s2k.main(TEST_DATA4_FPATH, create_key_tuple(20))
+        CM = s2k.ConversionManager(TEST_DATA4_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
 
@@ -121,7 +138,8 @@ class Test_00_Core(unittest.TestCase):
         s2k.main(TEST_DATA4_FPATH, create_key_tuple(20), mod_uri=TEST_URI)
 
     def test_m02__multilingual_match(self):
-        res_mod_fpath = s2k.main(TEST_DATA5_FPATH, create_key_tuple(20))
+        CM = s2k.ConversionManager(TEST_DATA5_FPATH, [ma_load_dict, ct_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
@@ -141,15 +159,5 @@ class Test_00_Core(unittest.TestCase):
         self.assertNotIn("R4__is_instance_of=", res)
 
 
-class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
-    """
-    These tests specifically trigger bugs (or test former bugs)
-    """
-
-    def test_b01__R77_list_problem(self):
-        with p.uri_context(uri=self.TEST_BASE_URI, prefix="ut"):
-            I1000 = p.create_item(
-                R1__has_label="test item",
-                R4__is_instance_of=p.I35["real number"],
-                R77__has_alternative_label=["test1", "test2"],
-            )
+    # todo test qualifiers
+    # todo test direct dict approach
