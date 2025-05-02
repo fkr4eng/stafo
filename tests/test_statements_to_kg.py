@@ -24,10 +24,13 @@ TEST_DATA2_FPATH = os.path.join(TESTA_DATA_DIR, "statements02_ring.md")
 TEST_DATA3_FPATH = os.path.join(TESTA_DATA_DIR, "statements03_latex.md")
 TEST_DATA4_FPATH = os.path.join(TESTA_DATA_DIR, "statements04_matching.md")
 TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
+TEST_DATA6_FPATH = os.path.join(TESTA_DATA_DIR, "statements06_qualifier.md")
 
 # todo this is not very elegant
-MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=True)
+# MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
+# ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=False)
+ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
+ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
 
 """
 tests/test_statements_to_kg.py::Test_02_FeatureRequest::test_c01__render_order_ring_problem
@@ -40,57 +43,89 @@ def create_key_tuple(number):
     relation_keys = [f"R{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
     return (item_keys, relation_keys)
 
+def get_key_by_name(res_mod_fpath, name):
+    with open(res_mod_fpath, "rt", encoding="utf-8") as f:
+        content = f.read()
+    pattern = r'[I|R]\d+(?= = p.create_\w+?\(R1__has_label="' + name + r'")'
+    res = re.findall(pattern, content)
+    assert len(res) == 1, f"{name} not unique in mod. result: {res}"
+    return res[0]
+
+def get_item_by_name(res_mod_fpath, name, mod):
+    key = get_key_by_name(res_mod_fpath, name)
+    item = getattr(mod, key)
+    return item
 
 class HousekeeperMixin(GeneralHousekeeperMixin):
     pass
 
 
-class Test_00_Core(unittest.TestCase):
+class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
     def setUp(self) -> None:
         return super().setUp()
 
+    def tearDown(self):
+        return super().tearDown()
+
     def test_a01__base(self):
         # do the conversion
-        res_mod_fpath = s2k.main(TEST_DATA1_FPATH)
+        CM = s2k.ConversionManager(TEST_DATA1_FPATH, num_keys=10)
+        res_mod_fpath = CM.run()
 
         # ensure that the result can be loaded without errors
 
-        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
     # test_r stands for render :)
     def test_r01__render_order_ring_problem(self):
-        res_mod_fpath = s2k.main(TEST_DATA2_FPATH, create_key_tuple(40))
+        CM = s2k.ConversionManager(TEST_DATA2_FPATH, num_keys=40)
+        res_mod_fpath = CM.run()
         # ensure that the result can be loaded without errors
-        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="tst")
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+        A = get_item_by_name(res_mod_fpath, "A", mod)
+        rel_key = get_key_by_name(res_mod_fpath, "has some relation to")
         self.assertEqual(
-            mod.I2003.get_relations()["irk:/ocse/0.2/auto_import_statements02_ring#R2000"][0]
-            .object.get_relations()["irk:/ocse/0.2/auto_import_statements02_ring#R2000"][0]
+            A.get_relations(f"{mod.__URI__}#{rel_key}")[0]
+            .object.get_relations(f"{mod.__URI__}#{rel_key}")[0]
             .object,
-            mod.I2003,
+            A,
         )
 
     def test_r02__render_latex_equations(self):
-        res_mod_fpath = s2k.main(TEST_DATA3_FPATH, create_key_tuple(50))
+        CM = s2k.ConversionManager(TEST_DATA3_FPATH, [ma_load_dict, ct_load_dict], num_keys=50)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
+
+        # check 1. equation with integral
         int_res_pattern = r"""cm1.new_math_relation\(lhs=cm1.F\(I\d+\["s"\]\), rsgn="==", rhs=ma.I5443\["definite integral"\]\(\(\(I\d+\["e"\]\*\*\(-1\*I\d+\["s"\]\*I\d+\["t"\]\)\)\*cm1.f\(I\d+\["t"\]\)\), I\d+\["t"\], ma.I5440\["limits"\]\(ma.I5000\["scalar zero"\], ma.I4291\["infinity"\]\)\)"""
-        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
         int_res = re.findall(int_res_pattern, res)
         self.assertEqual(len(int_res), 1)
+
+        # check 2. equation with derivative
+        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
         self.assertIn(deriv_res, res)
 
+        # check comments (source code before parsing)
+        comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"
+        self.assertIn(comment, res)
+
     def test_m01__match_entities(self):
-        res_mod_fpath = s2k.main(TEST_DATA4_FPATH, create_key_tuple(20))
+        CM = s2k.ConversionManager(TEST_DATA4_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
 
         # replaced entities should appear as args
-        self.assertIn('R4__is_instance_of=p.I34["complex number"]', res)
+        self.assertIn('R4__is_instance_of=p.I37["integer number"]', res)
         # replaced entities should not be initialized
-        self.assertNotIn('p.create_item(R1__has_label="real number"', res)
+        self.assertNotIn('p.create_item(R1__has_label="integer number"', res)
         # replaced entities should not be updated
-        self.assertNotIn('["real number"].update_relations', res)
+        self.assertNotIn('["integer number"].update_relations', res)
+        # check if matched relations are rendered with correct prefix
+        key = get_key_by_name(res_mod_fpath, "n")
+        self.assertIn(f'ma__R5938__has_row_number={key}["n"]', res)
 
     def test_m01b__ensure_no_key_warning(self):
         # this failed for pyirk < 0.15.1
@@ -107,7 +142,8 @@ class Test_00_Core(unittest.TestCase):
         s2k.main(TEST_DATA4_FPATH, create_key_tuple(20), mod_uri=TEST_URI)
 
     def test_m02__multilingual_match(self):
-        res_mod_fpath = s2k.main(TEST_DATA5_FPATH, create_key_tuple(20))
+        CM = s2k.ConversionManager(TEST_DATA5_FPATH, [ma_load_dict, ct_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
@@ -126,16 +162,33 @@ class Test_00_Core(unittest.TestCase):
         self.assertNotIn("R8__has_domain_of_argument_1=", res)
         self.assertNotIn("R4__is_instance_of=", res)
 
+    def test_q01__qualifier(self):
+        CM = s2k.ConversionManager(TEST_DATA6_FPATH, num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
-class Test_01_Bugs(HousekeeperMixin, unittest.TestCase):
-    """
-    These tests specifically trigger bugs (or test former bugs)
-    """
+        # check for the qualifier Factory
+        self.assertTrue(isinstance(mod.has_position, p.QualifierFactory))
 
-    def test_b01__R77_list_problem(self):
-        with p.uri_context(uri=self.TEST_BASE_URI, prefix="ut"):
-            I1000 = p.create_item(
-                R1__has_label="test item",
-                R4__is_instance_of=p.I35["real number"],
-                R77__has_alternative_label=["test1", "test2"],
-            )
+        # check validity of qualifiers
+        stack1 = get_item_by_name(res_mod_fpath, "stack1", mod)
+        rel_key = get_key_by_name(res_mod_fpath, "has stack component")
+        stms = stack1.get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms), 2)
+        self.assertEqual(len(stms[0].qualifiers), 2)
+        self.assertEqual(stms[0].qualifiers[0].relation.R1.value, "has position")
+        self.assertEqual(stms[0].qualifiers[0].object, 0)
+
+        stack2 = get_item_by_name(res_mod_fpath, "stack2", mod)
+        stms2 = stack2.get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms2), 2)
+        self.assertEqual(len(stms2[0].qualifiers), 1)
+        self.assertEqual(stms2[0].qualifiers[0].relation.R1.value, "has position")
+        self.assertEqual(stms2[0].qualifiers[0].object, 0)
+        self.assertEqual(len(stms2[1].qualifiers), 1)
+        self.assertEqual(stms2[1].qualifiers[0].relation.R1.value, "is at outer position")
+        self.assertEqual(stms2[1].qualifiers[0].object, True)
+
+    # todo test direct dict approach

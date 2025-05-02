@@ -58,7 +58,7 @@ class ConversionManager:
     def __init__(
         self,
         statements_fpath: str,
-        load_irk_modules: list[dict]=None,
+        load_irk_modules: list[dict]=[],
         # TODO: improve this; see comment above class definition
         mod_uri="__stafo_default_uri__",  # This will be replaced by a system-dependent hardcoded URI below
         force_key_tuple: tuple = None,
@@ -85,12 +85,13 @@ class ConversionManager:
         self.irk_module_names = u.MyDict({"builtins": "p"})
         self.loaded_modules = Container()
         self.load_irk_modules = load_irk_modules
-        for load_dict in load_irk_modules:
-            assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
-            # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
-            mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
-            self.loaded_modules.__setattr__(load_dict["prefix"], mod)
-            self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
+        if load_irk_modules:
+            for load_dict in load_irk_modules:
+                assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
+                # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+                mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
+                self.loaded_modules.__setattr__(load_dict["prefix"], mod)
+                self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
 
         self.default_language = "de" # todo this needs to be set for each document
         self.entity_matching_report = ""
@@ -98,12 +99,13 @@ class ConversionManager:
         # TODO: improve handling of duplicate labels (current strategy: making them at least explicit)
         # TODO: move OCSE-dependent code to its own module
         expected_ocse_duplicate_labels = ["linearity", "strict nonlinearity"]
-        self.existing_labels_dict = p.get_label_to_item_dict(known_duplicates=expected_ocse_duplicate_labels)
+        self.existing_item_labels_dict = p.get_label_to_item_dict(known_duplicates=expected_ocse_duplicate_labels)
+        self.existing_relation_labels_dict = p.get_label_to_relation_dict(known_duplicates=["has length"])
 
         # TODO: improve this; see comment above class definition
         if mod_uri == "__stafo_default_uri__":
             # (this construction allows to distinguish between `None` and <no-value-provided>)
-            self.mod_uri = f"irk:/ocse/0.2/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
+            self.mod_uri = f"irk:/auto_import_{os.path.split(self.statements_fpath)[-1].split('.')[0]}"
         else:
             self.mod_uri = mod_uri
 
@@ -118,6 +120,8 @@ class ConversionManager:
             self.item_keys, self.relation_keys = force_key_tuple
 
         self.stop_at_line = 124
+
+        self.q_ident = "qq:"
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -378,6 +382,7 @@ class ConversionManager:
                     "R1": "wildcard relation",
                     "prefix": "p",
                 },
+                # todo check if these relations with name == R1 can be removed from this dict (auto matched)
                 "has explanation": {
                     "key": "R81",
                     "R1": "has explanation",
@@ -393,77 +398,6 @@ class ConversionManager:
                     "R1": "is secondary instance of",
                     "prefix": "p",
                 },
-                "has title": {
-                    "key": "R8434",
-                    "R1": "has title",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has authors": {
-                    "key": "R8433",
-                    "R1": "has authors",
-                    "prefix": "ag",
-                },
-                "has year": {
-                    "key": "R8435",
-                    "R1": "has year",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has family name": {
-                    "key": "R7781",
-                    "R1": "has family name",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has given name": {
-                    "key": "R7782",
-                    "R1": "has given name",
-                    "prefix": "ag",
-                },
-                "has google scholar author ID": {
-                    "key": "R3476",
-                    "R1": "has google scholar author ID",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "cites": {
-                    "key": "R8440",
-                    "R1": "cites",
-                    "prefix": "ag",
-                },
-
-                # TODO: These should be read from omt
-                "has element symbol": {
-                    "key": "R2060",
-                    "R1": "has element symbol",
-                    "prefix": "omt",
-                },
-
-                "has atomic number": {
-                    "key": "R2061",
-                    "R1": "has atomic number",
-                    "prefix": "omt",
-                },
-
-                "has group number": {
-                    "key": "R2062",
-                    "R1": "has group number",
-                    "prefix": "omt",
-                },
-
-                "has melting temperature": {
-                    "key": "R2063",
-                    "R1": "has melting temperature",
-                    "prefix": "omt",
-                },
-
-                "has boiling temperature": {
-                    "key": "R2064",
-                    "R1": "has boiling temperature",
-                    "prefix": "omt",
-                },
-
             }}
         """
             # todo:
@@ -655,7 +589,7 @@ class ConversionManager:
                 rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i+i_plus])[0])
                 for k, v in self.d["items"][arg1].items():
                     if v == self.build_reference(rarg1):
-                        d["items"][arg1][k] = self.build_reference(rarg2)
+                        d["items"][arg1][k]["object"] = self.build_reference(rarg2)
                 i_plus += 1
                 if not self.lines[i+i_plus].startswith(" "):
                     # indentation ended
@@ -778,11 +712,13 @@ class ConversionManager:
                 else:
                     rel = k
                     string = self.strip(line)
-
+                string, *qual_string = string.split(self.q_ident)
                 res = re.findall(f"(?<=- )(.+?)(?: {rel}:? )(.+?)(?=\\.$|$)", string)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     arg2 = self.build_reference(arg2, d)
+
+                    q_dict = self.resolve_qualifiers(qual_string)
                     # first check for some special relation that require special attention
                     # todo having this explicite relation name here is very unelegant, pls change
                     if k == "is associated to" or k == "hat Gleichungsreferenz" or k == "has defining formula":
@@ -807,9 +743,13 @@ class ConversionManager:
                     # instance of
                     if v["key"] == "R4":
                         self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, skip_entity_order=skip_entity_order)
+                        if qual_string:
+                            logger.warning(f"line {line} has qualifiers for R4, which is neglected")
                     # subclass of
                     elif v["key"] == "R3":
                         self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None}, skip_entity_order=skip_entity_order)
+                        if qual_string:
+                            logger.warning(f"line {line} has qualifiers for R3, which is neglected")
                     # alternative label
                     elif "R77" in v["key"]:
                         if arg1 in d["items"]:
@@ -837,10 +777,13 @@ class ConversionManager:
                             # add the alternative label in the correct language
                             if existing_item.__getattr__(f"R1__has_label__{language}") is None:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
-                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1)
+                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict)
                             # remove default R4 typing and possible duplicate types
-                            r4_label = d[tag][arg1]["R4"].split('"')[1]
-                            if "Metaclass" in d[tag][arg1]["R4"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
+                            # TODO: this currently fails (see `pytest -sk test_m02`)
+                            # Reason: `d[tag][arg1]["R4"]` is a dict like `{'object': 'p.I2["Metaclass"]', 'q': []}`
+                            # but a string is expected
+                            r4_label = d[tag][arg1]["R4"]["object"].split('"')[1]
+                            if "Metaclass" in d[tag][arg1]["R4"]["object"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
                                 del d[tag][arg1]["R4"]
 
                         else:
@@ -848,20 +791,20 @@ class ConversionManager:
                             if not "R1" in d[tag][arg1].keys() and language == self.default_language:
                                 d[tag][arg1]["R1"] = arg1
                             else:
-                                self.add_relation_inplace(d[tag][arg1], v["key"], arg2)
+                                self.add_relation_inplace(d[tag][arg1], v["key"], arg2, q_dict)
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
                             logger.info(f"dummy item {arg1} added")
                         if arg1 in d["items"]:
-                            self.add_relation_inplace(d["items"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in d["relations"]:
-                            self.add_relation_inplace(d["relations"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(d["relations"][arg1], v["key"], arg2, q_dict)
                         # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
                         elif arg1 in self.d["items"]:
-                            self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in self.d["relations"]:
-                            self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2)
+                            self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2, q_dict)
                         else:
                             raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
 
@@ -888,6 +831,25 @@ class ConversionManager:
                 logger.warning(f"not processed line {i}: {line}")
 
         return d
+
+    def resolve_qualifiers(self, qualifiers):
+        # syntax qq: q1 v1, q2 v2, qq: q3 v3        q1 and q2 are a group and apply together -> they go into a list
+        dict_list = []
+        for q_str in qualifiers:
+            d = {}
+            for k, v in self.d["relations"].items():
+                if k in q_str and f"'{k}" in q_str:
+                    rel = f"'{k}'"
+                    string = q_str
+                else:
+                    rel = k
+                    string = self.strip(q_str)
+                res = re.findall(f"(?: ?)(?:{rel}:? )(.+?)(?=,|qq:|\\.$|$)", string)
+                for obj in res:
+                    d[v["key"]] = self.strip(obj)
+            dict_list.append(d)
+
+        return dict_list
 
     def get_r1_key(self, language, force_suffix=False):
         if language != self.default_language or force_suffix:
@@ -926,7 +888,9 @@ class ConversionManager:
                     irk_label = v.split('"')[1] # todo this should be try-except-ed
                     #! why are we doing this? This way I cant add string values -> Those are not added here but later
                 except Exception as e:
-                    pass
+                    logger.error(f'label {irk_label} should look like I1234["bla"]. maybe it was not defined in fnl?\
+                        maybe there is a typo (lower/ upper case?)')
+                # todo get rid of p.ds.get_item_by_label
                 v_item = p.ds.get_item_by_label(irk_label)
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
@@ -947,8 +911,12 @@ class ConversionManager:
 
     def add_new_rel(self, d, label, language, additional_relations:dict={}):
         prefix = False
-        # check if relation already exists in KG
-        existing_rel = p.ds.get_item_by_label(label.lower())
+        # check if item already exists in KG
+        existing_rel = self.get_existing_relation(label)
+        # todo find a save way to match different languages, .lower() has problems
+        # automatically created relations don't count # todo, do they even exist?
+        if existing_rel and "a" in existing_rel.short_key:
+            existing_rel = None
         if existing_rel:
             key = existing_rel.short_key
             prefix = self.irk_module_names[existing_rel.base_uri.split('/')[-1]]
@@ -958,10 +926,11 @@ class ConversionManager:
 
         if label not in d["relations"].keys():
             r1_key = self.get_r1_key(language)
+            pre = prefix + "__" if prefix else ""
             d["relations"][label] = {
                 "key": key,
                 r1_key: label,
-                "render": f"""{key}__{self.sp_to_us(label)}""",
+                "render": f"""{pre}{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet,
                 "prefix": prefix}
         else:
@@ -972,58 +941,75 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_relation_inplace(self, subject_dict:dict, key:str, obj:str, qualifier:dict={}):
+    def add_relation_inplace(self, subject_dict:dict, rel_key:str, obj:str, qualifier:Union[dict, list[dict]]={}):
         """add a relation between subject and object to a given dict (inplace)
 
         Args:
             d (dict): the dict in which the subject resides
-            key (str): relation key (e.g. R16)
+            rel_key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
+            qualifiers (list or dict): qualifiers for the relation. dict has to have the structure \
+                {"R1234": <value>,"R2345": <value>}. If multiple qualifiers appear in the same dict, that means they \
+                both apply to the relation at the same time. if multiple qualifiers apply independant of each other \
+                or the same qualifier applies multiple times, use a list of dicts: [{"R1234": 1}, {"R1234": 2}]. \
+                Defaults to {}.
         """
-        # try type conversion in case of literals (numbers)
-        try:
-            if obj == int(obj):
-                obj = int(obj)
-            elif obj == float(obj):
-                obj = float(obj)
-        except:
-            # object seems not to be a number
-            pass
-
-        object_dict = {"object": obj, "q": []}
-        if qualifier:
-            object_dict["q"].extend(qualifier)
-
-        self.rel_interpr = self.get_rel_dict_key_interpreter()
-        if key in self.rel_interpr.keys():
-            relation = self.d["relations"][self.rel_interpr[key]]
-
-            # relation is functional: only one object, might be overwriting old one
-            if "R22" in relation.keys() and relation["R22"] == True:
-                subject_dict[key] = object_dict
-            # relation is not functional: make list or append to it
+        # todo test and evaluate if this fucks anything up
+        # if the key is not a pyirk key (e.g. comment, formal_ass, ...) we dont want the nested dict structure
+        if not re.findall("R\d+", rel_key):
+            # afaik comments is the only key that requires a list here
+            if rel_key == "comments":
+                if not "comments" in subject_dict.keys():
+                    subject_dict[rel_key] = []
+                subject_dict[rel_key].append(obj)
             else:
-                if key in subject_dict.keys():
-                    assert type(subject_dict[key]) == list, f"{subject_dict[key]} should be a list."
-                    for i, d in enumerate(subject_dict[key]):
-                        # maybe same object already exists and we just add a qualifier
-                        # todo write test for this qualifier update
-                        if object_dict["object"] == d["object"]:
-                            # check if exact qualifier already exists, prevent adding duplicates
-                            for qual_dict in object_dict["q"]:
-                                if qual_dict not in subject_dict[key][i]["q"]:
-                                    subject_dict[key][i]["q"].append(qual_dict)
-                            # subject_dict[key][i]["q"].extend(object_dict["q"])
-                            break
-                    else:
-                        subject_dict[key].append(object_dict)
-                else:
-                    subject_dict[key] = [object_dict]
-
-        # key is probably a special key such as 'comment' or 'formal_set'
+                subject_dict[rel_key] = obj
+        # regular pyirk keys
         else:
-            assert not key.startswith("R"), f"is {key} maybe a relation key that should be in d[relations]?"
-            subject_dict[key] = object_dict
+            # try type conversion in case of literals (numbers)
+            try:
+                if obj == int(obj):
+                    obj = int(obj)
+                elif obj == float(obj):
+                    obj = float(obj)
+            except:
+                # object seems not to be a number
+                pass
+
+            object_dict = {"object": obj, "q": []}
+            if qualifier:
+                object_dict["q"].extend(qualifier)
+
+            self.rel_interpr = self.get_rel_dict_key_interpreter()
+            if rel_key in self.rel_interpr.keys():
+                relation = self.d["relations"][self.rel_interpr[rel_key]]
+
+                # relation is functional: only one object, might be overwriting old one
+                if "R22" in relation.keys() and relation["R22"] == True:
+                    subject_dict[rel_key] = object_dict
+                # relation is not functional: make list or append to it
+                else:
+                    if rel_key in subject_dict.keys():
+                        assert type(subject_dict[rel_key]) == list, f"{subject_dict[rel_key]} should be a list."
+                        for i, d in enumerate(subject_dict[rel_key]):
+                            # maybe same object already exists and we just add a qualifier
+                            # todo write test for this qualifier update
+                            if object_dict["object"] == d["object"]:
+                                # check if exact qualifier already exists, prevent adding duplicates
+                                for qual_dict in object_dict["q"]:
+                                    if qual_dict not in subject_dict[rel_key][i]["q"]:
+                                        subject_dict[rel_key][i]["q"].append(qual_dict)
+                                # subject_dict[key][i]["q"].extend(object_dict["q"])
+                                break
+                        else:
+                            subject_dict[rel_key].append(object_dict)
+                    else:
+                        subject_dict[rel_key] = [object_dict]
+
+            # key is probably a special key such as 'comment' or 'formal_set'
+            else:
+                assert not rel_key.startswith("R"), f"is {rel_key} maybe a relation key that should be in d[relations]?"
+                subject_dict[rel_key] = object_dict
 
     def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
         """parse the content of nested definition statements recursively.
@@ -1079,10 +1065,22 @@ class ConversionManager:
         return temp_dict
 
     def get_existing_item(self, label):
-        if label in self.existing_labels_dict.keys():
-            return self.existing_labels_dict[label]
+        if label in self.existing_item_labels_dict.keys():
+            return self.existing_item_labels_dict[label]
         else:
             return None
+
+    def get_existing_relation(self, label):
+        if label in self.existing_relation_labels_dict.keys():
+            return self.existing_relation_labels_dict[label]
+        else:
+            return None
+
+    def get_existing_entity(self, label):
+        e = self.get_existing_item(label)
+        if not e:
+            e = self.get_existing_relation(label)
+        return e
 
     def build_reference(self, arg2, local_dict={}):
         """return dual readable version of entity if possible (might be literal): I1234["something"]
@@ -1198,7 +1196,7 @@ class ConversionManager:
             res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
-            if "R4" in v.keys() and (v["R4"] == 'p.I15["implication proposition"]' or v["R4"] == 'p.I17["equivalence proposition"]' or v["R4"] == 'p.I14["mathematical proposition"]'):
+            if "R4" in v.keys() and (v["R4"]["object"] == 'p.I15["implication proposition"]' or v["R4"]["object"] == 'p.I17["equivalence proposition"]' or v["R4"]["object"] == 'p.I14["mathematical proposition"]'):
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
@@ -1234,7 +1232,7 @@ class ConversionManager:
 
         if final_replacements:
             res = self._final_replacements(res, final_replacements)
-
+        # todo run black?
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)
@@ -1258,8 +1256,8 @@ class ConversionManager:
 
 
     def prune_dict(self, value_dict):
-        matched_item = p.ds.get_item_by_label(value_dict["R1"])
-        existing_rel_keys = [rel.split("#")[-1] for rel in matched_item.get_relations().keys()]
+        matched_entity = self.get_existing_entity(value_dict["R1"])
+        existing_rel_keys = [rel.split("#")[-1] for rel in matched_entity.get_relations().keys()]
         del_keys = []
         for k, v in value_dict.items():
             if "R1" == k:
@@ -1288,7 +1286,7 @@ class ConversionManager:
                 # first some exceptions
                 if key == "R1" or "R1__" in key:
                     # background: R1 is handled differently during item creation, so it doesnt yet get a dict but still a string
-                    # reason: R1 is queried very often -> each location would need to change
+                    # reason: R1 is queried very often -> each location in the code would need to change
                     # todo unify!
                     value = {"object": value, "q": []}
                 elif key == "R6":
@@ -1370,8 +1368,9 @@ class ConversionManager:
                                 l.append(str(v))
                             else:
                                 ref = self.build_reference(v)
-                                if ref == v:
+                                if ref == v or key in keys_that_want_literals:
                                     # this means, that there is no reference and the origi-> quote the string
+                                    # or v was matched to an existing entity and now we want the alt. label instead of exsiting entity
                                     l.append(f'"{v}"')
                                 else:
                                     l.append(f'{ref}')
@@ -1435,7 +1434,7 @@ class ConversionManager:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
                     # todo decide uq_instance_of vs instance_of
-                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]}))')
+                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]["object"]}))')
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
@@ -1445,6 +1444,7 @@ class ConversionManager:
                         if not isinstance(vv, list):
                             vv = [vv]
                         for vvv in vv:
+                            vvv = vvv["object"]
                             # some exceptions when not to add cm.
                             # in case of literals (numbers)
                             if isinstance(vvv, Real):
@@ -1576,14 +1576,14 @@ class ConversionManager:
     def convert_latex_to_irklike_str(self, latex, item_lookup, var_map):
         # 1. convert to sympy
         sp_expr = parse_latex_lark(latex)
-        if len(sp_expr.free_symbols) > 5:
-            # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
-            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
         # ambiguous result
         if isinstance(sp_expr, Tree):
             # todo this is an easy fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
             logger.warning(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
+        if len(sp_expr.free_symbols) > 5:
+            # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
+            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
 
         # 2. traverse tree
         res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map)
@@ -1715,6 +1715,12 @@ class ConversionManager:
         else:
             logger.warning("expression lookup failed")
             return '"' + eq + '"'
+
+    def run(self):
+        self.step1_init()
+        self.step2_parse_fnl()
+        res = self.render()
+        return res
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None, mod_uri="__stafo_default_uri__"):
