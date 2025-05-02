@@ -43,16 +43,16 @@ def create_key_tuple(number):
     relation_keys = [f"R{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
     return (item_keys, relation_keys)
 
-def get_key_by_name(res_mod_path, name):
-    with open(res_mod_path, "rt", encoding="utf-8") as f:
+def get_key_by_name(res_mod_fpath, name):
+    with open(res_mod_fpath, "rt", encoding="utf-8") as f:
         content = f.read()
     pattern = r'[I|R]\d+(?= = p.create_\w+?\(R1__has_label="' + name + r'")'
     res = re.findall(pattern, content)
     assert len(res) == 1, f"{name} not unique in mod. result: {res}"
     return res[0]
 
-def get_item_by_name(res_mod_path, name, mod):
-    key = get_key_by_name(res_mod_path, name)
+def get_item_by_name(res_mod_fpath, name, mod):
+    key = get_key_by_name(res_mod_fpath, name)
     item = getattr(mod, key)
     return item
 
@@ -118,11 +118,14 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
             res = f.read()
 
         # replaced entities should appear as args
-        self.assertIn('R4__is_instance_of=p.I34["complex number"]', res)
+        self.assertIn('R4__is_instance_of=p.I37["integer number"]', res)
         # replaced entities should not be initialized
-        self.assertNotIn('p.create_item(R1__has_label="real number"', res)
+        self.assertNotIn('p.create_item(R1__has_label="integer number"', res)
         # replaced entities should not be updated
-        self.assertNotIn('["real number"].update_relations', res)
+        self.assertNotIn('["integer number"].update_relations', res)
+        # check if matched relations are rendered with correct prefix
+        key = get_key_by_name(res_mod_fpath, "n")
+        self.assertIn(f'ma__R5938__has_row_number={key}["n"]', res)
 
     def test_m01b__ensure_no_key_warning(self):
         # this failed for pyirk < 0.15.1
@@ -188,5 +191,4 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(stms2[1].qualifiers[0].relation.R1.value, "is at outer position")
         self.assertEqual(stms2[1].qualifiers[0].object, True)
 
-    # todo test qualifiers
     # todo test direct dict approach

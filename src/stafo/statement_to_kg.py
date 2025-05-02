@@ -99,7 +99,8 @@ class ConversionManager:
         # TODO: improve handling of duplicate labels (current strategy: making them at least explicit)
         # TODO: move OCSE-dependent code to its own module
         expected_ocse_duplicate_labels = ["linearity", "strict nonlinearity"]
-        self.existing_labels_dict = p.get_label_to_item_dict(known_duplicates=expected_ocse_duplicate_labels)
+        self.existing_item_labels_dict = p.get_label_to_item_dict(known_duplicates=expected_ocse_duplicate_labels)
+        self.existing_relation_labels_dict = p.get_label_to_relation_dict(known_duplicates=["has length"])
 
         # TODO: improve this; see comment above class definition
         if mod_uri == "__stafo_default_uri__":
@@ -381,6 +382,7 @@ class ConversionManager:
                     "R1": "wildcard relation",
                     "prefix": "p",
                 },
+                # todo check if these relations with name == R1 can be removed from this dict (auto matched)
                 "has explanation": {
                     "key": "R81",
                     "R1": "has explanation",
@@ -396,77 +398,6 @@ class ConversionManager:
                     "R1": "is secondary instance of",
                     "prefix": "p",
                 },
-                "has title": {
-                    "key": "R8434",
-                    "R1": "has title",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has authors": {
-                    "key": "R8433",
-                    "R1": "has authors",
-                    "prefix": "ag",
-                },
-                "has year": {
-                    "key": "R8435",
-                    "R1": "has year",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has family name": {
-                    "key": "R7781",
-                    "R1": "has family name",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "has given name": {
-                    "key": "R7782",
-                    "R1": "has given name",
-                    "prefix": "ag",
-                },
-                "has google scholar author ID": {
-                    "key": "R3476",
-                    "R1": "has google scholar author ID",
-                    "R22": True,
-                    "prefix": "ag",
-                },
-                "cites": {
-                    "key": "R8440",
-                    "R1": "cites",
-                    "prefix": "ag",
-                },
-
-                # TODO: These should be read from omt
-                "has element symbol": {
-                    "key": "R2060",
-                    "R1": "has element symbol",
-                    "prefix": "omt",
-                },
-
-                "has atomic number": {
-                    "key": "R2061",
-                    "R1": "has atomic number",
-                    "prefix": "omt",
-                },
-
-                "has group number": {
-                    "key": "R2062",
-                    "R1": "has group number",
-                    "prefix": "omt",
-                },
-
-                "has melting temperature": {
-                    "key": "R2063",
-                    "R1": "has melting temperature",
-                    "prefix": "omt",
-                },
-
-                "has boiling temperature": {
-                    "key": "R2064",
-                    "R1": "has boiling temperature",
-                    "prefix": "omt",
-                },
-
             }}
         """
             # todo:
@@ -957,7 +888,9 @@ class ConversionManager:
                     irk_label = v.split('"')[1] # todo this should be try-except-ed
                     #! why are we doing this? This way I cant add string values -> Those are not added here but later
                 except Exception as e:
-                    pass
+                    logger.error(f'label {irk_label} should look like I1234["bla"]. maybe it was not defined in fnl?\
+                        maybe there is a typo (lower/ upper case?)')
+                # todo get rid of p.ds.get_item_by_label
                 v_item = p.ds.get_item_by_label(irk_label)
                 # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
                 if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
@@ -978,8 +911,12 @@ class ConversionManager:
 
     def add_new_rel(self, d, label, language, additional_relations:dict={}):
         prefix = False
-        # check if relation already exists in KG
-        existing_rel = p.ds.get_item_by_label(label.lower())
+        # check if item already exists in KG
+        existing_rel = self.get_existing_relation(label)
+        # todo find a save way to match different languages, .lower() has problems
+        # automatically created relations don't count # todo, do they even exist?
+        if existing_rel and "a" in existing_rel.short_key:
+            existing_rel = None
         if existing_rel:
             key = existing_rel.short_key
             prefix = self.irk_module_names[existing_rel.base_uri.split('/')[-1]]
@@ -989,10 +926,11 @@ class ConversionManager:
 
         if label not in d["relations"].keys():
             r1_key = self.get_r1_key(language)
+            pre = prefix + "__" if prefix else ""
             d["relations"][label] = {
                 "key": key,
                 r1_key: label,
-                "render": f"""{key}__{self.sp_to_us(label)}""",
+                "render": f"""{pre}{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet,
                 "prefix": prefix}
         else:
@@ -1127,10 +1065,22 @@ class ConversionManager:
         return temp_dict
 
     def get_existing_item(self, label):
-        if label in self.existing_labels_dict.keys():
-            return self.existing_labels_dict[label]
+        if label in self.existing_item_labels_dict.keys():
+            return self.existing_item_labels_dict[label]
         else:
             return None
+
+    def get_existing_relation(self, label):
+        if label in self.existing_relation_labels_dict.keys():
+            return self.existing_relation_labels_dict[label]
+        else:
+            return None
+
+    def get_existing_entity(self, label):
+        e = self.get_existing_item(label)
+        if not e:
+            e = self.get_existing_relation(label)
+        return e
 
     def build_reference(self, arg2, local_dict={}):
         """return dual readable version of entity if possible (might be literal): I1234["something"]
@@ -1306,8 +1256,8 @@ class ConversionManager:
 
 
     def prune_dict(self, value_dict):
-        matched_item = p.ds.get_item_by_label(value_dict["R1"])
-        existing_rel_keys = [rel.split("#")[-1] for rel in matched_item.get_relations().keys()]
+        matched_entity = self.get_existing_entity(value_dict["R1"])
+        existing_rel_keys = [rel.split("#")[-1] for rel in matched_entity.get_relations().keys()]
         del_keys = []
         for k, v in value_dict.items():
             if "R1" == k:

@@ -1,6 +1,9 @@
-- There is a class: 'real number'.
-- There is a class: 'complex number'.
+- There is a class: 'integer number'.
+- There is a class: 'matrix'
+- There is a relation: 'has row number'
 
-- 's' is an instance of 'complex number'
-- 'e' is an instance of 'complex number'
+- 'A' is an instance of matrix
+- 'n' is an instance of 'integer number'
+
+- 'A' 'has row number' 'n'
 
