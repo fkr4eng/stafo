@@ -194,6 +194,14 @@ class ConversionManager:
             indent = 0
         return indent
 
+    def get_entity_type_from_label(self, label):
+        if label in self.d["items"].keys():
+            return "items"
+        elif label in self.d["relations"].keys():
+            return "relations"
+        else:
+            logger.error(f"label {label} not found in self.d")
+
     def get_sub_content(self, content):
         """return the lines that have the same (or more) indentation as the first line in content"""
         assert isinstance(content, list), f"content has to be list of str"
@@ -682,7 +690,12 @@ class ConversionManager:
                 if res: related_to = self.strip(res[0])
                 res= re.findall(self.explanation_pattern_dict["verbal"], l)
                 if res: verbal_sum = self.strip(res[0])
-            self.d["items"][related_to][self.d["relations"]["has explanation"]["key"]] = verbal_sum
+            if related_to and verbal_sum:
+                # self.d["items"][related_to][self.d["relations"]["has explanation"]["key"]] = verbal_sum
+                tag = self.get_entity_type_from_label(related_to)
+                self.add_relation_inplace(self.d[tag][related_to], self.d["relations"]["has explanation"]["key"], verbal_sum)
+            else:
+                logger.warning(f"explanation {explanation} did not specify 'related to' {related_to} AND 'verbal summary' {verbal_sum}")
         elif len(for_loop) > 0:
             index_var, start, stop = self.strip(for_loop[0])
             additional_content = self.get_sub_content(self.lines[i+1:])
@@ -816,7 +829,9 @@ class ConversionManager:
                     # functional
                     if v["key"] == "R22":
                         if arg1 in d["relations"]:
-                            d["relations"][arg1][v["key"]] = True
+                            # d["relations"][arg1][v["key"]] = True
+                            self.add_relation_inplace(d["relations"][arg1], "R22", True)
+                            # todo investigate how to set R22 = True in output file instead of R22=1
                         else:
                             raise KeyError(f"why is {arg1} not in d, maybe self.d?")
                         break
@@ -883,17 +898,13 @@ class ConversionManager:
         else:
             key = d["items"][label]["key"]
         for k, v in additional_relations.items():
-            if isinstance(v, str) and len(v) > 0:
-                try:
-                    irk_label = v.split('"')[1] # todo this should be try-except-ed
-                    #! why are we doing this? This way I cant add string values -> Those are not added here but later
-                except Exception as e:
-                    logger.error(f'label {irk_label} should look like I1234["bla"]. maybe it was not defined in fnl?\
-                        maybe there is a typo (lower/ upper case?)')
+            if d["items"][label]["prefix"] and k in ["R3", "R4"] and isinstance(v, str) and '"' in v:
+                # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
+                irk_label = v.split('"')[1]
                 # todo get rid of p.ds.get_item_by_label
                 v_item = p.ds.get_item_by_label(irk_label)
-                # prevent duplication in R3/R4 hierarchy while still supporting new relations for existing items
-                if d["items"][label]["prefix"] and v_item and k in ["R3", "R4"]:
+                #! string objects are added later
+                if v_item:
                     continue
             if isinstance(v, list):
                 # this is (only?) used when setting the dictionary directly instead of from fnl
@@ -954,9 +965,8 @@ class ConversionManager:
                 or the same qualifier applies multiple times, use a list of dicts: [{"R1234": 1}, {"R1234": 2}]. \
                 Defaults to {}.
         """
-        # todo test and evaluate if this fucks anything up
         # if the key is not a pyirk key (e.g. comment, formal_ass, ...) we dont want the nested dict structure
-        if not re.findall("R\d+", rel_key):
+        if not re.findall(r"R\d+", rel_key):
             # afaik comments is the only key that requires a list here
             if rel_key == "comments":
                 if not "comments" in subject_dict.keys():
