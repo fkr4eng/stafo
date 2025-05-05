@@ -829,9 +829,8 @@ class ConversionManager:
                     # functional
                     if v["key"] == "R22":
                         if arg1 in d["relations"]:
-                            # d["relations"][arg1][v["key"]] = True
-                            self.add_relation_inplace(d["relations"][arg1], "R22", True)
-                            # todo investigate how to set R22 = True in output file instead of R22=1
+                            self.add_relation_inplace(d["relations"][arg1], "R22", "True")
+                            # we use "True" here so it is rendered to True in the output. Using True here results in 1
                         else:
                             raise KeyError(f"why is {arg1} not in d, maybe self.d?")
                         break
@@ -848,7 +847,8 @@ class ConversionManager:
         return d
 
     def resolve_qualifiers(self, qualifiers):
-        # syntax qq: q1 v1, q2 v2, qq: q3 v3        q1 and q2 are a group and apply together -> they go into a list
+        # syntax 'a' 'rel' 'b' qq: 'q1' 'v1', 'q2' 'v2', qq: 'q3' 'v3'
+        # q1 and q2 are a group and apply together -> they go into a list
         dict_list = []
         for q_str in qualifiers:
             d = {}
