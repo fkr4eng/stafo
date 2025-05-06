@@ -28,6 +28,7 @@ TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
 TEST_DATA6_FPATH = os.path.join(TESTA_DATA_DIR, "statements06_qualifier.md")
 TEST_DATA7_FPATH = os.path.join(TESTA_DATA_DIR, "statements07_inheritance.md")
 TEST_DATA8_FPATH = os.path.join(TESTA_DATA_DIR, "statements08_errors.md")
+TEST_DATA9_FPATH = os.path.join(TESTA_DATA_DIR, "statements09_strings.md")
 
 # todo this is not very elegant
 # MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
@@ -56,7 +57,7 @@ def get_key_by_name(res_mod_fpath, name):
 
 def get_item_by_name(res_mod_fpath, name, mod):
     key = get_key_by_name(res_mod_fpath, name)
-    item = getattr(mod, key)
+    item: p.Item = getattr(mod, key)
     return item
 
 class HousekeeperMixin(GeneralHousekeeperMixin):
@@ -136,6 +137,16 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
             res = f.read()
         # test that some residual latex commands dont throw warnings in R2
         self.assertIn('R2__has_description=r"', res)
+
+    def test_r04__render_strings(self):
+        CM = s2k.ConversionManager(TEST_DATA9_FPATH, num_keys=20)
+        res_mod_fpath = CM.run()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+        # assert correct loading
+        test_item = get_item_by_name(res_mod_fpath, "Test", mod)
+        self.assertEqual(test_item.get_relations("R2", return_obj=True)[0].value, "bla")
+        rel = f'{mod.__URI__}#{get_key_by_name(res_mod_fpath, "rel")}'
+        self.assertEqual(test_item.get_relations(rel, return_obj=True)[0], "blub")
 
     def test_m01__match_entities(self):
         CM = s2k.ConversionManager(TEST_DATA4_FPATH, [ma_load_dict], num_keys=20)

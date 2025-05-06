@@ -563,7 +563,7 @@ class ConversionManager:
             # todo R8, R9, R11 should just be in general relation parsing instead of here
             arg1, arg2 = self.strip(type_of_arg_1[0])
             if arg2 not in self.d["items"].keys():
-                logger.info(f"unknown type: {arg2}")
+                logger.warning(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R8", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -573,7 +573,7 @@ class ConversionManager:
         elif len(type_of_arg_2) > 0:
             arg1, arg2 = self.strip(type_of_arg_2[0])
             if arg2 not in self.d["items"].keys():
-                logger.info(f"unknown type: {arg2}")
+                logger.warning(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R9", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -583,7 +583,7 @@ class ConversionManager:
         elif len(type_of_result) > 0:
             arg1, arg2 = self.strip(type_of_result[0])
             if arg2 not in self.d["items"].keys():
-                logger.info(f"unknown type: {arg2}")
+                logger.warning(f"unknown type: {arg2}")
             if arg1 in self.d["items"].keys():
                 self.add_relation_inplace(d["items"][arg1], "R11", self.build_reference(arg2))
             elif arg1 in self.d["relations"].keys():
@@ -1289,8 +1289,6 @@ class ConversionManager:
 
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
-        keys_that_want_literals = ["R1", "R2", "R24", "R77", "R77__en", "R77__de", "R81", "R82", "R3476", "R7781", "R7782", "R8434"]
-        # todo get rid of these hardcoded keys
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
@@ -1317,8 +1315,24 @@ class ConversionManager:
                     if "p.I2[" in value["object"]:
                         self.entity_matching_report += f'Unmatched entity: {self.build_reference(value_dict["R1"])}\n'
 
-                # add correct amount of quotation marks
-                if key in keys_that_want_literals:
+                # add correct amount of quotation marks if value is literal
+                key_wants_literal = False
+                rel_label = self.rel_interpr[key]
+                if pr := self.d["relations"][rel_label]["prefix"]:
+                    # relation is defined in existing module -> check R11 there
+                    if pr == "p": # official prefix of builtins is bi
+                        pr = "bi"
+                    e = p.ds.get_entity_by_uri(f'{p.ds.uri_prefix_mapping.b[pr]}#{key.split("__")[0]}')
+                    eR11 = e.get_relations("R11", return_obj=True)
+                    if p.I19["language-specified string literal"] in eR11 or p.I52["string"] in eR11:
+                        key_wants_literal = True
+                else:
+                    # relation is new, check R11 in self.d["relations"]
+                    if "R11" in self.d["relations"][rel_label].keys():
+                        for result_type_dict in self.d["relations"][rel_label]["R11"]:
+                            if "p.I52" in result_type_dict["object"] or "p.I19" in result_type_dict["object"]:
+                                key_wants_literal = True
+                if key_wants_literal:
                     # value is literal -> need extra quotation marks ""
                     quotes = '"'
                 else:
@@ -1385,8 +1399,8 @@ class ConversionManager:
                                 l.append(str(v))
                             else:
                                 ref = self.build_reference(v)
-                                if ref == v or key in keys_that_want_literals:
-                                    # this means, that there is no reference and the origi-> quote the string
+                                if ref == v or key_wants_literal:
+                                    # this means, that there is no reference to the original entity -> quote the string
                                     # or v was matched to an existing entity and now we want the alt. label instead of exsiting entity
                                     l.append(f'"{v}"')
                                 else:
