@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 124
+        self.stop_at_line = 20
 
         self.q_ident = "qq:"
 
@@ -907,6 +907,8 @@ class ConversionManager:
                 #! string objects are added later
                 if v_item:
                     continue
+            elif k in ["R3", "R4"] and isinstance(v, str) and not '"' in v:
+                logger.warning(f"Trying to set '{k}' of '{label}' with unrecognized item '{v}', maybe check for typos?")
             if isinstance(v, list):
                 # this is (only?) used when setting the dictionary directly instead of from fnl
                 for vv in v:
@@ -1288,7 +1290,7 @@ class ConversionManager:
     def built_simple_context(self, value_dict):
         """return context for template. works for most items and relations."""
         keys_that_want_literals = ["R1", "R2", "R24", "R77", "R77__en", "R77__de", "R81", "R82", "R3476", "R7781", "R7782", "R8434"]
-        # todo declare this at the top
+        # todo get rid of these hardcoded keys
         context = {"key": value_dict["key"], "rel": [], "extra": []}
         if "snip" in value_dict.keys():
             context["snip"] = value_dict["snip"]
@@ -1311,12 +1313,9 @@ class ConversionManager:
                     # todo find this equation
                     pass
                 elif (key == "R4" or key == "R3"):
-                    # this already assumes that R4 and R4 are functional
+                    # this already assumes that R3 and R4 are functional
                     if "p.I2[" in value["object"]:
                         self.entity_matching_report += f'Unmatched entity: {self.build_reference(value_dict["R1"])}\n'
-                    if ("p.I6" in value["object"] or "p.I7" in value["object"] or "p.I8" in value["object"] or "p.I9" in value["object"]):
-                        # operators need custom call method
-                        context["extra"].append(f'{self.build_reference(value_dict["R1"])}.add_method(p.create_evaluated_mapping, "_custom_call")')
 
                 # add correct amount of quotation marks
                 if key in keys_that_want_literals:
@@ -1346,7 +1345,8 @@ class ConversionManager:
                             context["extra"].append(
                                 f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})')
                     else:
-                        context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={quotes}{value}{quotes}')
+                        r = "r" if key == "R2" else "" # escape potential math expressions in R2
+                        context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={r}{quotes}{value}{quotes}')
                 # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
                 else:
                     # we need to manually construct a string here instead of a list, since we might want python objects
@@ -1516,7 +1516,7 @@ class ConversionManager:
                     context["full_source"] = res
 
             except Exception as e:
-                logger.warning(f"rendering failed for {eq_dict[what]} due to {type(e)}: {e}")
+                logger.warning(f"rendering failed for {eq_dict['full_source']} due to {type(e)}: {e}")
                 context["full_source"] = eq_dict["full_source"]
         res = render_template("math_relation_template.py", context)
         return res

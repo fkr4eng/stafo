@@ -1,4 +1,5 @@
 import unittest
+import logging
 import sys
 import os
 from os.path import join as pjoin
@@ -25,6 +26,8 @@ TEST_DATA3_FPATH = os.path.join(TESTA_DATA_DIR, "statements03_latex.md")
 TEST_DATA4_FPATH = os.path.join(TESTA_DATA_DIR, "statements04_matching.md")
 TEST_DATA5_FPATH = os.path.join(TESTA_DATA_DIR, "statements05_multilingual.md")
 TEST_DATA6_FPATH = os.path.join(TESTA_DATA_DIR, "statements06_qualifier.md")
+TEST_DATA7_FPATH = os.path.join(TESTA_DATA_DIR, "statements07_inheritance.md")
+TEST_DATA8_FPATH = os.path.join(TESTA_DATA_DIR, "statements08_errors.md")
 
 # todo this is not very elegant
 # MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
@@ -77,7 +80,19 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
-    # test_r stands for render :)
+    def test_a01__inheritance_of_custom_calls(self):
+        CM = s2k.ConversionManager(TEST_DATA7_FPATH, load_irk_modules=[ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
+        # ensure that the result can be loaded without errors
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+    def test_e01__error_messages(self):
+        CM = s2k.ConversionManager(TEST_DATA8_FPATH, num_keys=20)
+        with self.assertLogs(logging.getLogger("stafo")) as cm:
+            res_mod_fpath = CM.run()
+        self.assertIn("WARNING:stafo:Trying to set 'R3' of 'Signal' with unrecognized item 'reelwertige Funktion', maybe check for typos?", cm.output)
+
+
     def test_r01__render_order_ring_problem(self):
         CM = s2k.ConversionManager(TEST_DATA2_FPATH, num_keys=40)
         res_mod_fpath = CM.run()
@@ -113,6 +128,14 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         # check comments (source code before parsing)
         comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"
         self.assertIn(comment, res)
+
+    def test_r03__escape_R2(self):
+        CM = s2k.ConversionManager(TEST_DATA8_FPATH, num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt", encoding="utf-8") as f:
+            res = f.read()
+        # test that some residual latex commands dont throw warnings in R2
+        self.assertIn('R2__has_description=r"', res)
 
     def test_m01__match_entities(self):
         CM = s2k.ConversionManager(TEST_DATA4_FPATH, [ma_load_dict], num_keys=20)
@@ -193,5 +216,3 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(len(stms2[1].qualifiers), 1)
         self.assertEqual(stms2[1].qualifiers[0].relation.R1.value, "is at outer position")
         self.assertEqual(stms2[1].qualifiers[0].object, True)
-
-    # todo test direct dict approach

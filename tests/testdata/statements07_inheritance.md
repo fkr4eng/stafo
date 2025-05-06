@@ -1,0 +1,13 @@
+- There is a general operator: 'Funktion'.
+- There is a class: 'Signal'.
+- There is a class 'komplexwertige Funktion'
+- There is a class 'reellwertige Funktion'
+
+- 'Signal' is a subclass of 'reellwertige Funktion'
+- 'reellwertige Funktion' is a subclass of 'komplexwertige Funktion'
+- 'komplexwertige Funktion' is a subclass of 'Funktion'
+- There is a general statement:
+    - formalized assertion:
+        - 's1' is an instance of 'Signal'
+        - There is an equation:
+            - full source code: 's1'(0) == 0
