@@ -14,6 +14,7 @@ import pyirk as p
 import datetime as dt
 from string import ascii_letters
 from typing import Union
+import black
 
 try:
     # this will be part of standard library for python >= 3.11
@@ -1242,7 +1243,13 @@ class ConversionManager:
 
         if final_replacements:
             res = self._final_replacements(res, final_replacements)
-        # todo run black?
+        # black formatting
+        try:
+            res = black.format_file_contents(res, fast=False, mode=black.Mode(line_length=120))
+        except Exception as e:
+            logger.error(f"Black failed with {e}")
+
+
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
             f.write(res)

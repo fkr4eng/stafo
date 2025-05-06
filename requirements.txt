@@ -6,3 +6,4 @@ deepdiff
 sympy
 scholarly
 pytest
+black

@@ -93,19 +93,22 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         )
 
     def test_r02__render_latex_equations(self):
-        CM = s2k.ConversionManager(TEST_DATA3_FPATH, [ma_load_dict, ct_load_dict], num_keys=50)
+        CM = s2k.ConversionManager(TEST_DATA3_FPATH, [ma_load_dict, ct_load_dict], num_keys=100)
         res_mod_fpath = CM.run()
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
         # check 1. equation with integral
-        int_res_pattern = r"""cm1.new_math_relation\(lhs=cm1.F\(I\d+\["s"\]\), rsgn="==", rhs=ma.I5443\["definite integral"\]\(\(\(I\d+\["e"\]\*\*\(-1\*I\d+\["s"\]\*I\d+\["t"\]\)\)\*cm1.f\(I\d+\["t"\]\)\), I\d+\["t"\], ma.I5440\["limits"\]\(ma.I5000\["scalar zero"\], ma.I4291\["infinity"\]\)\)"""
-        int_res = re.findall(int_res_pattern, res)
-        self.assertEqual(len(int_res), 1)
+        stm = get_item_by_name(res_mod_fpath, "gen stm l.46", mod)
+        target = """["mathematical expression: definite integral(mathematical object: mul(mathematical object: pow(e, mathematical object: mul(mathematical object: mul(-1, s), t)), evaluated mapping: f(t)), t, tuple: limits(scalar zero, infinity))"]"""
+        item1 = repr(stm.scp__assertion.get_inv_relations("R20")[3].subject.object)
+        self.assertIn(target, item1)
 
         # check 2. equation with derivative
-        deriv_res = """cm1.new_math_relation(lhs=cm1.y(cm1.x), rsgn="==", rhs=ma.derivative(cm1.f(cm1.x), cm1.x, ma.I5001["scalar one"])"""
-        self.assertIn(deriv_res, res)
+        target = """["mathematical expression: derivative(evaluated mapping: f(x), x, scalar one)"]"""
+        item2 = repr(stm.scp__assertion.get_inv_relations("R20")[1].subject.object)
+        self.assertIn(target, item2)
 
         # check comments (source code before parsing)
         comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"

@@ -1,6 +1,7 @@
 - There is a class: 'real number'.
 - There is a class: 'complex number'.
 - There is a class: 'integer number'.
+- There is a general operator: 'Funktion'.
 - There is a class: 'Signal'.
 - There is a class 'komplexwertige Funktion'
 - There is a class 'reellwertige Funktion'
@@ -8,7 +9,7 @@
 - 's' is an instance of 'complex number'
 - 'e' is an instance of 'complex number'
 - There is a class: 'Variable'
-- There is a class: 'Operator'
+- There is a general operator: 'Operator'
 - There is a class: 'Eingangssignal'.
 - 'Eingangssignal' is a subclass of 'Signal'.
 - There is a class: 'Ausgangssignal'.
@@ -18,6 +19,9 @@
 - There is a class: 'Übertragungsglied'.
 - There is a property: 'stabil'
 - There is a property: 'zeitinvariant'
+- 'Signal' is a subclass of 'reellwertige Funktion'
+- 'komplexwertige Funktion' is a subclass of 'Funktion'
+- 'reellwertige Funktion' is a subclass of 'komplexwertige Funktion'
 
 - There is an if-then-statement:
     - full source code: 'Ein Übertragungsglied ist \emph{zeitinvariant}, wenn es das \emph{Verschiebungsprinzip} erfüllt: \begin{equation} \label{eq:VerschPrinzip} \nu(t) = \varphi(u(t)) \qquad \Rightarrow \qquad \nu(t - \tau) = \varphi(u(t - \tau)). \end{equation}'
@@ -45,17 +49,15 @@
         - 'F' is an instance of 'komplexwertige Funktion'
         - 'f' is an instance of 'reellwertige Funktion'
         - 'x' is an instance of 'real number'
-        - 'y' is an instance of 'real number'
+        - 'y' is an instance of 'reellwertige Funktion'
     - formalized assertion:
         - There is an equation:
             - full source code: F(s) == \int\limits_0^\infty f(t)*e^{-st} dt
             - source code of left hand side: F(s)
             - source code of right hand side: \int\limits_0^\infty f(t)*e^{-st} dt
-            - reference: 'eq:LaplaceHin'
         - There is an equation:
             - source code of left hand side: y(x)
             - source code of right hand side: \frac{d}{dx} (f(x))
-- 'Laplace Transformation' has defining formula 'eq:LaplaceHin'.
 - There is a class: 'vector'
 - There is a class: 'basis'
 - There is a class: 'sequence'
