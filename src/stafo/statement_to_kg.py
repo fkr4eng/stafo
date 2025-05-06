@@ -1049,7 +1049,6 @@ class ConversionManager:
                         assert type(subject_dict[rel_key]) == list, f"{subject_dict[rel_key]} should be a list."
                         for i, d in enumerate(subject_dict[rel_key]):
                             # maybe same object already exists and we just add a qualifier
-                            # todo write test for this qualifier update
                             if object_dict["object"] == d["object"]:
                                 # check if exact qualifier already exists, prevent adding duplicates
                                 for qual_dict in object_dict["q"]:

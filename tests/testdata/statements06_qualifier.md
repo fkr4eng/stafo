@@ -21,3 +21,6 @@
 - 'stack1' 'has stack component' 'Ti' qq: 'has position' 0, 'is at outer position': True, qq: 'has position' 3,  'is at outer position': True
 - 'stack2' 'has stack component' 'Ti' qq: 'has position' 0
 - 'stack2' 'has stack component' 'Ti' qq: 'is at outer position' True
+
+<!-- set the same thing again, should not produce a duplicate -->
+- 'stack1' 'has stack component' 'Ti' qq: 'has position' 0, 'is at outer position': True
