@@ -254,13 +254,7 @@ class ConversionManager:
         # relations: {}
         # }
         self.d = {
-            "items": {
-                "set": {
-                    "key": "I13",
-                    "R1": "mathematical set",
-                    "prefix": "p"
-                    },
-                },
+            "items": {},
             # todo: some of them have custom keys (as given by llm), some are copied from p.builtins. automate?
             "relations": {
                 "has label": {
@@ -433,6 +427,7 @@ class ConversionManager:
         self.binary_operator_pattern = re.compile(r"(?<=There is a binary operator)(?::? )(.+)")
         self.type_of_arg_1_pattern = re.compile(r"(?<=The type of argument1 of )(.+?)(?: is )(.+)")
         self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+)")
+        self.type_of_arg_3_pattern = re.compile(r"(?<=The type of argument3 of )(.+?)(?: is )(.+)")
         self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+)")
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
         self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
@@ -485,6 +480,9 @@ class ConversionManager:
             elif line.startswith(" "):
                 logger.debug(f"line {i} skipped: {line}")
                 pass
+            # markdown comments
+            elif line.startswith("<!--"):
+                continue
             # existing relations
             else:
                 self.d = self.process_line(self.d, i, line)
@@ -528,6 +526,7 @@ class ConversionManager:
         new_binary_operator = re.findall(self.binary_operator_pattern, line)
         type_of_arg_1 = re.findall(self.type_of_arg_1_pattern, line)
         type_of_arg_2 = re.findall(self.type_of_arg_2_pattern, line)
+        type_of_arg_3 = re.findall(self.type_of_arg_3_pattern, line)
         type_of_result = re.findall(self.type_of_result_pattern, line)
         amend_definition = re.findall(self.amend_definition_pattern, line)
         equation = re.findall(self.equation_pattern, line)
@@ -560,36 +559,13 @@ class ConversionManager:
         elif len(new_binary_operator) > 0:
             self.add_new_item(d, self.strip(new_binary_operator[0]), language, {"R4": 'p.I8["mathematical operation with arity 2"]'}, skip_entity_order=skip_entity_order)
         elif len(type_of_arg_1) > 0:
-            # todo R8, R9, R11 should just be in general relation parsing instead of here
-            arg1, arg2 = self.strip(type_of_arg_1[0])
-            if arg2 not in self.d["items"].keys():
-                logger.warning(f"unknown type: {arg2}")
-            if arg1 in self.d["items"].keys():
-                self.add_relation_inplace(d["items"][arg1], "R8", self.build_reference(arg2))
-            elif arg1 in self.d["relations"].keys():
-                self.add_relation_inplace(d["relations"][arg1], "R8", self.build_reference(arg2))
-            else:
-                raise KeyError()
+            self.handle_R8_R9_R10_R11(d, type_of_arg_1, "R8", language, skip_entity_order)
         elif len(type_of_arg_2) > 0:
-            arg1, arg2 = self.strip(type_of_arg_2[0])
-            if arg2 not in self.d["items"].keys():
-                logger.warning(f"unknown type: {arg2}")
-            if arg1 in self.d["items"].keys():
-                self.add_relation_inplace(d["items"][arg1], "R9", self.build_reference(arg2))
-            elif arg1 in self.d["relations"].keys():
-                self.add_relation_inplace(d["relations"][arg1], "R9", self.build_reference(arg2))
-            else:
-                raise KeyError()
+            self.handle_R8_R9_R10_R11(d, type_of_arg_2, "R9", language, skip_entity_order)
+        elif len(type_of_arg_3) > 0:
+            self.handle_R8_R9_R10_R11(d, type_of_arg_3, "R10", language, skip_entity_order)
         elif len(type_of_result) > 0:
-            arg1, arg2 = self.strip(type_of_result[0])
-            if arg2 not in self.d["items"].keys():
-                logger.warning(f"unknown type: {arg2}")
-            if arg1 in self.d["items"].keys():
-                self.add_relation_inplace(d["items"][arg1], "R11", self.build_reference(arg2))
-            elif arg1 in self.d["relations"].keys():
-                self.add_relation_inplace(d["relations"][arg1], "R11", self.build_reference(arg2))
-            else:
-                raise KeyError()
+            self.handle_R8_R9_R10_R11(d, type_of_result, "R11", language, skip_entity_order)
         elif len(amend_definition) > 0:
             arg1 = self.strip(amend_definition[0])
             process_next_line = True
@@ -730,6 +706,17 @@ class ConversionManager:
                 res = re.findall(f"(?<=- )(.+?)(?: {rel}:? )(.+?)(?=\\.$|$)", string)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
+                    # relation expects an entity
+                    if not self.key_wants_literal(label=k):
+                        # arg2 is not in self.d, dont search local d here since we dont want to match local vars here
+                        if self.build_reference(arg2) == arg2:
+                            existing = self.get_existing_item(arg2)
+                            if existing:
+                                self.add_new_item(self.d, arg2, language, {}, skip_entity_order)
+                                logger.info(f"undeclared class '{arg2}' was matched with {existing}")
+                            else:
+                                logger.warning(f"unknown type: '{arg2}'")
+
                     arg2 = self.build_reference(arg2, d)
 
                     q_dict = self.resolve_qualifiers(qual_string)
@@ -843,7 +830,19 @@ class ConversionManager:
                         logger.warning(f"maybe? not processed line {i}: {line}")
 
             else:
-                logger.warning(f"not processed line {i}: {line}")
+                # check if relation already exists
+                res = re.findall(r"- '.+?' '(.+?)' '.+?'", line)
+                if res:
+                    existing = self.get_existing_relation(res[0])
+                    if existing:
+                        self.add_new_rel(self.d, res[0], language, {})
+                        logger.info(f"undeclared relation '{res[0]}' was matched with {existing}")
+                        # now run the line again with the relation present
+                        self.process_line(d, i, line, skip_entity_order=skip_entity_order)
+                    else:
+                        logger.warning(f"not processed line {i}: {line}")
+                else:
+                    logger.warning(f"not processed line {i}: {line}")
 
         return d
 
@@ -866,6 +865,50 @@ class ConversionManager:
             dict_list.append(d)
 
         return dict_list
+
+    def key_wants_literal(self, key=None, label=None):
+        """
+        try to resolve R11 of given relation. Return True if R11 is p.I52["string"] or
+        p.I19["language-specified string literal"]. Defaults to False.
+        """
+        assert (key or label) and (key is None or label is None), "specify either key or label"
+        if key:
+            label = self.rel_interpr[key]
+        if label:
+            key = self.d["relations"][label]["key"]
+
+        key_wants_literal = False
+        if pr := self.d["relations"][label]["prefix"]:
+            # relation is defined in existing module -> check R11 there
+            if pr == "p": # official prefix of builtins is bi
+                pr = "bi"
+            e = p.ds.get_entity_by_uri(f'{p.ds.uri_prefix_mapping.b[pr]}#{key.split("__")[0]}')
+            eR11 = e.get_relations("R11", return_obj=True)
+            if p.I19["language-specified string literal"] in eR11 or p.I52["string"] in eR11:
+                key_wants_literal = True
+        else:
+            # relation is new, check R11 in self.d["relations"]
+            if "R11" in self.d["relations"][label].keys():
+                for result_type_dict in self.d["relations"][label]["R11"]:
+                    if "p.I52" in result_type_dict["object"] or "p.I19" in result_type_dict["object"]:
+                        key_wants_literal = True
+        return key_wants_literal
+
+    def handle_R8_R9_R10_R11(self, d, match, key, language, skip_entity_order):
+        arg1, arg2 = self.strip(match[0])
+        if arg2 not in self.d["items"].keys():
+            existing = self.get_existing_item(arg2)
+            if existing:
+                self.add_new_item(self.d, arg2, language, {}, skip_entity_order)
+                logger.info(f"undeclared class '{arg2}' was matched with {existing}")
+            else:
+                logger.warning(f"unknown type: '{arg2}'")
+        if arg1 in self.d["items"].keys():
+            self.add_relation_inplace(d["items"][arg1], key, self.build_reference(arg2))
+        elif arg1 in self.d["relations"].keys():
+            self.add_relation_inplace(d["relations"][arg1], key, self.build_reference(arg2))
+        else:
+            raise KeyError()
 
     def get_r1_key(self, language, force_suffix=False):
         if language != self.default_language or force_suffix:
@@ -1316,22 +1359,7 @@ class ConversionManager:
                         self.entity_matching_report += f'Unmatched entity: {self.build_reference(value_dict["R1"])}\n'
 
                 # add correct amount of quotation marks if value is literal
-                key_wants_literal = False
-                rel_label = self.rel_interpr[key]
-                if pr := self.d["relations"][rel_label]["prefix"]:
-                    # relation is defined in existing module -> check R11 there
-                    if pr == "p": # official prefix of builtins is bi
-                        pr = "bi"
-                    e = p.ds.get_entity_by_uri(f'{p.ds.uri_prefix_mapping.b[pr]}#{key.split("__")[0]}')
-                    eR11 = e.get_relations("R11", return_obj=True)
-                    if p.I19["language-specified string literal"] in eR11 or p.I52["string"] in eR11:
-                        key_wants_literal = True
-                else:
-                    # relation is new, check R11 in self.d["relations"]
-                    if "R11" in self.d["relations"][rel_label].keys():
-                        for result_type_dict in self.d["relations"][rel_label]["R11"]:
-                            if "p.I52" in result_type_dict["object"] or "p.I19" in result_type_dict["object"]:
-                                key_wants_literal = True
+                key_wants_literal = self.key_wants_literal(key)
                 if key_wants_literal:
                     # value is literal -> need extra quotation marks ""
                     quotes = '"'

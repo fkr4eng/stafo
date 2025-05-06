@@ -1,7 +1,6 @@
 - // snippet(4)
-- There is a class: 'set'.
 - There is a property: 'finite'.
-- 'finite' is applicable to 'set'.
+- 'finite' is applicable to 'mathematical set'.
 - There is a property: 'infinite'.
-- 'infinite' is applicable to 'set'.
+- 'infinite' is applicable to 'mathematical set'.
 - There is a general operator: 'Funktion'.

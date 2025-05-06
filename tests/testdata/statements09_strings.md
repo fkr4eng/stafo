@@ -1,5 +1,3 @@
-- There is a class: 'string'
-
 - There is a class: 'Test'.
 - 'Test' has the verbal description 'bla'
 

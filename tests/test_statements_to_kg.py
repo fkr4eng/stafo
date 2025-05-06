@@ -74,14 +74,14 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
     def test_a01__base(self):
         # do the conversion
-        CM = s2k.ConversionManager(TEST_DATA1_FPATH, num_keys=10)
+        CM = s2k.ConversionManager(TEST_DATA1_FPATH, [ma_load_dict], num_keys=10)
         res_mod_fpath = CM.run()
 
         # ensure that the result can be loaded without errors
 
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
-    def test_a01__inheritance_of_custom_calls(self):
+    def test_a02__inheritance_of_custom_calls(self):
         CM = s2k.ConversionManager(TEST_DATA7_FPATH, load_irk_modules=[ma_load_dict], num_keys=20)
         res_mod_fpath = CM.run()
         # ensure that the result can be loaded without errors
@@ -154,6 +154,10 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
 
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        # check the implicitely matched entities
+
         # replaced entities should appear as args
         self.assertIn('R4__is_instance_of=p.I37["integer number"]', res)
         # replaced entities should not be initialized
@@ -163,6 +167,12 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         # check if matched relations are rendered with correct prefix
         key = get_key_by_name(res_mod_fpath, "n")
         self.assertIn(f'ma__R5938__has_row_number={key}["n"]', res)
+
+        # check the explicitely matched entity
+
+        # replaced entities should not be initialized
+        self.assertNotIn('p.create_item(R1__has_label="complex number"', res)
+        self.assertEqual(get_item_by_name(res_mod_fpath, "c", mod).get_relations("R4", return_obj=True)[0], p.I34)
 
     def test_m01b__ensure_no_key_warning(self):
         # this failed for pyirk < 0.15.1
@@ -198,6 +208,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         # test no duplicate information was added
         self.assertNotIn("R8__has_domain_of_argument_1=", res)
         self.assertNotIn("R4__is_instance_of=", res)
+
 
     def test_q01__qualifier(self):
         CM = s2k.ConversionManager(TEST_DATA6_FPATH, num_keys=20)

@@ -5,6 +5,7 @@
 - // manually added 1
 - There is a class: 'set' @en
 - 'set' has the alternative german label 'Menge'
+- 'set' has the alternative label 'mathematical set' // this should match to pyirk
 - There is a relation: 'is subset of'
 - The type of argument1 of 'is subset of' is 'set'
 - The result type of 'is subset of' is 'set'

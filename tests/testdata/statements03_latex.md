@@ -1,6 +1,6 @@
-- There is a class: 'real number'.
-- There is a class: 'complex number'.
-- There is a class: 'integer number'.
+//
+//
+//
 - There is a general operator: 'Funktion'.
 - There is a class: 'Signal'.
 - There is a class 'komplexwertige Funktion'

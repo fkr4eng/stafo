@@ -8,6 +8,8 @@
 - There is a class: 'integer number' @en
 - There is a class: 'complex number' @en
 
+- 'set' has the alternative label 'mathematical set' // this should match to pyirk
+
 - 'real number' is a subclass of 'complex number'
 - 'integer number' is a subclass of 'real number'
 

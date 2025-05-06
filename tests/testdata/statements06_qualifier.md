@@ -1,8 +1,6 @@
 - // snippet (1)
 - There is a class: 'memristor stack'
 - There is a class: 'stack component'
-- There is a class: 'integer number'
-- There is a class: 'bool'
 
 - There is a relation: 'has stack component'
 - The type of argument1 of 'has stack component' is 'memristor stack'
