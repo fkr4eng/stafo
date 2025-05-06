@@ -255,7 +255,6 @@ class ConversionManager:
         # }
         self.d = {
             "items": {},
-            # todo: some of them have custom keys (as given by llm), some are copied from p.builtins. automate?
             "relations": {
                 "has label": {
                     "key": "R1",
@@ -347,11 +346,6 @@ class ConversionManager:
                     "R1": "has alternative latex string",
                     "prefix": "p",
                 },
-                "is a secondary instance of": {
-                    "key": "R30",
-                    "R1": "is secondary instance of",
-                    "prefix": "p",
-                },
                 "has the property": {
                     "key": "R16",
                     "R1": "has property",
@@ -385,20 +379,9 @@ class ConversionManager:
                     "R1": "wildcard relation",
                     "prefix": "p",
                 },
-                # todo check if these relations with name == R1 can be removed from this dict (auto matched)
                 "has explanation": {
                     "key": "R81",
                     "R1": "has explanation",
-                    "prefix": "p",
-                },
-                "is secondary subclass of": {
-                    "key": "R46",
-                    "R1": "is secondary subclass of",
-                    "prefix": "p",
-                },
-                "is secondary instance of": {
-                    "key": "R30",
-                    "R1": "is secondary instance of",
                     "prefix": "p",
                 },
             }}
@@ -629,11 +612,6 @@ class ConversionManager:
                 if len(full_source) > 0:
                     additional_context["comments"].append(full_source[0])
                     continue
-                # todo depricated source code of scopes
-                # source_pre = re.findall(r"source code of premise: (.+?)(?=\.$|$)", l)
-                # source_ass = re.findall(r"source code of assertion: (.+?)(?=\.$|$)", l)
-                # if source_pre: additional_context["source_pre"] = source_pre[0]
-                # if source_ass: additional_context["source_ass"] = source_ass[0]
                 formal = re.findall(r"(?<=formalized )(set|pre|ass)", l)
                 if formal:
                     # in order for new relations in assertion to relate to the subject created in setting, the dict
@@ -780,9 +758,6 @@ class ConversionManager:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
                                 self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict)
                             # remove default R4 typing and possible duplicate types
-                            # TODO: this currently fails (see `pytest -sk test_m02`)
-                            # Reason: `d[tag][arg1]["R4"]` is a dict like `{'object': 'p.I2["Metaclass"]', 'q': []}`
-                            # but a string is expected
                             r4_label = d[tag][arg1]["R4"]["object"].split('"')[1]
                             if "Metaclass" in d[tag][arg1]["R4"]["object"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
                                 del d[tag][arg1]["R4"]
@@ -1611,7 +1586,7 @@ class ConversionManager:
 
         only_term = True
         if full:
-            rel_signs = ["<=", ">=", "<", ">", "=="] # todo change '=' to '==' to distinguish sum{i=1} = x
+            rel_signs = ["<=", ">=", "<", ">", "=="]
             for rs in rel_signs:
                 if rs in latex:
                     only_term = False
