@@ -32,7 +32,7 @@ with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 # https://github.com/google-gemini/generative-ai-python
-genai.configure(api_key=config_dict["gemeni_api_key"])
+genai.configure(api_key=config_dict["gemini_api_key"])
 model = genai.GenerativeModel('gemini-1.5-pro-latest')
 
 # - It would be useful if you also would generate comments to explain your "chain of thought".

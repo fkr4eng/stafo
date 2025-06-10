@@ -43,11 +43,11 @@
 - // snippet(4)
 - There is a class: 'vector space' @en
 - 'vector space' has the alternative german label 'Vektorraum'
-- 'vector space' is an instance of 'set'
+- 'vector space' is a subclass of 'set'
 - There is a class: 'n-dimensional real vector space' @en
 - 'n-dimensional real vector space' has the associated LaTeX notation $\mathbb{R}^n$
 - 'n-dimensional real vector space' has the alternative german label '$n$-dimensionaler reeller Vektorraum'
-- 'n-dimensional real vector space' is an instance of 'vector space'
+- 'n-dimensional real vector space' is a subclass of 'vector space'
 - There is a class: 'vector' @en
 - 'vector' is a subclass of 'sequence'
 - 'vector' has the alternative german label 'Vektor'
@@ -59,31 +59,31 @@
 - // snippet(5)
 - There is a class: 'vector component' @en
 - 'vector component' has the alternative german label 'Vektorkomponente'
-- 'vector component' is an instance of 'real number'
+- 'vector component' is a subclass of 'real number'
 - There is a relation: 'has vector component'
 - The type of argument1 of 'has vector component' is 'vector'
 - The result type of 'has vector component' is 'vector component'
 - There is a class: 'column vector' @en
 - 'column vector' has the alternative german label 'Spaltenvektor'
-- 'column vector' is an instance of 'vector'
+- 'column vector' is a subclass of 'vector'
 - 'column vector' has the associated LaTeX notation $\left(\begin{array}{c} x_1 \\ \vdots \\ x_n \end{array}\right)$
 
 - // snippet(6)
 - There is a class: 'row vector' @en
 - 'row vector' has the alternative german label 'Zeilenvektor'
-- 'row vector' is an instance of 'vector'
+- 'row vector' is a subclass of 'vector'
 - 'column vector' has the alternative german label 'kontravarianter Vektor'
 - 'column vector' has the alternative label 'contravariant vector'
 
 - // snippet(7)
 - There is a class: 'unit vector' @en
 - 'unit vector' has the alternative german label 'Einheitsvektor'
-- 'unit vector' is an instance of 'vector'
+- 'unit vector' is a subclass of 'vector'
 - There is a class: 'basis'
-- 'basis' is an instance of 'set'
+- 'basis' is a subclass of 'set'
 - There is a class: 'canonical basis' @en
 - 'canonical basis' has the alternative german label 'kanonische Basis'
-- 'canonical basis' is an instance of 'basis'
+- 'canonical basis' is a subclass of 'basis'
 - 'canonical basis' has the associated LaTeX notation $e_1, \dots, e_n$ where $e_i$ has $i$-th component equal to 1 and all other components equal to zero.
 - 'canonical basis' has the alternative german label 'Standardbasis'
 - There is a general statement:
@@ -141,7 +141,7 @@
 - There is a class: 'linear hull' @en
 - 'linear hull' has the alternative german label 'lineare Hülle'
 - 'linear hull' has the alternative english label 'linear span'
-- 'linear hull' is an instance of 'set'
+- 'linear hull' is a subclass of 'set'
 - 'linear hull' has the associated LaTeX notation ${\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\}$.
 - There is a general statement:
     - full source code: Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die Menge aller Linearkombinationen dieser Vektoren: \[ {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} . \]
@@ -149,15 +149,15 @@
         - 'r' is an instance of 'integer number'
         - 'n' is an instance of 'integer number'
         - 'v' is an instance of 'sequence'
-        - 'v' has the verbal description 'sequence of r vectors from Rn'
+        - 'v' 'has element type' 'vector'
         - 'Rn' is an instance of 'n-dimensional real vector space'
         - 'Rn' 'has dimension' 'n'
         - // inferred knowledge: The LaTeX code implies that the alpha_i are real numbers.
-        - 'alpha' is an instance of 'sequence'
-        - 'alpha' has the verbal description 'sequence of r real numbers'
+        - 'alpha' is an instance of 'sequence of coefficients'
+        - 'alpha' 'has element type' 'real number'
         - 'i' is an instance of 'integer number'
     - formalized assertion:
         - 'lh' is an instance of 'linear hull'
         - There is an equation:
-            - full source code: lh == { \sum_{i=1}^r ('element of sequence'(alpha, i) * 'element of sequence'(v, i)) }
+            - full source code: lh == \sum_{i=1}^r ('element of sequence'(alpha, i) * 'element of sequence'(v, i))
 

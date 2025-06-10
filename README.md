@@ -22,6 +22,7 @@ Copy `./_example_config.toml` to `./.git_config.toml` and adapt the content.
 - Process one snippet of the source file
     - `stafo -i data/chunk_full_source.tex data/formalized_statements0.md snapshots/math`
     - `stafo -i data\V0\V0_all.tex data\V0\formalized_statements_v0.md snapshots/V0`
+    - `stafo -i data\nichtlinear\processed\kapitel2.tex data\nichtlinear\processed\formalized_statements_nl.md snapshots\nl`
     - after running this command the user is expected to review the changes to the statement-file
 
 - Convert formalized snippets to pyirk (still experimental):

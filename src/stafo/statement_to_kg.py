@@ -776,7 +776,6 @@ class ConversionManager:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in d["relations"]:
                             self.add_relation_inplace(d["relations"][arg1], v["key"], arg2, q_dict)
-                        # todo: keep an eye out for this change, why would a scope reference something outside as a subject?
                         elif arg1 in self.d["items"]:
                             self.add_relation_inplace(self.d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in self.d["relations"]:
@@ -1611,7 +1610,7 @@ class ConversionManager:
         sp_expr = parse_latex_lark(latex)
         # ambiguous result
         if isinstance(sp_expr, Tree):
-            # todo this is an easy fix, but might prove troublesome in the future, beware of the warning
+            # todo this is a quick fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
             logger.warning(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
         if len(sp_expr.free_symbols) > 5:
