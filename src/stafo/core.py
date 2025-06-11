@@ -205,10 +205,13 @@ class MainManager:
         return result
 
     def create_context(self, new_latex_source: str, look_ahead_latex_source: str) -> dict:
-
+        # first remove todos from statement source, otherwise llm will annotate todos instead of solving them
+        pattern = re.compile(r"// ?(?:todo|TODO).+$", re.MULTILINE)
+        statement_source = re.sub(pattern, "", self.statement_source)
+        IPS()
         context = {
             "processed_latex_source": self.processed_latex_source,
-            "resulting_statements": self.statement_source,
+            "resulting_statements": statement_source,
             "new_latex_source": new_latex_source,
             "look_ahead_latex_source": look_ahead_latex_source,
             "continue_mode": self.continue_mode,
