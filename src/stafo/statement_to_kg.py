@@ -120,9 +120,9 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 20
+        self.stop_at_line = 27
 
-        self.q_ident = "qq:"
+        self.q_ident = "qqq"
 
     def sp_to_us(self, s):
         """space to underscore"""
@@ -235,8 +235,12 @@ class ConversionManager:
             rel_dict[v["key"]] = k
         return rel_dict
 
-    def get_qualifier_name(self, relation_R1:str):
-        return relation_R1.lower().replace(" ", "_")
+    def get_qualifier_name(self, relation_dict:dict):
+        if "qual_name" in relation_dict.keys():
+            name = relation_dict["qual_name"]
+        else:
+            name = relation_dict["R1"].lower().replace(" ", "_")
+        return name
 
     ####################################################################################################################
     # init formal natural language parser
@@ -384,6 +388,20 @@ class ConversionManager:
                     "R1": "has explanation",
                     "prefix": "p",
                 },
+                "univ_quant": {
+                    "key": "R44",
+                    "R1": "is universally quantified",
+                    "prefix": "p",
+                    "is_qualifier": True,
+                    "qual_name": "p.univ_quant"
+                },
+                "exis_quant": {
+                    "key": "R66",
+                    "R1": "is existentially quantified",
+                    "prefix": "p",
+                    "is_qualifier": True,
+                    "qual_name": "p.exis_quant"
+                },
             }}
         """
             # todo:
@@ -416,7 +434,7 @@ class ConversionManager:
         self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
         self.math_rel_pattern = re.compile(r"There is a mathematical relation")
         self.equivalence_pattern = re.compile(r"There is an equivalence-statement")
-        self.if_then_pattern = re.compile(r"There is an if-then-statement")
+        self.if_then_pattern = re.compile(r"There is an if(?:-| )then(?:-| )statement")
         self.general_statement_pattern = re.compile(r"There is a general statement")
         self.explanation_pattern = re.compile(r"There is an explanation")
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
@@ -821,19 +839,20 @@ class ConversionManager:
         return d
 
     def resolve_qualifiers(self, qualifiers):
-        # syntax 'a' 'rel' 'b' qq: 'q1' 'v1', 'q2' 'v2', qq: 'q3' 'v3'
+        # syntax 'a' 'rel' 'b' qqq 'q1' 'v1', 'q2' 'v2', qqq 'q3' 'v3'
         # q1 and q2 are a group and apply together -> they go into a list
         dict_list = []
         for q_str in qualifiers:
             d = {}
             for k, v in self.d["relations"].items():
+                # resolve quotes '' (should exist, but you can never be sure)
                 if k in q_str and f"'{k}" in q_str:
                     rel = f"'{k}'"
                     string = q_str
                 else:
                     rel = k
                     string = self.strip(q_str)
-                res = re.findall(f"(?: ?)(?:{rel}:? )(.+?)(?=,|qq:|\\.$|$)", string)
+                res = re.findall(f"(?: ?)(?:{rel}:? )(.+?)(?=,|qqq|\\.$|$)", string)
                 for obj in res:
                     d[v["key"]] = self.strip(obj)
             dict_list.append(d)
@@ -1355,7 +1374,7 @@ class ConversionManager:
                         for qualifier_dict in qualifier_list:
                             q_str = "["
                             for rel_key, qual_value in qualifier_dict.items():
-                                q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]]["R1"])}({self.build_reference(qual_value)}), """
+                                q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({self.build_reference(qual_value)}), """
                             q_str += "]"
                             context["extra"].append(
                                 f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})')
@@ -1387,7 +1406,7 @@ class ConversionManager:
                             for q_dict in q_list:
                                 q_str = "["
                                 for rel_key, qual_value in q_dict.items():
-                                    q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]]["R1"])}({self.build_reference(qual_value)}), """
+                                    q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({self.build_reference(qual_value)}), """
                                 q_str += "]"
                                 context["extra"].append(
                                     f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {obj}, qualifiers={q_str})'
@@ -1410,7 +1429,7 @@ class ConversionManager:
                         string = f"[{', '.join(l)}]"
                         context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
             elif key == "is_qualifier" and value == True:
-                context["extra"].append(f"""{self.get_qualifier_name(value_dict["R1"])} = p.QualifierFactory({self.build_reference(value_dict["R1"])})""")
+                context["extra"].append(f"""{self.get_qualifier_name(value_dict)} = p.QualifierFactory({self.build_reference(value_dict["R1"])})""")
         # sort the relations in ascending number oder
         context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
         # get rid of R1, since we use the entity.update method
@@ -1476,21 +1495,29 @@ class ConversionManager:
                         if not isinstance(vv, list):
                             vv = [vv]
                         for vvv in vv:
-                            vvv = vvv["object"]
+                            obj = vvv["object"]
                             # some exceptions when not to add cm.
                             # in case of literals (numbers)
-                            if isinstance(vvv, Real):
-                                obj_str = f"{vvv}"
+                            if isinstance(obj, Real):
+                                obj_str = f"{obj}"
                             # in case of equation references (global item names)
                             # todo this is suboptimal. if the same name exists in global namespace and scope, the global one is used
                             # todo bc. it is hard to know here, whats already been defined in e.g. settings scopes above
-                            elif re.findall(r"I\d+", vvv):
-                                obj_str = f"{vvv}"
+                            elif re.findall(r"I\d+", obj):
+                                obj_str = f"{obj}"
                             else:
                                 # todo this cm1 is not clean since new variables might be defined in subscopes
-                                obj_str = f"cm1.{vvv}"
+                                obj_str = f"cm1.{obj}"
                             # todo this cm1 is not clean since new variables might be defined in subscopes
-                            out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str})')
+                            if vvv["q"]:
+                                for q_dict in vvv["q"]:
+                                    q_str = ", qualifiers=["
+                                    for rel_key, qual_value in q_dict.items():
+                                        q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({self.build_reference(qual_value)}), """
+                                    q_str += "]"
+                            else:
+                                q_str = ""
+                            out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
         return out
 
     def render_math_relation(self, statement_item, eq_dict, recursion_depth):

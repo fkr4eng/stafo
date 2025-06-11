@@ -10,6 +10,8 @@ with {{context.id}}.scope("premise") as cm{{context.rd}}:{% if context.premise %
     pass{% endif %}
 
 with {{context.id}}.scope("assertion") as cm{{context.rd}}:{% if context.assertion %}{% for line in context.assertion%}
-    {{line}}{% endfor %} {% endif %}
+    {{line}}{% endfor %}
+    {% else %}
+    pass{% endif %}
 
 

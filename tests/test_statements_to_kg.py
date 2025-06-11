@@ -238,3 +238,10 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(len(stms2[1].qualifiers), 1)
         self.assertEqual(stms2[1].qualifiers[0].relation.R1.value, "is at outer position")
         self.assertEqual(stms2[1].qualifiers[0].object, True)
+
+        # check if this also works inside statements
+        if_then_stm = get_item_by_name(res_mod_fpath, "it stm l.27", mod)
+        stms3 = if_then_stm._ns_setting["s"].get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms3[0].qualifiers), 2) # univ_quant and defining scope
+        self.assertEqual(stms3[0].qualifiers[0].relation.R1.value, "is universally quantified")
+        self.assertEqual(stms3[0].qualifiers[0].object, True)

@@ -28,6 +28,8 @@ Copy `./_example_config.toml` to `./.git_config.toml` and adapt the content.
 - Convert formalized snippets to pyirk (still experimental):
     - `stafo -c tmp.md`
 
+- Auto snippet numbering
+    - `stafo -asn data\nichtlinear\processed\kapitel2.tex`
 
 ## PDF creation (math document)
 
@@ -43,8 +45,8 @@ For manual reviewing the created snippets it is recommended to read the pdf file
 ## Qualifiers:
 ### in FNL
 - see example [here](./tests/testdata/statements06_qualifier.md)
-- if multiple qualifiers apply together (e.g. from + to see below), they are separated by comma behind qq:
-- if qualfifiers apply independant (see below), they are separated by qq:
+- if multiple qualifiers apply together (e.g. from + to see below), they are separated by comma behind qqq
+- if qualfifiers apply independant (see below), they are separated by qqq
 ### target format
 d = {
     "items": {
