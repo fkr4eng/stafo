@@ -245,3 +245,8 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(len(stms3[0].qualifiers), 2) # univ_quant and defining scope
         self.assertEqual(stms3[0].qualifiers[0].relation.R1.value, "is universally quantified")
         self.assertEqual(stms3[0].qualifiers[0].object, True)
+
+        # check uq_instance of
+        mem_stack = get_key_by_name(res_mod_fpath, "memristor stack")
+        target = f'cm1.new_var(s=p.uq_instance_of({mem_stack}["memristor stack"]))'
+        self.assertIn(target, res)

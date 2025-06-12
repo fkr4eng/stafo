@@ -739,12 +739,12 @@ class ConversionManager:
                             arg2 = self.eq_reference_dict[arg2]["key"]
                     # instance of
                     if v["key"] == "R4":
-                        self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, skip_entity_order=skip_entity_order)
-                        if qual_string:
-                            logger.warning(f"line {line} has qualifiers for R4, which is neglected")
+                        self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, qualifiers=q_dict, skip_entity_order=skip_entity_order)
+                        # if qual_string:
+                        #     logger.warning(f"line {line} has qualifiers for R4, which is neglected")
                     # subclass of
                     elif v["key"] == "R3":
-                        self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None}, skip_entity_order=skip_entity_order)
+                        self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None},qualifiers=q_dict, skip_entity_order=skip_entity_order)
                         if qual_string:
                             logger.warning(f"line {line} has qualifiers for R3, which is neglected")
                     # alternative label
@@ -911,7 +911,7 @@ class ConversionManager:
         return r1_key
 
     # @u.timing
-    def add_new_item(self, d, label, language, additional_relations:dict={}, skip_entity_order=False):
+    def add_new_item(self, d, label, language, additional_relations:dict={}, qualifiers=None, skip_entity_order=False):
         prefix = False
         # check if item already exists in KG
         existing_item = self.get_existing_item(label)
@@ -950,7 +950,7 @@ class ConversionManager:
                 for vv in v:
                     self.add_relation_inplace(d["items"][label], k, vv)
             else:
-                self.add_relation_inplace(d["items"][label], k, v)
+                self.add_relation_inplace(d["items"][label], k, v, qualifier=qualifiers)
             # possibility to delete previously set relations (eg. change R3 -> R4)
             if v == None:
                 if k in d["items"][label].keys():
@@ -1484,8 +1484,16 @@ class ConversionManager:
             else:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
-                    # todo decide uq_instance_of vs instance_of
-                    out.insert(insertion_index, f'cm{recursion_depth}.new_var({key}=p.instance_of({value["R4"]["object"]}))')
+                    uq = ""
+                    if value["R4"]["q"]:
+                        for qual_dict in value["R4"]["q"]:
+                            if "R44" in qual_dict.keys() and qual_dict["R44"] == "True":
+                                uq = "uq_"
+                            else:
+                                logger.warning(f'The R4 relation of statement {statement_item} has qualifier \
+                                    {qual_dict} which was neglegted')
+                    out.insert(insertion_index,
+                               f'cm{recursion_depth}.new_var({key}=p.{uq}instance_of({value["R4"]["object"]}))')
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
