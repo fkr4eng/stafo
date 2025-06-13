@@ -713,7 +713,7 @@ class ConversionManager:
                             else:
                                 logger.warning(f"unknown type: '{arg2}'")
 
-                    arg2 = self.build_reference(arg2, d)
+                        arg2 = self.build_reference(arg2, d)
 
                     q_dict = self.resolve_qualifiers(qual_string)
                     # first check for some special relation that require special attention
@@ -1158,7 +1158,7 @@ class ConversionManager:
         return arg2
 
     def get_diffed_dict(self, diff:deepdiff.DeepDiff):
-        """return the difference dict between to dict. Note: currently only works for addition "info(dict1)<info(dict2)"
+        """return the difference dict between two dicts. Note: currently only works for addition "info(dict1)<info(dict2)"
 
         Args:
             diff (deepdiff.DeepDiff): diff object

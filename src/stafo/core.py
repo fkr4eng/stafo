@@ -208,7 +208,7 @@ class MainManager:
         # first remove todos from statement source, otherwise llm will annotate todos instead of solving them
         pattern = re.compile(r"// ?(?:todo|TODO).+$", re.MULTILINE)
         statement_source = re.sub(pattern, "", self.statement_source)
-        IPS()
+
         context = {
             "processed_latex_source": self.processed_latex_source,
             "resulting_statements": statement_source,
