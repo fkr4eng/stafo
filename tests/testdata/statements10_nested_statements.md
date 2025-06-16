@@ -1,0 +1,27 @@
+- There is a class: 'identity matrix' @en
+- There is a relation: 'has number of rows'
+- There is a relation: 'has number of columns'
+- There is a general statement:
+    - formalized setting:
+        - 'In' is an instance of 'identity matrix'.
+        - 'n' is an instance of 'integer number'.
+        - 'In' 'has number of rows' 'n'.
+        - 'In' 'has number of columns' 'n'.
+    - formalized assertion:
+        - For all 'i' from 1 to 'n':
+            - For all 'j' from 1 to 'n':
+                - AND
+                    - There is an if-then-statement:
+                        - formalized premise:
+                            - There is an equation:
+                                - full source code: i == j
+                        - formalized assertion:
+                            - There is an equation:
+                                - full source code: 'element of sequence'(In, i, j) == 1
+                    - There is an if-then-statement:
+                        - formalized premise:
+                            - There is a mathematical relation:
+                                - full source code: i != j
+                        - formalized assertion:
+                            - There is an equation:
+                                - full source code: 'element of sequence'(In, i, j) == 0

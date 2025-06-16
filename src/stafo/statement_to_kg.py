@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 27
+        self.stop_at_line = 466
 
         self.q_ident = "qqq"
 
@@ -601,6 +601,12 @@ class ConversionManager:
                     if res:
                         if name == "reference":
                             self.eq_reference_dict[self.strip(res[0])] = {"key": key, "statement_name": self.new_item_name}
+                        if name == "full_source":
+                            rel_signs = ["<=", ">=", "<", ">", "==", "!="]
+                            for rs in rel_signs:
+                                if rs in res[0]:
+                                    eq_dict["rel_sign"] = rs
+
                         eq_dict[name] = res[0]
             d["items"][item_name] = eq_dict
 
@@ -617,6 +623,7 @@ class ConversionManager:
                 additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
                 new_item_name = f"gen stm "
             additional_content = self.get_sub_content(self.lines[i+1:])
+            top_level_indent = self.get_indent(self.lines[i+1])
             temp_dict = {"items": {}, "relations": {}}
             # note: statement name only allowed as first line in statement to prevent mid parsing name changes
             name = re.findall(r"statement name: (.+?)(?=\.$|$)", self.lines[i+1])
@@ -624,14 +631,15 @@ class ConversionManager:
                 assert name_given == False, "multiple name assignments for statement is not supported"
                 new_item_name += f"{self.strip(name[0])}"
                 name_given = True
-            new_item_name +=  f"l.{i}"
+            new_item_name +=  f"l{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 if len(full_source) > 0:
                     additional_context["comments"].append(full_source[0])
                     continue
                 formal = re.findall(r"(?<=formalized )(set|pre|ass)", l)
-                if formal:
+                # prevent detection of subscope by looking at indentation
+                if formal and self.get_indent(l) == top_level_indent:
                     # in order for new relations in assertion to relate to the subject created in setting, the dict
                     # is passed from one scope to the next. In order to still differentiate "dict_ass - dict_set",
                     # the temp_dict is copied
@@ -673,7 +681,7 @@ class ConversionManager:
             index_var, start, stop = self.strip(for_loop[0])
             additional_content = self.get_sub_content(self.lines[i+1:])
             temp_dict = {"items": {}, "relations": {}}
-            temp_dict = self.recurse_nested_statements(additional_content, i, temp_dict)
+            temp_dict = self.recurse_nested_statements(additional_content, i+1, temp_dict)
             key = self.item_keys.pop()
             for_dict = {
                 "key": key,
@@ -1195,16 +1203,15 @@ class ConversionManager:
             # since we start with an empty dict anyways, we dont need to do anything here
             dbg += 1
 
-        # old: so far this only happens in snippet 81, with 3 equations in premise and 3 equations in assertion
         if "values_changed" in diff.keys():
-            raise DeprecationWarning("since the introduction of kwarg threshold_to_diff_deeper=0, this should not occur anymore.")
+            logger.warning("dict diff detected values_changed. is this intended?")
             for ikey, ivalue in diff["values_changed"].items():
                 key_pattern = re.compile(r"(?<=\[').+?(?='\])")
                 res = re.findall(key_pattern, ikey)
                 set_nested_value(current_dict, res, diff["values_changed"][ikey]["new_value"])
             dbg += 1
         if dbg != len(diff.keys()):
-            raise KeyError("apparently some change between the dicts was not considered. please investigate diff.keys()")
+            raise ParserError("apparently some change between the dicts was not considered. please investigate diff.keys()")
         return current_dict
 
     ####################################################################################################################
@@ -1437,7 +1444,23 @@ class ConversionManager:
             del context["rel"][0]
         return context
 
-    def get_statement_context_recursively(self, statement_item, subdict:dict, recursion_depth=1):
+    def get_statement_context_recursively(self, statement_item:dict, subdict:dict, context_recursion_depth=1, indent_depth=1):
+        """step through nested dicts and generate output
+        Note: different context_recursion_depths are necessary since some structures (i.e. for loop) need normal (+1)
+        indentation but no additional (+0) context variable count
+
+        Args:
+            statement_item (dict): top level dict with all infos
+            subdict (dict): the dict we are currently working on
+            context_recursion_depth (int, optional): count number of recursions, important for cm<i>.<var>. Defaults to 1.
+            indent_depth (int, optional): count number of recursions, important for ident. Defaults to 1.
+
+        Raises:
+            TypeError: _description_
+
+        Returns:
+            list[str]: output
+        """        """"""
         # output
         out = []
         # insertion index makes sure that item creation happens before relations are added, that reference said items
@@ -1446,7 +1469,7 @@ class ConversionManager:
             # if key == "other":
             if "equation" in key or "math_relation" in key:
                 if value["type"] in ["equation", "mathematical relation"]:
-                    res = self.render_math_relation(statement_item, value, recursion_depth)
+                    res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
                     for l in res.split("\n"):
                         # adapt equation to context manager
                         if len(l) > 0 and not "snippet" in l:
@@ -1454,33 +1477,64 @@ class ConversionManager:
                 else:
                     raise TypeError()
             elif "OR" in key or "AND" in key or "NOT" in key:
-                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], recursion_depth+1)
+                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], context_recursion_depth+1, indent_depth+1)
                 context = {
                     "content": res,
                     "logic_operator": key.split("_")[0],
-                    "rd": recursion_depth,
-                    "new_rd": recursion_depth + 1,
-                    "indent": " " * 4 * recursion_depth,
+                    "rd": context_recursion_depth,
+                    "new_rd": context_recursion_depth + 1,
+                    "indent": " " * 4 * indent_depth,
                     }
                 out.append(render_template("and_or_not_template.py", context))
             elif "for_loop" in key:
-                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], recursion_depth)
+                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], context_recursion_depth, indent_depth+1)
                 if value["start"].isnumeric():
                     start = int(value["start"])
                 else:
-                    start = f"""cm{recursion_depth}.{value["start"]}"""
+                    start = f"""cm{context_recursion_depth}.{value["start"]}"""
                 if value["stop"].isnumeric():
                     stop = int(value["stop"])
                 else:
-                    stop = f"""cm{recursion_depth}.{value["stop"]}"""
+                    stop = f"""cm{context_recursion_depth}.{value["stop"]}"""
                 context = {
                     "content": res,
-                    "indent": " " * 4 * recursion_depth,
+                    "indent": " " * 4 * indent_depth,
                     "start": start,
                     "stop": stop,
-                    "index_var": f"""cm{recursion_depth}.{value["index_var"]}""",
+                    "index_var": f"""{value["index_var"]}""",
                     }
                 out.append(render_template("integer_range_template.py", context))
+            elif "it stm" in key:
+                context = {
+                    "rd": context_recursion_depth,
+                    "indent": " " * 4 * indent_depth,
+                    }
+
+                if "formal_set" in value.keys():
+                    logger.warning(f'setting found in nested statement {statement_item["key"]} which is not yet supported')
+                if "formal_pre" in value.keys():
+                    premises = self.get_statement_context_recursively(value, value[f"formal_pre"], context_recursion_depth, indent_depth)
+                    # extract the kwargs from the rendered statement
+                    # todo this could probably be solved more elegantly
+                    context["premise"] = []
+                    for prem in premises:
+                        if "new_math_relation" in prem:
+                            context["premise"].append(prem.split("new_math_relation")[1].split("force_key")[0]+")")
+                        else:
+                            logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
+                                {prem} which is not yet supported')
+                if "formal_ass" in value.keys():
+                    assertions = self.get_statement_context_recursively(value, value[f"formal_ass"], context_recursion_depth, indent_depth)
+                    # extract the kwargs from the rendered statement
+                    # todo this could probably be solved more elegantly
+                    context["assertion"] = []
+                    for ass in assertions:
+                        if "new_math_relation" in ass:
+                            context["assertion"].append(prem.split("new_math_relation")[1].split("force_key")[0]+")")
+                        else:
+                            logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
+                                {ass} which is not yet supported')
+                out.append(render_template("nested_statement_template.py", context))
             else:
                 key = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
@@ -1493,7 +1547,7 @@ class ConversionManager:
                                 logger.warning(f'The R4 relation of statement {statement_item} has qualifier \
                                     {qual_dict} which was neglegted')
                     out.insert(insertion_index,
-                               f'cm{recursion_depth}.new_var({key}=p.{uq}instance_of({value["R4"]["object"]}))')
+                               f'cm{context_recursion_depth}.new_var({key}=p.{uq}instance_of({value["R4"]["object"]}))')
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
@@ -1509,27 +1563,42 @@ class ConversionManager:
                             if isinstance(obj, Real):
                                 obj_str = f"{obj}"
                             # in case of equation references (global item names)
-                            # todo this is suboptimal. if the same name exists in global namespace and scope, the global one is used
-                            # todo bc. it is hard to know here, whats already been defined in e.g. settings scopes above
                             elif re.findall(r"I\d+", obj):
                                 obj_str = f"{obj}"
                             else:
-                                # todo this cm1 is not clean since new variables might be defined in subscopes
-                                obj_str = f"cm1.{obj}"
-                            # todo this cm1 is not clean since new variables might be defined in subscopes
+                                obj_str = f"{self.get_context_r(obj, statement_item)}{obj}"
                             if vvv["q"]:
                                 for q_dict in vvv["q"]:
                                     q_str = ", qualifiers=["
                                     for rel_key, qual_value in q_dict.items():
-                                        q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({self.build_reference(qual_value)}), """
+                                        ref = self.build_reference(qual_value)
+                                        if ref == qual_value:
+                                            # no reference found in dicts -> value is local variable
+                                            ref = f"{self.get_context_r(ref, statement_item)}{ref}"
+                                        q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({ref}), """
                                     q_str += "]"
                             else:
                                 q_str = ""
-                            out.append(f'cm{recursion_depth}.new_rel(cm1.{key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
+                            out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}\
+                                {key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
         return out
 
-    def render_math_relation(self, statement_item, eq_dict, recursion_depth):
-        context = {"key": eq_dict["key"], "rel": [], "rd": recursion_depth}
+    def get_context_r(self, name, statement_item, r=1):
+        if name in statement_item.keys():
+            return f"cm{r}."
+        else:
+            for k, v in statement_item.items():
+                if isinstance(v, dict):
+                    if k == "items" or "formal" in k:
+                        res = self.get_context_r(name, v, r)
+                    else:
+                        res = self.get_context_r(name, v, r+1)
+                    if res:
+                        return res
+        return ""
+
+    def render_math_relation(self, statement_item, eq_dict, context_recursion_depth, indent_depth):
+        context = {"key": eq_dict["key"], "rel": [], "rd": context_recursion_depth}
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
         else:
@@ -1544,8 +1613,8 @@ class ConversionManager:
 
         #! TODO WIP
         if "lhs_formal" in eq_dict.keys() and "rhs_formal" in eq_dict.keys():
-            context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"])
-            context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"])
+            context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"], statement_item)
+            context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"], statement_item)
         elif "lhs_source" in eq_dict.keys() and "rhs_source" in eq_dict.keys():
             try:
                 what = "lhs_source"
@@ -1620,16 +1689,16 @@ class ConversionManager:
 
         only_term = True
         if full:
-            rel_signs = ["<=", ">=", "<", ">", "=="]
+            rel_signs = ["<=", ">=", "<", ">", "==", "!="]
             for rs in rel_signs:
                 if rs in latex:
                     only_term = False
                     res = []
                     for term in latex.split(rs):
-                        res.append(self.convert_latex_to_irklike_str(term, lookup, var_map))
+                        res.append(self.convert_latex_to_irklike_str(term, lookup, var_map, statement_item))
 
         if only_term:
-            res = self.convert_latex_to_irklike_str(latex, lookup, var_map)
+            res = self.convert_latex_to_irklike_str(latex, lookup, var_map, statement_item)
 
         return res
 
@@ -1640,7 +1709,7 @@ class ConversionManager:
         pat = re.compile(f"(?:{'|'.join(ignore_commands)})" + r"{(.+?)}")
         l = re.sub(pat, lambda mo: mo.group(1), l)
 
-    def convert_latex_to_irklike_str(self, latex, item_lookup, var_map):
+    def convert_latex_to_irklike_str(self, latex, item_lookup, var_map, statement_item):
         # 1. convert to sympy
         sp_expr = parse_latex_lark(latex)
         # ambiguous result
@@ -1653,21 +1722,22 @@ class ConversionManager:
             logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
 
         # 2. traverse tree
-        res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map)
+        res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map, statement_item)
         return res
 
-    def convert_sympy_to_irklike_str(self, sp_expr, item_lookup, var_map):
+    def convert_sympy_to_irklike_str(self, sp_expr, item_lookup, var_map, statement_item):
         def _get_irk_for_sp(sp_expr, args):
             # Symbols
             if isinstance(sp_expr, sp.Symbol):
                 if sp_expr.name in var_map.b.keys():
                     og_var_name = var_map.b[sp_expr.name]
                 else:
-                    og_var_name = sp_expr.name
+                    og_var_name = sp_expr.name.value
                 if og_var_name in self.d["items"]:
                     res = self.build_reference(og_var_name)
                 else:
-                    res = "cm1." + self.build_reference(og_var_name, local_dict={"items": item_lookup})
+                    res = self.get_context_r(og_var_name, statement_item) + \
+                        self.build_reference(og_var_name, local_dict={"items": item_lookup})
                 return res
             # callable custom Funktions e.g. f(x)
             elif isinstance(type(sp_expr), sp.core.function.UndefinedFunction):
@@ -1677,11 +1747,12 @@ class ConversionManager:
                 if sp_expr.name in var_map.b.keys():
                     og_var_name = var_map.b[sp_expr.name]
                 else:
-                    og_var_name = sp_expr.name
+                    og_var_name = sp_expr.name.value
                 if og_var_name in self.d["items"]:
                     function_type = self.build_reference(og_var_name)
                 else:
-                    function_type = "cm1." + self.build_reference(og_var_name, local_dict={"items": item_lookup})
+                    function_type = self.get_context_r(og_var_name, statement_item) + \
+                        self.build_reference(og_var_name, local_dict={"items": item_lookup})
                 return f"""{function_type}({", ".join(args)})"""
             # numbers
             elif isinstance(sp_expr, (int, float, complex, sp.Number)):
@@ -1726,14 +1797,14 @@ class ConversionManager:
         res = tt.run(sp_expr)
         return res
 
-    def replace_expr(self, expr):
+    def replace_expr(self, expr, statement_item):
         try:
             parsed_expr = sp.parse_expr(expr)
         except:
             logger.info(f"sympy parsing failed for {expr}, defering to lookup")
             return self.get_expr_from_lookup(expr)
         repl_list, subs_list = [], []
-        repl_list, subs_list = self._get_repl_list_rec(parsed_expr, repl_list, subs_list)
+        repl_list, subs_list = self._get_repl_list_rec(parsed_expr, statement_item, repl_list, subs_list)
         for old, new in repl_list:
             parsed_expr = parsed_expr.replace(old, new)
         # again sp.N is annoying
@@ -1741,7 +1812,7 @@ class ConversionManager:
             parsed_expr = parsed_expr.subs(subs_list)
         return parsed_expr
 
-    def _get_repl_list_rec(self, parsed_expr, repl_list:list=[], subs_list:list=[]):
+    def _get_repl_list_rec(self, parsed_expr, statement_item, repl_list:list=[], subs_list:list=[]):
         """create a list of replacements: new functions and variables with their names as needed for the string in pyirk.
         this differentiates between local (context) names (cm.local_var) and global names (I1234["Operator1"])
         """
@@ -1754,7 +1825,7 @@ class ConversionManager:
             elif func.name.replace("_", " ") in self.d["items"].keys():
                 repl_list.append((func, sp.Function(self.build_reference(func.name.replace("_", " ")))))
             else:
-                repl_list.append((func, sp.Function(f"cm1.{func.name}")))
+                repl_list.append((func, sp.Function(f"{self.get_context_r(func.name, statement_item)}{func.name}")))
         # replace free variables
         elif isinstance(parsed_expr, sp.Symbol):
             if parsed_expr.name in self.d["items"].keys():
@@ -1763,12 +1834,12 @@ class ConversionManager:
             elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
                 subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
             else:
-                subs_list.append((parsed_expr, sp.Symbol(f"cm1.{parsed_expr.name}")))
+                subs_list.append((parsed_expr, sp.Symbol(f"{self.get_context_r(parsed_expr.name, statement_item)}{parsed_expr.name}")))
         # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
         if hasattr(parsed_expr, "args"):
             for subexpr in parsed_expr.args:
                 # traverse the tree
-                repl_list, subs_list = self._get_repl_list_rec(subexpr, repl_list, subs_list)
+                repl_list, subs_list = self._get_repl_list_rec(subexpr, statement_item, repl_list, subs_list)
                 # elif isinstance(subexpr, sp.Symbol):
                 #     subs_list.append((subexpr, sp.var(f"cm.{subexpr.name}")))
         return repl_list, subs_list

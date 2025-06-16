@@ -11,7 +11,6 @@
 - 'has position' is a qualifier.
 
 - There is a relation: 'is at outer position'
-- The result type of 'is at outer position' is 'bool'
 - 'is at outer position' is a qualifier.
 
 
@@ -30,3 +29,5 @@
         - 's' is an instance of 'memristor stack' qqq univ_quant True
         - 'c' is an instance of 'stack component'
         - 's' 'has stack component' 'c' qqq univ_quant True
+        <!-- this next statement does not make sense, it should test if the object of a qualifier relation can be a local variable -->
+        - 's' 'has stack component' 'c' qqq 'is at outer position' 'c'

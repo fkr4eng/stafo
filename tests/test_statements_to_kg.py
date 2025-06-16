@@ -29,10 +29,8 @@ TEST_DATA6_FPATH = os.path.join(TESTA_DATA_DIR, "statements06_qualifier.md")
 TEST_DATA7_FPATH = os.path.join(TESTA_DATA_DIR, "statements07_inheritance.md")
 TEST_DATA8_FPATH = os.path.join(TESTA_DATA_DIR, "statements08_errors.md")
 TEST_DATA9_FPATH = os.path.join(TESTA_DATA_DIR, "statements09_strings.md")
+TEST_DATA10_FPATH = os.path.join(TESTA_DATA_DIR, "statements10_nested_statements.md")
 
-# todo this is not very elegant
-# MATH_FPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-# ma = p.irkloader.load_mod_from_path(MATH_FPATH, prefix="ma", reuse_loaded=False)
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
 
@@ -250,3 +248,11 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         mem_stack = get_key_by_name(res_mod_fpath, "memristor stack")
         target = f'cm1.new_var(s=p.uq_instance_of({mem_stack}["memristor stack"]))'
         self.assertIn(target, res)
+
+    def test_n01__nested_statements(self):
+        CM = s2k.ConversionManager(TEST_DATA10_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+        # todo check if this worked
