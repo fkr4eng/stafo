@@ -608,6 +608,8 @@ class ConversionManager:
                                     eq_dict["rel_sign"] = rs
 
                         eq_dict[name] = res[0]
+            if len(eq_dict.keys()) == 3:
+                logger.warning(f"equation line {i} did not produce any meaningfull content. Check spelling?")
             d["items"][item_name] = eq_dict
 
         # statements
@@ -1513,7 +1515,7 @@ class ConversionManager:
                 if "formal_set" in value.keys():
                     logger.warning(f'setting found in nested statement {statement_item["key"]} which is not yet supported')
                 if "formal_pre" in value.keys():
-                    premises = self.get_statement_context_recursively(value, value[f"formal_pre"], context_recursion_depth, indent_depth)
+                    premises = self.get_statement_context_recursively(statement_item, value[f"formal_pre"], context_recursion_depth, indent_depth)
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["premise"] = []
@@ -1524,13 +1526,13 @@ class ConversionManager:
                             logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
                                 {prem} which is not yet supported')
                 if "formal_ass" in value.keys():
-                    assertions = self.get_statement_context_recursively(value, value[f"formal_ass"], context_recursion_depth, indent_depth)
+                    assertions = self.get_statement_context_recursively(statement_item, value[f"formal_ass"], context_recursion_depth, indent_depth)
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["assertion"] = []
                     for ass in assertions:
                         if "new_math_relation" in ass:
-                            context["assertion"].append(prem.split("new_math_relation")[1].split("force_key")[0]+")")
+                            context["assertion"].append(ass.split("new_math_relation")[1].split("force_key")[0]+")")
                         else:
                             logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
                                 {ass} which is not yet supported')
