@@ -72,18 +72,20 @@ Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch
 (x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt}
 \end{equation}
 das (\textbf{\em kanonische}) \textbf{\em Skalarprodukt}.
+\snippet{12}
 Die Vektoren~$x$ und~$y$ sind zueinander \textbf{\em orthogonal} (bzw.
 stehen \textbf{\em senkrecht aufeinander}), falls
 \[
 (x,y)=0.
 \]
-
+\snippet{13}
 Jeder Unterraum~$\mathbb{U}$ des ${\mathbb{R}}^{n}$ kann mit Hilfe eines
 geeignet gewählten weiteren Unterraums~$\mathbb{V}$ zum ursprünglichen
 Vektorraum~${\mathbb{R}}^{n}$ ergänzt werden, so dass
 \[
 {\mathbb{R}}^{n}=\mathbb{U}+\mathbb{V}.
 \]
+\snippet{14}
 Haben zusätzlich beide Unterräume nur den Nullvektor gemeinsam, d.\,h.
 \[
 \mathbb{U}\cap\mathbb{V}=\{0\},
@@ -95,10 +97,11 @@ beiden Unterräume darstellen:
 \[
 {\mathbb{R}}^{n}=\mathbb{U}\oplus\mathbb{V}.
 \]
+\snippet{15}
 Die Zerlegung in direkte Summen bedeutet, dass es für jeden Vektor
 $x\in{\mathbb{R}}^{n}$ eine eindeutige Darstellung $x=u+v$ mit $u\in\mathbb{U}$
 und $v\in\mathbb{V}$ gibt.
-
+\snippet{16}
 Die Ergänzung eines Unterraumes~$\mathbb{U}$ um einen Komplmentärraum~$\mathbb{V}$
 ist nicht eindeutig. Wählt man den Komplementärraum unter Zuhilfenahme
 des Skalarprodukts~(\ref{eq:skalarprodukt}) derart, dass alle Vektoren
@@ -112,7 +115,7 @@ Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensi
 \begin{equation}
 \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl}
 \end{equation}
-
+\snippet{17i}
 \begin{example}
 \label{exa:orthogonales-Komplement}Die Vektoren
 \[
@@ -142,7 +145,7 @@ aufgespannt:
 
 
 \end{example}
-
+\snippet{18}
 Eine $m\times n$-Matrix $A\in{\mathbb{R}}^{m\times n}$ besteht aus $m$ Zeilen
 und $n$ Spalten:
 \[
@@ -152,11 +155,13 @@ a_{11} & \cdots & a_{1n}\\
 a_{m1} & \cdots & a_{mn}
 \end{array}\right).
 \]
+\snippet{19}
 Gilt $m=n$, so spricht man von einer \textbf{\em quadratischen} Matrix.
+\snippet{20}
 Die $n\times n$\textbf{\em -Einheitsmatrix} (engl. \textbf{\em identity matrix})
 wird mit~$I_{n}$ bzw. mit~$I$ bezeichnet. Bei ihr sind die Hauptdiagonalelemente
 Eins, alle anderen Elemente Null.
-
+\snippet{21}
 Unter dem \textbf{\em Bild} (engl. \textbf{\em image}, \textbf{\em range}) einer Matrix
 versteht man die Menge
 \[

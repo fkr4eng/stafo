@@ -11,6 +11,8 @@
 - The result type of 'is subset of' is 'set'
 - There is a relation: 'has element'
 - The type of argument1 of 'has element' is 'set'
+- There is a relation: 'is element of'
+- The result type of 'is element of' is 'set'
 - There is a relation: 'has element type'
 - 'has element type' has the verbal description 'specifies what types of elements appear in this set'
 - The type of argument1 of 'has element type' is 'set'
@@ -120,7 +122,7 @@
         - 'x' is an instance of 'vector'
         - 'b' is an instance of 'basis'
         - 'n' is an instance of 'integer number'
-        - 'i' is an instance of 'integer number'
+        - 'i' is an instance of 'integer number' // todo should this be removed?
         - 'c' is an instance of 'sequence of coefficients'
         - 'c' 'has element type' 'real number'
         - 'd' is an instance of 'sequence of coefficients'
@@ -131,9 +133,9 @@
         - There is an equation:
             - full source code: x == \sum_{i=1}^n ('element of sequence'(d, i) * 'element of sequence'(b, i))
     - formalized assertion:
-        - For all 'i' from 1 to 'n':
+        - For all 'j' from 1 to 'n':
             - There is an equation:
-                - full source code: 'element of sequence'(c, i) == 'element of sequence'(d, i)
+                - full source code: 'element of sequence'(c, j) == 'element of sequence'(d, j)
 
 
 
@@ -159,5 +161,336 @@
     - formalized assertion:
         - 'lh' is an instance of 'linear hull'
         - There is an equation:
-            - full source code: lh == \sum_{i=1}^r ('element of sequence'(alpha, i) * 'element of sequence'(v, i))
+            - full source code: 'lh' == \sum_{i=1}^r ('element of sequence'('alpha', i) * 'element of sequence'(v, i))
 
+
+- // snippet(10)
+- There is a class: 'subspace' @en
+- 'subspace' has the alternative german label 'Untervektorraum'
+- 'subspace' has the alternative german label 'Unterraum'
+- 'subspace' has the alternative german label 'Teilraum'
+- 'subspace' is a subclass of 'vector space'
+- There is a relation 'is subspace of'
+- The type of argument1 of 'is subspace of' is 'vector space'
+- The result type of 'is subspace of' is 'vector space'
+- 'is subspace of' 'is used to model' 'subspace'
+- There is a general statement:
+    - full source code: Die lineare Hülle ist damit ein \textbf{\em Untervektorraum}, \textbf{\em Unterraum} bzw. \textbf{\em Teilraum} (engl. \textbf{\em subspace}) des~${\mathbb{R}}^{n}$, d.\,h. eine nichtleere Teilmenge des~${\mathbb{R}}^{n}$, welche selber ein Vektorraum ist.
+    - formalized setting:
+        - 'lh' is an instance of 'linear hull'
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+    - formalized assertion:
+        - 'lh' 'is subspace of' 'Rn'
+
+- // snippet(11)
+- There is a binary operator: 'canonical scalar product' @en.
+- 'canonical scalar product' has the alternative german label 'kanonisches Skalarprodukt'.
+- 'canonical scalar product' has the alternative german label 'Skalarprodukt'.
+- 'canonical scalar product' has the alternative label 'scalar product' @en.
+- 'canonical scalar product' has the associated LaTeX notation $(x,y)$.
+- The type of argument1 of 'canonical scalar product' is 'vector'.
+- The type of argument2 of 'canonical scalar product' is 'vector'.
+- The result type of 'canonical scalar product' is 'real number'. // inferred knowledge: The components x_i and y_i are real numbers, thus the sum is a real number.
+- 'canonical scalar product' has the defining formula $\sum_{i=1}^{n}x_{i}y_{i}$.
+- There is a general statement:
+    - full source code: Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch \begin{equation} (x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt} \end{equation} das (\textbf{\em kanonische}) \textbf{\em Skalarprodukt}.
+    - formalized setting:
+        - 'x' is an instance of 'vector'.
+        - 'y' is an instance of 'vector'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'x' is element of 'Rn'.
+        - 'y' is element of 'Rn'.
+        - 'i' is an instance of 'integer number'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'canonical scalar product'(x, y) == sum_{i=1}^n ('element of sequence'(x, i) * 'element of sequence'(y, i)).
+
+
+- // snippet(12)
+- There is a class 'orthogonality' @en.
+- 'orthogonality' has the alternative german label 'Orthogonalität'.
+- 'orthogonality' has the verbal description 'concept of orthogonality, perpendicular vectors.' // todo better description
+- There is a relation 'is orthogonal to'
+- The type of argument1 of 'is orthogonal to' is 'vector'
+- The result type of 'is orthogonal to' is 'vector'
+- 'is orthogonal to' 'is used to model' 'orthogonality'
+- 'is orthogonal to' 'is symmetrical' True.
+- There is an equivalence-statement:
+    - full source code: Die Vektoren~$x$ und~$y$ sind zueinander \textbf{\em orthogonal} (bzw. stehen \textbf{\em senkrecht aufeinander}), falls \[ (x,y)=0. \]
+    - formalized setting:
+        - 'x' is an instance of 'vector'.
+        - 'y' is an instance of 'vector'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'x' is element of 'Rn'.
+        - 'y' is element of 'Rn'.
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'canonical scalar product'(x, y) == 0
+    - formalized assertion:
+        - 'x' 'is orthogonal to' 'y'.
+
+
+- // snippet(13)
+- There is a binary operator: 'sum of vector spaces' @en.
+- 'sum of vector spaces' has the associated LaTeX notation $\mathbb{U} + \mathbb{V}$.
+- The type of argument1 of 'sum of vector spaces' is 'vector space'.
+- The type of argument2 of 'sum of vector spaces' is 'vector space'.
+- The result type of 'sum of vector spaces' is 'vector space'.
+- There is a general statement:
+    - full source code: Jeder Unterraum~$\mathbb{U}$ des ${\mathbb{R}}^{n}$ kann mit Hilfe eines geeignet gewählten weiteren Unterraums~$\mathbb{V}$ zum ursprünglichen Vektorraum~${\mathbb{R}}^{n}$ ergänzt werden, so dass \[ {\mathbb{R}}^{n}=\mathbb{U}+\mathbb{V}. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'vector space' qqq univ_quant.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'V' is an instance of 'vector space' qqq exis_quant.
+        - 'V' 'is subspace of' 'Rn'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'Rn' == 'sum of vector spaces'(U, V)
+
+- // snippet(14)
+- There is a binary operator: 'intersection of sets' @en.
+- 'intersection of sets' has the associated LaTeX notation $\mathbb{U} \cap \mathbb{V}$.
+- 'intersection of sets' has the alternative german label 'Schnittmenge'.
+- The type of argument1 of 'intersection of sets' is 'set'.
+- The type of argument2 of 'intersection of sets' is 'set'.
+- The result type of 'intersection of sets' is 'set'.
+
+- There is a class: 'zero vector' @en.
+- 'zero vector' has the associated LaTeX notation $\{0\}$.
+- 'zero vector' has the alternative german label 'Nullvektor'.
+- 'zero vector' is a subclass of 'vector'. // inferred knowledge
+
+- There is a class: 'complement space' @en.
+- 'complement space' has the alternative german label 'Komplementärraum'.
+- 'complement space' has the alternative german label 'Komplement'.
+- 'complement space' is a subclass of 'subspace'. // inferred knowledge
+- There is a relation 'has complement space'
+- The type of argument1 of 'has complement space' is 'vector space'
+- The result type of 'has complement space' is 'vector space'
+- 'has complement space' 'is used to model' 'complement space'
+
+- There is a binary operator: 'direct sum of vector spaces' @en.
+- 'direct sum of vector spaces' has the associated LaTeX notation $\mathbb{U} \oplus \mathbb{V}$.
+- 'direct sum of vector spaces' has the alternative german label 'direkte Summe'.
+- The type of argument1 of 'direct sum of vector spaces' is 'vector space'.
+- The type of argument2 of 'direct sum of vector spaces' is 'vector space'.
+- The result type of 'direct sum of vector spaces' is 'vector space'.
+
+- There is an if-then-statement:
+    - full source code: Haben zusätzlich beide Unterräume nur den Nullvektor gemeinsam, d.\,h. \[ \mathbb{U}\cap\mathbb{V}=\{0\}, \] dann ist der Unterraum~$\mathbb{V}$ der \textbf{\em Komplementärraum} (bzw. das \textbf{\em Komplement}) des Unterraumes~$\mathbb{U}$. In diesem Fall kann man den Vektorraum~${\mathbb{R}}^{n}$ als \textbf{\em direkte Summe} der beiden Unterräume darstellen: \[ {\mathbb{R}}^{n}=\mathbb{U}\oplus\mathbb{V}. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'z' is an instance of 'zero vector'
+        - 'z' 'is element of' 'Rn'
+        - 'U' is an instance of 'vector space'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'V' is an instance of 'vector space'.
+        - 'V' 'is subspace of' 'Rn'.
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'intersection of sets'(U, V) == 'z'
+    - formalized assertion:
+        - 'U' 'has complement space' 'V' qqq 'is valid on set' 'Rn'.
+        - There is an equation:
+            - full source code: 'Rn' == 'direct sum of vector spaces'(U, V)
+
+
+- // snippet(15)
+- There is a general statement:
+    - full source code: Die Zerlegung in direkte Summen bedeutet, dass es für jeden Vektor $x\in{\mathbb{R}}^{n}$ eine eindeutige Darstellung $x=u+v$ mit $u\in\mathbb{U}$ und $v\in\mathbb{V}$ gibt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'subspace'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'V' is an instance of 'subspace'.
+        - 'V' 'is subspace of' 'Rn'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn'.
+        - There is an equation:
+            - full source code: 'Rn' == 'direct sum of vector spaces'(U, V)
+    - formalized assertion:
+        - 'u' is an instance of 'vector'.
+        - 'u' is element of 'U'.
+        - 'v' is an instance of 'vector'.
+        - 'v' is element of 'V'.
+        - There is an equation:
+            - full source code: x == u + v
+
+- There is a general statement:
+    - full source code:  If a vector x can be represented as two sums of vectors u1+v1 and u2+v2 where u1, u2 are in U and v1, v2 are in V, then u1=u2 and v1=v2.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'subspace'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'V' is an instance of 'subspace'.
+        - 'V' 'is subspace of' 'Rn'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn'.
+        - There is an equation:
+            - full source code: 'Rn' == 'direct sum of vector spaces'(U, V)
+        - 'u1' is an instance of 'vector'.
+        - 'u1' is element of 'U'.
+        - 'v1' is an instance of 'vector'.
+        - 'v1' is element of 'V'.
+        - There is an equation:
+            - full source code: x = 'u1' + 'v1'
+        - 'u2' is an instance of 'vector'.
+        - 'u2' is element of 'U'.
+        - 'v2' is an instance of 'vector'.
+        - 'v2' is element of 'V'.
+        - There is an equation:
+            - full source code: x = 'u2' + 'v2'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'u1' == 'u2'
+        - There is an equation:
+            - full source code: 'v1' == 'v2'
+
+
+
+- // snippet(16)
+- There is a general statement:
+    - full source code: Die Ergänzung eines Unterraumes~$\mathbb{U}$ um einen Komplmentärraum~$\mathbb{V}$ ist nicht eindeutig.
+    - formalized setting:
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'U' is an instance of 'subspace'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'V1' is an instance of 'vector space'.
+        - 'U' 'has complement space' 'V1'.
+    - formalized assertion:
+        - 'V2' is an instance of 'vector space'.
+        - 'U' 'has complement space' 'V2'.
+
+- There is a class: 'orthogonal complement' @en.
+- 'orthogonal complement' has the alternative german label 'orthogonales Komplement'.
+- 'orthogonal complement' is a subclass of 'complement space'.
+- 'orthogonal complement' has the associated LaTeX notation $\mathbb{U}^{\perp}$.
+- There is a relation 'has orthogonal complement'
+- The type of argument1 of has orthogonal complement' is 'vector space'
+- The result type of 'has orthogonal complement' is 'vector space'
+- 'has orthogonal complement' 'is used to model' 'complement space'
+- There is a general statement:
+    - full source code: Wählt man den Komplementärraum unter Zuhilfenahme des Skalarprodukts~(\ref{eq:skalarprodukt}) derart, dass alle Vektoren $u\in\mathbb{U}$ und $v\in\mathbb{V}$ jeweils senkrecht aufeinander stehen, so erhält man das \textbf{\em orthogonale Komplement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$: \begin{equation} \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement} \end{equation}
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'subspace'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'U' 'has complement space' 'V'.
+        - 'u' is an instance of 'vector'.
+        - 'u' is element of 'U' qqq univ_quant.
+        - 'v' is an instance of 'vector'.
+        - 'v' is element of 'Rn' qqq univ_quant. // todo is this correct?
+        - 'V' is an instance of 'vector space'.
+        - 'v' 'is element of' 'V'
+    - formalized premise:
+        - 'v' 'is orthogonal to' 'u'.
+    - formalized assertion:
+        - 'U' 'has orthogonal complement' 'V' qqq 'is valid on set' 'Rn'.
+
+- There is a unary operator: 'dimension' @en.
+- 'dimension' has the alternative german label 'Dimension'.
+- 'dimension' has the associated LaTeX notation $\dim$.
+- The type of argument1 of 'dimension' is 'vector space'.
+- The result type of 'dimension' is 'integer number'.
+- There is a general statement:
+    - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'subspace'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'Up' is an instance of 'orthogonal complement'.
+        - 'U' 'has orthogonal complement' 'Up'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'dimension'(U) + 'dimension'('Up') == n
+            - reference: 'Dimensionsformel'
+
+
+- // snippet(17i)
+- // ignored content
+
+- // snippet(18)
+- There is a class: 'matrix' @en
+- 'matrix' has the alternative german label 'Matrix'
+- 'matrix' is a subclass of 'sequence' // A matrix can be seen as a sequence of its rows or columns.
+- There is a relation: 'has number of rows'
+- The type of argument1 of 'has number of rows' is 'matrix'
+- The result type of 'has number of rows' is 'integer number'
+- There is a relation: 'has number of columns'
+- The type of argument1 of 'has number of columns' is 'matrix'
+- The result type of 'has number of columns' is 'integer number'
+
+- 'matrix' has the associated LaTeX notation $A = \left(\begin{array}{ccc} a_{11} & \cdots & a_{1n}\\ \vdots & \ddots & \vdots\\ a_{m1} & \cdots & a_{mn} \end{array}\right)$.
+
+
+- // snippet(19)
+- There is a class: 'square matrix' @en
+- 'square matrix' has the alternative german label 'quadratische Matrix'
+- 'square matrix' is a subclass of 'matrix'
+- There is an if-then-statement:
+    - full source code: Gilt $m=n$, so spricht man von einer \textbf{\em quadratischen} Matrix.
+    - formalized setting:
+        - 'A' is an instance of 'matrix'.
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'A' 'has number of rows' 'm'.
+        - 'A' 'has number of columns' 'n'.
+    - formalized premise:
+        - There is an equation:
+            - formalized left hand side: m
+            - formalized right hand side: n
+    - formalized assertion:
+        - 'A' 'is secondary instance of' 'square matrix'.
+
+- // snippet(20)
+- There is a class: 'identity matrix' @en
+- 'identity matrix' has the alternative german label 'Einheitsmatrix'
+- 'identity matrix' is a subclass of 'square matrix' // inferred knowledge
+- 'identity matrix' has the associated LaTeX notation $I_n$.
+- 'identity matrix' has the alternative associated LaTeX notation $I$.
+- There is an if-then-statement:
+    - full source code: Bei ihr sind die Hauptdiagonalelemente Eins, alle anderen Elemente Null.
+    - formalized setting:
+        - 'In' is an instance of 'square matrix'.
+        - 'n' is an instance of 'integer number'.
+        - 'In' 'has number of rows' 'n'.
+        - 'In' 'has number of columns' 'n'.
+    - formalized premise:
+        - For all 'i' from 1 to 'n':
+            - For all 'j' from 1 to 'n':
+                - AND
+                    - There is an if-then-statement:
+                        - formalized premise:
+                            - There is an equation:
+                                - full source code: i == j
+                        - formalized assertion:
+                            - There is an equation:
+                                - full source code: 'element of sequence'('In', i, j) == 1
+                    - There is an if-then-statement:
+                        - formalized premise:
+                            - There is a mathematical relation:
+                                - full source code: i != j
+                        - formalized assertion:
+                            - There is an equation:
+                                - full source code: 'element of sequence'('In', i, j) == 0
+    - formalized assertion:
+        - 'In' is secondary instance of 'identity matrix'

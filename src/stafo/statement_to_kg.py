@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 466
+        self.stop_at_line = 360
 
         self.q_ident = "qqq"
 
