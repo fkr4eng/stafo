@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 360
+        self.stop_at_line = 198
 
         self.q_ident = "qqq"
 
@@ -143,7 +143,7 @@ class ConversionManager:
                 new.append(self.strip(v))
             return tuple(new)
         elif isinstance(s, str):
-            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "").rstrip()
+            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "").rstrip().lstrip()
         else:
             raise TypeError(s)
 
@@ -1538,18 +1538,21 @@ class ConversionManager:
                                 {ass} which is not yet supported')
                 out.append(render_template("nested_statement_template.py", context))
             else:
-                key = self.strip_math(key).replace(" ", "_")
+                key_render = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
                     uq = ""
-                    if value["R4"]["q"]:
-                        for qual_dict in value["R4"]["q"]:
-                            if "R44" in qual_dict.keys() and qual_dict["R44"] == "True":
+                    qualifiers = ""
+                    q_list = []
+                    for qual_dict in value["R4"]["q"]:
+                        for k, v in qual_dict.items():
+                            if k == "R44" and v == "True":
                                 uq = "uq_"
                             else:
-                                logger.warning(f'The R4 relation of statement {statement_item} has qualifier \
-                                    {qual_dict} which was neglegted')
+                                q_list.append(f'{self.d["relations"][self.rel_interpr[k]]["qual_name"]}({v})')
+                    if q_list:
+                        qualifiers = f', qualifiers=[{", ".join(q_list)}]'
                     out.insert(insertion_index,
-                               f'cm{context_recursion_depth}.new_var({key}=p.{uq}instance_of({value["R4"]["object"]}))')
+                               f'cm{context_recursion_depth}.new_var({key_render}=p.{uq}instance_of({value["R4"]["object"]}{qualifiers}))')
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
@@ -1582,7 +1585,7 @@ class ConversionManager:
                             else:
                                 q_str = ""
                             out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}\
-                                {key}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
+                                {key_render}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
         return out
 
     def get_context_r(self, name, statement_item, r=1):

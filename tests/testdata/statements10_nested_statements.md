@@ -1,6 +1,7 @@
 - There is a class: 'identity matrix' @en
 - There is a relation: 'has number of rows'
 - There is a relation: 'has number of columns'
+- There is a binary operator: 'element of sequence'
 - There is a general statement:
     - formalized setting:
         - 'In' is an instance of 'identity matrix'.
@@ -17,11 +18,11 @@
                                 - full source code: i == j
                         - formalized assertion:
                             - There is an equation:
-                                - full source code: 'element of sequence'(In, i, j) == 1
+                                - full source code: 'element of sequence'('In', i, j) == 1
                     - There is an if-then-statement:
                         - formalized premise:
                             - There is a mathematical relation:
                                 - full source code: i != j
                         - formalized assertion:
                             - There is an equation:
-                                - full source code: 'element of sequence'(In, i, j) == 0
+                                - full source code: 'element of sequence'('In', i, j) == 0

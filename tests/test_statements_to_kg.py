@@ -114,7 +114,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
         # check 1. equation with integral
-        stm = get_item_by_name(res_mod_fpath, "gen stm l.46", mod)
+        stm = get_item_by_name(res_mod_fpath, "gen stm l46", mod)
         target = """["mathematical expression: definite integral(mathematical object: mul(mathematical object: pow(e, mathematical object: mul(mathematical object: mul(-1, s), t)), evaluated mapping: f(t)), t, tuple: limits(scalar zero, infinity))"]"""
         item1 = repr(stm.scp__assertion.get_inv_relations("R20")[3].subject.object)
         self.assertIn(target, item1)
@@ -238,7 +238,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(stms2[1].qualifiers[0].object, True)
 
         # check if this also works inside statements
-        if_then_stm = get_item_by_name(res_mod_fpath, "it stm l.27", mod)
+        if_then_stm = get_item_by_name(res_mod_fpath, "it stm l26", mod)
         stms3 = if_then_stm._ns_setting["s"].get_relations(f"{mod.__URI__}#{rel_key}")
         self.assertEqual(len(stms3[0].qualifiers), 2) # univ_quant and defining scope
         self.assertEqual(stms3[0].qualifiers[0].relation.R1.value, "is universally quantified")
@@ -248,6 +248,12 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         mem_stack = get_key_by_name(res_mod_fpath, "memristor stack")
         target = f'cm1.new_var(s=p.uq_instance_of({mem_stack}["memristor stack"]))'
         self.assertIn(target, res)
+
+        # check exis_quant
+        stms4 = if_then_stm._ns_setting["k"].get_relations("R4")
+        self.assertEqual(len(stms4[0].qualifiers), 1) # exis_quant and defining scope
+        self.assertEqual(stms4[0].qualifiers[0].relation.R1.value, "is existentially quantified")
+        self.assertEqual(stms4[0].qualifiers[0].object, True)
 
     def test_n01__nested_statements(self):
         CM = s2k.ConversionManager(TEST_DATA10_FPATH, [ma_load_dict], num_keys=20)

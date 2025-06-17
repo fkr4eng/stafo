@@ -27,6 +27,7 @@
 - There is an if-then-statement:
     - formalized setting:
         - 's' is an instance of 'memristor stack' qqq univ_quant True
+        - 'k' is an instance of 'memristor stack' qqq exis_quant True
         - 'c' is an instance of 'stack component'
         - 's' 'has stack component' 'c' qqq univ_quant True
         <!-- this next statement does not make sense, it should test if the object of a qualifier relation can be a local variable -->
