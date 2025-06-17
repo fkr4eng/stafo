@@ -720,7 +720,7 @@ class ConversionManager:
                             if existing:
                                 self.add_new_item(self.d, arg2, language, {}, skip_entity_order)
                                 logger.info(f"undeclared class '{arg2}' was matched with {existing}")
-                            else:
+                            elif arg2 not in d["items"].keys():
                                 logger.warning(f"unknown type: '{arg2}'")
 
                         arg2 = self.build_reference(arg2, d)
@@ -986,7 +986,8 @@ class ConversionManager:
 
         if label not in d["relations"].keys():
             r1_key = self.get_r1_key(language)
-            pre = prefix + "__" if prefix else ""
+            # we dont want builtins prefixes, since e.g. p__R86__is_uses_to_model will not work and is unnecessary
+            pre = prefix + "__" if prefix and prefix != "p" else ""
             d["relations"][label] = {
                 "key": key,
                 r1_key: label,

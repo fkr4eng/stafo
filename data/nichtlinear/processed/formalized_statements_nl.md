@@ -118,7 +118,7 @@
             - full source code: x == \sum_{i=1}^n ('element of sequence'(x, i) * 'element of sequence'(b, i))
 - // comment: the word "eindeutig" in the german text is important. It means that the linear combination is unique. This aspect is not captured by the formalized statements yet. It might be possible to express this by adding another general statement which says that if there are two such linear combinations, then they must be equal.
 
-- There is a general statement:
+- There is an if-then-statement:
     - full source code:  If a vector x can be represented as two linear combinations of basis vectors, these linear combinations must be identical.
     - formalized setting:
         - 'x' is an instance of 'vector'
@@ -129,9 +129,9 @@
         - 'c' 'has element type' 'real number'
         - 'd' is an instance of 'sequence of coefficients'
         - 'd' 'has element type' 'real number'
+    - formalized premise:
         - There is an equation:
-            - source code of left hand side: x
-            - source code of right hand side: \sum_{i=1}^n ('element of sequence'(c, i) * 'element of sequence'(b, i))
+            - full source code: x == \sum_{i=1}^n ('element of sequence'(c, i) * 'element of sequence'(b, i))
         - There is an equation:
             - full source code: x == \sum_{i=1}^n ('element of sequence'(d, i) * 'element of sequence'(b, i))
     - formalized assertion:
@@ -406,11 +406,13 @@
     - formalized assertion:
         - 'U' 'has orthogonal complement' 'V' qqq 'is valid on set' 'Rn'.
 
-- There is a unary operator: 'dimension' @en.
-- 'dimension' has the alternative german label 'Dimension'.
-- 'dimension' has the associated LaTeX notation $\dim$.
-- The type of argument1 of 'dimension' is 'vector space'.
-- The result type of 'dimension' is 'integer number'.
+- There is a unary operator: 'dimension op' @en.
+- 'dimension op' has the alternative german label 'dimension op'.
+- 'dimension op' has the associated LaTeX notation $\dim$.
+- The type of argument1 of 'dimension op' is 'vector space'.
+- The result type of 'dimension op' is 'integer number'.
+- 'dimension op' 'is used to model' 'dimension'
+- 'has dimension' 'is used to model' 'dimension'
 - There is a general statement:
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
     - formalized setting:
@@ -423,7 +425,7 @@
         - 'U' 'has orthogonal complement' 'Up'.
     - formalized assertion:
         - There is an equation:
-            - full source code: 'dimension'(U) + 'dimension'('Up') == n
+            - full source code: 'dimension op'(U) + 'dimension op'('Up') == n
             - reference: 'Dimensionsformel'
 
 
