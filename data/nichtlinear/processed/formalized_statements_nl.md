@@ -25,6 +25,8 @@
 - There is a class: 'sequence of coefficients'
 - 'sequence of coefficients' is a subclass of 'sequence'
 - // todo all instances of 'sequence of coefficients' have element type 'real number'
+- There is a relation: 'is valid on set'
+- 'is valid on set' is a qualifier.
 
 - // snippet(2)
 - New section: "Lineare Algebra".
@@ -207,7 +209,7 @@
         - 'i' is an instance of 'integer number'.
     - formalized assertion:
         - There is an equation:
-            - full source code: 'canonical scalar product'(x, y) == sum_{i=1}^n ('element of sequence'(x, i) * 'element of sequence'(y, i)).
+            - full source code: 'canonical scalar product'('x', 'y') == \sum_{'i'=1}^'n' ('element of sequence'('x', 'i') * 'element of sequence'('y', 'i')).
 
 
 - // snippet(12)
@@ -218,7 +220,7 @@
 - The type of argument1 of 'is orthogonal to' is 'vector'
 - The result type of 'is orthogonal to' is 'vector'
 - 'is orthogonal to' 'is used to model' 'orthogonality'
-- 'is orthogonal to' 'is symmetrical' True.
+- 'is orthogonal to' 'is symmetrical' 'True'.
 - There is an equivalence-statement:
     - full source code: Die Vektoren~$x$ und~$y$ sind zueinander \textbf{\em orthogonal} (bzw. stehen \textbf{\em senkrecht aufeinander}), falls \[ (x,y)=0. \]
     - formalized setting:
@@ -248,9 +250,9 @@
         - 'n' is an instance of 'integer number'.
         - 'Rn' is an instance of 'n-dimensional real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'U' is an instance of 'vector space' qqq univ_quant.
+        - 'U' is an instance of 'vector space' qqq univ_quant True
         - 'U' 'is subspace of' 'Rn'.
-        - 'V' is an instance of 'vector space' qqq exis_quant.
+        - 'V' is an instance of 'vector space' qqq exis_quant True.
         - 'V' 'is subspace of' 'Rn'.
     - formalized assertion:
         - There is an equation:
@@ -313,9 +315,9 @@
         - 'n' is an instance of 'integer number'.
         - 'Rn' is an instance of 'n-dimensional real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'U' is an instance of 'subspace'.
+        - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
-        - 'V' is an instance of 'subspace'.
+        - 'V' is an instance of 'vector space'.
         - 'V' 'is subspace of' 'Rn'.
         - 'x' is an instance of 'vector'.
         - 'x' is element of 'Rn'.
@@ -335,9 +337,9 @@
         - 'n' is an instance of 'integer number'.
         - 'Rn' is an instance of 'n-dimensional real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'U' is an instance of 'subspace'.
+        - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
-        - 'V' is an instance of 'subspace'.
+        - 'V' is an instance of 'vector space'.
         - 'V' 'is subspace of' 'Rn'.
         - 'x' is an instance of 'vector'.
         - 'x' is element of 'Rn'.
@@ -348,13 +350,13 @@
         - 'v1' is an instance of 'vector'.
         - 'v1' is element of 'V'.
         - There is an equation:
-            - full source code: x = 'u1' + 'v1'
+            - full source code: x == 'u1' + 'v1'
         - 'u2' is an instance of 'vector'.
         - 'u2' is element of 'U'.
         - 'v2' is an instance of 'vector'.
         - 'v2' is element of 'V'.
         - There is an equation:
-            - full source code: x = 'u2' + 'v2'
+            - full source code: x == 'u2' + 'v2'
     - formalized assertion:
         - There is an equation:
             - full source code: 'u1' == 'u2'
@@ -368,7 +370,7 @@
     - full source code: Die Ergänzung eines Unterraumes~$\mathbb{U}$ um einen Komplmentärraum~$\mathbb{V}$ ist nicht eindeutig.
     - formalized setting:
         - 'Rn' is an instance of 'n-dimensional real vector space'.
-        - 'U' is an instance of 'subspace'.
+        - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
         - 'V1' is an instance of 'vector space'.
         - 'U' 'has complement space' 'V1'.
@@ -390,13 +392,13 @@
         - 'n' is an instance of 'integer number'.
         - 'Rn' is an instance of 'n-dimensional real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'U' is an instance of 'subspace'.
+        - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
         - 'U' 'has complement space' 'V'.
         - 'u' is an instance of 'vector'.
-        - 'u' is element of 'U' qqq univ_quant.
+        - 'u' is element of 'U' qqq univ_quant True
         - 'v' is an instance of 'vector'.
-        - 'v' is element of 'Rn' qqq univ_quant. // todo is this correct?
+        - 'v' is element of 'Rn' qqq univ_quant True. // todo is this correct?
         - 'V' is an instance of 'vector space'.
         - 'v' 'is element of' 'V'
     - formalized premise:
@@ -415,7 +417,7 @@
         - 'n' is an instance of 'integer number'.
         - 'Rn' is an instance of 'n-dimensional real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'U' is an instance of 'subspace'.
+        - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
         - 'Up' is an instance of 'orthogonal complement'.
         - 'U' 'has orthogonal complement' 'Up'.
