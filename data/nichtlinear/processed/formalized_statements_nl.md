@@ -90,17 +90,18 @@
 - 'canonical basis' is a subclass of 'basis'
 - 'canonical basis' has the associated LaTeX notation $e_1, \dots, e_n$ where $e_i$ has $i$-th component equal to 1 and all other components equal to zero.
 - 'canonical basis' has the alternative german label 'Standardbasis'
-- There is a general statement:
+- Definition of 'canonical basis':
     - formalized setting:
         - 'n' is an instance of 'integer number'
         - 'Rn' is an instance of 'n-dimensional real vector space'
         - 'Rn' 'has dimension' 'n'
-    - formalized assertion
-        - 'b' is an instance of 'canonical basis'
-        - 'b' 'is subset of' 'Rn'
         - 's' is an instance of 'set'
         - 's' 'has element type' 'unit vector'
+        - 's' 'has length' 'n'
         - 's' has the verbal description 'set of all n unit vectors'
+    - formalized assertion
+        - 'b' is an instance of 'canonical basis' // todo should this be part of assertion?
+        - 'b' 'is subset of' 'Rn'
         - There is an equation:
             - full source code: 'b' == 's'
 
@@ -147,7 +148,11 @@
 - 'linear hull' has the alternative english label 'linear span'
 - 'linear hull' is a subclass of 'set'
 - 'linear hull' has the associated LaTeX notation ${\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\}$.
-- There is a general statement:
+- There is a unary operator 'span':
+- The type of argument1 of 'span': is 'set' // todo can we specify that this is a set of vectors?
+- The result type of 'span': is 'vector space'
+- 'span' 'is used to model' 'linear hull'
+- Definition of 'span':
     - full source code: Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die Menge aller Linearkombinationen dieser Vektoren: \[ {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} . \]
     - formalized setting:
         - 'r' is an instance of 'integer number'
@@ -156,15 +161,19 @@
         - 'v' 'has element type' 'vector'
         - 'Rn' is an instance of 'n-dimensional real vector space'
         - 'Rn' 'has dimension' 'n'
-        - // inferred knowledge: The LaTeX code implies that the alpha_i are real numbers.
-        - 'alpha' is an instance of 'sequence of coefficients'
+        - 'alpha' is an instance of 'sequence of coefficients' qqq exis_quant True // todo ist dieser quantor sinnvoll?
         - 'alpha' 'has element type' 'real number'
         - 'i' is an instance of 'integer number'
+        - 's' is an instance of 'set'
+        - 's' 'has element type' 'vector'
     - formalized assertion:
-        - 'lh' is an instance of 'linear hull'
+        - 'si' is an instance of 'vector'
+        - 'si' is element of 's'
         - There is an equation:
-            - full source code: 'lh' == \sum_{i=1}^r ('element of sequence'('alpha', i) * 'element of sequence'(v, i))
-
+            - full source code: 'si' == \sum_{i=1}^r ('element of sequence'('alpha', i) * 'element of sequence'(v, i))
+        - There is an equation:
+            - full source code: 'span'(v) == s
+- // todo wie darstellen, dass span(v) durch die menge aller möglichen vektoren definiert wird?
 
 - // snippet(10)
 - There is a class: 'subspace' @en
@@ -196,7 +205,7 @@
 - The type of argument2 of 'canonical scalar product' is 'vector'.
 - The result type of 'canonical scalar product' is 'real number'. // inferred knowledge: The components x_i and y_i are real numbers, thus the sum is a real number.
 - 'canonical scalar product' has the defining formula $\sum_{i=1}^{n}x_{i}y_{i}$.
-- There is a general statement:
+- Definition of 'canonical scalar product':
     - full source code: Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch \begin{equation} (x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt} \end{equation} das (\textbf{\em kanonische}) \textbf{\em Skalarprodukt}.
     - formalized setting:
         - 'x' is an instance of 'vector'.
@@ -471,7 +480,7 @@
 - 'identity matrix' is a subclass of 'square matrix' // inferred knowledge
 - 'identity matrix' has the associated LaTeX notation $I_n$.
 - 'identity matrix' has the alternative associated LaTeX notation $I$.
-- There is an if-then-statement:
+- There is an if-then-statement: // todo should this be a definition?
     - full source code: Bei ihr sind die Hauptdiagonalelemente Eins, alle anderen Elemente Null.
     - formalized setting:
         - 'In' is an instance of 'square matrix'.
