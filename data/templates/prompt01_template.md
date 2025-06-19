@@ -48,15 +48,19 @@ It might be possible that there is not enough infomation to completely generate 
 The following Complex Formalized Statements are allowed:
 
 - // The following starts a definition statement which can contain either one OR or one AND block. Such blocks can be nested which is represented by their indentation level. Each condition may be preceded by NOT to indicate the negation of the following condition.
-- <arg1> has the definition:
-    - // the following starts an OR-block, i.e. a block of an arbitrary number of conditions which are linked by logical OR
-    - OR
+- Definition of <arg1>:
+    - full source code: <arg1>
+    - formalized setting:
+        - <expression1>
+        - // the setting should define all variables that will be used in the following premise and assertion block
+        - // the setting might be empty
+    - formalized premise:
         - <condition1>
+        - // The condition can consist of (nested) 'OR' and 'AND'-blocks.
+        - // the premise might be empty
+    - formalized assertion:
         - <condition2>
-    - // the following starts an AND-block, i.e. a block of an arbitrary number of conditions which are linked by logical AND
-    - AND
-        - <condition1>
-        - <condition2>
+        - // same as for the premise: The condition can consist of (nested) 'OR' and 'AND'-blocks.
 
 - // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
 - Amend definition of <arg1>:
@@ -68,7 +72,7 @@ The following Complex Formalized Statements are allowed:
         - <expression1>
         - // the setting should define all variables that will be used in the following premise and assertion block
         - // the setting might be empty
-        - formalized premise:
+    - formalized premise:
         - <condition1>
         - // The condition can consist of (nested) 'OR' and 'AND'-blocks.
         - // the premise might be empty

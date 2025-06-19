@@ -430,6 +430,7 @@ class ConversionManager:
         self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+)")
         self.type_of_arg_3_pattern = re.compile(r"(?<=The type of argument3 of )(.+?)(?: is )(.+)")
         self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+)")
+        self.definition_pattern = re.compile(r"(?<=Definition of )(.+)")
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
         self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
         self.math_rel_pattern = re.compile(r"There is a mathematical relation")
@@ -614,7 +615,7 @@ class ConversionManager:
             d["items"][item_name] = eq_dict
 
         # statements
-        elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0:
+        elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0 or len(definition) > 0:
             name_given = False
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
@@ -625,6 +626,11 @@ class ConversionManager:
             elif len(general_statement) > 0:
                 additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
                 new_item_name = f"gen stm "
+            elif len(definition) > 0:
+                definition = self.strip(definition[0])
+                additional_context = {"R4": 'p.I20["mathematical definition"]', "comments": []}
+                new_item_name = f"definition of {definition} "
+
             additional_content = self.get_sub_content(self.lines[i+1:])
             top_level_indent = self.get_indent(self.lines[i+1])
             temp_dict = {"items": {}, "relations": {}}
@@ -665,6 +671,11 @@ class ConversionManager:
                     additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
 
             d = self.add_new_item(d, new_item_name, language, additional_context, skip_entity_order=skip_entity_order)
+            if len(definition) > 0:
+                if definition in self.d["items"].keys():
+                    self.add_relation_inplace(d["items"][definition], "R37", new_item_name)
+                else:
+                    logger.warning(f"no reference item for 'definition of {definition}' found.", extra={"line": i})
             # this should not be used any other way, but just to be sure, reset this
             self.new_item_name = None
         elif len(explanation) > 0:
@@ -711,7 +722,10 @@ class ConversionManager:
                     rel = k
                     string = self.strip(line)
                 string, *qual_string = string.split(self.q_ident)
+                # relations structured arg1 rel arg2
                 res = re.findall(f"(?<=- )(.+?)(?: {rel}:? )(.+?)(?=\\.$|$)", string)
+                # relations of structure arg1 rel. this is mostly legacy content
+                res2 = re.findall(r"(?<=- )(.+?)(?: " + k + r"""(?: |'|"|\.|:|$))""", line)
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     # relation expects an entity
@@ -814,10 +828,8 @@ class ConversionManager:
                             raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
 
                     break
-                # relations of structure arg1 rel.
-                res = re.findall(r"(?<=- )(.+?)(?: " + k + r"""(?: |'|"|\.|:|$))""", line)
-                if len(res) > 0:
-                    arg1 = self.strip(res[0])
+                elif len(res2) > 0:
+                    arg1 = self.strip(res2[0])
                     # functional
                     if v["key"] == "R22":
                         if arg1 in d["relations"]:
@@ -830,11 +842,9 @@ class ConversionManager:
                     elif v["key"] == "R37":
                         # resolve if this is def for property or concept or something else?
                         raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
-                    else:
-                        logger.warning(f"maybe? not processed line: {line}", extra={"line": i})
 
             else:
-                # check if relation already exists
+                # check if relation already exists in other modules but was not explicitly added
                 res = re.findall(r"- '.+?' '(.+?)' '.+?'", line)
                 if res:
                     existing = self.get_existing_relation(res[0])
@@ -1256,7 +1266,10 @@ class ConversionManager:
             res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
-            if "R4" in v.keys() and (v["R4"]["object"] == 'p.I15["implication proposition"]' or v["R4"]["object"] == 'p.I17["equivalence proposition"]' or v["R4"]["object"] == 'p.I14["mathematical proposition"]'):
+            if "R4" in v.keys() and (v["R4"]["object"] == 'p.I15["implication proposition"]' or \
+                v["R4"]["object"] == 'p.I17["equivalence proposition"]' or \
+                v["R4"]["object"] == 'p.I14["mathematical proposition"]' or \
+                v["R4"]["object"] == 'p.I20["mathematical definition"]'):
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
@@ -1587,8 +1600,8 @@ class ConversionManager:
                                     q_str += "]"
                             else:
                                 q_str = ""
-                            out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}\
-                                {key_render}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
+                            out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}'
+                                + f'{key_render}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
         return out
 
     def get_context_r(self, name, statement_item, r=1):
@@ -1703,9 +1716,13 @@ class ConversionManager:
                     only_term = False
                     res = []
                     for term in latex.split(rs):
+                        # for logging down the line
+                        self.latex_og = term
                         res.append(self.convert_latex_to_irklike_str(term, lookup, var_map, statement_item))
 
         if only_term:
+            # for logging down the line
+            self.latex_og = latex
             res = self.convert_latex_to_irklike_str(latex, lookup, var_map, statement_item)
 
         return res
@@ -1724,10 +1741,10 @@ class ConversionManager:
         if isinstance(sp_expr, Tree):
             # todo this is a quick fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
-            logger.warning(f"Warning: lark result not unique, using first option: {sp_expr} for {latex}")
+            logger.warning(f"Warning: lark result not unique, using first structural option: {sp_expr} for {self.latex_og}")
         if len(sp_expr.free_symbols) > 5:
             # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
-            logger.warning(f"equation {latex} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
+            logger.warning(f"equation {self.latex_og} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
 
         # 2. traverse tree
         res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map, statement_item)
