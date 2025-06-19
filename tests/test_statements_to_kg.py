@@ -1,5 +1,5 @@
 import unittest
-import logging
+# import logging
 import sys
 import os
 from os.path import join as pjoin
@@ -14,6 +14,7 @@ import pyirk as p
 from pyirk.utils import GeneralHousekeeperMixin
 
 from stafo import statement_to_kg as s2k
+from stafo.stafo_logging import logger
 from stafo.utils import TESTA_DATA_DIR
 
 from ipydex import IPS, activate_ips_on_exception
@@ -87,9 +88,17 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
     def test_e01__error_messages(self):
         CM = s2k.ConversionManager(TEST_DATA8_FPATH, num_keys=20)
-        with self.assertLogs(logging.getLogger("stafo")) as cm:
+        with self.assertLogs(logger) as cm:
             res_mod_fpath = CM.run()
         self.assertIn("WARNING:stafo:Trying to set 'R3' of 'Signal' with unrecognized item 'reelwertige Funktion', maybe check for typos?", cm.output)
+
+    def test_l01__logs(self):
+        logger.info("test")
+        logger.warning("test", extra={"line": 5})
+        with open("stafo.log", "rt", encoding="utf-8") as f:
+            lines = f.readlines()
+        self.assertIn("- stafo - INFO - test", lines[-2])
+        self.assertIn("- stafo - WARNING - FNL l.5 - test", lines[-1])
 
 
     def test_r01__render_order_ring_problem(self):

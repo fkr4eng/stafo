@@ -479,7 +479,7 @@ class ConversionManager:
                 continue
             # indeted lines should be processed somewhere down below
             elif line.startswith(" "):
-                logger.debug(f"line {i} skipped: {line}")
+                logger.debug(f"skipped: {line}", extra={"line": i})
                 pass
             # markdown comments
             elif line.startswith("<!--"):
@@ -529,6 +529,7 @@ class ConversionManager:
         type_of_arg_2 = re.findall(self.type_of_arg_2_pattern, line)
         type_of_arg_3 = re.findall(self.type_of_arg_3_pattern, line)
         type_of_result = re.findall(self.type_of_result_pattern, line)
+        definition = re.findall(self.definition_pattern, line)
         amend_definition = re.findall(self.amend_definition_pattern, line)
         equation = re.findall(self.equation_pattern, line)
         math_rel = re.findall(self.math_rel_pattern, line)
@@ -609,7 +610,7 @@ class ConversionManager:
 
                         eq_dict[name] = res[0]
             if len(eq_dict.keys()) == 3:
-                logger.warning(f"equation line {i} did not produce any meaningfull content. Check spelling?")
+                logger.warning(f"equation did not produce any meaningfull content. Check spelling?", extra={"line": i})
             d["items"][item_name] = eq_dict
 
         # statements
@@ -678,7 +679,8 @@ class ConversionManager:
                 tag = self.get_entity_type_from_label(related_to)
                 self.add_relation_inplace(self.d[tag][related_to], self.d["relations"]["has explanation"]["key"], verbal_sum)
             else:
-                logger.warning(f"explanation {explanation} did not specify 'related to' {related_to} AND 'verbal summary' {verbal_sum}")
+                logger.warning(f"explanation {explanation} did not specify 'related to' {related_to} AND 'verbal \
+                    summary' {verbal_sum}", extra={"line": i})
         elif len(for_loop) > 0:
             index_var, start, stop = self.strip(for_loop[0])
             additional_content = self.get_sub_content(self.lines[i+1:])
@@ -719,9 +721,9 @@ class ConversionManager:
                             existing = self.get_existing_item(arg2)
                             if existing:
                                 self.add_new_item(self.d, arg2, language, {}, skip_entity_order)
-                                logger.info(f"undeclared class '{arg2}' was matched with {existing}")
+                                logger.info(f"undeclared class '{arg2}' was matched with {existing}", extra={"line": i})
                             elif arg2 not in d["items"].keys():
-                                logger.warning(f"unknown type: '{arg2}'")
+                                logger.warning(f"unknown type: '{arg2}'", extra={"line": i})
 
                         arg2 = self.build_reference(arg2, d)
 
@@ -756,7 +758,7 @@ class ConversionManager:
                     elif v["key"] == "R3":
                         self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None},qualifiers=q_dict, skip_entity_order=skip_entity_order)
                         if qual_string:
-                            logger.warning(f"line {line} has qualifiers for R3, which is neglected")
+                            logger.warning(f"{arg1} has qualifiers for R3, which is neglected", extra={"line": i})
                     # alternative label
                     elif "R77" in v["key"]:
                         if arg1 in d["items"]:
@@ -799,7 +801,7 @@ class ConversionManager:
                     else:
                         if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
-                            logger.info(f"dummy item {arg1} added")
+                            logger.info(f"dummy item {arg1} added", extra={"line": i})
                         if arg1 in d["items"]:
                             self.add_relation_inplace(d["items"][arg1], v["key"], arg2, q_dict)
                         elif arg1 in d["relations"]:
@@ -829,7 +831,7 @@ class ConversionManager:
                         # resolve if this is def for property or concept or something else?
                         raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
                     else:
-                        logger.warning(f"maybe? not processed line {i}: {line}")
+                        logger.warning(f"maybe? not processed line: {line}", extra={"line": i})
 
             else:
                 # check if relation already exists
@@ -838,13 +840,13 @@ class ConversionManager:
                     existing = self.get_existing_relation(res[0])
                     if existing:
                         self.add_new_rel(self.d, res[0], language, {})
-                        logger.info(f"undeclared relation '{res[0]}' was matched with {existing}")
+                        logger.info(f"undeclared relation '{res[0]}' was matched with {existing}", extra={"line": i})
                         # now run the line again with the relation present
                         self.process_line(d, i, line, skip_entity_order=skip_entity_order)
                     else:
-                        logger.warning(f"not processed line {i}: {line}")
+                        logger.warning(f"not processed line: {line}", extra={"line": i})
                 else:
-                    logger.warning(f"not processed line {i}: {line}")
+                    logger.warning(f"not processed line: {line}", extra={"line": i})
 
         return d
 
