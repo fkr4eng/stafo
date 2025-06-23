@@ -170,6 +170,7 @@ versteht man die Menge
  & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}.
 \end{array}
 \]
+\snippet{22}
  Besteht die Matrix~$A$ spaltenweise aus den Vektoren $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$,
 d.\,h.
 \[
@@ -179,13 +180,17 @@ so gilt
 \[
 {\operatorname{im}}\,A={\operatorname{span}}\left\{ a_{1},\ldots,a_{n}\right\} .
 \]
-Das Bild einer Matrix ist die lineare Hülle der Spalten. Das Bild
-ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$. Der \textbf{\em Rang} (engl.
+Das Bild einer Matrix ist die lineare Hülle der Spalten.
+\snippet{23}
+Das Bild
+ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$.
+\snippet{24}
+Der \textbf{\em Rang} (engl.
 \textbf{\em rank}) der Matrix~$A$ ist die Dimension ihres Bildes:
 \begin{equation}
 {\operatorname{rang}}\,A:=\dim({\operatorname{im}}\,A).\label{eq:rank}
 \end{equation}
-
+\snippet{25}
 Der \textbf{\em Kern} oder \textbf{\em Nullraum}
 (engl. \textbf{\em kernel}, \textbf{\em null space}) einer Matrix~$A$ ist definiert
 durch
@@ -193,14 +198,18 @@ durch
 \ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} ,
 \]
 d.\,h. er ist die Lösungsmenge des zur Matrix~$A$ gehörenden linearen
-homogenen Gleichungssystems. Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$.
+homogenen Gleichungssystems.
+\snippet{26}
+Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$.
+\snippet{27}
 Die Dimension des Kerns heißt \textbf{\em Defekt} (engl. \textbf{\em nullity},
 \textbf{\em corank}):
 \begin{equation}
 {\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank}
 \end{equation}
+\snippet{28}
 Der Defekt gibt den \textbf{\em Rangabfall} einer Matrix an.
-
+\snippet{29}
 Mit Bild und Kern sind folgende Zerlegungen der Vektorräume~${\mathbb{R}}^{m}$
 und~${\mathbb{R}}^{n}$ in jeweils direkte Summen zweier Untervektorräume möglich:
 \begin{equation}
@@ -209,20 +218,26 @@ und~${\mathbb{R}}^{n}$ in jeweils direkte Summen zweier Untervektorräume mögli
 {\mathbb{R}}^{n} & = & \ker\,A & \oplus & {\operatorname{im}}\,A^{T}.
 \end{array}\label{eq:zerleg-im-ker}
 \end{equation}
+\snippet{30}
 Bei dieser Zerlegung wird der jeweilige Unterraum (${\operatorname{im}}\,A$ bzw.
 $\ker\,A$) um sein entsprechendes orthogonales Komplement erweitert.
+\snippet{31}
 Die sich zum Vektorraum ${\mathbb{R}}^{n}$ ergänzenden Unterräume haben nur
 den Nullvektor gemeinsam:
 \[
 {\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}.
 \]
+\snippet{32}
 Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl})
 nimmt in diesem Fall die Gestalt
 \begin{equation}
 \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel}
 \end{equation}
-an~\cite{lorenz1992,beutelspacher2001}. Der Zusammenhang~(\ref{eq:dimensions-formel})
+an~\cite{lorenz1992,beutelspacher2001}.
+\snippet{33}
+Der Zusammenhang~(\ref{eq:dimensions-formel})
 ist auch unter der Bezeichnung \textbf{\em Rangsatz} bekannt.
+\snippet{34i}
 \begin{example}
 \label{exa:Bild-und-Kern}Man betrachte die $2\times3$-Matrix
 \[
@@ -243,6 +258,7 @@ Nullraum angeben lassen. Die Dimensionsformel~(\ref{eq:dimensions-formel})
 ist bei diesem Beispiel offensichtlich erfüllt.
 
 \end{example}
+\snippet{35}
 Die Matrix $A\in{\mathbb{R}}^{m\times n}$ wird mitunter synonym zur linearen
 Abbildung bzw. zum linearen Operator
 \[

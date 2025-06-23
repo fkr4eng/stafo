@@ -507,3 +507,110 @@
                                 - full source code: 'element of sequence'('In', i, j) == 0
     - formalized assertion:
         - 'In' is secondary instance of 'identity matrix'
+
+- // snippet(21)
+- There is a class: 'image of matrix' @en
+- 'image of matrix' has the alternative german label 'Bild'
+- 'image of matrix' has the alternative english label 'range'
+- 'image of matrix' is a subclass of 'set' // inferred knowledge
+- 'image of matrix' has the associated LaTeX notation ${\operatorname{im}}\,A$.
+- 'image of matrix' is a subclass of 'set'
+- There is a unary operator: 'imag'
+- The type of argument1 of 'imag' is 'matrix'
+- The result type of 'imag' is 'set'
+- 'imag' has the verbal description 'operator that returns image of matrix'
+- 'imag' 'is used to model' 'image of matrix'
+- Definition of 'imag':
+    - full source code: Unter dem \textbf{\em Bild} (engl. \textbf{\em image}, \textbf{\em range}) einer Matrix versteht man die Menge \[ \begin{array}{lrl} {\operatorname{im}}\,A & := & \left\{ y\in{\mathbb{R}}^{m};\,\exists x\in{\mathbb{R}}^{n}\textrm{ mit }y=Ax\right\} \\  & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}. \end{array} \]
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'.
+        - 'A' 'has number of columns' 'n'.
+        - 'y' is an instance of 'vector'.
+        - 'y' is element of 'Rm'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn' qqq exis_quant True.
+        - 'imA' is an instance of 'set'
+        - 'imA' is subset of 'Rm'
+        - There is an equation:
+            - full source code: y == A * x
+        - 'y' is element of 'imA'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'imag'(A) == 'imA'
+    - // todo nicht sicher ob das so gut dargestellt ist
+
+
+- // manually added (4)
+- There is a binary operator 'row'
+- The type of argument1 of 'row' is 'matrix'
+- The type of argument2 of 'row' is 'integer number'
+- The result type of 'row' is 'vector'
+- There is a binary operator 'column'
+- The type of argument1 of 'column' is 'matrix'
+- The type of argument2 of 'column' is 'integer number'
+- The result type of 'column' is 'vector'
+
+
+- // snippet(22)
+- There is a general statement:
+    - full source code: Besteht die Matrix~$A$ spaltenweise aus den Vektoren $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$, d.\,h. \[ A=\left(a_{1},\ldots,a_{n}\right), \] so gilt \[ {\operatorname{im}}\,A={\operatorname{span}}\left\{ a_{1},\ldots,a_{n}\right\} . \]
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'a' is an instance of 'sequence'.
+        - 'a' 'has element type' 'vector'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'.
+        - 'A' 'has number of columns' 'n'.
+        - For all 'i' from 1 to 'n':
+            - 'element of sequence'(a, i) 'is element of' 'Rm'
+            - There is an equation:
+                - full source code: 'column'('A', 'i') == 'element of sequence'('a', 'i')
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'imag'(A) == 'span'(a)
+
+
+
+- // snippet(23)
+- There is a general statement:
+    - full source code: Das Bild ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$.
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'.
+        - 'imA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'imA' == 'imag'(A)
+    - formalized assertion:
+        - 'imA' 'is subspace of' 'Rm'
+
+- // snippet(24)
+- There is a class: 'rank of matrix' @en
+- 'rank of matrix' has the alternative german label 'Rang'
+- 'rank of matrix' has the alternative label 'rank'
+- There is a unary operator: 'rank op'
+- The type of argument1 of 'rank op' is 'matrix'
+- The result type of 'rank op' is 'integer number'
+- 'rank op' has the verbal description 'operator that returns rank of matrix'
+- 'rank op' has the associated LaTeX notation ${\operatorname{rang}}\,A$.
+- 'rank op' 'is used to model' 'rank of matrix'
+- Definition of 'rank op':
+    - full source code: Der \textbf{\em Rang} (engl. \textbf{\em rank}) der Matrix~$A$ ist die Dimension ihres Bildes: \begin{equation} {\operatorname{rang}}\,A:=\dim({\operatorname{im}}\,A).\label{eq:rank} \end{equation}
+    - formalized setting:
+        - 'A' is an instance of 'matrix'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'rank op'(A) == 'dimension op'('imag'(A))
+
