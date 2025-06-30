@@ -31,6 +31,7 @@ TEST_DATA7_FPATH = os.path.join(TESTA_DATA_DIR, "statements07_inheritance.md")
 TEST_DATA8_FPATH = os.path.join(TESTA_DATA_DIR, "statements08_errors.md")
 TEST_DATA9_FPATH = os.path.join(TESTA_DATA_DIR, "statements09_strings.md")
 TEST_DATA10_FPATH = os.path.join(TESTA_DATA_DIR, "statements10_nested_statements.md")
+TEST_DATA11_FPATH = os.path.join(TESTA_DATA_DIR, "statements11_sys_equations.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -92,7 +93,10 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
             res_mod_fpath = CM.run()
         self.assertIn("WARNING:stafo:Trying to set 'R3' of 'Signal' with unrecognized item 'reelwertige Funktion', maybe check for typos?", cm.output)
 
+    @unittest.expectedFailure
     def test_l01__logs(self):
+        #! todo: this test fails since pytest prevents logging to file. if log_file is specified in pyproject.toml,
+        #! the custom formatter is neglected and the test fails anyways
         logger.info("test")
         logger.warning("test", extra={"line": 5})
         with open("stafo.log", "rt", encoding="utf-8") as f:
@@ -271,3 +275,12 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
             res = f.read()
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
         # todo check if this worked
+
+    def test_n02__system_of_equations(self):
+        CM = s2k.ConversionManager(TEST_DATA11_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+        rel_dict = get_item_by_name(res_mod_fpath, "gen stm l4", mod).scp__premise.get_inv_relations("R20")[0].subject.get_inv_relations()
+        self.assertEqual(len(list(rel_dict.values())[0]), 2)

@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 198
+        self.stop_at_line = 574
 
         self.q_ident = "qqq"
 
@@ -440,6 +440,7 @@ class ConversionManager:
         self.explanation_pattern = re.compile(r"There is an explanation")
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
         self.qualifier_pattern = re.compile(r"(?<=- )(.+?)(?= is a qualifier)")
+        self.system_of_equation_pattern = re.compile(r"There is a system of equations")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
@@ -450,7 +451,8 @@ class ConversionManager:
             "rhs_source": re.compile(r"(?<=- source code of right hand side)(?::? )(.+?)(?=\.$|$)"),
             "lhs_formal": re.compile(r"(?<=- formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
             "rhs_formal": re.compile(r"(?<=- formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
-            "reference": re.compile(r"(?<=- reference)(?::? )(.+)")
+            "reference": re.compile(r"(?<=- reference)(?::? )(.+)"),
+            # "sys_eq": re.compile(r"(?<=- sys_eq)(?::? )(.+)"),
         }
         self.explanation_pattern_dict = {
             "related": re.compile(r"(?<=- related to)(?::? )(.+?)(?=\.$|$)"),
@@ -533,6 +535,7 @@ class ConversionManager:
         definition = re.findall(self.definition_pattern, line)
         amend_definition = re.findall(self.amend_definition_pattern, line)
         equation = re.findall(self.equation_pattern, line)
+        sys_equation = re.findall(self.system_of_equation_pattern, line)
         math_rel = re.findall(self.math_rel_pattern, line)
         equivalence = re.findall(self.equivalence_pattern, line)
         if_then = re.findall(self.if_then_pattern, line)
@@ -612,7 +615,18 @@ class ConversionManager:
                         eq_dict[name] = res[0]
             if len(eq_dict.keys()) == 3:
                 logger.warning(f"equation did not produce any meaningfull content. Check spelling?", extra={"line": i})
+            if "sys_eq" in kwargs.keys():
+                eq_dict["sys_eq"] = kwargs["sys_eq"]
             d["items"][item_name] = eq_dict
+
+        # system of equations
+        elif len(sys_equation) > 0:
+            name = f"system_of_equations_{i}"
+            self.add_new_item(d, name, language, additional_relations={"R4": self.build_reference("system of equations")}, skip_entity_order=True)
+            additional_content = self.get_sub_content(self.lines[i+1:])
+            for ii, line in enumerate(additional_content):
+                self.process_line(d, i+ii+1, line, sys_eq=self.build_reference(name))
+
 
         # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0 or len(definition) > 0:
@@ -1485,7 +1499,7 @@ class ConversionManager:
         insertion_index = 0
         for key, value in subdict["items"].items():
             # if key == "other":
-            if "equation" in key or "math_relation" in key:
+            if ("equation" in key and not "system_of_equations" in key) or "math_relation" in key:
                 if value["type"] in ["equation", "mathematical relation"]:
                     res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
                     for l in res.split("\n"):
@@ -1626,6 +1640,8 @@ class ConversionManager:
             context["snip"] = ""
         if "comments" in eq_dict.keys():
             context["comments"] = eq_dict["comments"]
+        if "sys_eq" in eq_dict.keys():
+            context["sys_eq"] = {"rel": self.build_reference("is part of system"), "obj": eq_dict["sys_eq"]}
 
         if eq_dict["type"] == "equation":
             context["rsgn"] = '"=="'

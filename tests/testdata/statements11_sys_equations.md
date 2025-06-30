@@ -1,0 +1,14 @@
+- There is a class: 'real number'
+- There is a class: 'system of equations'
+- There is a relation: 'is part of system'
+
+- There is a general statement:
+    - formalized setting:
+        - 'a' is an instance of 'real number'.
+        - 'b' is an instance of 'real number'.
+    - formalized premise:
+        - There is a system of equations:
+            - There is an equation:
+                - full source code: 'a' == 2 * 'b'
+            - There is an equation:
+                - full source code: 2 * 'a' == 4 * 'b'

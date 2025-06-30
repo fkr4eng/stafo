@@ -116,7 +116,7 @@ The following Complex Formalized Statements are allowed:
 
 - // The following equation statement can only be used as part of a formalized setting, premise or assertion of one of the previous statements.
 - There is an equation:
-- full source code: <arg1>.
+    - full source code: <arg1>.
     - source code of left hand side: <arg2>.
     - source code of right hand side: <arg3>.
     - formalized left hand side: <expression1>
