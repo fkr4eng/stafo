@@ -264,22 +264,30 @@ Abbildung bzw. zum linearen Operator
 \[
 \mathcal{A}:{\mathbb{R}}^{n}\to{\mathbb{R}}^{m}\quad\text{mit}\quad x\mapsto Ax
 \]
-behandelt. Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$,
+behandelt.
+\snippet{36}
+Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$,
 wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$ die Menge der linearen Abbildungen vom~${\mathbb{R}}^{n}$
 in den~${\mathbb{R}}^{m}$ bezeichnet. Diese Menge besitzt auch die Struktur
 eines Vektorraumes der Dimension $n\cdot m$.
-
+\snippet{37}
 Der \textbf{\em Dualraum} (engl. \textbf{\em dual space}) $({\mathbb{R}}^{n})^{*}$
 des~${\mathbb{R}}^{n}$ besteht aus den auf~${\mathbb{R}}^{n}$ definierten \textbf{\em linearen
 Funktionalen} (\textbf{\em Linearformen}), d.\,h. aus linearen Abbildungen
-${\mathbb{R}}^{n}\to{\mathbb{R}}$. Der Dualraum lässt sich daher auch durch $({\mathbb{R}}^{n})^{*}=L({\mathbb{R}}^{n},{\mathbb{R}})$
-angeben. Die Elemente $\omega\in({\mathbb{R}}^{n})^{*}$ des Dualraums, die
+${\mathbb{R}}^{n}\to{\mathbb{R}}$.
+\snippet{38}
+Der Dualraum lässt sich daher auch durch $({\mathbb{R}}^{n})^{*}=L({\mathbb{R}}^{n},{\mathbb{R}})$
+angeben.
+\snippet{39}
+Die Elemente $\omega\in({\mathbb{R}}^{n})^{*}$ des Dualraums, die
 man auch \textbf{\em Kovektoren} oder \textbf{\em kovariante
 Vektoren} nennt, kann man als Zeilenvektoren
 \[
 \omega=\left(\omega_{1},\ldots,\omega_{n}\right)
 \]
-darstellen. Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler
+darstellen.
+\snippet{40}
+Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler
 reeller Vektorraum mit der kanonischen Basis
 \[
 \begin{array}{lcl}
@@ -288,22 +296,28 @@ e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\
 e_{n}^{*} & = & (0,\ldots,0,1).
 \end{array}
 \]
+\snippet{41}
 Im Zusammenhang mit dem Dualraum nennt man den ursprünglichen Vektorraum
 manchmal auch \textbf{\em Primalraum}.
-
+\snippet{42}
 \begin{remark}
 \label{rem:Isomorphismus-Primal-Dual}Bei den hier betrachteten endlichdimensionalen
 Vektorräumen sind Primal- und Dualraum zueinander \textbf{\em isomorph},
 d.\,h. es existiert eine lineare invertierbare (bijektive) Abbildung
-zwischen beiden Räumen. Mit einer solchen Abbildung, die man \textbf{\em Isomorphismus}
+zwischen beiden Räumen.
+\snippet{43}
+Mit einer solchen Abbildung, die man \textbf{\em Isomorphismus}
 nennt, kann jeder Vektor des Primalraumes eindeutig einem Kovektor
-des Dualraumes zugeordnet werden und umgekehrt. Bei der Darstellung
+des Dualraumes zugeordnet werden und umgekehrt.
+\snippet{44}
+Bei der Darstellung
 der Vektoren und Kovektoren als Spalten- und Zeilenvektoren wird dieser
 Isomorphismus für beide Abbildungsrichtungen durch die \textbf{\em Transposition}
 beschrieben, d.\,h.
 \[
 x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{T}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{T}\in{\mathbb{R}}^{n}.
 \]
+\snippet{45}
 Die Transposition kann in beide Richtungen angewandt werden. In der
 Differentialgeometrie sind je nach Zuordnungsrichtung die Abbildungen
 \[
@@ -316,7 +330,7 @@ Isomorphismen} bezeichnet werden,
 x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{\flat}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{\sharp}\in{\mathbb{R}}^{n}.
 \]
 \end{remark}
-
+\snippet{46}
 Durch Verknüpfung von Elementen aus Primal- und Dualraum erhält man
 mit
 \begin{equation}
@@ -329,6 +343,7 @@ x_{n}
 eine \textbf{\em natürliche Paarung}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$,
 die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt}
 oder \textbf{\em Kontraktion} zwischen Kovektoren und Vektoren auffasst.
+\snippet{47}
 Die Basis $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu
 $\left\{ e_{1},\ldots,e_{n}\right\} $ \textbf{\em duale Basis}, d.\,h.
 es gilt
@@ -342,41 +357,49 @@ mit dem \textbf{\em Kroneckersymbol}
 0 & \textrm{sonst.}
 \end{array}\right.
 \]
-
+\snippet{48}
 Die natürliche Paarung~(\ref{eq:inneres-produkt}) entspricht im
 Wesentlichen dem Skalarprodukt~(\ref{eq:skalarprodukt}), nur dass
 anstelle von zwei Vektoren wie beim Skalarprodukt jetzt ein aus Kovektor
 und Vektor bestehendes Paar als Argumente übergeben werden. Daher
 wird mitunter für~(\ref{eq:inneres-produkt}) auch die Bezeichnung
-Skalarprodukt verwendet~\cite{bishop1980}. In der gleichen Weise,
+Skalarprodukt verwendet~\cite{bishop1980}.
+\snippet{49}
+In der gleichen Weise,
 wie mit dem Skalarprodukt zu einem gegebenen Unterraum $\mathbb{U}\subset{\mathbb{R}}^{n}$
 das orthogonale Komplement~(\ref{eq:ortho-komplement}) konstruiert
 wird, kann man mit der natürlichen Paarung den \textbf{\em Annihilatorraum}
 \begin{equation}
 \mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum}
 \end{equation}
-erzeugen. Für einen gegebenen Unterraum sind sein orthogonales Komplement
+erzeugen.
+\snippet{50}
+Für einen gegebenen Unterraum sind sein orthogonales Komplement
 und sein Annihilatorraum zueinander isomorph, so dass wir ohne Probleme
 in~(\ref{eq:ortho-komplement}) und~(\ref{eq:annihilatorraum})
 die gleiche Bezeichnung verwenden können. Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl})
 gilt daher auch in gleiche Weise für den Annihilatorraum~(\ref{eq:annihilatorraum}).
-
+\snippet{51}
 \section{Felder und Ableitungen\label{sec:Felder-und-Ableitungen}}
-
+\snippet{52i}
 Im vorangegangenen Abschnitt wurden konstante Größen, insbesondere
 Zeilen- und Spaltenvektoren, betrachtet. Hängen diese Größen von einem
 Vektor ab (z.\,B. der Position im Raum), dann wird man auf den Begriff
 des Feldes und damit in den Bereich der Differentialgeometrie geführt.
-
+\snippet{53}
 Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine offene Teilmenge des Vektorraums~${\mathbb{R}}^{n}$.
 Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$ bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$
 nennt man \textbf{\em Skalarfeld} bzw. \textbf{\em Vektorfeld}.
+\snippet{54}
 Eine Abbildung $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \textbf{\em Kovektorfeld},
 \textbf{\em Differentialform ersten Grades}
-(kurz \textbf{\em 1-Form}) oder \textbf{\em Pfaffsche Form}. Bei den betreffenden
+(kurz \textbf{\em 1-Form}) oder \textbf{\em Pfaffsche Form}.
+\snippet{55}
+Bei den betreffenden
 Feldern können weitere Abhängigkeiten auftreten, z.\,B. von der Zeit
 oder von Parametern. Dann würde man von \textbf{\em zeit-} bzw. \textbf{\em parameterabhängigen}
 \textbf{\em Feldern} sprechen.
+\snippet{56}
 
 Neben der Darstellung eines Vektorfeldes
 \[
@@ -391,20 +414,26 @@ wird häufig auch die Notation
 \begin{equation}
 f(x)=f_{1}(x)\frac{\partial}{\partial x_{1}}+\cdots+f_{n}(x)\frac{\partial}{\partial x_{n}}\label{eq:Basisdarstellung-Vektorfelder}
 \end{equation}
-verwendet. Dabei symbolisiert
+verwendet.
+\snippet{57}
+Dabei symbolisiert
 \begin{equation}
 \left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\} \label{eq:Basisvektorfelder}
 \end{equation}
 die kanonische Basis, die im Punkt $x\in\mathcal{M}$ den sogenannten
 \textbf{\em Tangential\-raum}~$T_{x}\mathcal{M}$
 aufspannt (siehe Anmerkungen~\ref{rem:tangentialraum} und~\ref{rem:Notation-Basis-Vektorfelder}).
+\snippet{58}
 Die zugehörige duale Basis wird mit $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $
 bezeichnet, d.\,h.
 \[
 \left\langle {\mathrm{d}} x_{i},\frac{\partial}{\partial x_{j}}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n.
 \]
+\snippet{59}
 Von der dualen Basis wird im Punkt~$x$ der \textbf{\em Kotangential\-raum}~$T_{x}^{*}\mathcal{M}$,
-d.\,h. der Dualraum des Tangentialraumes, aufgespannt. Ein Kovektorfeld~$\omega$
+d.\,h. der Dualraum des Tangentialraumes, aufgespannt.
+\snippet{60}
+Ein Kovektorfeld~$\omega$
 kann dann als Zeilenvektor
 \[
 \omega(x)=\left(\omega_{1}(x),\ldots,\omega_{n}(x)\right)
@@ -414,16 +443,20 @@ oder in der Form
 \omega(x)=\omega_{1}(x){\mathrm{d}} x_{1}+\cdots+\omega_{n}(x){\mathrm{d}} x_{n}\label{eq:Basisdarstellung-Kovektorfelder}
 \end{equation}
 angegeben werden.
+\snippet{61i}
 \begin{remark}
 [Tangentialraum]\label{rem:tangentialraum}Der Begriff Tangentialraum
 ist im Zusammenhang mit differenzierbaren Mannigfaltigkeiten verbreitet~\cite{abraham1983,jaenich2005,lee2006}.
+\snippet{62}
 Für die hier betrachtete offene Teilmenge $\mathcal{M}\subseteq{\mathbb{R}}^{n}$
 kann man den im Punkt $p\in\mathcal{M}$ aufgespannten Tangentialraum
 $T_{p}\mathcal{M}$ durch
 \[
 T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\}
 \]
-definieren. Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$ und
+definieren.
+\snippet{63}
+Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$ und
 $\alpha\cdot(p,v):=(p,\alpha v)$ für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$
 erhält man einen $n$-dimensionalen reellen Vektorraum, der von den
 Basisvektorfeldern
@@ -431,6 +464,7 @@ Basisvektorfeldern
 \frac{\partial}{\partial x_{i}}(p):\,p\mapsto(p,e_{i})\label{eq:Basisvektorfeld-Tangentialraum}
 \end{equation}
 für $i=1,\ldots,n$ aufgespannt wird (siehe Abb.~\ref{fig:Tangentialraum-Skizze}).
+\snippet{64}
 Für verschiedene Punkte $p,q\in\mathcal{M}$ erhält man formal unterschiedliche
 Tangentialräume $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber
 jeweils isomorph (gleichwertig) zum Vektorraum~${\mathbb{R}}^{n}$ sind. Daher
@@ -438,7 +472,7 @@ dürfen wir statt der Tangentialräume einfach den Vektor\-raum~${\mathbb{R}}^{n
 verwenden und können bei den Basisvektorfeldern~(\ref{eq:Basisvektorfeld-Tangentialraum})
 den Bezugspunkt~$p$ weglassen.
 \end{remark}
-
+\snippet{65}
 
 Die Ableitung einer differenzierbaren vektoriellen
 Funktion $F:\mathcal{M}\to{\mathbb{R}}^{m}$ ist die $m\times n$-Matrix

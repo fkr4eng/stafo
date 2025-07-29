@@ -90,6 +90,9 @@
 - 'canonical basis' is a subclass of 'basis'
 - 'canonical basis' has the associated LaTeX notation $e_1, \dots, e_n$ where $e_i$ has $i$-th component equal to 1 and all other components equal to zero.
 - 'canonical basis' has the alternative german label 'Standardbasis'
+- There is a relation: 'has basis'
+- The type of argument1 of 'has basis' is 'vector space'
+- The result type of 'has basis' is 'basis'
 - Definition of 'canonical basis':
     - formalized setting:
         - 'n' is an instance of 'integer number'
@@ -101,6 +104,7 @@
         - 's' has the verbal description 'set of all n unit vectors'
     - formalized assertion
         - 'b' is an instance of 'canonical basis' // todo should this be part of assertion?
+        - 'Rn' 'has basis' 'b'
         - 'b' 'is subset of' 'Rn'
         - There is an equation:
             - full source code: 'b' == 's'
@@ -515,12 +519,39 @@
 - 'image of matrix' is a subclass of 'set' // inferred knowledge
 - 'image of matrix' has the associated LaTeX notation ${\operatorname{im}}\,A$.
 - 'image of matrix' is a subclass of 'set'
-- There is a unary operator: 'imag'
-- The type of argument1 of 'imag' is 'matrix'
-- The result type of 'imag' is 'set'
-- 'imag' has the verbal description 'operator that returns image of matrix'
-- 'imag' 'is used to model' 'image of matrix'
-- Definition of 'imag':
+
+- There is a unary operator: 'image of function op'
+- The type of argument1 of 'image of function op' is 'general function'
+- The result type of 'image of function op' is 'set'
+- 'image of function op' has the verbal description 'operator that returns image of a function'
+- Definition of 'image of function op':
+    - formalized setting:
+        - 'X' is an instance of 'set'
+        - 'Y' is an instance of 'set'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'X'
+        - 'f' 'has codomain' 'Y'
+        - 'x' is an instance of 'mathematical object'
+        - 'y' is an instance of 'mathematical object'
+        - 'imf' is an instance of 'set'
+        - 'imf' is subset of 'Y'
+    - formalized premise:
+        - 'x' is element of 'X' qqq exis_quant True.
+        - 'y' is element of 'imf'
+        - There is an equation:
+            - full source code: y == f(x)
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'image of function op'(f) == 'imf'
+
+
+
+- There is a unary operator: 'image of matrix op'
+- The type of argument1 of 'image of matrix op' is 'matrix'
+- The result type of 'image of matrix op' is 'set'
+- 'image of matrix op' has the verbal description 'operator that returns image of matrix'
+- 'image of matrix op' 'is used to model' 'image of matrix'
+- Definition of 'image of matrix op':
     - full source code: Unter dem \textbf{\em Bild} (engl. \textbf{\em image}, \textbf{\em range}) einer Matrix versteht man die Menge \[ \begin{array}{lrl} {\operatorname{im}}\,A & := & \left\{ y\in{\mathbb{R}}^{m};\,\exists x\in{\mathbb{R}}^{n}\textrm{ mit }y=Ax\right\} \\  & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}. \end{array} \]
     - formalized setting:
         - 'm' is an instance of 'integer number'.
@@ -535,27 +566,29 @@
         - 'y' is an instance of 'vector'.
         - 'y' is element of 'Rm'.
         - 'x' is an instance of 'vector'.
-        - 'x' is element of 'Rn' qqq exis_quant True.
         - 'imA' is an instance of 'set'
         - 'imA' is subset of 'Rm'
+    - formalized premise
+        - 'x' is element of 'Rn' qqq exis_quant True.
         - There is an equation:
             - full source code: y == A * x
         - 'y' is element of 'imA'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'imag'(A) == 'imA'
+            - full source code: 'image of matrix op'(A) == 'imA'
     - // todo nicht sicher ob das so gut dargestellt ist
+    - // todo unify this with def of image above
 
 
 - // manually added (4)
-- There is a binary operator 'row'
-- The type of argument1 of 'row' is 'matrix'
-- The type of argument2 of 'row' is 'integer number'
-- The result type of 'row' is 'vector'
-- There is a binary operator 'column'
-- The type of argument1 of 'column' is 'matrix'
-- The type of argument2 of 'column' is 'integer number'
-- The result type of 'column' is 'vector'
+- There is a binary operator 'row op'
+- The type of argument1 of 'row op' is 'matrix'
+- The type of argument2 of 'row op' is 'integer number'
+- The result type of 'row op' is 'vector'
+- There is a binary operator 'column op'
+- The type of argument1 of 'column op' is 'matrix'
+- The type of argument2 of 'column op' is 'integer number'
+- The result type of 'column op' is 'vector'
 
 
 - // snippet(22)
@@ -568,16 +601,19 @@
         - 'Rm' 'has dimension' 'm'.
         - 'a' is an instance of 'sequence'.
         - 'a' 'has element type' 'vector'.
+        - 'ai' is an instance of 'vector'
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'.
         - 'A' 'has number of columns' 'n'.
         - For all 'i' from 1 to 'n':
-            - 'element of sequence'(a, i) 'is element of' 'Rm'
             - There is an equation:
-                - full source code: 'column'('A', 'i') == 'element of sequence'('a', 'i')
+                - full source code: 'ai' == 'element of sequence'('a', 'i')
+            - 'ai' 'is element of' 'Rm'
+            - There is an equation:
+                - full source code: 'column op'('A', 'i') == 'ai'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'imag'(A) == 'span'(a)
+            - full source code: 'image of matrix op'(A) == 'span'(a)
 
 
 
@@ -592,7 +628,7 @@
         - 'A' 'has number of rows' 'm'.
         - 'imA' is an instance of 'set'
         - There is an equation:
-            - full source code: 'imA' == 'imag'(A)
+            - full source code: 'imA' == 'image of matrix op'(A)
     - formalized assertion:
         - 'imA' 'is subspace of' 'Rm'
 
@@ -612,5 +648,622 @@
         - 'A' is an instance of 'matrix'.
     - formalized assertion:
         - There is an equation:
-            - full source code: 'rank op'(A) == 'dimension op'('imag'(A))
+            - full source code: 'rank op'(A) == 'dimension op'('image of matrix op'(A))
+
+
+- // snippet(25)
+- There is a class: 'kernel of matrix' @en
+- 'kernel of matrix' has the alternative german label 'Kern'
+- 'kernel of matrix' has the alternative german label 'Nullraum'
+- 'kernel of matrix' has the alternative english label 'null space'
+- 'kernel of matrix' is a subclass of 'set' // inferred knowledge
+- 'kernel of matrix' has the associated LaTeX notation $\ker\,A$.
+- There is a unary operator: 'ker'
+- The type of argument1 of 'ker' is 'matrix'
+- The result type of 'ker' is 'set'
+- 'ker' has the verbal description 'operator that returns kernel of matrix'
+- 'ker' 'is used to model' 'kernel of matrix'
+- Definition of 'ker':
+    - full source code: Der \textbf{\em Kern} oder \textbf{\em Nullraum} (engl. \textbf{\em kernel}, \textbf{\em null space}) einer Matrix~$A$ ist definiert durch \[ \ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} , \] d.\,h. er ist die Lösungsmenge des zur Matrix~$A$ gehörenden linearen homogenen Gleichungssystems.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of columns' 'n'. // inferred knowledge: since x is in Rn, A must have n columns
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn'.
+        - 'kA' is an instance of 'set'
+        - 'x' is element of 'kA'
+        - There is an equation:
+            - full source code: A * x == 0
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'ker'(A) == 'kA'
+    - // todo nicht sicher ob das so gut dargestellt ist
+
+
+- // snippet(26)
+- There is a general statement:
+    - full source code: Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'kerA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'kerA' == 'ker'(A)
+    - formalized assertion:
+        - 'kerA' 'is subspace of' 'Rn'
+
+- // manually added (5):
+- There is a class: 'system of equations'
+- There is a relation: 'is part of system of equations'
+
+- // snippet(27)
+- There is a class: 'defect of matrix' @en
+- 'defect of matrix' has the alternative german label 'Defekt'
+- 'defect of matrix' has the alternative english label 'nullity'
+- 'defect of matrix' has the alternative english label 'corank'
+- There is a unary operator: 'corank op'
+- The type of argument1 of 'corank op' is 'matrix'
+- The result type of 'corank op' is 'integer number'
+- 'corank op' has the verbal description 'operator that returns defect of matrix'
+- 'corank op' has the associated LaTeX notation ${\operatorname{corang}}\,A$.
+- 'corank op' 'is used to model' 'defect of matrix'
+- Definition of 'corank op':
+    - full source code: Die Dimension des Kerns heißt \textbf{\em Defekt} (engl. \textbf{\em nullity}, \textbf{\em corank}): \begin{equation} {\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank} \end{equation}
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of columns' 'n'. // inferred knowledge: since ker A is a subspace of Rn, A must have n columns
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'corank op'(A) == 'dimension op'('ker'(A))
+        - There is an equation:
+            - full source code: 'corank op'(A) == n - 'rank op'(A)
+
+
+- // snippet(28)
+- 'defect of matrix' has the alternative german label 'Rangabfall'
+
+- // manually added (6)
+- There is a unary operator: 'transpose'
+
+- // snippet(29)
+- There is a general statement:
+    - full source code: Mit Bild und Kern sind folgende Zerlegungen der Vektorräume~${\mathbb{R}}^{m}$ und~${\mathbb{R}}^{n}$ in jeweils direkte Summen zweier Untervektorräume möglich: \begin{equation} \begin{array}{lcccc} {\mathbb{R}}^{m} & = & {\operatorname{im}}\,A & \oplus & \ker\,A^{T},\\ {\mathbb{R}}^{n} & = & \ker\,A & \oplus & {\operatorname{im}}\,A^{T}. \end{array}\label{eq:zerleg-im-ker} \end{equation}
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'. // inferred knowledge
+        - 'A' 'has number of columns' 'n'. // inferred knowledge
+    - formalized assertion:
+        - There is a system of equations:
+            - There is an equation:
+                - full source code: 'Rm' == 'direct sum of vector spaces'('image of matrix op'(A), 'ker'('transpose'('A')))
+            - There is an equation:
+                - full source code: 'Rn' == 'direct sum of vector spaces'('ker'(A), 'image of matrix op'('transpose'(A)))
+
+- // snippet(30)
+- There is a general statement:
+    - full source code: Bei dieser Zerlegung wird der jeweilige Unterraum (${\operatorname{im}}\,A$ bzw. $\ker\,A$) um sein entsprechendes orthogonales Komplement erweitert.
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'. // inferred knowledge
+        - 'A' 'has number of columns' 'n'. // inferred knowledge
+        - 'imA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'imA' == 'image of matrix op'(A)
+        - 'kerA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'kerA' == 'ker'(A)
+        - 'kerAT' is an instance of 'set'
+        - 'imAT' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'kerAT' == 'ker'('transpose'(A))
+        - There is an equation:
+            - full source code: 'imAT' == 'image of matrix op'('transpose'(A))
+    - formalized assertion:
+        - 'imA' 'has orthogonal complement' 'kerAT'
+        - 'kerA' 'has orthogonal complement' 'imAT'
+
+
+- // snippet(31)
+- There is a general statement:
+    - full source code: Die sich zum Vektorraum ${\mathbb{R}}^{n}$ ergänzenden Unterräume haben nur den Nullvektor gemeinsam: \[ {\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'imA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'imA' == 'image of matrix op'(A)
+        - 'kerA' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'kerA' == 'ker'(A)
+        - 'z' is an instance of 'zero vector'
+        - 's' is an instance of 'set'
+        - 'z' is element of 's'
+    - formalized assertion:
+        - There is a system of equations:
+            - There is an equation:
+                - full source code: 'intersection of sets'('imA', 'ker'('transpose'('A'))) == 's'
+            - There is an equation:
+                - full source code: 'intersection of sets'('kerA', 'image of matrix op'('transpose'('A'))) == 's'
+
+- // snippet(32)
+- There is a general statement:
+    - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt \begin{equation} \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel} \end{equation} an~\cite{lorenz1992,beutelspacher2001}.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of columns' 'n'. // inferred knowledge: since ker A is a subspace of Rn, A must have n columns
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'dimension op'('ker'(A)) + 'dimension op'('image of matrix op'(A)) == n
+            - reference: 'Rangsatz'
+
+- // snippet(33)
+
+- // snippet(34i)
+- // ignored content
+- // manually added (7)
+- There is a general operator: 'general function'
+
+- // snippet(35)
+- There is a class: 'linear mapping' @en
+- 'linear mapping' has the alternative german label 'lineare Abbildung'
+- 'linear mapping' has the alternative german label 'linearer Operator'
+- 'linear mapping' has the alternative english label 'linear operator'
+- 'linear mapping' is a subclass of 'general function'
+- There is a relation: 'is treated synonymously to' // todo merge this relation with existing one
+- 'matrix' 'is treated synonymously to' 'linear mapping'
+- 'is treated synonymously to' has the verbal description 'indicates that two concepts are treated as synonyms in the given context'
+- There is a general statement:
+    - full source code: Die Matrix $A\in{\mathbb{R}}^{m\times n}$ wird mitunter synonym zur linearen Abbildung bzw. zum linearen Operator \[ \mathcal{A}:{\mathbb{R}}^{n}\to{\mathbb{R}}^{m}\quad\text{mit}\quad x\mapsto Ax \] behandelt.
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'A' is an instance of 'matrix'.
+        - 'A' 'has number of rows' 'm'.
+        - 'A' 'has number of columns' 'n'.
+        - 'LA' is an instance of 'linear mapping'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'LA'(x) == A * x
+
+
+- // snippet(36)
+- There is a class: 'set of linear mappings' @en
+- 'set of linear mappings' has the associated LaTeX notation $L(\mathbb{R}^n, \mathbb{R}^m)$.
+- 'set of linear mappings' has the alternative german label 'Menge der linearen Abbildungen'.
+- 'set of linear mappings' is a subclass of 'set'.
+- 'set of linear mappings' 'has element type' 'linear mapping'.
+- There is a binary operator: 'set of linear mappings op'
+- The type of argument1 of 'set of linear mappings op' is 'vector space'
+- The type of argument2 of 'set of linear mappings op' is 'vector space'
+- The result type of 'set of linear mappings op' is 'set of linear mappings'
+- 'set of linear mappings op' is used to model 'set of linear mappings'
+
+
+- There is a general statement:
+    - full source code: Diese Menge besitzt auch die Struktur eines Vektorraumes der Dimension $n\cdot m$.
+    - formalized setting:
+        - 'm' is an instance of 'integer number'.
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' 'has dimension' 'm'.
+        - 'L' is an instance of 'set of linear mappings'
+        - 'd' is an instance of 'integer number'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: L == 'set of linear mappings op'('Rn', 'Rm')
+        - 'L' is secondary instance of 'vector space'.
+        - There is an equation:
+            - full source code: 'd' == 'm' * 'n'
+        - 'L' 'has dimension' 'd'.
+
+
+- // snippet(37)
+- There is a class: 'dual space' @en
+- 'dual space' has the alternative german label 'Dualraum'
+- 'dual space' is a subclass of 'vector space' // inferred knowledge
+- There is a unary operator: 'dual'
+- The type of argument1 of 'dual' is 'vector space'
+- The result type of 'dual' is 'vector space'
+- 'dual' 'is used to model' 'dual space'
+- 'dual space' has the associated LaTeX notation $(\mathbb{R}^n)^*$
+- There is a class: 'linear functional' @en
+- 'linear functional' has the alternative german label 'lineares Funktional'
+- 'linear functional' has the alternative german label 'Linearform'
+- 'linear functional' is a subclass of 'linear mapping' // inferred knowledge
+
+- // snippet(38)
+- There is a general statement:
+    - full source code: Der \textbf{\em Dualraum} (engl. \textbf{\em dual space}) $({\mathbb{R}}^{n})^{*}$ des~${\mathbb{R}}^{n}$ besteht aus den auf~${\mathbb{R}}^{n}$ definierten \textbf{\em linearen Funktionalen} (\textbf{\em Linearformen}), d.\,h. aus linearen Abbildungen ${\mathbb{R}}^{n}\to{\mathbb{R}}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'dualRn' == 'set of linear mappings op'('Rn', 'set of real numbers')
+
+
+
+- // snippet(39)
+- There is a class: 'covector' @en
+- 'covector' has the alternative german label 'Kovektor'
+- 'covector' has the alternative german label 'kovarianter Vektor'
+- 'covector' has the alternative english label 'covariant vector'
+- 'covector' is a subclass of 'vector' // inferred knowledge
+- 'dual space' 'has element type' 'covector'
+- 'covector' has the associated LaTeX notation $(\omega_1, \dots, \omega_n)$
+- There is a general statement:
+    - full source code: Die Elemente $\omega\in({\mathbb{R}}^{n})^{*}$ des Dualraums, die man auch \textbf{\em Kovektoren} oder \textbf{\em kovariante Vektoren} nennt, kann man als Zeilenvektoren \[ \omega=\left(\omega_{1},\ldots,\omega_{n}\right) \] darstellen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'omega' is an instance of 'covector'
+        - 'omega' is element of 'dualRn'
+    - formalized assertion:
+        - 'omega' is secondary instance of 'row vector'
+
+
+- // snippet(40)
+- There is a general statement:
+    - full source code: Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler reeller Vektorraum mit der kanonischen Basis \[ \begin{array}{lcl} e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\  & \vdots\\ e_{n}^{*} & = & (0,\ldots,0,1). \end{array} \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+    - formalized assertion:
+        - 'dualRn' is secondary instance of 'n-dimensional real vector space'.
+        - 'dualRn' 'has dimension' 'n'.
+
+
+
+- // snippet(41)
+- There is a general statement:
+    - full source code: Im Zusammenhang mit dem Dualraum nennt man den ursprünglichen Vektorraum manchmal auch \textbf{\em Primalraum}.
+    - formalized setting:
+        - 'V' is an instance of 'vector space'.
+        - 'dualV' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualV' == 'dual'('V')
+    - formalized assertion:
+        - 'V' has the alternative german label 'Primalraum'.
+
+
+- // manually added (8)
+- There is a relation: 'has inverse mapping'
+- The type of argument1 of 'has inverse mapping' is 'general function'
+- The result type of 'has inverse mapping' is 'general function'
+- 'has inverse mapping' 'is symmetrical' True
+- There is a property: 'linear'
+- There is a property: 'injective'
+- There is a property: 'surjective'
+- There is a property: 'bijective'
+
+- Definition of 'injective':
+    - formalized setting:
+        - 'X' is an instance of 'set'
+        - 'Y' is an instance of 'set'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'X'
+        - 'f' 'has codomain' 'Y'
+        - 'a' is an instance of 'mathematical object'
+        - 'b' is an instance of 'mathematical object'
+        - 'a' is element of 'X'
+        - 'b' is element of 'X'
+    - formalized premise:
+        - There is an if-then-statement
+            - formalized premise:
+                - There is an equation:
+                    - full source code: f(a) == f(b)
+            - formalized assertion
+                - There is an equation:
+                    - full source code: a == b
+    - formalized assertion:
+        - 'f' has the property 'injective'
+
+- Definition of 'surjective':
+    - formalized setting:
+        - 'X' is an instance of 'set'
+        - 'Y' is an instance of 'set'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'X'
+        - 'f' 'has codomain' 'Y'
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'image of function op'(f) == 'Y'
+    - formalized assertion:
+        - 'f' has the property surjective
+
+- Definition of 'bijective':
+    - formalized setting:
+        - 'X' is an instance of 'set'
+        - 'Y' is an instance of 'set'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'X'
+        - 'f' 'has codomain' 'Y'
+    - formalized premise:
+        - 'f' has the property 'injective'
+        - 'f' has the property 'surjective'
+    - formalized assertion:
+        - 'f' has the property 'bijective'
+
+
+- // snippet(42)
+
+- There is a class: 'isomorphism' @en
+- 'isomorphism' has the alternative german label 'Isomorphismus'
+- 'isomorphism' is a subclass of 'general function' // inferred knowledge
+- 'isomorphism' has the property 'linear' // todo can classes have properties?
+- 'isomorphism' has the property 'bijective'
+- There is a relation: 'is isomorphic to'
+- 'is isomorphic to' has the verbal description 'indicates that two algebraic structures are isomorphic'
+- 'is isomorphic to' 'is used to model' 'isomorphism'
+- There is a general statement:
+    - full source code: Bei den hier betrachteten endlichdimensionalen Vektorräumen sind Primal- und Dualraum zueinander \textbf{\em isomorph}, d.\,h. es existiert eine lineare invertierbare (bijektive) Abbildung zwischen beiden Räumen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'V' is an instance of 'vector space'
+        - 'V' has dimension 'n'
+        - 'dualV' is an instance of 'dual space'
+        - 'dualV' has dimension 'n'
+        - There is an equation:
+            - full source code: 'dualV' == 'dual'(V)
+    - formalized assertion:
+        - 'V' 'is isomorphic to' 'dualV'
+
+
+
+- // snippet(43)
+- There is a general statement:
+    - full source code: Mit einer solchen Abbildung, die man \textbf{\em Isomorphismus} nennt, kann jeder Vektor des Primalraumes eindeutig einem Kovektor des Dualraumes zugeordnet werden und umgekehrt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'iso' is an instance of 'isomorphism'.
+        - 'inviso' is an instance of 'isomorphism'.
+        - 'iso' 'has domain' 'Rn'
+        - 'iso' 'has codomain' 'dualRn'
+        - 'iso' 'has inverse mapping' 'inviso'
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn' qqq univ_quant True.
+        - 'omega' is an instance of 'covector'.
+        - 'omega' is element of 'dualRn'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'iso'(x) == 'omega'
+        - There is an equation:
+            - full source code: 'inviso'('omega') == x
+
+
+
+- // snippet(44)
+- There is a general statement:
+    - full source code: Bei der Darstellung der Vektoren und Kovektoren als Spalten- und Zeilenvektoren wird dieser Isomorphismus für beide Abbildungsrichtungen durch die \textbf{\em Transposition} beschrieben, d.\,h. \[ x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{T}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{T}\in{\mathbb{R}}^{n}. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'iso' is an instance of 'isomorphism'.
+        - 'iso' 'has domain' 'Rn'
+        - 'iso' 'has codomain' 'dualRn'
+
+        - 'x' is an instance of 'vector'.
+        - 'x' is seondary instance of 'column vector'
+        - 'x' is element of 'Rn'.
+        - 'omega' is an instance of 'covector'.
+        - 'omega' is secondary instance of 'row vector'
+        - 'omega' is element of 'dualRn'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'iso' == 'transpose' // todo kann man das so schreiben? mit argument?, R47 is same as?
+        - There is an equation:
+            - full source code: 'transpose'(x) == omega
+        - There is an equation:
+            - full source code: 'transpose'(omega) == x
+
+
+
+- // snippet(45)
+- // todo musikalische isomophismen
+
+
+- // snippet(46)
+- There is a binary operator: 'natural pairing' @en.
+- 'natural pairing' has the alternative german label 'natürliche Paarung'.
+- 'natural pairing' has the alternative german label 'duale Paarung'.
+- 'natural pairing' has the alternative german label 'inneres Produkt'.
+- 'natural pairing' has the alternative english label 'inner product'.
+- 'natural pairing' has the alternative german label 'Kontraktion'.
+- 'natural pairing' has the alternative english label 'contraction'.
+- 'natural pairing' has the associated LaTeX notation $\langle \omega, x \rangle$.
+- 'natural pairing' has the alternative associated LaTeX notation $\omega \cdot x$.
+- The type of argument1 of 'natural pairing' is 'covector'.
+- The type of argument2 of 'natural pairing' is 'vector'.
+- The result type of 'natural pairing' is 'real number'. // inferred knowledge
+- Definition of 'natural pairing':
+    - full source code: Durch Verknüpfung von Elementen aus Primal- und Dualraum erhält man mit \begin{equation} \left\langle \omega,x\right\rangle =\omega\cdot x=\left(\omega_{1},\ldots,\omega_{n}\right)\left(\begin{array}{c} x_{1}\\ \vdots\\ x_{n} \end{array}\right)=\sum_{i=1}^{n}\omega_{i}x_{i}\label{eq:inneres-produkt} \end{equation} eine \textbf{\em natürliche Paarung}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em Kontraktion} zwischen Kovektoren und Vektoren auffasst.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'omega' is an instance of 'covector'.
+        - 'omega' is element of 'dualRn'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'Rn'.
+        - 'i' is an instance of 'integer number'.
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'natural pairing'('omega', 'x') == \sum_{i=1}^{n} ('element of sequence'('omega', 'i') * 'element of sequence'('x', 'i'))
+
+
+- // snippet(47)
+- There is a class: 'dual basis' @en
+- 'dual basis' has the alternative german label 'duale Basis'
+- There is a relation: 'is dual basis of'
+- The type of argument1 of 'is dual basis of' is 'dual basis'
+- The result type of 'is dual basis of' is 'basis'
+- 'is dual basis of' 'is used to model' 'dual basis'
+
+- There is a general statement:
+    - full source code: Die Basis $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu $\left\{ e_{1},\ldots,e_{n}\right\} $ \textbf{\em duale Basis}, d.\,h. es gilt \[ \left\langle e_{i}^{*},e_{j}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n \] mit dem \textbf{\em Kroneckersymbol} \[ \delta_{ij}=\left\{ \begin{array}{cl} 1 & \textrm{für }i=j,\\ 0 & \textrm{sonst.} \end{array}\right. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'b' is an instance of 'canonical basis'.
+        - 'bstar' is an instance of 'basis'.
+        - 'Rn' 'has basis' 'b'
+        - 'dualRn' 'has basis' 'bstar'
+        - 'i' is an instance of 'integer number'.
+        - 'j' is an instance of 'integer number'.
+    - formalized premise:
+        - 'bstar' 'is dual basis of' 'b'
+    - formalized assertion:
+        - There is an if-then-statement:
+            - formalized premise:
+                - There is an equation:
+                    - full source code: i == j
+            - formalized assertion:
+                - There is an equation:
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('bstar', j)) == 1
+        - There is an if-then-statement:
+            - formalized premise:
+                - There is an equation:
+                    - full source code: i != j
+            - formalized assertion:
+                - There is an equation:
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('bstar', j)) == 0
+
+
+
+- // snippet(48)
+- 'natural pairing' 'is associated to' 'canonical scalar product'
+
+- // snippet(49)
+- There is a class: 'annihilator space' @en
+- 'annihilator space' has the alternative german label 'Annihilatorraum'
+- 'annihilator space' is a subclass of 'set' // inferred knowledge
+- 'annihilator space' has the associated LaTeX notation $\mathbb{U}^{\perp}$
+- There is a unary operator: 'annihilator'
+- The type of argument1 of 'annihilator' is 'vector space'
+- The result type of 'annihilator' is 'vector space'
+- 'annihilator' 'is used to model' 'annihilator space'
+- Definition of 'annihilator':
+    - full source code: In der gleichen Weise, wie mit dem Skalarprodukt zu einem gegebenen Unterraum $\mathbb{U}\subset{\mathbb{R}}^{n}$ das orthogonale Komplement~(\ref{eq:ortho-komplement}) konstruiert wird, kann man mit der natürlichen Paarung den \textbf{\em Annihilatorraum} \begin{equation} \mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum} \end{equation} erzeugen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'dualRn' is an instance of 'dual space'.
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'U' is an instance of 'vector space'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'omega' is an instance of 'covector'.
+        - 'omega' is element of 'dualRn'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'U' qqq univ_quant True
+        - 'annU' is an instance of 'set'
+        - 'annU' 'is subspace of' 'dualRn'
+        - 'omega' is element of 'annU'
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'natural pairing'('omega', 'x') == 0
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'annihilator'(U) == 'annU'
+
+
+- // snippet(50)
+- There is a general statement:
+    - full source code: Für einen gegebenen Unterraum sind sein orthogonales Komplement und sein Annihilatorraum zueinander isomorph, so dass wir ohne Probleme in~(\ref{eq:ortho-komplement}) und~(\ref{eq:annihilatorraum}) die gleiche Bezeichnung verwenden können.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'vector space'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'orthoU' is an instance of 'orthogonal complement'.
+        - 'U' 'has orthogonal complement' 'orthoU'.
+        - 'annU' is an instance of 'annihilator space'.
+        - There is an equation:
+            - full source code: 'annU' == 'annihilator'(U)
+    - formalized assertion:
+        - 'orthoU' 'is isomorphic to' 'annU'
+
+- There is an explanation:
+    - verbal summary: "The identical notation for orthogonal complement and annihilator space is justified by their isomorphism."
+    - related to: 'orthogonal complement'
+    - related to: 'annihilator space'
+
+- There is a general statement:
+    - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) gilt daher auch in gleiche Weise für den Annihilatorraum~(\ref{eq:annihilatorraum}).
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'U' is an instance of 'vector space'.
+        - 'U' 'is subspace of' 'Rn'.
+        - 'annU' is an instance of 'annihilator space'.
+        - There is an equation:
+            - full source code: 'annU' == 'annihilator'(U)
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'dimension op'(U) + 'dimension op'('annU') == n
+            - reference: 'Dimensionsformel'
 
