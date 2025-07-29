@@ -1,6 +1,6 @@
 - There is a class: 'real number'
 - There is a class: 'system of equations'
-- There is a relation: 'is part of system'
+- There is a relation: 'is part of system of equations'
 
 - There is a general statement:
     - formalized setting:

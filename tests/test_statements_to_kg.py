@@ -32,6 +32,7 @@ TEST_DATA8_FPATH = os.path.join(TESTA_DATA_DIR, "statements08_errors.md")
 TEST_DATA9_FPATH = os.path.join(TESTA_DATA_DIR, "statements09_strings.md")
 TEST_DATA10_FPATH = os.path.join(TESTA_DATA_DIR, "statements10_nested_statements.md")
 TEST_DATA11_FPATH = os.path.join(TESTA_DATA_DIR, "statements11_sys_equations.md")
+TEST_DATA12_FPATH = os.path.join(TESTA_DATA_DIR, "statements12_R77.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -97,6 +98,9 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
     def test_l01__logs(self):
         #! todo: this test fails since pytest prevents logging to file. if log_file is specified in pyproject.toml,
         #! the custom formatter is neglected and the test fails anyways
+        # make sure the correct log messages aren't already present accidentally
+        with open("stafo.log", "at", encoding="utf-8") as f:
+            f.write("\n---------\n")
         logger.info("test")
         logger.warning("test", extra={"line": 5})
         with open("stafo.log", "rt", encoding="utf-8") as f:
@@ -220,6 +224,13 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertNotIn("R8__has_domain_of_argument_1=", res)
         self.assertNotIn("R4__is_instance_of=", res)
 
+    def test_m03__multilingual_labels2(self):
+        CM = s2k.ConversionManager(TEST_DATA12_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt") as f:
+            res = f.read()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+        # todo check if all labels are present
 
     def test_q01__qualifier(self):
         CM = s2k.ConversionManager(TEST_DATA6_FPATH, num_keys=20)

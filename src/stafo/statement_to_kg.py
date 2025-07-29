@@ -120,7 +120,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 574
+        self.stop_at_line = 727
 
         self.q_ident = "qqq"
 
@@ -368,13 +368,13 @@ class ConversionManager:
                 },
                 "has the alternative german label": {
                     "key": "R77__de",
-                    "R1": "has alternative label  de",
+                    "R1": "has alternative label",
                     "prefix": "p",
                     "render": "R77__has_alternative_label__de",
                 },
                 "has the alternative english label": {
                     "key": "R77__en",
-                    "R1": "has alternative label  en",
+                    "R1": "has alternative label",
                     "prefix": "p",
                     "render": "R77__has_alternative_label__en",
                 },
@@ -452,6 +452,7 @@ class ConversionManager:
             "lhs_formal": re.compile(r"(?<=- formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
             "rhs_formal": re.compile(r"(?<=- formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
             "reference": re.compile(r"(?<=- reference)(?::? )(.+)"),
+            "description": re.compile(r"(?<= - description)(?::? )(.+)(?=\.$|$)")
             # "sys_eq": re.compile(r"(?<=- sys_eq)(?::? )(.+)"),
         }
         self.explanation_pattern_dict = {
@@ -657,8 +658,12 @@ class ConversionManager:
             new_item_name +=  f"l{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
+                description = re.findall(self.equation_pattern_dict["description"], l)
                 if len(full_source) > 0:
                     additional_context["comments"].append(full_source[0])
+                    continue
+                elif len(description) > 0:
+                    additional_context["R2"] = description[0]
                     continue
                 formal = re.findall(r"(?<=formalized )(set|pre|ass)", l)
                 # prevent detection of subscope by looking at indentation
@@ -814,7 +819,7 @@ class ConversionManager:
                             # add the alternative label in the correct language
                             if existing_item.__getattr__(f"R1__has_label__{language}") is None:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
-                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict)
+                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict) # arg1 is correct here
                             # remove default R4 typing and possible duplicate types
                             r4_label = d[tag][arg1]["R4"]["object"].split('"')[1]
                             if "Metaclass" in d[tag][arg1]["R4"]["object"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
@@ -855,7 +860,7 @@ class ConversionManager:
                     # definition
                     elif v["key"] == "R37":
                         # resolve if this is def for property or concept or something else?
-                        raise NotImplementedError("This is so old and prob wrong, esp. recursion see other example")
+                        raise NotImplementedError()
 
             else:
                 # check if relation already exists in other modules but was not explicitly added
@@ -1183,6 +1188,8 @@ class ConversionManager:
         elif arg2 in self.d["relations"].keys():
             arg2v = self.d["relations"][arg2]
             key = arg2v['key']
+            if "R77" in key:
+                key = "R77"
             if arg2v["prefix"]:
                 arg2 = f"""{arg2v["prefix"]}.{key}["{arg2v['R1']}"]"""
             else:
@@ -1260,6 +1267,7 @@ class ConversionManager:
         entity_declaration = ""
         output = ""
         count = 0
+        self.stop_at_snip = 47
 
         for key in self.entity_order:
             name = self.key_to_name[key]
@@ -1275,6 +1283,11 @@ class ConversionManager:
                 v = self.prune_dict(v)
             else:
                 entity_declaration += f'{key} = p.create_{tag[:-1]}(R1__has_label="{v["R1"]}")\n'
+
+            # debug
+            if str(self.stop_at_snip) in v["snip"]:
+                44
+
             context = self.built_simple_context(v)
             context["name"] = self.build_reference(name)
             res = render_template(f"basic_entity_template.py", context)
@@ -1504,7 +1517,7 @@ class ConversionManager:
                     res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
                     for l in res.split("\n"):
                         # adapt equation to context manager
-                        if len(l) > 0 and not "snippet" in l:
+                        if len(l) > 0 and not "snippet" in l and not "manually added" in l:
                             out.insert(insertion_index, l)
                 else:
                     raise TypeError()
@@ -1538,14 +1551,14 @@ class ConversionManager:
                 out.append(render_template("integer_range_template.py", context))
             elif "it stm" in key:
                 context = {
-                    "rd": context_recursion_depth,
+                    "rd": context_recursion_depth+1,
                     "indent": " " * 4 * indent_depth,
                     }
 
                 if "formal_set" in value.keys():
                     logger.warning(f'setting found in nested statement {statement_item["key"]} which is not yet supported')
                 if "formal_pre" in value.keys():
-                    premises = self.get_statement_context_recursively(statement_item, value[f"formal_pre"], context_recursion_depth, indent_depth)
+                    premises = self.get_statement_context_recursively(statement_item, value[f"formal_pre"], context_recursion_depth+1, indent_depth)
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["premise"] = []
@@ -1556,7 +1569,7 @@ class ConversionManager:
                             logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
                                 {prem} which is not yet supported')
                 if "formal_ass" in value.keys():
-                    assertions = self.get_statement_context_recursively(statement_item, value[f"formal_ass"], context_recursion_depth, indent_depth)
+                    assertions = self.get_statement_context_recursively(statement_item, value[f"formal_ass"], context_recursion_depth+1, indent_depth)
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["assertion"] = []
@@ -1614,8 +1627,20 @@ class ConversionManager:
                                     q_str += "]"
                             else:
                                 q_str = ""
+
+                            if "R77" == kk:
+                                extra = f" @ p.{self.default_language}"
+                            elif "R77__" in kk:
+                                extra = f' @ p.{kk.split("__")[-1]}'
+                            else:
+                                extra = ""
+
+                            if self.key_wants_literal(kk):
+                                quotes = '"'
+                            else:
+                                quotes = ""
                             out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}'
-                                + f'{key_render}, {self.build_reference(self.rel_interpr[kk])}, {obj_str}{q_str})')
+                                + f'{key_render}, {self.build_reference(self.rel_interpr[kk])}, {quotes}{obj_str}{quotes}{extra}{q_str})')
         return out
 
     def get_context_r(self, name, statement_item, r=1):
@@ -1641,7 +1666,7 @@ class ConversionManager:
         if "comments" in eq_dict.keys():
             context["comments"] = eq_dict["comments"]
         if "sys_eq" in eq_dict.keys():
-            context["sys_eq"] = {"rel": self.build_reference("is part of system"), "obj": eq_dict["sys_eq"]}
+            context["sys_eq"] = {"rel": self.build_reference("is part of system of equations"), "obj": eq_dict["sys_eq"]}
 
         if eq_dict["type"] == "equation":
             context["rsgn"] = '"=="'
