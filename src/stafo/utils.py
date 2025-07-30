@@ -194,3 +194,9 @@ class OneToOneMapping(object):
             if strict:
                 raise
             # else -> pass
+
+
+def cleanup_after_latex(folder_path, filename):
+    del_files = [".4ct", ".4tc", ".aux", ".css", ".dvi", ".html", ".idv", ".lg", ".log", ".tmp", ".xref"]
+    for ending in del_files:
+        os.remove(os.path.join(folder_path, filename.split(".")[0] + ending))

@@ -88,7 +88,54 @@ class Preprocessor():
             f.write(content)
 
 
+"""generated from ChatGPT using the following prompt:
+i have a latex file with line breaks in the middle of normal paragraphs of text, sometimes in the middle of a sentence.
+how can i automatically replace these line breaks with normal spaces, while keeping the relecant line breaks the same?
 
+"""
+
+def fix_latex_linebreaks(text):
+    lines = text.splitlines()
+    new_lines = []
+    buffer = []
+
+    def flush_buffer():
+        if buffer:
+            new_lines.append(" ".join(buffer))
+            buffer.clear()
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped == "":
+            # Empty line → paragraph break
+            flush_buffer()
+            new_lines.append("")
+        elif stripped.startswith("\\") or stripped.startswith("%") or re.match(r"^\s*\\", line):
+            # Command or comment line
+            flush_buffer()
+            new_lines.append(line)
+        elif re.match(r"^\s", line):
+            # Possibly an indented line (e.g., inside an environment)
+            flush_buffer()
+            new_lines.append(line)
+        else:
+            # Normal text line — collect into buffer
+            buffer.append(stripped)
+
+    flush_buffer()  # Flush remaining buffer at end
+    return "\n".join(new_lines)
+
+def clean_tex_linebreaks(filepath):
+
+    with open(filepath, "rt", encoding="utf-8") as f:
+        text = f.read()
+
+    fixed = fix_latex_linebreaks(text)
+
+    with open(filepath, "wt", encoding="utf-8") as f:
+        f.write(fixed)
+
+# todo incorporate into preprocessor
 
 if __name__ == "__main__":
     pre = Preprocessor("nichtlinear", "grundlagen.tex", preamble_name="buch.tex")

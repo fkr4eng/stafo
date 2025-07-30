@@ -1,0 +1,229 @@
+\documentclass[a4paper,twoside,english,ngerman,deutsch,german,sectrefs,envcountsame,envcountchap]{svmono}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\begin{document}
+
+\chapter{Mathematische Grundlagen\label{cha:Grundlagen}}
+Dieser Abschnitt soll dem Leser einige Grundlagen der linearen Abgebra sowie der Vektoranalysis in Erinnerung rufen. Dabei finden auch erste Begriffe und Konzepte der Differentialgeometrie Erwähnung. Zusätzlich werden ausgewählte Aspekte gewöhnlicher Differentialgleichungssysteme behandelt. In diesem Kapitel werden nur diejenigen Aussagen bewiesen, die für regelungstheoretische Anwendungen in den folgenden Abschnitten des Buches von besonderer Bedeutung sind. Zur Festigung und Vertiefung der behandelten Konzepte seien dem Leser die Lehrbücher~\cite{arnold2001,kerner2007} empfohlen.
+
+\section{Lineare Algebra\label{sec:Lineare-Algebra}}
+
+Sei ${\mathbb{R}}$ die Menge der reellen Zahlen. Der $n$-dimensionale reelle Vektorraum wird mit ${\mathbb{R}}^{n}$ bezeichnet, seine Elemente heißen \textbf{\em Vektoren}. Ein Vektor $x\in{\mathbb{R}}^{n}$ wird oft in der Form eines Spaltenvektors
+\begin{equation}
+x=\left(\begin{array}{c} x_{1}\\
+\vdots\\
+x_{n}
+\end{array}\right)\label{eq:vektor-x}
+\end{equation}
+mit den Komponenten $x_{1},\ldots,x_{n}\in{\mathbb{R}}$ dargestellt. Zur Unterscheidung von Zeilenvektoren spricht man hier auch von \textbf{\em kontravarianten Vektoren}.
+
+Die $n$ Einheitsvektoren
+\[
+e_{1}=\left(\begin{array}{c} 1\\ 0\\
+\vdots\\
+0
+\end{array}\right),\ldots,e_{n}=\left(\begin{array}{c}
+0\\
+\vdots\\
+0\\ 1
+\end{array}\right)
+\]
+bilden eine Basis des~${\mathbb{R}}^{n}$, die sogenannte \textbf{\em kanonische Basis} oder \textbf{\em Standardbasis}. Jeder Vektor~(\ref{eq:vektor-x}) lässt sich eindeutig als Linearkombination der Basisvektoren darstellen:
+\[
+x=x_{1}e_{1}+\cdots+x_{n}e_{n}.
+\]
+Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die Menge aller Linearkombinationen dieser Vektoren:
+\[
+{\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} .
+\]
+Die lineare Hülle ist damit ein \textbf{\em Untervektorraum}, \textbf{\em Unterraum} bzw. \textbf{\em Teilraum} (engl. \textbf{\em subspace}) des~${\mathbb{R}}^{n}$, d.\,h. eine nichtleere Teilmenge des~${\mathbb{R}}^{n}$, welche selber ein Vektorraum ist.
+
+Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch
+\begin{equation}
+(x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt}
+\end{equation}
+das (\textbf{\em kanonische}) \textbf{\em Skalarprodukt}. Die Vektoren~$x$ und~$y$ sind zueinander \textbf{\em orthogonal} (bzw. stehen \textbf{\em senkrecht aufeinander}), falls
+\[
+(x,y)=0.
+\]
+
+Jeder Unterraum~$\mathbb{U}$ des ${\mathbb{R}}^{n}$ kann mit Hilfe eines geeignet gewählten weiteren Unterraums~$\mathbb{V}$ zum ursprünglichen Vektorraum~${\mathbb{R}}^{n}$ ergänzt werden, so dass
+\[
+{\mathbb{R}}^{n}=\mathbb{U}+\mathbb{V}.
+\]
+Haben zusätzlich beide Unterräume nur den Nullvektor gemeinsam, d.\,h.
+\[
+\mathbb{U}\cap\mathbb{V}=\{0\},
+\]
+dann ist der Unterraum~$\mathbb{V}$ der \textbf{\em Komplementärraum} (bzw. das \textbf{\em Komplement}) des Unterraumes~$\mathbb{U}$. In diesem Fall kann man den Vektorraum~${\mathbb{R}}^{n}$ als \textbf{\em direkte Summe} der beiden Unterräume darstellen:
+\[
+{\mathbb{R}}^{n}=\mathbb{U}\oplus\mathbb{V}.
+\]
+Die Zerlegung in direkte Summen bedeutet, dass es für jeden Vektor $x\in{\mathbb{R}}^{n}$ eine eindeutige Darstellung $x=u+v$ mit $u\in\mathbb{U}$ und $v\in\mathbb{V}$ gibt.
+
+Die Ergänzung eines Unterraumes~$\mathbb{U}$ um einen Komplmentärraum~$\mathbb{V}$ ist nicht eindeutig. Wählt man den Komplementärraum unter Zuhilfenahme des Skalarprodukts~(\ref{eq:skalarprodukt}) derart, dass alle Vektoren $u\in\mathbb{U}$ und $v\in\mathbb{V}$ jeweils senkrecht aufeinander stehen, so erhält man das \textbf{\em orthogonale Komplement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$:
+\begin{equation}
+\mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement}
+\end{equation}
+Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}):
+\begin{equation}
+\dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl}
+\end{equation}
+
+\begin{example}
+\label{exa:orthogonales-Komplement}Die Vektoren
+\[
+u_{1}=\left(\begin{array}{c} 1\\ 2\\ 3
+\end{array}\right)\quad\text{und}\quad u_{2}=\left(\begin{array}{c}
+4\\ 5\\ 6
+\end{array}\right)
+\]
+spannen im Vektorraum ${\mathbb{R}}^{3}$ einen zweidimensionalen Unterraum $\mathbb{U}={\operatorname{span}}\{u_{1},u_{2}\}$ auf. In \textsc{Maxima}~\cite{maxima,haager2014} definiert man die Spaltenvektoren mit dem Befehl \texttt{columnvector} aus dem Paket \texttt{eigen}. Das orthogonale Komplement ist eindimensional und wird von dem Vektor
+\[
+v=\left(\begin{array}{c} -3\\ 6\\ -3
+\end{array}\right)
+\]
+aufgespannt:
+
+
+\end{example}
+
+Eine $m\times n$-Matrix $A\in{\mathbb{R}}^{m\times n}$ besteht aus $m$ Zeilen und $n$ Spalten:
+\[
+A=\left(\begin{array}{ccc} a_{11} & \cdots & a_{1n}\\
+\vdots & \ddots & \vdots\\
+a_{m1} & \cdots & a_{mn}
+\end{array}\right).
+\]
+Gilt $m=n$, so spricht man von einer \textbf{\em quadratischen} Matrix. Die $n\times n$\textbf{\em -Einheitsmatrix} (engl. \textbf{\em identity matrix}) wird mit~$I_{n}$ bzw. mit~$I$ bezeichnet. Bei ihr sind die Hauptdiagonalelemente Eins, alle anderen Elemente Null.
+
+Unter dem \textbf{\em Bild} (engl. \textbf{\em image}, \textbf{\em range}) einer Matrix versteht man die Menge
+\[
+\begin{array}{lrl}
+{\operatorname{im}}\,A & := & \left\{ y\in{\mathbb{R}}^{m};\,\exists x\in{\mathbb{R}}^{n}\textrm{ mit }y=Ax\right\} \\
+ & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}.
+\end{array}
+\]
+ Besteht die Matrix~$A$ spaltenweise aus den Vektoren $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$,
+d.\,h.
+\[
+A=\left(a_{1},\ldots,a_{n}\right),
+\]
+so gilt
+\[
+{\operatorname{im}}\,A={\operatorname{span}}\left\{ a_{1},\ldots,a_{n}\right\} .
+\]
+Das Bild einer Matrix ist die lineare Hülle der Spalten. Das Bild ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$. Der \textbf{\em Rang} (engl.
+\textbf{\em rank}) der Matrix~$A$ ist die Dimension ihres Bildes:
+\begin{equation}
+{\operatorname{rang}}\,A:=\dim({\operatorname{im}}\,A).\label{eq:rank}
+\end{equation}
+
+Der \textbf{\em Kern} oder \textbf{\em Nullraum} (engl. \textbf{\em kernel}, \textbf{\em null space}) einer Matrix~$A$ ist definiert durch
+\[
+\ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} ,
+\]
+d.\,h. er ist die Lösungsmenge des zur Matrix~$A$ gehörenden linearen homogenen Gleichungssystems. Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$. Die Dimension des Kerns heißt \textbf{\em Defekt} (engl. \textbf{\em nullity},
+\textbf{\em corank}):
+\begin{equation}
+{\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank}
+\end{equation}
+Der Defekt gibt den \textbf{\em Rangabfall} einer Matrix an.
+
+Mit Bild und Kern sind folgende Zerlegungen der Vektorräume~${\mathbb{R}}^{m}$ und~${\mathbb{R}}^{n}$ in jeweils direkte Summen zweier Untervektorräume möglich:
+\begin{equation}
+\begin{array}{lcccc}
+{\mathbb{R}}^{m} & = & {\operatorname{im}}\,A & \oplus & \ker\,A^{T},\\ {\mathbb{R}}^{n} & = & \ker\,A & \oplus & {\operatorname{im}}\,A^{T}.
+\end{array}\label{eq:zerleg-im-ker}
+\end{equation}
+Bei dieser Zerlegung wird der jeweilige Unterraum (${\operatorname{im}}\,A$ bzw. $\ker\,A$) um sein entsprechendes orthogonales Komplement erweitert. Die sich zum Vektorraum ${\mathbb{R}}^{n}$ ergänzenden Unterräume haben nur den Nullvektor gemeinsam:
+\[
+{\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}.
+\]
+Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt
+\begin{equation}
+\dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel}
+\end{equation}
+an~\cite{lorenz1992,beutelspacher2001}. Der Zusammenhang~(\ref{eq:dimensions-formel}) ist auch unter der Bezeichnung \textbf{\em Rangsatz} bekannt.
+\begin{example}
+\label{exa:Bild-und-Kern}Man betrachte die $2\times3$-Matrix
+\[
+A=\left(\begin{array}{ccc} 1 & 2 & 3\\ 4 & 5 & 6
+\end{array}\right).
+\]
+Bild und Kern einer Matrix lassen sich in \textsc{Maxima} mit den Funktionen \texttt{columnspace} bzw. \texttt{nullspace} des Pakets
+\texttt{linearalgebra} berechnen:
+
+
+
+Mit \texttt{rank} und \texttt{nullity} kann man sich zusätzlich die Dimensionen~(\ref{eq:rank}) und~(\ref{eq:corank}) von Bild und Nullraum angeben lassen. Die Dimensionsformel~(\ref{eq:dimensions-formel}) ist bei diesem Beispiel offensichtlich erfüllt.
+
+\end{example}
+Die Matrix $A\in{\mathbb{R}}^{m\times n}$ wird mitunter synonym zur linearen Abbildung bzw. zum linearen Operator
+\[
+\mathcal{A}:{\mathbb{R}}^{n}\to{\mathbb{R}}^{m}\quad\text{mit}\quad x\mapsto Ax
+\]
+behandelt. Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$ die Menge der linearen Abbildungen vom~${\mathbb{R}}^{n}$ in den~${\mathbb{R}}^{m}$ bezeichnet. Diese Menge besitzt auch die Struktur eines Vektorraumes der Dimension $n\cdot m$.
+
+Der \textbf{\em Dualraum} (engl. \textbf{\em dual space}) $({\mathbb{R}}^{n})^{*}$ des~${\mathbb{R}}^{n}$ besteht aus den auf~${\mathbb{R}}^{n}$ definierten \textbf{\em linearen Funktionalen} (\textbf{\em Linearformen}), d.\,h. aus linearen Abbildungen ${\mathbb{R}}^{n}\to{\mathbb{R}}$. Der Dualraum lässt sich daher auch durch $({\mathbb{R}}^{n})^{*}=L({\mathbb{R}}^{n},{\mathbb{R}})$ angeben. Die Elemente $\omega\in({\mathbb{R}}^{n})^{*}$ des Dualraums, die man auch \textbf{\em Kovektoren} oder \textbf{\em kovariante Vektoren} nennt, kann man als Zeilenvektoren
+\[
+\omega=\left(\omega_{1},\ldots,\omega_{n}\right)
+\]
+darstellen. Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler reeller Vektorraum mit der kanonischen Basis
+\[
+\begin{array}{lcl}
+e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\
+ & \vdots\\
+e_{n}^{*} & = & (0,\ldots,0,1).
+\end{array}
+\]
+Im Zusammenhang mit dem Dualraum nennt man den ursprünglichen Vektorraum manchmal auch \textbf{\em Primalraum}.
+
+\begin{remark}
+\label{rem:Isomorphismus-Primal-Dual}Bei den hier betrachteten endlichdimensionalen
+Vektorräumen sind Primal- und Dualraum zueinander \textbf{\em isomorph}, d.\,h. es existiert eine lineare invertierbare (bijektive) Abbildung zwischen beiden Räumen. Mit einer solchen Abbildung, die man \textbf{\em Isomorphismus} nennt, kann jeder Vektor des Primalraumes eindeutig einem Kovektor des Dualraumes zugeordnet werden und umgekehrt. Bei der Darstellung der Vektoren und Kovektoren als Spalten- und Zeilenvektoren wird dieser Isomorphismus für beide Abbildungsrichtungen durch die \textbf{\em Transposition} beschrieben, d.\,h.
+\[
+x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{T}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{T}\in{\mathbb{R}}^{n}.
+\]
+Die Transposition kann in beide Richtungen angewandt werden. In der Differentialgeometrie sind je nach Zuordnungsrichtung die Abbildungen
+\[
+\flat:{\mathbb{R}}^{n}\to({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\sharp:({\mathbb{R}}^{n})^{*}\to{\mathbb{R}}^{n},
+\]
+die aufgrund der verwendeten Symbole mitunter auch als \textbf{\em musikalische Isomorphismen} bezeichnet werden, üblich~\cite{marsden2001,bullo2004,jaenich2005}. Dabei gilt:
+\[
+x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{\flat}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{\sharp}\in{\mathbb{R}}^{n}.
+\]
+\end{remark}
+
+Durch Verknüpfung von Elementen aus Primal- und Dualraum erhält man mit
+\begin{equation}
+\left\langle \omega,x\right\rangle =\omega\cdot x=\left(\omega_{1},\ldots,\omega_{n}\right)\left(\begin{array}{c}
+x_{1}\\
+\vdots\\
+x_{n}
+\end{array}\right)=\sum_{i=1}^{n}\omega_{i}x_{i}\label{eq:inneres-produkt}
+\end{equation}
+eine \textbf{\em natürliche Paarung}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em Kontraktion} zwischen Kovektoren und Vektoren auffasst. Die Basis $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu $\left\{ e_{1},\ldots,e_{n}\right\} $ \textbf{\em duale Basis}, d.\,h. es gilt
+\[
+\left\langle e_{i}^{*},e_{j}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n
+\]
+mit dem \textbf{\em Kroneckersymbol}
+\[
+\delta_{ij}=\left\{ \begin{array}{cl}
+1 & \textrm{für }i=j,\\ 0 & \textrm{sonst.}
+\end{array}\right.
+\]
+
+Die natürliche Paarung~(\ref{eq:inneres-produkt}) entspricht im Wesentlichen dem Skalarprodukt~(\ref{eq:skalarprodukt}), nur dass anstelle von zwei Vektoren wie beim Skalarprodukt jetzt ein aus Kovektor und Vektor bestehendes Paar als Argumente übergeben werden. Daher wird mitunter für~(\ref{eq:inneres-produkt}) auch die Bezeichnung Skalarprodukt verwendet~\cite{bishop1980}. In der gleichen Weise, wie mit dem Skalarprodukt zu einem gegebenen Unterraum $\mathbb{U}\subset{\mathbb{R}}^{n}$ das orthogonale Komplement~(\ref{eq:ortho-komplement}) konstruiert wird, kann man mit der natürlichen Paarung den \textbf{\em Annihilatorraum}
+\begin{equation}
+\mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum}
+\end{equation}
+erzeugen. Für einen gegebenen Unterraum sind sein orthogonales Komplement und sein Annihilatorraum zueinander isomorph, so dass wir ohne Probleme in~(\ref{eq:ortho-komplement}) und~(\ref{eq:annihilatorraum}) die gleiche Bezeichnung verwenden können. Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) gilt daher auch in gleiche Weise für den Annihilatorraum~(\ref{eq:annihilatorraum}).
+
+\end{document}

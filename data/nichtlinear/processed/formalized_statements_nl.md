@@ -232,6 +232,7 @@
 - There is a relation 'is orthogonal to'
 - The type of argument1 of 'is orthogonal to' is 'vector'
 - The result type of 'is orthogonal to' is 'vector'
+- 'is orthogonal to' has the alternative german label 'ist senkrecht zu'
 - 'is orthogonal to' 'is used to model' 'orthogonality'
 - 'is orthogonal to' 'is symmetrical' 'True'.
 - There is an equivalence-statement:

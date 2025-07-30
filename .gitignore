@@ -41,3 +41,5 @@ data/nichtlinear/raw/
 *.tex.backup
 *.clo
 *.idx
+*.fls
+*.fdb_latexmk
