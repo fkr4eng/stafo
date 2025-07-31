@@ -1,10 +1,10 @@
 from rapidfuzz import fuzz, process, utils
-from rapidfuzz.distance import Indel
+from rapidfuzz.distance import Indel, JaroWinkler
 import subprocess
 import pyirk as p
 from ipydex import IPS
 import os
-import re
+import re, regex
 import numpy as np
 
 
@@ -66,6 +66,7 @@ with open(html_fpath, "rt", encoding="utf-8") as f:
     html_source = f.read()
 
 # cleanup html
+## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
 html_source = html_source.replace("<span \nclass", "<span class")
 
 def repl_func(matchobj):
@@ -91,16 +92,21 @@ with open(os.path.join(fpath_head, "tt_style.html"), "rt", encoding="utf-8") as 
 html_source = html_source.replace("<head>", "<head>\n" + style)
 
 # add tooltip
-for word in relevant_words:
+## replace long words first to avoid partial replacements
+for word in sorted(relevant_words, key=len, reverse=True):
     # https://rapidfuzz.github.io/RapidFuzz/Usage/distance/Indel.html#normalized-similarity
-    res = process.extractOne(word, item_label_list[:,1], scorer=Indel.normalized_similarity, processor=utils.default_process, score_cutoff=0.8)
+    res = process.extractOne(word, item_label_list[:,1], scorer=JaroWinkler.normalized_similarity, processor=utils.default_process, score_cutoff=0.8)
     if res:
         context = {"word": word,
                 "tooltip": repr(item_label_list[res[2],0]).replace("<", "&lt").replace(">", "&gt")}
         tt = render_template("html_tooltip_template.html", context)
 
-        html_source = html_source.replace(word, tt)
+        # use regex for variable length lookbehind assertion. avoid replacing the label of I123["label"]
+        # be careful with labels in equations, they will not render if replaced with tooltip
+        html_source = regex.sub(r'(?<!<span class="tooltip">|\["|\\label \{[^\}]+?)'+word+r'(?!<span class="tooltiptext">|"\])', tt, html_source)
+        # html_source = html_source.replace(word, tt)
 
 with open(html_fpath, "wt", encoding="utf-8") as f:
     f.write(html_source)
+
 IPS()

@@ -48,6 +48,7 @@ For manual reviewing the created snippets it is recommended to read the pdf file
 - if multiple qualifiers apply together (e.g. from + to see below), they are separated by comma behind qqq
 - if qualfifiers apply independant (see below), they are separated by qqq
 ### target format
+````
 d = {
     "items": {
         "bob": {
@@ -91,3 +92,4 @@ d = {
 R1111["lives_in"]
 R2222["from"]
 R3333["to"]
+````
