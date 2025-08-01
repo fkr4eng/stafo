@@ -13,7 +13,7 @@ from stafo.preprocessor import clean_tex_linebreaks
 
 fpath = os.path.join(BASE_DIR, "html", "kapitel_2_1.tex")
 clean_tex_linebreaks(fpath)
-output_dir = "res"
+output_dir = os.path.join(BASE_DIR, "html", "res")
 with open(fpath, "rt", encoding="utf-8") as f:
     tex_source = f.read()
 
@@ -98,15 +98,23 @@ for word in sorted(relevant_words, key=len, reverse=True):
     res = process.extractOne(word, item_label_list[:,1], scorer=JaroWinkler.normalized_similarity, processor=utils.default_process, score_cutoff=0.8)
     if res:
         context = {"word": word,
-                "tooltip": repr(item_label_list[res[2],0]).replace("<", "&lt").replace(">", "&gt")}
+                # "tooltip": repr(item_label_list[res[2],0]).replace("<", "&lt").replace(">", "&gt")
+                "tooltip": f'<iframe src="{item_label_list[res[2],0].short_key}.html"></iframe>',
+                "link": f"{item_label_list[res[2],0].short_key}.html",
+        }
         tt = render_template("html_tooltip_template.html", context)
 
         # use regex for variable length lookbehind assertion. avoid replacing the label of I123["label"]
         # be careful with labels in equations, they will not render if replaced with tooltip
-        html_source = regex.sub(r'(?<!<span class="tooltip">|\["|\\label \{[^\}]+?)'+word+r'(?!<span class="tooltiptext">|"\])', tt, html_source)
+        # prevent double replacement
+        html_source = regex.sub(r'(?<!class="tooltip">|\["|\\label \{[^\}]+?)'+word+r'(?!<span class="tooltiptext">|"\])', tt, html_source)
         # html_source = html_source.replace(word, tt)
 
 with open(html_fpath, "wt", encoding="utf-8") as f:
     f.write(html_source)
+
+if False:
+    # this takes a lot of time
+    p.visualization.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=True)
 
 IPS()

@@ -23,6 +23,7 @@ ignored_content/
 match_history/
 snapshots/
 data/nichtlinear/raw/
+html/res/
 
 # tex related files
 *.log
