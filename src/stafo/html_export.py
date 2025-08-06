@@ -84,7 +84,7 @@ while old_html != html_source:
         print("done")
     else:
         print(i)
-html_source = html_source.replace(" ", " ")
+# html_source = html_source.replace(" ", " ")
 
 # add tooltip style
 with open(os.path.join(fpath_head, "tt_style.html"), "rt", encoding="utf-8") as f:
@@ -104,17 +104,16 @@ for word in sorted(relevant_words, key=len, reverse=True):
         }
         tt = render_template("html_tooltip_template.html", context)
 
-        # use regex for variable length lookbehind assertion. avoid replacing the label of I123["label"]
+        # use regex for non-constant length lookbehind assertion. avoid replacing the label of I123["label"]
         # be careful with labels in equations, they will not render if replaced with tooltip
         # prevent double replacement
         html_source = regex.sub(r'(?<!class="tooltip">|\["|\\label \{[^\}]+?)'+word+r'(?!<span class="tooltiptext">|"\])', tt, html_source)
-        # html_source = html_source.replace(word, tt)
 
 with open(html_fpath, "wt", encoding="utf-8") as f:
     f.write(html_source)
 
-if False:
+if True:
     # this takes a lot of time
-    p.visualization.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=True)
+    p.visualization.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False)
 
 IPS()
