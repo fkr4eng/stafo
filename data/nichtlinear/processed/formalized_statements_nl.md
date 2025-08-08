@@ -1,4 +1,3 @@
-
 - // snippet(1i)
 - // ignored content
 
@@ -44,6 +43,16 @@
 - 'integer number' is a subclass of 'real number'
 - 'integer number' has the alternative german label 'Natürliche Zahl'
 
+- Concepts in this snippet:
+    - 'real number'
+    - 'set of real numbers'
+    - 'set'
+    - 'integer number'
+- Defined in this snippet:
+    - 'real number'
+    - 'set of real numbers'
+    - 'integer number'
+
 - // snippet(4)
 - There is a class: 'vector space' @en
 - 'vector space' has the alternative german label 'Vektorraum'
@@ -60,6 +69,21 @@
 - The type of argument1 of 'has dimension' is 'vector space'
 - The result type of 'has dimension' is 'integer number'
 
+- Concepts in this snippet:
+    - 'vector space'
+    - 'set'
+    - 'n-dimensional real vector space'
+    - 'vector'
+    - 'sequence'
+    - 'has element type'
+    - 'has dimension'
+    - 'integer number'
+- Defined in this snippet:
+    - 'vector space'
+    - 'n-dimensional real vector space'
+    - 'vector'
+    - 'has dimension'
+
 - // snippet(5)
 - There is a class: 'vector component' @en
 - 'vector component' has the alternative german label 'Vektorkomponente'
@@ -72,12 +96,32 @@
 - 'column vector' is a subclass of 'vector'
 - 'column vector' has the associated LaTeX notation $\left(\begin{array}{c} x_1 \\ \vdots \\ x_n \end{array}\right)$
 
+- Concepts in this snippet:
+    - 'vector component'
+    - 'real number'
+    - 'has vector component'
+    - 'vector'
+    - 'column vector'
+- Defined in this snippet:
+    - 'vector component'
+    - 'has vector component'
+    - 'column vector'
+
 - // snippet(6)
 - There is a class: 'row vector' @en
 - 'row vector' has the alternative german label 'Zeilenvektor'
 - 'row vector' is a subclass of 'vector'
 - 'column vector' has the alternative german label 'kontravarianter Vektor'
 - 'column vector' has the alternative label 'contravariant vector'
+
+- Concepts in this snippet:
+    - 'row vector'
+    - 'vector'
+    - 'column vector'
+    - 'kontravarianter Vektor'
+    - 'contravariant vector'
+- Defined in this snippet:
+    - 'row vector'
 
 - // snippet(7)
 - There is a class: 'unit vector' @en
@@ -108,6 +152,28 @@
         - 'b' 'is subset of' 'Rn'
         - There is an equation:
             - full source code: 'b' == 's'
+
+- Concepts in this snippet:
+    - 'unit vector'
+    - 'vector'
+    - 'basis'
+    - 'set'
+    - 'canonical basis'
+    - 'has basis'
+    - 'vector space'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'has element type'
+    - 'has length'
+    - 'set of all n unit vectors'
+    - 'is subset of'
+- Defined in this snippet:
+    - 'unit vector'
+    - 'basis'
+    - 'canonical basis'
+    - 'has basis'
+
 
 - // snippet(8)
 - There is a general statement:
@@ -146,6 +212,15 @@
 
 
 
+- Concepts in this snippet:
+    - 'vector'
+    - 'basis'
+    - 'integer number'
+    - 'element of sequence'
+    - 'sequence of coefficients'
+    - 'real number'
+    - 'has element type'
+
 - // snippet(9)
 - There is a class: 'linear hull' @en
 - 'linear hull' has the alternative german label 'lineare Hülle'
@@ -179,6 +254,25 @@
             - full source code: 'span'(v) == s
 - // todo wie darstellen, dass span(v) durch die menge aller möglichen vektoren definiert wird?
 
+- Concepts in this snippet:
+    - 'linear hull'
+    - 'set'
+    - 'span'
+    - 'vector space'
+    - 'integer number'
+    - 'sequence'
+    - 'has element type'
+    - 'vector'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'sequence of coefficients'
+    - 'real number'
+    - 'is element of'
+- Defined in this snippet:
+    - 'linear hull'
+    - 'span'
+
+
 - // snippet(10)
 - There is a class: 'subspace' @en
 - 'subspace' has the alternative german label 'Untervektorraum'
@@ -198,6 +292,18 @@
         - 'Rn' 'has dimension' 'n'
     - formalized assertion:
         - 'lh' 'is subspace of' 'Rn'
+
+- Concepts in this snippet:
+    - 'subspace'
+    - 'vector space'
+    - 'is subspace of'
+    - 'linear hull'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+- Defined in this snippet:
+    - 'subspace'
+    - 'is subspace of'
 
 - // snippet(11)
 - There is a binary operator: 'canonical scalar product' @en.
@@ -223,6 +329,20 @@
     - formalized assertion:
         - There is an equation:
             - full source code: 'canonical scalar product'('x', 'y') == \sum_{'i'=1}^'n' ('element of sequence'('x', 'i') * 'element of sequence'('y', 'i')).
+
+
+- Concepts in this snippet:
+    - 'canonical scalar product'
+    - 'scalar product'
+    - 'vector'
+    - 'real number'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is element of'
+    - 'element of sequence'
+- Defined in this snippet:
+    - 'canonical scalar product'
 
 
 - // snippet(12)
@@ -252,6 +372,20 @@
         - 'x' 'is orthogonal to' 'y'.
 
 
+- Concepts in this snippet:
+    - 'orthogonality'
+    - 'is orthogonal to'
+    - 'vector'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is element of'
+    - 'canonical scalar product'
+- Defined in this snippet:
+    - 'orthogonality'
+    - 'is orthogonal to'
+
+
 - // snippet(13)
 - There is a binary operator: 'sum of vector spaces' @en.
 - 'sum of vector spaces' has the associated LaTeX notation $\mathbb{U} + \mathbb{V}$.
@@ -271,6 +405,16 @@
     - formalized assertion:
         - There is an equation:
             - full source code: 'Rn' == 'sum of vector spaces'(U, V)
+
+- Concepts in this snippet:
+    - 'sum of vector spaces'
+    - 'vector space'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is subspace of'
+- Defined in this snippet:
+    - 'sum of vector spaces'
 
 - // snippet(14)
 - There is a binary operator: 'intersection of sets' @en.
@@ -320,6 +464,30 @@
         - 'U' 'has complement space' 'V' qqq 'is valid on set' 'Rn'.
         - There is an equation:
             - full source code: 'Rn' == 'direct sum of vector spaces'(U, V)
+
+
+- Concepts in this snippet:
+    - 'intersection of sets'
+    - 'set'
+    - 'zero vector'
+    - 'vector'
+    - 'complement space'
+    - 'subspace'
+    - 'has complement space'
+    - 'vector space'
+    - 'direct sum of vector spaces'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is element of'
+    - 'is subspace of'
+    - 'is valid on set'
+- Defined in this snippet:
+    - 'intersection of sets'
+    - 'zero vector'
+    - 'complement space'
+    - 'has complement space'
+    - 'direct sum of vector spaces'
 
 
 - // snippet(15)
@@ -377,6 +545,17 @@
         - There is an equation:
             - full source code: 'v1' == 'v2'
 
+
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'vector space'
+    - 'is subspace of'
+    - 'vector'
+    - 'is element of'
+    - 'direct sum of vector spaces'
 
 
 - // snippet(16)
@@ -443,6 +622,27 @@
             - reference: 'Dimensionsformel'
 
 
+- Concepts in this snippet:
+    - 'n-dimensional real vector space'
+    - 'vector space'
+    - 'is subspace of'
+    - 'has complement space'
+    - 'orthogonal complement'
+    - 'complement space'
+    - 'integer number'
+    - 'has dimension'
+    - 'vector'
+    - 'is element of'
+    - 'is orthogonal to'
+    - 'is valid on set'
+    - 'dimension op'
+    - 'dimension'
+- Defined in this snippet:
+    - 'orthogonal complement'
+    - 'has orthogonal complement'
+    - 'dimension op'
+
+
 - // snippet(17i)
 - // ignored content
 
@@ -459,6 +659,17 @@
 
 - 'matrix' has the associated LaTeX notation $A = \left(\begin{array}{ccc} a_{11} & \cdots & a_{1n}\\ \vdots & \ddots & \vdots\\ a_{m1} & \cdots & a_{mn} \end{array}\right)$.
 
+
+- Concepts in this snippet:
+    - 'matrix'
+    - 'sequence'
+    - 'has number of rows'
+    - 'integer number'
+    - 'has number of columns'
+- Defined in this snippet:
+    - 'matrix'
+    - 'has number of rows'
+    - 'has number of columns'
 
 - // snippet(19)
 - There is a class: 'square matrix' @en
@@ -478,6 +689,16 @@
             - formalized right hand side: n
     - formalized assertion:
         - 'A' 'is secondary instance of' 'square matrix'.
+
+- Concepts in this snippet:
+    - 'square matrix'
+    - 'matrix'
+    - 'integer number'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'is secondary instance of'
+- Defined in this snippet:
+    - 'square matrix'
 
 - // snippet(20)
 - There is a class: 'identity matrix' @en
@@ -512,6 +733,18 @@
                                 - full source code: 'element of sequence'('In', i, j) == 0
     - formalized assertion:
         - 'In' is secondary instance of 'identity matrix'
+
+- Concepts in this snippet:
+    - 'identity matrix'
+    - 'square matrix'
+    - 'integer number'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'element of sequence'
+    - 'is secondary instance of'
+- Defined in this snippet:
+    - 'identity matrix'
+
 
 - // snippet(21)
 - There is a class: 'image of matrix' @en
@@ -592,6 +825,35 @@
 - The result type of 'column op' is 'vector'
 
 
+- Concepts in this snippet:
+    - 'image of matrix'
+    - 'range'
+    - 'set'
+    - 'image of function op'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'mathematical object'
+    - 'is subset of'
+    - 'is element of'
+    - 'image of matrix op'
+    - 'matrix'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'vector'
+    - 'row op'
+    - 'column op'
+- Defined in this snippet:
+    - 'image of matrix'
+    - 'image of function op'
+    - 'image of matrix op'
+    - 'row op'
+    - 'column op'
+
+
 - // snippet(22)
 - There is a general statement:
     - full source code: Besteht die Matrix~$A$ spaltenweise aus den Vektoren $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$, d.\,h. \[ A=\left(a_{1},\ldots,a_{n}\right), \] so gilt \[ {\operatorname{im}}\,A={\operatorname{span}}\left\{ a_{1},\ldots,a_{n}\right\} . \]
@@ -618,6 +880,23 @@
 
 
 
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'sequence'
+    - 'has element type'
+    - 'vector'
+    - 'matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'element of sequence'
+    - 'is element of'
+    - 'column op'
+    - 'image of matrix op'
+    - 'span'
+
+
 - // snippet(23)
 - There is a general statement:
     - full source code: Das Bild ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$.
@@ -632,6 +911,16 @@
             - full source code: 'imA' == 'image of matrix op'(A)
     - formalized assertion:
         - 'imA' 'is subspace of' 'Rm'
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'has number of rows'
+    - 'set'
+    - 'image of matrix op'
+    - 'is subspace of'
 
 - // snippet(24)
 - There is a class: 'rank of matrix' @en
@@ -651,6 +940,18 @@
         - There is an equation:
             - full source code: 'rank op'(A) == 'dimension op'('image of matrix op'(A))
 
+
+- Concepts in this snippet:
+    - 'rank of matrix'
+    - 'rank'
+    - 'rank op'
+    - 'matrix'
+    - 'integer number'
+    - 'dimension op'
+    - 'image of matrix op'
+- Defined in this snippet:
+    - 'rank of matrix'
+    - 'rank op'
 
 - // snippet(25)
 - There is a class: 'kernel of matrix' @en
@@ -684,6 +985,22 @@
     - // todo nicht sicher ob das so gut dargestellt ist
 
 
+- Concepts in this snippet:
+    - 'kernel of matrix'
+    - 'set'
+    - 'ker'
+    - 'matrix'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'has number of columns'
+    - 'vector'
+    - 'is element of'
+- Defined in this snippet:
+    - 'kernel of matrix'
+    - 'ker'
+
+
 - // snippet(26)
 - There is a general statement:
     - full source code: Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$.
@@ -701,6 +1018,21 @@
 - // manually added (5):
 - There is a class: 'system of equations'
 - There is a relation: 'is part of system of equations'
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'set'
+    - 'ker'
+    - 'is subspace of'
+    - 'system of equations'
+    - 'is part of system of equations'
+- Defined in this snippet:
+    - 'system of equations'
+    - 'is part of system of equations'
+
 
 - // snippet(27)
 - There is a class: 'defect of matrix' @en
@@ -728,11 +1060,33 @@
             - full source code: 'corank op'(A) == n - 'rank op'(A)
 
 
+- Concepts in this snippet:
+    - 'defect of matrix'
+    - 'corank op'
+    - 'matrix'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'has number of columns'
+    - 'dimension op'
+    - 'ker'
+    - 'rank op'
+- Defined in this snippet:
+    - 'defect of matrix'
+    - 'corank op'
+
+
 - // snippet(28)
 - 'defect of matrix' has the alternative german label 'Rangabfall'
 
 - // manually added (6)
 - There is a unary operator: 'transpose'
+
+- Concepts in this snippet:
+    - 'defect of matrix'
+    - 'transpose'
+- Defined in this snippet:
+    - 'transpose'
 
 - // snippet(29)
 - There is a general statement:
@@ -753,6 +1107,18 @@
                 - full source code: 'Rm' == 'direct sum of vector spaces'('image of matrix op'(A), 'ker'('transpose'('A')))
             - There is an equation:
                 - full source code: 'Rn' == 'direct sum of vector spaces'('ker'(A), 'image of matrix op'('transpose'(A)))
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'direct sum of vector spaces'
+    - 'image of matrix op'
+    - 'ker'
+    - 'transpose'
 
 - // snippet(30)
 - There is a general statement:
@@ -784,6 +1150,19 @@
         - 'kerA' 'has orthogonal complement' 'imAT'
 
 
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'set'
+    - 'image of matrix op'
+    - 'ker'
+    - 'transpose'
+    - 'has orthogonal complement'
+
 - // snippet(31)
 - There is a general statement:
     - full source code: Die sich zum Vektorraum ${\mathbb{R}}^{n}$ ergänzenden Unterräume haben nur den Nullvektor gemeinsam: \[ {\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}. \]
@@ -808,6 +1187,19 @@
             - There is an equation:
                 - full source code: 'intersection of sets'('kerA', 'image of matrix op'('transpose'('A'))) == 's'
 
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'set'
+    - 'image of matrix op'
+    - 'ker'
+    - 'transpose'
+    - 'zero vector'
+    - 'is element of'
+    - 'intersection of sets'
+
 - // snippet(32)
 - There is a general statement:
     - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt \begin{equation} \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel} \end{equation} an~\cite{lorenz1992,beutelspacher2001}.
@@ -821,6 +1213,16 @@
         - There is an equation:
             - full source code: 'dimension op'('ker'(A)) + 'dimension op'('image of matrix op'(A)) == n
             - reference: 'Rangsatz'
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'matrix'
+    - 'has number of columns'
+    - 'dimension op'
+    - 'ker'
+    - 'image of matrix op'
 
 - // snippet(33)
 
@@ -858,6 +1260,24 @@
             - full source code: 'LA'(x) == A * x
 
 
+- Concepts in this snippet:
+    - 'linear mapping'
+    - 'linear operator'
+    - 'general function'
+    - 'is treated synonymously to'
+    - 'matrix'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'vector'
+    - 'is element of'
+- Defined in this snippet:
+    - 'linear mapping'
+    - 'is treated synonymously to'
+
+
 - // snippet(36)
 - There is a class: 'set of linear mappings' @en
 - 'set of linear mappings' has the associated LaTeX notation $L(\mathbb{R}^n, \mathbb{R}^m)$.
@@ -891,6 +1311,22 @@
         - 'L' 'has dimension' 'd'.
 
 
+- Concepts in this snippet:
+    - 'set of linear mappings'
+    - 'set'
+    - 'has element type'
+    - 'linear mapping'
+    - 'set of linear mappings op'
+    - 'vector space'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is secondary instance of'
+- Defined in this snippet:
+    - 'set of linear mappings'
+    - 'set of linear mappings op'
+
+
 - // snippet(37)
 - There is a class: 'dual space' @en
 - 'dual space' has the alternative german label 'Dualraum'
@@ -904,6 +1340,17 @@
 - 'linear functional' has the alternative german label 'lineares Funktional'
 - 'linear functional' has the alternative german label 'Linearform'
 - 'linear functional' is a subclass of 'linear mapping' // inferred knowledge
+
+- Concepts in this snippet:
+    - 'dual space'
+    - 'vector space'
+    - 'dual'
+    - 'linear functional'
+    - 'linear mapping'
+- Defined in this snippet:
+    - 'dual space'
+    - 'dual'
+    - 'linear functional'
 
 - // snippet(38)
 - There is a general statement:
@@ -919,6 +1366,17 @@
         - There is an equation:
             - full source code: 'dualRn' == 'set of linear mappings op'('Rn', 'set of real numbers')
 
+
+
+- Concepts in this snippet:
+    - 'dual space'
+    - 'dual'
+    - 'n-dimensional real vector space'
+    - 'integer number'
+    - 'has dimension'
+    - 'set of linear mappings op'
+    - 'set of real numbers'
+    - 'linear mapping'
 
 
 - // snippet(39)
@@ -944,6 +1402,21 @@
         - 'omega' is secondary instance of 'row vector'
 
 
+- Concepts in this snippet:
+    - 'covector'
+    - 'covariant vector'
+    - 'vector'
+    - 'dual space'
+    - 'has element type'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is element of'
+    - 'row vector'
+    - 'is secondary instance of'
+- Defined in this snippet:
+    - 'covector'
+
 - // snippet(40)
 - There is a general statement:
     - full source code: Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler reeller Vektorraum mit der kanonischen Basis \[ \begin{array}{lcl} e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\  & \vdots\\ e_{n}^{*} & = & (0,\ldots,0,1). \end{array} \]
@@ -959,6 +1432,14 @@
         - 'dualRn' 'has dimension' 'n'.
 
 
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'is secondary instance of'
 
 - // snippet(41)
 - There is a general statement:
@@ -1031,6 +1512,32 @@
         - 'f' has the property 'bijective'
 
 
+- Concepts in this snippet:
+    - 'vector space'
+    - 'dual space'
+    - 'dual'
+    - 'dualV'
+    - 'has inverse mapping'
+    - 'general function'
+    - 'is symmetrical'
+    - 'linear'
+    - 'injective'
+    - 'surjective'
+    - 'bijective'
+    - 'set'
+    - 'has domain'
+    - 'has codomain'
+    - 'mathematical object'
+    - 'is element of'
+    - 'image of function op'
+- Defined in this snippet:
+    - 'has inverse mapping'
+    - 'linear'
+    - 'injective'
+    - 'surjective'
+    - 'bijective'
+
+
 - // snippet(42)
 
 - There is a class: 'isomorphism' @en
@@ -1054,6 +1561,23 @@
     - formalized assertion:
         - 'V' 'is isomorphic to' 'dualV'
 
+
+
+- Concepts in this snippet:
+    - 'isomorphism'
+    - 'general function'
+    - 'linear'
+    - 'bijective'
+    - 'is isomorphic to'
+    - 'integer number'
+    - 'vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'dualV'
+- Defined in this snippet:
+    - 'isomorphism'
+    - 'is isomorphic to'
 
 
 - // snippet(43)
@@ -1081,6 +1605,21 @@
         - There is an equation:
             - full source code: 'inviso'('omega') == x
 
+
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'isomorphism'
+    - 'has domain'
+    - 'has codomain'
+    - 'has inverse mapping'
+    - 'vector'
+    - 'is element of'
+    - 'covector'
 
 
 - // snippet(44)
@@ -1112,6 +1651,22 @@
             - full source code: 'transpose'(omega) == x
 
 
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'isomorphism'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'column vector'
+    - 'is element of'
+    - 'covector'
+    - 'row vector'
+    - 'transpose'
 
 - // snippet(45)
 - // todo musikalische isomophismen
@@ -1147,6 +1702,28 @@
     - formalized assertion:
         - There is an equation:
             - full source code: 'natural pairing'('omega', 'x') == \sum_{i=1}^{n} ('element of sequence'('omega', 'i') * 'element of sequence'('x', 'i'))
+
+
+- Concepts in this snippet:
+    - 'natural pairing'
+    - 'duale Paarung'
+    - 'inner product'
+    - 'contraction'
+    - 'covector'
+    - 'vector'
+    - 'real number'
+    - 'n'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'dualRn'
+    - 'omega'
+    - 'is element of'
+    - 'element of sequence'
+- Defined in this snippet:
+    - 'natural pairing'
 
 
 - // snippet(47)
@@ -1192,8 +1769,31 @@
 
 
 
+- Concepts in this snippet:
+    - 'dual basis'
+    - 'is dual basis of'
+    - 'basis'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'canonical basis'
+    - 'has basis'
+    - 'natural pairing'
+    - 'element of sequence'
+- Defined in this snippet:
+    - 'dual basis'
+    - 'is dual basis of'
+
 - // snippet(48)
 - 'natural pairing' 'is associated to' 'canonical scalar product'
+
+- Concepts in this snippet:
+    - 'natural pairing'
+    - 'canonical scalar product'
+- Defined in this snippet:
+
 
 - // snippet(49)
 - There is a class: 'annihilator space' @en
@@ -1228,6 +1828,26 @@
     - formalized assertion:
         - There is an equation:
             - full source code: 'annihilator'(U) == 'annU'
+
+
+- Concepts in this snippet:
+    - 'annihilator space'
+    - 'set'
+    - 'annihilator'
+    - 'vector space'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'is subspace of'
+    - 'covector'
+    - 'is element of'
+    - 'vector'
+    - 'natural pairing'
+- Defined in this snippet:
+    - 'annihilator space'
+    - 'annihilator'
 
 
 - // snippet(50)
@@ -1267,4 +1887,25 @@
         - There is an equation:
             - full source code: 'dimension op'(U) + 'dimension op'('annU') == n
             - reference: 'Dimensionsformel'
+
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'vector space'
+    - 'is subspace of'
+    - 'orthogonal complement'
+    - 'has orthogonal complement'
+    - 'annihilator space'
+    - 'annihilator'
+    - 'is isomorphic to'
+    - 'dimension op'
+
+
+- // snippet(51)
+- New section: "Felder und Ableitungen".
+
+- // snippet(52i)
+- // ignored content
 
