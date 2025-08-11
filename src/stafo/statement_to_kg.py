@@ -32,17 +32,6 @@ else:
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
 
-# if u.config_data:
-#     ma_path = os.path.join(u.config_data["ocse_path"], "math1.py")
-#     ct_path = os.path.join(u.config_data["ocse_path"], "control_theory1.py")
-#     ag_path = os.path.join(u.config_data["ocse_path"], "agents1.py")
-
-# else:
-#     ma_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "math1.py")
-#     ct_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "control_theory1.py")
-#     ag_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(p.__file__), "../../..", "irk-data", "ocse")), "agents1.py")
-
-
 def get_md_lines(fpath) -> list[str]:
     with open(fpath, "rt", encoding="utf-8") as f:
         raw = f.read()
@@ -441,6 +430,8 @@ class ConversionManager:
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
         self.qualifier_pattern = re.compile(r"(?<=- )(.+?)(?= is a qualifier)")
         self.system_of_equation_pattern = re.compile(r"There is a system of equations")
+        self.concepts_in_snippet_pattern = re.compile(r"Concepts in this snippet")
+        self.defined_in_snippet_pattern = re.compile(r"Defined in this snippet")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
@@ -544,6 +535,8 @@ class ConversionManager:
         explanation = re.findall(self.explanation_pattern, line)
         for_loop = re.findall(self.for_pattern, line)
         qualifier = re.findall(self.qualifier_pattern, line)
+        concepts = re.findall(self.concepts_in_snippet_pattern, line)
+        defined = re.findall(self.defined_in_snippet_pattern, line)
 
         # debug
         if i == self.stop_at_line:
@@ -730,6 +723,19 @@ class ConversionManager:
             rel = self.strip(qualifier[0])
             if rel in self.d["relations"].keys():
                 self.d["relations"][rel]["is_qualifier"] = True
+        elif len(concepts) > 0 or len(defined) > 0:
+            additional_content = self.get_sub_content(self.lines[i+1:])
+            if self.current_snippet not in d["items"].keys():
+                self.add_new_item(d, self.current_snippet, language, additional_relations={"R4": "snippet"})
+            if len(concepts) > 0:
+                rel_key = self.d["relations"]["contains concept"]["key"] # todo get rid of hardcoded labels here
+            else:
+                rel_key = self.d["relations"]["contains definition of"]["key"]
+            for sub_line in additional_content:
+                arg1 = re.findall(r"- '?(.+?)'?$", sub_line)
+                if arg1:
+                    self.add_relation_inplace(d["items"][self.current_snippet], rel_key, arg1[0])
+
         else:
             for k, v in self.d["relations"].items():
                 # relations of structure: arg1 rel arg2
@@ -1037,7 +1043,7 @@ class ConversionManager:
         """add a relation between subject and object to a given dict (inplace)
 
         Args:
-            d (dict): the dict in which the subject resides
+            subject_dict (dict): the subject dict, eg. d["items"][arg1]
             rel_key (str): relation key (e.g. R16)
             value (str): object, in general the result of self.build_reference
             qualifiers (list or dict): qualifiers for the relation. dict has to have the structure \

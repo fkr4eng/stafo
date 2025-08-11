@@ -8,7 +8,7 @@ import re, regex
 import numpy as np
 
 
-from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, cleanup_after_latex
+from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, del_latex_aux_files
 from stafo.preprocessor import clean_tex_linebreaks
 
 fpath = os.path.join(BASE_DIR, "html", "kapitel_2_1.tex")
@@ -43,7 +43,7 @@ for item in relevant_items:
         item_label_list.append([item, literal.value])
 item_label_list = np.array(item_label_list)
 
-relevant_words = re.findall(r"(?<=\{\\em ).+?(?=\})", tex_source, re.DOTALL) # due to arbitrary linebreaks in tex
+relevant_words = re.findall(r"(?<=\{\\em ).+?(?=\})", tex_source, re.DOTALL) # DOTALL to manage arbitrary linebreaks in tex
 relevant_words = [rw.replace("\n", " ") for rw in relevant_words]
 
 # convert latex to html
@@ -58,7 +58,7 @@ else:
     print("conversion failed!")
 os.chdir(cwd)
 # delete aux files
-cleanup_after_latex(fpath_head, fpath_tail)
+del_latex_aux_files(fpath_head, fpath_tail)
 
 # load html
 html_fpath = os.path.join(fpath_head, output_dir, fpath_tail.replace(".tex", ".html"))
@@ -68,7 +68,7 @@ with open(html_fpath, "rt", encoding="utf-8") as f:
 # cleanup html
 ## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
 html_source = html_source.replace("<span \nclass", "<span class")
-
+## html looks like this: <span class="some">Mat</span><span class="some">rix</span> which needs to be corrected
 def repl_func(matchobj):
     res = ""
     for i in range(1,6):
@@ -84,7 +84,6 @@ while old_html != html_source:
         print("done")
     else:
         print(i)
-# html_source = html_source.replace(" ", " ")
 
 # add tooltip style
 with open(os.path.join(fpath_head, "tt_style.html"), "rt", encoding="utf-8") as f:

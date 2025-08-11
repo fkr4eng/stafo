@@ -1,3 +1,8 @@
+- There is a class: 'snippet'
+- There is a relation: 'contains concept'
+- The type of argument1 of 'contains concept' is 'snippet'
+- There is a relation: 'contains definition of'
+- The type of argument1 of 'contains definition of' is 'snippet'
 - // snippet(1i)
 - // ignored content
 
@@ -1792,7 +1797,6 @@
 - Concepts in this snippet:
     - 'natural pairing'
     - 'canonical scalar product'
-- Defined in this snippet:
 
 
 - // snippet(49)
