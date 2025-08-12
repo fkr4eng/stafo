@@ -158,7 +158,7 @@ with open(module_fpath, "rt", encoding="utf-8") as f:
 with open(fnl_fpath, "rt", encoding="utf-8") as f:
     fnl_source = f.read()
 
-context = {"snippets": []}
+context = {"snippets": [], "css_name": fpath_tail.replace(".tex", ".css")}
 max_num_snippets = int(re.findall(r"\\snippet\{(\d+)i?\}", tex_source)[-1])
 for i in range(1, max_num_snippets):
     html_snip = re.findall(

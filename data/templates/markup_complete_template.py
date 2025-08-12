@@ -103,7 +103,7 @@
     hljs.highlightAll();
 </script>
 
-<link rel="stylesheet" type="text/css" href="nl_latex_copy.css" />
+<link rel="stylesheet" type="text/css" href="{{context.css_name}}" />
 <script>window.MathJax = {
   tex: { tags: "ams" },
   options: {
