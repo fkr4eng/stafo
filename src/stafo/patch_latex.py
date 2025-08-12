@@ -23,10 +23,11 @@ for i in range(1, 51):
     res1 = re.findall(f"(- // snippet\({i}(i?)\).+?)(?=- // snippet)", nl_content, re.DOTALL)
     fnl_snippet = res1[0][0]
     res2 = re.findall(r"(\\snippet\{" + str(i) + r"i?\})(.+?)(?=\\snippet)", latex_content, re.DOTALL)
+    snip_str = res2[0][0]
     latex_snippet = res2[0][1]
     new_nl_content += fnl_snippet
     if "i" in res1[0][1] or "new section" in fnl_snippet.lower():
-        new_latex_content += latex_snippet + "\n"
+        new_latex_content += snip_str + "\n" + latex_snippet + "\n"
         print("skipping", i)
         continue
 
@@ -39,10 +40,11 @@ for i in range(1, 51):
     }
     message = render_template("prompt02_annotate_latex_template.md", context)
     res = llm_api(message)
-    new_latex_content += res + "\n"
+    new_latex_content += snip_str + "\n" + res + "\n"
 
 
-prelim = ["\\newcommand{\setref}[2]{\\textcolor{red}{#1}\\textcolor{green}{#2}}"]
+prelim = ["\\newcommand{\\setref}[2]{\\textcolor{red}{#1}\\textcolor{green}{#2}}",
+          "\\newcommand{\\snippet}[1]{\\\\\\textbf{snippet #1}\\\\}"]
 context = {
     "preliminaries": prelim,
     "content": new_latex_content,
