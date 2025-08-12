@@ -123,8 +123,6 @@
     - 'row vector'
     - 'vector'
     - 'column vector'
-    - 'kontravarianter Vektor'
-    - 'contravariant vector'
 - Defined in this snippet:
     - 'row vector'
 
@@ -171,7 +169,6 @@
     - 'has dimension'
     - 'has element type'
     - 'has length'
-    - 'set of all n unit vectors'
     - 'is subset of'
 - Defined in this snippet:
     - 'unit vector'
@@ -338,7 +335,6 @@
 
 - Concepts in this snippet:
     - 'canonical scalar product'
-    - 'scalar product'
     - 'vector'
     - 'real number'
     - 'integer number'
@@ -832,7 +828,6 @@
 
 - Concepts in this snippet:
     - 'image of matrix'
-    - 'range'
     - 'set'
     - 'image of function op'
     - 'general function'
@@ -948,7 +943,6 @@
 
 - Concepts in this snippet:
     - 'rank of matrix'
-    - 'rank'
     - 'rank op'
     - 'matrix'
     - 'integer number'
@@ -1267,7 +1261,6 @@
 
 - Concepts in this snippet:
     - 'linear mapping'
-    - 'linear operator'
     - 'general function'
     - 'is treated synonymously to'
     - 'matrix'
@@ -1409,7 +1402,6 @@
 
 - Concepts in this snippet:
     - 'covector'
-    - 'covariant vector'
     - 'vector'
     - 'dual space'
     - 'has element type'
@@ -1521,7 +1513,6 @@
     - 'vector space'
     - 'dual space'
     - 'dual'
-    - 'dualV'
     - 'has inverse mapping'
     - 'general function'
     - 'is symmetrical'
@@ -1579,7 +1570,6 @@
     - 'has dimension'
     - 'dual space'
     - 'dual'
-    - 'dualV'
 - Defined in this snippet:
     - 'isomorphism'
     - 'is isomorphic to'
@@ -1711,20 +1701,14 @@
 
 - Concepts in this snippet:
     - 'natural pairing'
-    - 'duale Paarung'
-    - 'inner product'
-    - 'contraction'
     - 'covector'
     - 'vector'
     - 'real number'
-    - 'n'
     - 'integer number'
     - 'n-dimensional real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
-    - 'dualRn'
-    - 'omega'
     - 'is element of'
     - 'element of sequence'
 - Defined in this snippet:

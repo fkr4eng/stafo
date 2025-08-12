@@ -11,7 +11,8 @@ import numpy as np
 from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, del_latex_aux_files
 from stafo.preprocessor import clean_tex_linebreaks
 
-fpath = os.path.join(BASE_DIR, "html", "kapitel_2_1.tex")
+# fpath = os.path.join(BASE_DIR, "html", "kapitel_2_1.tex")
+fpath = os.path.join(BASE_DIR, "html", "nl_latex_copy.tex")
 clean_tex_linebreaks(fpath)
 output_dir = os.path.join(BASE_DIR, "html", "res")
 with open(fpath, "rt", encoding="utf-8") as f:
@@ -85,34 +86,76 @@ while old_html != html_source:
     else:
         print(i)
 
+## remove duplicate whitespaces
+html_source = re.sub(r" +", " ", html_source)
+
 # add tooltip style
 with open(os.path.join(fpath_head, "tt_style.html"), "rt", encoding="utf-8") as f:
     style = f.read()
 html_source = html_source.replace("<head>", "<head>\n" + style)
 
 # add tooltip
-## replace long words first to avoid partial replacements
-for word in sorted(relevant_words, key=len, reverse=True):
-    # https://rapidfuzz.github.io/RapidFuzz/Usage/distance/Indel.html#normalized-similarity
-    res = process.extractOne(word, item_label_list[:,1], scorer=JaroWinkler.normalized_similarity, processor=utils.default_process, score_cutoff=0.8)
-    if res:
-        context = {"word": word,
-                # "tooltip": repr(item_label_list[res[2],0]).replace("<", "&lt").replace(">", "&gt")
-                "tooltip": f'<iframe src="{item_label_list[res[2],0].short_key}.html"></iframe>',
-                "link": f"{item_label_list[res[2],0].short_key}.html",
+pattern = regex.compile(r"""
+(?(DEFINE)                              # Define span pattern
+  (?P<SPAN>
+    <span\b[^>]*>                      # any opening <span ...>
+      (?:
+        [^<]+                          # text nodes
+        | (?&SPAN)                     # nested <span>...</span> (recursion)
+        | <(?!/span)[^>]+>             # any other opening tag (NOT a closing </span>)
+      )*
+    </span>
+  )
+)
+<span\b[^>]*\bid=['"]textcolor\d+['"][^>]*>  # target opening tag with the given id
+  (
+    [^<]+
+    | (?&SPAN)                              # allow nested spans (uses the DEFINEd group)
+    | <(?!/span)[^>]+>
+  )*
+</span>
+<span\b[^>]*\bid=['"]textcolor\d+['"][^>]*>  # target opening tag with the given id
+  (
+    [^<]+
+    | (?&SPAN)                              # allow nested spans (uses the DEFINEd group)
+    | <(?!/span)[^>]+>
+  )*
+</span>
+""", regex.VERBOSE | regex.IGNORECASE)
+def repl_func(matchobj):
+    try:
+        clean_tex = re.sub(r" +", " ", matchobj.group(0).replace("\n", " "))
+        label = re.findall(r"(?<=label:).+?(?=<|$)", clean_tex, re.DOTALL)
+        assert len(label) >= 1, f"label not found in {matchobj}"
+        label = label[-1].replace("\n", " ")
+        item = p.ds.get_item_by_label(label)
+        assert item is not None, f"no item found for label {label, matchobj}"
+        short_key = item.short_key
+        context = {"word": matchobj.group(2),
+                "short_key": short_key,
         }
         tt = render_template("html_tooltip_template.html", context)
+    except Exception as e:
+        print(e)
+        tt = matchobj.group(0) # to show whats not working
+        # tt = matchobj.group(2) # during operation
+    return tt
 
-        # use regex for non-constant length lookbehind assertion. avoid replacing the label of I123["label"]
-        # be careful with labels in equations, they will not render if replaced with tooltip
-        # prevent double replacement
-        html_source = regex.sub(r'(?<!class="tooltip">|\["|\\label \{[^\}]+?)'+word+r'(?!<span class="tooltiptext">|"\])', tt, html_source)
+html_source = regex.sub(pattern, repl_func, html_source)
+
 
 with open(html_fpath, "wt", encoding="utf-8") as f:
     f.write(html_source)
 
 if True:
+    s = p.ds.get_item_by_label("snippet(16)")
+    rels = list(s.get_inv_relations().keys())
+
+    vm = p.visualization.vm
+    for rel in rels:
+        if "contains" in p.ds.get_entity_by_uri(rel).R1.value:
+            vm.REL_BLACKLIST.append(rel)
     # this takes a lot of time
-    p.visualization.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False)
+    vm.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False)
 
 IPS()
