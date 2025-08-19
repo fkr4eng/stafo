@@ -4,184 +4,177 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formalized Knowledge</title>
+
+<!-- Base styling -->
 <style>
     body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 40px;
+        background: #f5f7fa;
+        color: #222;
+        line-height: 1.6;
     }
+
+    h1, h2, h3, b {
+        color: #333;
+    }
+
     .toggle-container {
         display: flex;
         align-items: flex-start;
-        margin-bottom: 20px;
-    }
-    .content-box {
-        padding: 10px;
-        border: 2px solid #333;
-        min-width: 150px;
-        flex: 1;
-    }
-    .toggle-btn {
-        padding: 8px 16px;
-        margin-left: 10px; /* space between content and button */
-        font-size: 14px;
-        cursor: pointer;
-        height: fit-content; /* so button isn't stretched vertically */
-    }
-    .state {
-        display: none; /* hidden templates */
+        margin-bottom: 30px;
+        gap: 15px;
     }
 
+    .content-box {
+        flex: 1;
+        padding: 20px;
+        border-radius: 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        transition: background 0.3s ease;
+        min-width: 250px;
+    }
+
+    .toggle-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+        background: #4a90e2;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+        background: #357ABD;
+        transform: translateY(-1px);
+    }
+
+    .toggle-btn:active {
+        transform: translateY(1px);
+    }
+
+    .state {
+        display: none;
+    }
+
+    /* Tooltips */
     .tooltip {
         position: relative;
         cursor: pointer;
-        color: blue;
+        color: #0066cc;
+        font-weight: 500;
     }
 
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 800px;
-        height: 600px;
-        background-color: #fff;
-        color: #333;
-        text-align: left;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        position: absolute;
-        z-index: 1;
-        top: 1.5em;
-        left: 0;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-        opacity: 0;
-        transform-origin: top left;
-    }
-
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .tooltip .tooltiptext-contains {
-        visibility: hidden;
-        width: 800px;
-        background-color: #fff;
-        color: #333;
-        text-align: left;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        position: absolute;
-        z-index: 1;
-        top: 1.5em;
-        left: 0;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-        opacity: 0;
-        transform-origin: top left;
-    }
-
-    .tooltip:hover .tooltiptext-contains {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .tooltiptext iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        zoom: 0.5;
-        pointer-events: none; /* disable interaction */
-    }
-
-    .inner-tooltiptext iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        zoom: 0.5;
-        pointer-events: none; /* disable interaction */
-    }
-
-    /* Inner tooltip style */
-    .inner-tooltip {
-        position: relative;
-        color: #ffbb00; /* make the special word stand out */
-        cursor: help;
-    }
-
+    .tooltip .tooltiptext,
+    .tooltip .tooltiptext-contains,
     .inner-tooltip .inner-tooltiptext {
         visibility: hidden;
-        width: 800px;
-        height: 600px;
-        background-color: #fff;
-        color: #333;
-        text-align: left;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        position: absolute;
-        z-index: 1;
-        top: 1.5em;
-        left: 0;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-        transition: opacity 0.5s ease, visibility 0.5s ease;
         opacity: 0;
-        transform-origin: top left;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+        width: 800px;
+        max-width: 90vw;
+        background: #fff;
+        color: #333;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 15px;
+        position: absolute;
+        z-index: 10;
+        top: 1.8em;
+
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+
+    }
+    .tooltip .tooltiptext,
+    .inner-tooltip .inner-tooltiptext {
+        height: 600px;
+        left: 3em;
+    }
+    .inner-tooltip .inner-tooltiptext {
+        position: absolute;
+        top: 2em;     /* vertical offset relative to word */
+        left: 0;      /* relative to word */
+        width: 800px; /* still wide */
+        transform: translateX(-200px); /* push it left so it looks fixed-ish */
     }
 
+    .tooltip:hover .tooltiptext,
+    .tooltip:hover .tooltiptext-contains,
     .inner-tooltip:hover .inner-tooltiptext {
         visibility: visible;
         opacity: 1;
     }
 
+    .tooltiptext iframe,
+    .inner-tooltiptext iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        pointer-events: none;
+        zoom: 0.5;
+    }
+
+    .inner-tooltip {
+        color: #ff9800;
+        cursor: help;
+        font-weight: 600;
+        position: relative;
+    }
+
+    /* Markdown output */
     .markdown-output {
-        border: 1px solid #ccc;
-        padding: 15px;
-        background: #f9f9f9;
-        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 18px;
+        background: #fafafa;
+        margin-top: 10px;
+        border-radius: 8px;
         white-space: pre-wrap;
+        font-size: 0.95rem;
     }
-    .markdown-source {
-        display: none; /* hide raw markdown */
-    }
+
     .markdown-output ul {
-        margin-top: -10px;
-        margin-bottom: -10px;
+        margin: 0.5em 0;
         padding-left: 20px;
     }
+
     .markdown-output ul li {
-        margin-top: -10px;
-        margin-bottom: -10px; /* smaller gap between bullets */
-        padding: 0;
+        margin: 0.25em 0;
     }
 
+    pre code {
+        border-radius: 6px;
+        padding: 12px;
+        display: block;
+        font-size: 0.9rem;
+    }
 </style>
+<!-- Code highlighting -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-
-<!-- Highlight.js library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<!-- Load Python syntax support -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>
-    // Automatically highlight all code blocks
-    hljs.highlightAll();
-</script>
+<script>hljs.highlightAll();</script>
 
+<!-- MathJax -->
 <link rel="stylesheet" type="text/css" href="{{context.css_name}}" />
-<script>window.MathJax = {
+<script>
+window.MathJax = {
   tex: { tags: "ams" },
-  options: {
-    processHtmlClass: "state",  // only process elements with this class
-  },
-  startup: {
-    typeset: true  // disable automatic typesetting on startup
-  }
-};</script>
-<script type="text/javascript" async="async" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
-
+  options: { processHtmlClass: "state" },
+  startup: { typeset: true }
+};
+</script>
+<script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
 </head>
 <body>
+
+<h1>Formalized Knowledge</h1>
 
 {% for snippet in context.snippets %}
 <b>Snippet {{snippet.snippet}}</b>
@@ -199,7 +192,6 @@
             </textarea>
             <div class="markdown-output"></div>
         </div>
-
     </div>
     <div class="state" data-button="TeX">
         <pre><code class="language-python">
@@ -207,11 +199,10 @@
         </code></pre>
     </div>
 </div>
-
 {% endfor %}
 
-
 <script>
+// Toggle system
 document.querySelectorAll(".toggle-container").forEach(container => {
     const states = Array.from(container.querySelectorAll(".state"));
     let index = 0;
@@ -222,9 +213,7 @@ document.querySelectorAll(".toggle-container").forEach(container => {
     function showState(i) {
         box.innerHTML = states[i].innerHTML;
         const btnLabel = states[i].dataset.button;
-        if (btnLabel) {
-            button.textContent = btnLabel;
-        }
+        if (btnLabel) button.textContent = btnLabel;
     }
 
     showState(index);
@@ -233,16 +222,15 @@ document.querySelectorAll(".toggle-container").forEach(container => {
         index = (index + 1) % states.length;
         showState(index);
     });
-    //MathJax.typesetPromise().catch(err => console.error(err.message));
 });
-</script>
-<script>
-  // For each markdown block, render the markdown inside the output div
-  document.querySelectorAll('.markdown-block').forEach(block => {
+
+// Markdown renderer
+document.querySelectorAll('.markdown-block').forEach(block => {
     const source = block.querySelector('.markdown-source').value;
     const output = block.querySelector('.markdown-output');
     output.innerHTML = marked.parse(source);
-  });
+});
 </script>
+
 </body>
 </html>
