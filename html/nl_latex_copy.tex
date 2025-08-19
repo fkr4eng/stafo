@@ -10,34 +10,39 @@
 
 
 \newcommand{\setref}[2]{\textcolor{red}{#1}\textcolor{green}{#2}}
-\newcommand{\snippet}[1]{\\\textbf{snippet #1}\\}
+\newcommand{\snippet}[1]{\textbf{snippet #1}\\}
+\newcommand{\eqnote}[2]{\textcolor{orange}{#1}\textcolor{magenta}{\texttt{#2}}}
 
 \begin{document}
 
 \snippet{1i}
 
+
 \chapter{Mathematische Grundlagen\label{cha:Grundlagen}}
 Dieser Abschnitt soll dem Leser einige Grundlagen der linearen Abgebra sowie der Vektoranalysis in Erinnerung rufen. Dabei finden auch erste Begriffe und Konzepte der Differentialgeometrie Erwähnung. Zusätzlich werden ausgewählte Aspekte gewöhnlicher Differentialgleichungssysteme behandelt. In diesem Kapitel werden nur diejenigen Aussagen bewiesen, die für regelungstheoretische Anwendungen in den folgenden Abschnitten des Buches von besonderer Bedeutung sind. Zur Festigung und Vertiefung der behandelten Konzepte seien dem Leser die Lehrbücher~\cite{arnold2001,kerner2007} empfohlen.
 
+
 \snippet{2}
+
 
 \section{Lineare Algebra\label{sec:Lineare-Algebra}}
 
+
 \snippet{3}
-Sei ${\mathbb{R}}$ die \setref{Menge}{label:set} der \setref{reellen Zahlen}{label:real number}.
+Sei ${\mathbb{R}}$\eqnote{concepts:'set of real numbers'}{statement:''} die \setref{Menge}{label:set} der \setref{reellen Zahlen}{label:real number}.
 
 \snippet{4}
-Der \setref{$n$-dimensionale reelle Vektorraum}{label:n-dimensional real vector space} wird mit ${\mathbb{R}}^{n}$ bezeichnet, seine Elemente heißen \setref{\textbf{\em Vektoren}}{label:vector}.
+Der \setref{$n$-dimensionale reelle Vektorraum}{label:n-dimensional real vector space} wird mit ${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet, seine Elemente heißen \setref{\textbf{\em Vektoren}}{label:vector}.
 
 \snippet{5}
-Ein \setref{Vektor}{label:vector} $x\in{\mathbb{R}}^{n}$ wird oft in der Form eines \setref{Spaltenvektors}{label:column vector}
+Ein \setref{Vektor}{label:vector} $x\in{\mathbb{R}}^{n}$\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of'}{statement:'vector' 'is element of' 'n-dimensional real vector space'} wird oft in der Form eines \setref{Spaltenvektors}{label:column vector}
 \begin{equation}
 x=\left(\begin{array}{c} x_{1}\\
 \vdots\\
 x_{n}
 \end{array}\right)\label{eq:vektor-x}
-\end{equation}
-mit den \setref{Komponenten}{label:vector component} $x_{1},\ldots,x_{n}\in{\mathbb{R}}$ dargestellt.
+\end{equation}\eqnote{concepts:'column vector', 'vector component'}{statement:''}
+mit den \setref{Komponenten}{label:vector component} $x_{1},\ldots,x_{n}\in{\mathbb{R}}$\eqnote{concepts:'vector component', 'set of real numbers', 'is element of'}{statement:'vector component' 'is element of' 'set of real numbers'} dargestellt.
 
 \snippet{6}
 Zur Unterscheidung von \setref{Zeilenvektoren}{label:row vector} spricht man hier auch von \textbf{\em \setref{kontravarianten Vektoren}{label:column vector}}.
@@ -53,68 +58,70 @@ e_{1}=\left(\begin{array}{c} 1\\ 0\\
 \vdots\\
 0\\ 1
 \end{array}\right)
-\]
+\]\eqnote{concepts:'unit vector', 'column vector', 'vector component'}{statement:''}
 bilden eine \setref{Basis}{label:basis} des~${\mathbb{R}}^{n}$, die sogenannte \textbf{\em \setref{kanonische Basis}{label:canonical basis}} oder \textbf{\em \setref{Standardbasis}{label:canonical basis}}.
 
 \snippet{8}
-Jeder \setref{Vektor}{label:vector}~(\ref{eq:vektor-x}) lässt sich eindeutig als Linearkombination der \setref{Basis}{label:basis}vektoren darstellen:
+Jeder \setref{Vektor}{label:vector}~(\eqref{eq:vektor-x}) lässt sich eindeutig als Linearkombination der \setref{Basis}{label:basis}vektoren darstellen:
 \[
 x=x_{1}e_{1}+\cdots+x_{n}e_{n}.
-\]
+\]\eqnote{concepts:'vector', 'basis', 'integer number', 'element of sequence'}{statement:x == $\sum_{i=1}^n$ ('element of sequence'(x, i) * 'element of sequence'(b, i))}
 
 \snippet{9}
 Die \setref{\textbf{\em lineare Hülle}}{label:linear hull} (engl. \setref{\textbf{\em linear hull}}{label:linear hull}, \setref{linear span}{label:linear hull}) von $r$ \setref{Vektoren}{label:vector} $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die \setref{Menge}{label:set} aller Linearkombinationen dieser \setref{Vektoren}{label:vector}:
 \[
 {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} .
-\]
+\]\eqnote{concepts:'linear hull', 'span', 'vector', 'n-dimensional real vector space', 'is element of', 'set of real numbers', 'sequence of coefficients', 'real number', 'set'}{statement:'span'(v) == s}
 
 \snippet{10}
-Die \setref{lineare Hülle}{label:linear hull} ist damit ein \setref{Untervektorraum}{label:subspace}, \setref{Unterraum}{label:subspace} bzw. \setref{Teilraum}{label:subspace} (engl. \setref{subspace}{label:subspace}) des~${\mathbb{R}}^{n}$, d.\,h. eine nichtleere Teilmenge des~${\mathbb{R}}^{n}$, welche selber ein \setref{Vektorraum}{label:vector space} ist.
+Die \setref{lineare Hülle}{label:linear hull} ist damit ein \setref{Untervektorraum}{label:subspace}, \setref{Unterraum}{label:subspace} bzw. \setref{Teilraum}{label:subspace} (engl. \setref{subspace}{label:subspace}) des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''}, d.\,h. eine nichtleere Teilmenge des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''}, welche selber ein \setref{Vektorraum}{label:vector space} ist.
 
 \snippet{11}
-Zu zwei \setref{Vektoren}{label:vector} $x,y\in{\mathbb{R}}^{n}$ definiert man durch
+Zu zwei \setref{Vektoren}{label:vector} $x,y\in{\mathbb{R}}^{n}$\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of'}{statement:'vector' 'is element of' 'n-dimensional real vector space'} definiert man durch
 \begin{equation}
 (x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt}
 \end{equation}
+\eqnote{concepts:'canonical scalar product', 'vector', 'integer number', 'element of sequence'}{statement:'canonical scalar product'('x', 'y') == $\sum_{'i'=1}^{'n'}$ ('element of sequence'('x', 'i') * 'element of sequence'('y', 'i'))}
 das (\textbf{\em \setref{kanonisches Skalarprodukt}{label:canonical scalar product}}) \textbf{\em \setref{Skalarprodukt}{label:canonical scalar product}}.
 
 \snippet{12}
 Die \setref{Vektoren}{label:vector}~$x$ und~$y$ sind zueinander \textbf{\em \setref{orthogonal}{label:orthogonality}} (bzw. stehen \textbf{\em senkrecht aufeinander}), falls
 \[
 (x,y)=0.
-\]
+\]\eqnote{concepts:'vector', 'canonical scalar product'}{statement:'canonical scalar product'('x', 'y') == 0}
 
 \snippet{13}
-Jeder \setref{Unterraum}{label:subspace}~$\mathbb{U}$ des ${\mathbb{R}}^{n}$ kann mit Hilfe eines geeignet gewählten weiteren \setref{Unterraums}{label:subspace}~$\mathbb{V}$ zum ursprünglichen
-\setref{Vektorraum}{label:vector space}~${\mathbb{R}}^{n}$ ergänzt werden, so dass
+Jeder \setref{Unterraum}{label:subspace}~$\mathbb{U}$ des ${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} kann mit Hilfe eines geeignet gewählten weiteren \setref{Unterraums}{label:subspace}~$\mathbb{V}$ zum ursprünglichen
+\setref{Vektorraum}{label:vector space}~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} ergänzt werden, so dass
 \[
 {\mathbb{R}}^{n}=\mathbb{U}+\mathbb{V}.
-\]
+\]\eqnote{concepts:'n-dimensional real vector space', 'vector space', 'sum of vector spaces'}{statement:'n-dimensional real vector space' == 'sum of vector spaces'('vector space', 'vector space')}
 
 \snippet{14}
 Haben zusätzlich beide \setref{Unterräume}{label:subspace} nur den \setref{Nullvektor}{label:zero vector} gemeinsam, d.\,h.
 \[
 \mathbb{U}\cap\mathbb{V}=\{0\},
-\]
+\]\eqnote{concepts:'intersection of sets', 'zero vector', 'vector space'}{statement:'intersection of sets'('vector space', 'vector space') == 'zero vector'}
 dann ist der \setref{Unterraum}{label:subspace}~$\mathbb{V}$ der \setref{Komplementärraum}{label:complement space} (bzw. das \setref{Komplement}{label:complement space}) des \setref{Unterraumes}{label:subspace}~$\mathbb{U}$. In diesem Fall kann man den \setref{Vektorraum}{label:vector space}~${\mathbb{R}}^{n}$ als \setref{direkte Summe}{label:direct sum of vector spaces} der beiden \setref{Unterräume}{label:subspace} darstellen:
 \[
 {\mathbb{R}}^{n}=\mathbb{U}\oplus\mathbb{V}.
-\]
+\]\eqnote{concepts:'n-dimensional real vector space', 'direct sum of vector spaces', 'vector space'}{statement:'n-dimensional real vector space' == 'direct sum of vector spaces'('vector space', 'vector space')}
 
 \snippet{15}
-Die Zerlegung in \setref{direkte Summen}{label:direct sum of vector spaces} bedeutet, dass es für jeden \setref{Vektor}{label:vector} $x\in{\mathbb{R}}^{n}$ eine eindeutige Darstellung $x=u+v$ mit $u\in\mathbb{U}$ und $v\in\mathbb{V}$ gibt.
+Die Zerlegung in \setref{direkte Summen}{label:direct sum of vector spaces} bedeutet, dass es für jeden \setref{Vektor}{label:vector} $x\in{\mathbb{R}}^{n}$\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of'}{statement:'vector' 'is element of' 'n-dimensional real vector space'} eine eindeutige Darstellung $x=u+v$\eqnote{concepts:'vector'}{statement:''} mit $u\in\mathbb{U}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} und $v\in\mathbb{V}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} gibt.
 
 \snippet{16}
-Die Ergänzung eines \setref{Unterraumes}{label:subspace}~$\mathbb{U}$ um einen \setref{Komplmentärraum}{label:complement space}~$\mathbb{V}$ ist nicht eindeutig. Wählt man den \setref{Komplementärraum}{label:complement space} unter Zuhilfenahme des \setref{Skalarprodukts}{label:canonical scalar product}~(\ref{eq:skalarprodukt}) derart, dass alle \setref{Vektoren}{label:vector} $u\in\mathbb{U}$ und $v\in\mathbb{V}$ jeweils senkrecht aufeinander stehen, so erhält man das \setref{orthogonale Komplement}{label:orthogonal complement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$:
+Die Ergänzung eines \setref{Unterraumes}{label:subspace}~$\mathbb{U}$ um einen \setref{Komplmentärraum}{label:complement space}~$\mathbb{V}$ ist nicht eindeutig. Wählt man den \setref{Komplementärraum}{label:complement space} unter Zuhilfenahme des \setref{Skalarprodukts}{label:canonical scalar product}~(\eqref{eq:skalarprodukt}) derart, dass alle \setref{Vektoren}{label:vector} $u\in\mathbb{U}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} und $v\in\mathbb{V}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} jeweils senkrecht aufeinander stehen, so erhält man das \setref{orthogonale Komplement}{label:orthogonal complement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$:
 \begin{equation}
 \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement}
-\end{equation}
+\end{equation}\eqnote{concepts:'orthogonal complement', 'n-dimensional real vector space', 'vector', 'vector space', 'canonical scalar product', 'is element of'}{statement:''}
 Hinsichtlich der \setref{Dimensionen}{label:dimension} besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}):
 \begin{equation}
 \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl}
-\end{equation}
+\end{equation}\eqnote{concepts:'dimension op', 'vector space', 'orthogonal complement', 'integer number'}{statement:'dimension op'('vector space') + 'dimension op'('orthogonal complement') == 'integer number'}
 
 \snippet{17i}
+
 
 \begin{example}
 \label{exa:orthogonales-Komplement}Die Vektoren
@@ -134,20 +141,21 @@ aufgespannt:
 
 \end{example}
 
+
 \snippet{18}
-Eine $m\times n$-\setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$ besteht aus $m$ \setref{Zeilen}{label:row vector} und $n$ \setref{Spalten}{label:column vector}:
+Eine $m\times n$-\setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$\eqnote{concepts:'matrix', 'n-dimensional real vector space', 'is element of'}{statement:''} besteht aus $m$ \setref{Zeilen}{label:row vector} und $n$ \setref{Spalten}{label:column vector}:
 \[
 A=\left(\begin{array}{ccc} a_{11} & \cdots & a_{1n}\\
 \vdots & \ddots & \vdots\\
 a_{m1} & \cdots & a_{mn}
 \end{array}\right).
-\]
+\]\eqnote{concepts:'matrix'}{statement:''}
 
 \snippet{19}
-Gilt $m=n$, so spricht man von einer \textbf{\em \setref{quadratischen Matrix}{label:square matrix}}.
+Gilt $m=n$\eqnote{concepts:'integer number'}{statement:'integer number' = 'integer number'} , so spricht man von einer \textbf{\em \setref{quadratischen Matrix}{label:square matrix}}.
 
 \snippet{20}
-Die $n\times n$\textbf{\em -\setref{Einheitsmatrix}{label:identity matrix}} (engl. \textbf{\em \setref{identity matrix}{label:identity matrix}}) wird mit~$I_{n}$ bzw. mit~$I$ bezeichnet. Bei ihr sind die \setref{Hauptdiagonalelemente}{label:element of sequence} Eins, alle anderen \setref{Elemente}{label:element of sequence} Null.
+Die $n\times n$\textbf{\em -\setref{Einheitsmatrix}{label:identity matrix}} (engl. \textbf{\em \setref{identity matrix}{label:identity matrix}}) wird mit~$I_{n}$\eqnote{concepts:'identity matrix'}{statement:''} bzw. mit~$I$\eqnote{concepts:'identity matrix'}{statement:''} bezeichnet. Bei ihr sind die \setref{Hauptdiagonalelemente}{label:element of sequence} Eins, alle anderen \setref{Elemente}{label:element of sequence} Null.
 
 \snippet{21}
 Unter dem \textbf{\em \setref{Bild}{label:image of matrix}} (engl. \textbf{\em \setref{image}{label:image of matrix}}, \textbf{\em \setref{range}{label:image of matrix}}) einer \setref{Matrix}{label:matrix} versteht man die \setref{Menge}{label:set}
@@ -156,76 +164,81 @@ Unter dem \textbf{\em \setref{Bild}{label:image of matrix}} (engl. \textbf{\em \
 {\operatorname{im}}\,A & := & \left\{ y\in{\mathbb{R}}^{m};\,\exists x\in{\mathbb{R}}^{n}\textrm{ mit }y=Ax\right\} \\
  & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}.
 \end{array}
-\]
+\]\eqnote{concepts:'image of matrix', 'matrix', 'set', 'n-dimensional real vector space', 'is element of', 'vector'}{statement:''}
 
 \snippet{22}
-Besteht die \setref{Matrix}{label:matrix}~$A$ spaltenweise aus den \setref{Vektoren}{label:vector} $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$, d.\,h.
+Besteht die \setref{Matrix}{label:matrix}~$A$ spaltenweise aus den \setref{Vektoren}{label:vector} $a_{1},\ldots,a_{n}\in{\mathbb{R}}^{m}$\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of'}{statement:'vector' 'is element of' 'n-dimensional real vector space'} , d.\,h.
 \[
 A=\left(a_{1},\ldots,a_{n}\right),
-\]
+\]\eqnote{concepts:'matrix', 'vector', 'sequence'}{statement:''}
 so gilt
 \[
 {\operatorname{im}}\,A={\operatorname{span}}\left\{ a_{1},\ldots,a_{n}\right\} .
-\]
+\]\eqnote{concepts:'image of matrix op', 'span', 'matrix', 'sequence'}{statement:'image of matrix op'('matrix') == 'span'('sequence')}
 Das \setref{Bild}{label:image of matrix} einer \setref{Matrix}{label:matrix} ist die \setref{lineare Hülle}{label:linear hull} der \setref{Spalten}{label:column vector}.
 
 \snippet{23}
-Das \setref{Bild}{label:image of matrix} ist somit ein \setref{Untervektorraum}{label:subspace} des~${\mathbb{R}}^{m}$.
+Das \setref{Bild}{label:image of matrix} ist somit ein \setref{Untervektorraum}{label:subspace} des~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''}.
+
+
 
 \snippet{24}
 Der \setref{Rang}{label:rank of matrix} (engl. \setref{rank}{label:rank of matrix}) der \setref{Matrix}{label:matrix}~$A$ ist die \setref{Dimension}{label:dimension} ihres \setref{Bildes}{label:image of matrix}:
 \begin{equation}
 {\operatorname{rang}}\,A:=\dim({\operatorname{im}}\,A).\label{eq:rank}
-\end{equation}
+\end{equation}\eqnote{concepts:'rank op', 'matrix', 'dimension op', 'image of matrix op'}{statement:'rank op'('matrix') == 'dimension op'('image of matrix op'('matrix'))}
 
 \snippet{25}
 Der \setref{\textbf{\em Kern}}{label:kernel of matrix} oder \setref{\textbf{\em Nullraum}}{label:kernel of matrix} (engl. \setref{\textbf{\em kernel}}{label:kernel of matrix}, \setref{\textbf{\em null space}}{label:kernel of matrix}) einer \setref{Matrix}{label:matrix}~$A$ ist definiert durch
 \[
-\ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} ,
-\]
+\ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\}
+\]\eqnote{concepts:'ker', 'matrix', 'set', 'vector', 'n-dimensional real vector space', 'is element of'}{statement:'ker'('matrix') == 'set'} ,
 d.\,h. er ist die Lösungsmenge des zur \setref{Matrix}{label:matrix}~$A$ gehörenden linearen homogenen Gleichungssystems.
 
 \snippet{26}
-Der \setref{Kern}{label:kernel of matrix} ist ein \setref{Untervektorraum}{label:subspace} des~${\mathbb{R}}^{n}$.
+Der \setref{Kern}{label:kernel of matrix} ist ein \setref{Untervektorraum}{label:subspace} des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''}.
 
 \snippet{27}
 Die \setref{Dimension}{label:dimension} des \setref{Kerns}{label:kernel of matrix} heißt \textbf{\em \setref{Defekt}{label:defect of matrix}} (engl. \textbf{\em \setref{nullity}{label:defect of matrix}},
 \textbf{\em \setref{corank}{label:defect of matrix}}):
 \begin{equation}
 {\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank}
-\end{equation}
+\end{equation}\eqnote{concepts:'corank op', 'matrix', 'dimension op', 'ker', 'integer number', 'rank op'}{statement:'corank op'('matrix') = 'dimension op'('ker'('matrix')) = 'integer number' - 'rank op'('matrix')}
 
 \snippet{28}
 Der \setref{Defekt}{label:defect of matrix} gibt den \setref{Rangabfall}{label:defect of matrix} einer \setref{Matrix}{label:matrix} an.
 
 \snippet{29}
-Mit \setref{Bild}{label:image of matrix} und \setref{Kern}{label:kernel of matrix} sind folgende Zerlegungen der Vektorräume~${\mathbb{R}}^{m}$ und~${\mathbb{R}}^{n}$ in jeweils \setref{direkte Summen}{label:direct sum of vector spaces} zweier Untervektorräume möglich:
+Mit \setref{Bild}{label:image of matrix} und \setref{Kern}{label:kernel of matrix} sind folgende Zerlegungen der Vektorräume~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} und~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in jeweils \setref{direkte Summen}{label:direct sum of vector spaces} zweier Untervektorräume möglich:
 \begin{equation}
 \begin{array}{lcccc}
 {\mathbb{R}}^{m} & = & {\operatorname{im}}\,A & \oplus & \ker\,A^{T},\\ {\mathbb{R}}^{n} & = & \ker\,A & \oplus & {\operatorname{im}}\,A^{T}.
 \end{array}\label{eq:zerleg-im-ker}
-\end{equation}
+\end{equation}\eqnote{concepts:'n-dimensional real vector space', 'image of matrix op', 'direct sum of vector spaces', 'ker', 'transpose', 'matrix'}{statement:'n-dimensional real vector space' == 'direct sum of vector spaces'('image of matrix op'('matrix'), 'ker'('transpose'('matrix')))
+'n-dimensional real vector space' == 'direct sum of vector spaces'('ker'('matrix'), 'image of matrix op'('transpose'('matrix')))}
 
 \snippet{30}
-Bei dieser Zerlegung wird der jeweilige \setref{Unterraum}{label:subspace} ($\operatorname{im}\,A$ bzw. $\ker\,A$) um sein entsprechendes \setref{orthogonales Komplement}{label:orthogonal complement} erweitert.
+Bei dieser Zerlegung wird der jeweilige \setref{Unterraum}{label:subspace} ($\operatorname{im}\,A$\eqnote{concepts:'image of matrix op', 'matrix'}{statement:'image of matrix op'('matrix')} bzw. $\ker\,A$\eqnote{concepts:'ker', 'matrix'}{statement:'ker'('matrix')}) um sein entsprechendes \setref{orthogonales Komplement}{label:orthogonal complement} erweitert.
 
 \snippet{31}
-Die sich zum \setref{Vektorraum}{label:vector space} ${\mathbb{R}}^{n}$ ergänzenden \setref{Unterräume}{label:subspace} haben nur den \setref{Nullvektor}{label:zero vector} gemeinsam:
+Die sich zum \setref{Vektorraum}{label:vector space} ${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} ergänzenden \setref{Unterräume}{label:subspace} haben nur den \setref{Nullvektor}{label:zero vector} gemeinsam:
 \[
 {\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}.
-\]
+\]\eqnote{concepts:'image of matrix op', 'ker', 'transpose', 'intersection of sets', 'zero vector', 'set'}{statement:'intersection of sets'('image of matrix op'('matrix'), 'ker'('transpose'('matrix'))) == 'set'
+'intersection of sets'('ker'('matrix'), 'image of matrix op'('transpose'('matrix'))) == 'set'}
 
 \snippet{32}
-Die \setref{Dimensionsformel}{label:dimension}~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt
+Die \setref{Dimensionsformel}{label:dimension}~(\eqref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt
 \begin{equation}
 \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel}
-\end{equation}
+\end{equation}\eqnote{concepts:'dimension op', 'ker', 'matrix', 'image of matrix op', 'integer number'}{statement:'dimension op'('ker'('matrix')) + 'dimension op'('image of matrix op'('matrix')) == 'integer number'}
 an~\cite{lorenz1992,beutelspacher2001}.
 
 \snippet{33}
-Der \setref{Zusammenhang}{label:general statement}~(\ref{eq:dimensions-formel}) ist auch unter der Bezeichnung \textbf{\em \setref{Rangsatz}{label:Rangsatz}} bekannt.
+Der \setref{Zusammenhang}{label:general statement}~(\eqref{eq:dimensions-formel}) ist auch unter der Bezeichnung \textbf{\em \setref{Rangsatz}{label:Rangsatz}} bekannt.
 
 \snippet{34i}
+
 
 \begin{example}
 \label{exa:Bild-und-Kern}Man betrachte die $2\times3$-Matrix
@@ -238,42 +251,43 @@ Bild und Kern einer Matrix lassen sich in \textsc{Maxima} mit den Funktionen \te
 
 
 
-Mit \texttt{rank} und \texttt{nullity} kann man sich zusätzlich die Dimensionen~(\ref{eq:rank}) und~(\ref{eq:corank}) von Bild und Nullraum angeben lassen. Die Dimensionsformel~(\ref{eq:dimensions-formel}) ist bei diesem Beispiel offensichtlich erfüllt.
+Mit \texttt{rank} und \texttt{nullity} kann man sich zusätzlich die Dimensionen~(\eqref{eq:rank}) und~(\eqref{eq:corank}) von Bild und Nullraum angeben lassen. Die Dimensionsformel~(\eqref{eq:dimensions-formel}) ist bei diesem Beispiel offensichtlich erfüllt.
 
 \end{example}
 
+
 \snippet{35}
-Die \setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$ wird mitunter synonym zur \setref{linearen Abbildung}{label:linear mapping} bzw. zum \setref{linearen Operator}{label:linear mapping}
+Die \setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$\eqnote{concepts:'matrix', 'n-dimensional real vector space', 'is element of'}{statement:''} wird mitunter synonym zur \setref{linearen Abbildung}{label:linear mapping} bzw. zum \setref{linearen Operator}{label:linear mapping}
 \[
 \mathcal{A}:{\mathbb{R}}^{n}\to{\mathbb{R}}^{m}\quad\text{mit}\quad x\mapsto Ax
-\]
+\]\eqnote{concepts:'linear mapping', 'n-dimensional real vector space', 'matrix', 'vector'}{statement:'linear mapping'('vector') == 'matrix' * 'vector'}
 behandelt.
 
 \snippet{36}
-Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$ die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$ in den~${\mathbb{R}}^{m}$ bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$.
+Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'linear mapping', 'set of linear mappings', 'n-dimensional real vector space', 'is element of'}{statement:'linear mapping' 'is element of' 'set of linear mappings'}, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'set of linear mappings', 'n-dimensional real vector space', 'set of linear mappings op'}{statement:'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')} die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in den~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$\eqnote{concepts:'integer number'}{statement:''}.
 
 \snippet{37}
-Der \setref{Dualraum}{label:dual space} (engl. \setref{dual space}{label:dual space}) $({\mathbb{R}}^{n})^{*}$ des~${\mathbb{R}}^{n}$ besteht aus den auf~${\mathbb{R}}^{n}$ definierten \setref{linearen Funktionalen}{label:linear functional} (\setref{Linearformen}{label:linear functional}), d.\,h. aus \setref{linearen Abbildungen}{label:linear mapping} ${\mathbb{R}}^{n}\to{\mathbb{R}}$.
+Der \setref{Dualraum}{label:dual space} (engl. \setref{dual space}{label:dual space}) $({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'dual space', 'n-dimensional real vector space', 'dual'}{statement:'dual'('n-dimensional real vector space')} des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} besteht aus den auf~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} definierten \setref{linearen Funktionalen}{label:linear functional} (\setref{Linearformen}{label:linear functional}), d.\,h. aus \setref{linearen Abbildungen}{label:linear mapping} ${\mathbb{R}}^{n}\to{\mathbb{R}}$\eqnote{concepts:'n-dimensional real vector space', 'set of real numbers', 'linear mapping'}{statement:''}.
 
 \snippet{38}
-Der \setref{Dualraum}{label:dual space} lässt sich daher auch durch $({\mathbb{R}}^{n})^{*}=L({\mathbb{R}}^{n},{\mathbb{R}})$ angeben.
+Der \setref{Dualraum}{label:dual space} lässt sich daher auch durch $({\mathbb{R}}^{n})^{*}=L({\mathbb{R}}^{n},{\mathbb{R}})$\eqnote{concepts:'dual space', 'dual', 'n-dimensional real vector space', 'set of linear mappings op', 'set of real numbers'}{statement:'dual'('n-dimensional real vector space') == 'set of linear mappings op'('n-dimensional real vector space', 'set of real numbers')} angeben.
 
 \snippet{39}
-Die \setref{Elemente}{label:element of sequence} $\omega\in({\mathbb{R}}^{n})^{*}$ des \setref{Dualraums}{label:dual space}, die man auch \textbf{\em \setref{Kovektoren}{label:covector}} oder \textbf{\em \setref{kovariante Vektoren}{label:covector}} nennt, kann man als \setref{Zeilenvektoren}{label:row vector}
+Die \setref{Elemente}{label:element of sequence} $\omega\in({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'covector', 'dual space', 'n-dimensional real vector space', 'dual', 'is element of'}{statement:'covector' 'is element of' 'dual'('n-dimensional real vector space')} des \setref{Dualraums}{label:dual space}, die man auch \textbf{\em \setref{Kovektoren}{label:covector}} oder \textbf{\em \setref{kovariante Vektoren}{label:covector}} nennt, kann man als \setref{Zeilenvektoren}{label:row vector}
 \[
 \omega=\left(\omega_{1},\ldots,\omega_{n}\right)
-\]
+\]\eqnote{concepts:'covector'}{statement:''}
 darstellen.
 
 \snippet{40}
-Der \setref{Dualraum}{label:dual space}~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler reeller \setref{Vektorraum}{label:vector space} mit der \setref{kanonischen Basis}{label:canonical basis}
+Der \setref{Dualraum}{label:dual space}~$({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'dual space', 'n-dimensional real vector space', 'dual'}{statement:'dual'('n-dimensional real vector space')} ist selber ein $n$-dimensionaler reeller \setref{Vektorraum}{label:vector space} mit der \setref{kanonischen Basis}{label:canonical basis}
 \[
 \begin{array}{lcl}
 e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\
  & \vdots\\
 e_{n}^{*} & = & (0,\ldots,0,1).
 \end{array}
-\]
+\]\eqnote{concepts:'canonical basis', 'covector', 'integer number', 'element of sequence'}{statement:''}
 
 \snippet{41}
 Im Zusammenhang mit dem \setref{Dualraum}{label:dual space} nennt man den ursprünglichen \setref{Vektorraum}{label:vector space} manchmal auch \textbf{\em Primalraum}.
@@ -283,7 +297,9 @@ Im Zusammenhang mit dem \setref{Dualraum}{label:dual space} nennt man den urspr�
 \label{rem:Isomorphismus-Primal-Dual}Bei den hier betrachteten endlichdimensionalen
 \setref{Vektorräumen}{label:vector space} sind Primal- und \setref{Dualraum}{label:dual space} zueinander \textbf{\em \setref{isomorph}{label:isomorphism}},
 d.\,h. es existiert eine \setref{lineare}{label:linear} invertierbare (\setref{bijektive}{label:bijective}) Abbildung zwischen beiden \setref{Räumen}{label:vector space}.
-\end{remark}
+
+
+
 
 \snippet{43}
 Mit einer solchen \setref{Abbildung}{label:general function}, die man \setref{Isomorphismus}{label:isomorphism} nennt, kann jeder \setref{Vektor}{label:vector} des Primalraumes eindeutig einem \setref{Kovektor}{label:covector} des \setref{Dualraumes}{label:dual space} zugeordnet werden und umgekehrt.
@@ -294,17 +310,17 @@ Bei der Darstellung der \setref{Vektoren}{label:vector} und \setref{Kovektoren}{
 beschrieben, d.\,h.
 \[
 x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{T}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{T}\in{\mathbb{R}}^{n}.
-\]
+\]\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of', 'dual space', 'dual', 'transpose', 'covector'}{statement:''}
 
 \snippet{45}
 Die \setref{Transposition}{label:transpose} kann in beide Richtungen angewandt werden. In der Differentialgeometrie sind je nach Zuordnungsrichtung die \setref{Abbildungen}{label:general function}
 \[
 \flat:{\mathbb{R}}^{n}\to({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\sharp:({\mathbb{R}}^{n})^{*}\to{\mathbb{R}}^{n},
-\]
+\]\eqnote{concepts:'n-dimensional real vector space', 'dual space', 'dual'}{statement:''}
 die aufgrund der verwendeten Symbole mitunter auch als \setref{musikalische Isomorphismen}{label:isomorphism} bezeichnet werden, üblich~\cite{marsden2001,bullo2004,jaenich2005}. Dabei gilt:
 \[
 x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{\flat}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{\sharp}\in{\mathbb{R}}^{n}.
-\]
+\]\eqnote{concepts:'vector', 'n-dimensional real vector space', 'is element of', 'dual space', 'dual', 'covector'}{statement:''}
 \end{remark}
 
 \snippet{46}
@@ -315,34 +331,34 @@ x_{1}\\
 \vdots\\
 x_{n}
 \end{array}\right)=\sum_{i=1}^{n}\omega_{i}x_{i}\label{eq:inneres-produkt}
-\end{equation}
+\end{equation}\eqnote{concepts:'natural pairing', 'covector', 'vector', 'element of sequence', 'integer number'}{statement:'natural pairing'('covector', 'vector') == $\sum_{i=1}^{n}$ ('element of sequence'('covector', 'integer number') * 'element of sequence'('vector', 'integer number'))}
 eine \textbf{\em \setref{natürliche Paarung}{label:natural pairing}}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em \setref{Kontraktion}{label:contraction}} zwischen \setref{Kovektoren}{label:covector} und \setref{Vektoren}{label:vector} auffasst.
 
 \snippet{47}
 Die \setref{Basis}{label:basis} $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu $\left\{ e_{1},\ldots,e_{n}\right\} $ \setref{duale Basis}{label:dual basis}, d.\,h. es gilt
 \[
 \left\langle e_{i}^{*},e_{j}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n
-\]
+\]\eqnote{concepts:'natural pairing', 'element of sequence', 'integer number'}{statement:'natural pairing'('element of sequence'('dual basis', 'integer number'), 'element of sequence'('basis', 'integer number')) = 1 if 'integer number' == 'integer number' else 0}
 mit dem Kroneckersymbol
 \[
 \delta_{ij}=\left\{ \begin{array}{cl}
 1 & \textrm{für }i=j,\\ 0 & \textrm{sonst.}
 \end{array}\right.
-\]
+\]\eqnote{concepts:'integer number'}{statement:''}
 
 \snippet{48}
-Die \setref{natürliche Paarung}{label:natural pairing}~(\ref{eq:inneres-produkt}) entspricht im Wesentlichen dem \setref{kanonischen Skalarprodukt}{label:canonical scalar product}~(\ref{eq:skalarprodukt}), nur dass anstelle von zwei \setref{Vektoren}{label:vector} wie beim \setref{kanonischen Skalarprodukt}{label:canonical scalar product} jetzt ein aus \setref{Kovektor}{label:covector} und \setref{Vektor}{label:vector} bestehendes Paar als Argumente übergeben werden. Daher wird mitunter für~(\ref{eq:inneres-produkt}) auch die Bezeichnung
+Die \setref{natürliche Paarung}{label:natural pairing}~(\eqref{eq:inneres-produkt}) entspricht im Wesentlichen dem \setref{kanonischen Skalarprodukt}{label:canonical scalar product}~(\eqref{eq:skalarprodukt}), nur dass anstelle von zwei \setref{Vektoren}{label:vector} wie beim \setref{kanonischen Skalarprodukt}{label:canonical scalar product} jetzt ein aus \setref{Kovektor}{label:covector} und \setref{Vektor}{label:vector} bestehendes Paar als Argumente übergeben werden. Daher wird mitunter für~(\eqref{eq:inneres-produkt}) auch die Bezeichnung
 \setref{Skalarprodukt}{label:canonical scalar product} verwendet~\cite{bishop1980}.
 
 \snippet{49}
-In der gleichen Weise, wie mit dem \setref{Skalarprodukt}{label:canonical scalar product} zu einem gegebenen \setref{Unterraum}{label:subspace} $\mathbb{U}\subset{\mathbb{R}}^{n}$ das \setref{orthogonale Komplement}{label:orthogonal complement}~(\ref{eq:ortho-komplement}) konstruiert wird, kann man mit der \setref{natürlichen Paarung}{label:natural pairing} den \setref{Annihilatorraum}{label:annihilator space}
+In der gleichen Weise, wie mit dem \setref{Skalarprodukt}{label:canonical scalar product} zu einem gegebenen \setref{Unterraum}{label:subspace} $\mathbb{U}\subset{\mathbb{R}}^{n}$ das \setref{orthogonale Komplement}{label:orthogonal complement}~(\eqref{eq:ortho-komplement}) konstruiert wird, kann man mit der \setref{natürlichen Paarung}{label:natural pairing} den \setref{Annihilatorraum}{label:annihilator space}
 \begin{equation}
 \mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum}
-\end{equation}
+\end{equation}\eqnote{concepts:'annihilator space', 'dual space', 'dual', 'n-dimensional real vector space', 'covector', 'is element of', 'vector space', 'vector', 'natural pairing'}{statement:'annihilator'('vector space') == 'set'}
 erzeugen.
 
 \snippet{50}
-Für einen gegebenen \setref{Unterraum}{label:subspace} sind sein \setref{orthogonales Komplement}{label:orthogonal complement} und sein \setref{Annihilatorraum}{label:annihilator space} zueinander \setref{isomorph}{label:isomorphism}, so dass wir ohne Probleme in~(\ref{eq:ortho-komplement}) und~(\ref{eq:annihilatorraum}) die gleiche Bezeichnung verwenden können. Die \setref{Dimensionsformel}{label:dimension}~(\ref{eq:dimensionsformel-ortho-kompl}) gilt daher auch in gleiche Weise für den \setref{Annihilatorraum}{label:annihilator space}~(\ref{eq:annihilatorraum}).
+Für einen gegebenen \setref{Unterraum}{label:subspace} sind sein \setref{orthogonales Komplement}{label:orthogonal complement} und sein \setref{Annihilatorraum}{label:annihilator space} zueinander \setref{isomorph}{label:isomorphism}, so dass wir ohne Probleme in~(\eqref{eq:ortho-komplement}) und~(\eqref{eq:annihilatorraum}) die gleiche Bezeichnung verwenden können. Die \setref{Dimensionsformel}{label:dimension}~(\eqref{eq:dimensionsformel-ortho-kompl}) gilt daher auch in gleiche Weise für den \setref{Annihilatorraum}{label:annihilator space}~(\eqref{eq:annihilatorraum}).
 
 
 

@@ -15,6 +15,7 @@ import datetime as dt
 from string import ascii_letters
 from typing import Union
 import black
+import pickle
 
 try:
     # this will be part of standard library for python >= 3.11
@@ -415,6 +416,7 @@ class ConversionManager:
         self.general_operator_pattern = re.compile(r"(?<=There is a general operator)(?::? )(.+)")
         self.unary_operator_pattern = re.compile(r"(?<=There is a unary operator)(?::? )(.+)")
         self.binary_operator_pattern = re.compile(r"(?<=There is a binary operator)(?::? )(.+)")
+        self.ternary_operator_pattern = re.compile(r"(?<=There is a ternary operator)(?::? )(.+)")
         self.type_of_arg_1_pattern = re.compile(r"(?<=The type of argument1 of )(.+?)(?: is )(.+)")
         self.type_of_arg_2_pattern = re.compile(r"(?<=The type of argument2 of )(.+?)(?: is )(.+)")
         self.type_of_arg_3_pattern = re.compile(r"(?<=The type of argument3 of )(.+?)(?: is )(.+)")
@@ -520,6 +522,7 @@ class ConversionManager:
         new_general_operator = re.findall(self.general_operator_pattern, line)
         new_unary_operator = re.findall(self.unary_operator_pattern, line)
         new_binary_operator = re.findall(self.binary_operator_pattern, line)
+        new_ternary_operator = re.findall(self.ternary_operator_pattern, line)
         type_of_arg_1 = re.findall(self.type_of_arg_1_pattern, line)
         type_of_arg_2 = re.findall(self.type_of_arg_2_pattern, line)
         type_of_arg_3 = re.findall(self.type_of_arg_3_pattern, line)
@@ -558,6 +561,8 @@ class ConversionManager:
             self.add_new_item(d, self.strip(new_unary_operator[0]), language, {"R4": 'p.I7["mathematical operation with arity 1"]'}, skip_entity_order=skip_entity_order)
         elif len(new_binary_operator) > 0:
             self.add_new_item(d, self.strip(new_binary_operator[0]), language, {"R4": 'p.I8["mathematical operation with arity 2"]'}, skip_entity_order=skip_entity_order)
+        elif len(new_ternary_operator) > 0:
+            self.add_new_item(d, self.strip(new_ternary_operator[0]), language, {"R4": 'p.I9["mathematical operation with arity 3"]'}, skip_entity_order=skip_entity_order)
         elif len(type_of_arg_1) > 0:
             self.handle_R8_R9_R10_R11(d, type_of_arg_1, "R8", language, skip_entity_order)
         elif len(type_of_arg_2) > 0:
@@ -1353,6 +1358,8 @@ class ConversionManager:
         os.makedirs("match_history", exist_ok=True)
         with open(f"match_history/matched_entities_{t}.txt", "wt", encoding="utf-8") as f:
             f.write(self.entity_matching_report)
+        with open(f"fnl_dict.pcl", "wb") as f:
+            pickle.dump(self.d, f)
         return fpath
 
     def _final_replacements(self, txt: str, rplmts: list):

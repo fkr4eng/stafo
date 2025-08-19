@@ -1,0 +1,13 @@
+<span class="tooltip">
+  <img src="{{context.img_path}}" alt="info" width="10" height="10">
+  <span class="tooltiptext-contains">
+    Concepts in this expression:
+    {{context.concepts}}
+
+    {% if context.statement %}
+    <br>
+    Formalized expression:
+    {{context.statement}}
+    {% endif %}
+  </span>
+</span>

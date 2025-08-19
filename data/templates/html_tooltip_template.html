@@ -1,1 +1,5 @@
+{% if context.inner %}
+<a href="{{context.short_key}}.html" target="_blank" class="inner-tooltip">{{context.word}}<span class="inner-tooltiptext"><iframe src="{{context.short_key}}.html"></iframe></span></a>
+{% else %}
 <a href="{{context.short_key}}.html" target="_blank" class="tooltip">{{context.word}}<span class="tooltiptext"><iframe src="{{context.short_key}}.html"></iframe></span></a>
+{% endif %}

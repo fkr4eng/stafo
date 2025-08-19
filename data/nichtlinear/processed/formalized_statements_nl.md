@@ -31,6 +31,9 @@
 - // todo all instances of 'sequence of coefficients' have element type 'real number'
 - There is a relation: 'is valid on set'
 - 'is valid on set' is a qualifier.
+- There is a general operator: 'univeral quantifier'
+- There is a general operator: 'existential quantifier'
+- There is a ternary operator: 'sum over index'
 
 - // snippet(2)
 - New section: "Lineare Algebra".
@@ -596,7 +599,8 @@
         - 'V' is an instance of 'vector space'.
         - 'v' 'is element of' 'V'
     - formalized premise:
-        - 'v' 'is orthogonal to' 'u'.
+        - There is an equation:
+            - full source code: 'canonical scalar product'('u', 'v') == 0
     - formalized assertion:
         - 'U' 'has orthogonal complement' 'V' qqq 'is valid on set' 'Rn'.
 

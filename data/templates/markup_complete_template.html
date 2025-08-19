@@ -62,6 +62,30 @@
         opacity: 1;
     }
 
+    .tooltip .tooltiptext-contains {
+        visibility: hidden;
+        width: 800px;
+        background-color: #fff;
+        color: #333;
+        text-align: left;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        position: absolute;
+        z-index: 1;
+        top: 1.5em;
+        left: 0;
+        box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        opacity: 0;
+        transform-origin: top left;
+    }
+
+    .tooltip:hover .tooltiptext-contains {
+        visibility: visible;
+        opacity: 1;
+    }
+
     .tooltiptext iframe {
         width: 100%;
         height: 100%;
@@ -69,6 +93,47 @@
         zoom: 0.5;
         pointer-events: none; /* disable interaction */
     }
+
+    .inner-tooltiptext iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        zoom: 0.5;
+        pointer-events: none; /* disable interaction */
+    }
+
+    /* Inner tooltip style */
+    .inner-tooltip {
+        position: relative;
+        color: #ffbb00; /* make the special word stand out */
+        cursor: help;
+    }
+
+    .inner-tooltip .inner-tooltiptext {
+        visibility: hidden;
+        width: 800px;
+        height: 600px;
+        background-color: #fff;
+        color: #333;
+        text-align: left;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        position: absolute;
+        z-index: 1;
+        top: 1.5em;
+        left: 0;
+        box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        opacity: 0;
+        transform-origin: top left;
+    }
+
+    .inner-tooltip:hover .inner-tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
     .markdown-output {
         border: 1px solid #ccc;
         padding: 15px;
@@ -168,7 +233,7 @@ document.querySelectorAll(".toggle-container").forEach(container => {
         index = (index + 1) % states.length;
         showState(index);
     });
-    MathJax.typesetPromise().catch(err => console.error(err.message));
+    //MathJax.typesetPromise().catch(err => console.error(err.message));
 });
 </script>
 <script>
