@@ -284,7 +284,7 @@ if False:
     nl = p.irkloader.load_mod_from_path(module_fpath, "nl", "nonlinear", reuse_loaded=True)
 
     s = p.ds.get_item_by_label("snippet(16)")
-    rels = list(s.get_inv_relations().keys())
+    rels = list(s.get_relations().keys())
 
     vm = p.visualization.vm
     for rel in rels:
