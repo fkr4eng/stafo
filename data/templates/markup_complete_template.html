@@ -13,6 +13,7 @@
         background: #f5f7fa;
         color: #222;
         line-height: 1.6;
+        max-width: 1200px;  /* restrict page width */
     }
 
     h1, h2, h3, b {
@@ -146,7 +147,10 @@
     .markdown-output ul li {
         margin: 0.25em 0;
     }
-
+    .markdown-source {
+        height: auto;
+        width: 100%;
+    }
     pre code {
         border-radius: 6px;
         padding: 12px;
@@ -203,6 +207,20 @@ window.MathJax = {
 
 <script>
 // Toggle system
+function autoResizeTextarea(t) {
+    t.style.height = 'auto';                 // reset
+    t.style.height = t.scrollHeight + 'px';  // fit to content
+}
+
+function wireAndResizeTextareas(scope) {
+    scope.querySelectorAll('textarea.markdown-source').forEach(t => {
+        // resize now (after it’s visible)
+        requestAnimationFrame(() => autoResizeTextarea(t));
+        // keep resizing as user edits
+        t.addEventListener('input', () => autoResizeTextarea(t));
+    });
+}
+
 document.querySelectorAll(".toggle-container").forEach(container => {
     const states = Array.from(container.querySelectorAll(".state"));
     let index = 0;
@@ -212,8 +230,12 @@ document.querySelectorAll(".toggle-container").forEach(container => {
 
     function showState(i) {
         box.innerHTML = states[i].innerHTML;
+
         const btnLabel = states[i].dataset.button;
         if (btnLabel) button.textContent = btnLabel;
+
+        // wire up and resize any textareas that just became visible
+        wireAndResizeTextareas(box);
     }
 
     showState(index);
@@ -222,13 +244,6 @@ document.querySelectorAll(".toggle-container").forEach(container => {
         index = (index + 1) % states.length;
         showState(index);
     });
-});
-
-// Markdown renderer
-document.querySelectorAll('.markdown-block').forEach(block => {
-    const source = block.querySelector('.markdown-source').value;
-    const output = block.querySelector('.markdown-output');
-    output.innerHTML = marked.parse(source);
 });
 </script>
 
