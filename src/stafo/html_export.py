@@ -181,6 +181,7 @@ if True:
     def repl_func(matchobj):
         #! keep in mind: the pattern always matches an empty string as group(1)
         clean_html = re.sub(r" +", " ", matchobj.group(0).replace("\n", " "))
+        # label annotation
         if "label" in clean_html:
             try:
                 label = re.findall(r"(?<=label:).+?(?=<|$)", clean_html, re.DOTALL)
@@ -198,6 +199,7 @@ if True:
                 print(e)
                 tt = matchobj.group(0) # to show whats not working
                 # tt = matchobj.group(2) # during operation
+        # equation annotation
         elif "concepts" in clean_html:
             concepts = ""
             gr2 = re.sub(r"  +", " ", matchobj.group(2).replace("\n", " "))
@@ -222,7 +224,29 @@ if True:
 
     html_source = regex.sub(pattern, repl_func, html_source)
 
-    # add equation annotation
+    # put icon and equations on same line
+    pat = regex.compile(r"""
+    (?(DEFINE)                              # Define span pattern
+    (?P<SPAN>
+        <span\b[^>]*>                      # any opening <span ...>
+        (?:
+            [^<]+                          # text nodes
+            | (?&SPAN)                     # nested <span>...</span> (recursion)
+            | <(?!/span)[^>]+>             # any other opening tag (NOT a closing </span>)
+        )*
+        </span>
+    ))
+    <div\ class="mathjax\ equation">.+?</div>[\ \n]*<span\ class="tooltip">
+    (?:
+        [^<]+
+        | (?&SPAN)                              # allow nested spans (uses the DEFINEd group)
+        | <(?!/span)[^>]+>
+    )*
+    </span>                              # allow nested spans (uses the DEFINEd group)
+    """, regex.VERBOSE | regex.IGNORECASE | re.DOTALL)
+    def div_repl(mo):
+        return f"""<div class="horizontal">{mo.group(0)}</div>"""
+    html_source = regex.sub(pat, div_repl, html_source)
 
 
 

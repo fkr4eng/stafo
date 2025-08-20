@@ -157,6 +157,11 @@
         display: block;
         font-size: 0.9rem;
     }
+    .horizontal {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
 </style>
 <!-- Code highlighting -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -220,6 +225,9 @@ function wireAndResizeTextareas(scope) {
         t.addEventListener('input', () => autoResizeTextarea(t));
     });
 }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 document.querySelectorAll(".toggle-container").forEach(container => {
     const states = Array.from(container.querySelectorAll(".state"));
@@ -228,7 +236,11 @@ document.querySelectorAll(".toggle-container").forEach(container => {
     const box = container.querySelector(".content-box");
     const button = container.querySelector(".toggle-btn");
 
-    function showState(i) {
+    async function showState(i) {
+        MathJax.typesetClear([box]);
+        MathJax.texReset();
+        await sleep(10);
+
         box.innerHTML = states[i].innerHTML;
 
         const btnLabel = states[i].dataset.button;
@@ -236,6 +248,12 @@ document.querySelectorAll(".toggle-container").forEach(container => {
 
         // wire up and resize any textareas that just became visible
         wireAndResizeTextareas(box);
+        // Re-render MathJax for the new content
+        setTimeout(() => {
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([box]).catch(err => console.log(err.message));
+            }
+        }, 50);
     }
 
     showState(index);
