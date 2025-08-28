@@ -83,7 +83,7 @@ def create_html():
     html_fpath = os.path.join(fpath_head, output_dir, fpath_tail.replace(".tex", ".html"))
     with open(html_fpath, "rt", encoding="utf-8") as f:
         html_source = f.read()
-
+    html_source_og = html_source # for debugging
     # cleanup html
     ## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
     html_source = html_source.replace("<span \nclass", "<span class")
@@ -98,7 +98,7 @@ def create_html():
     while old_html != html_source:
         i += 1
         old_html = html_source
-        html_source = re.sub(r'(<span \n?class=)(?P<classname>.+?)(>.+?)</span>([ \n]*)<span \n?class=(?P=classname)>(.+?</span>)', repl_func_cleanup, html_source)
+        html_source = re.sub(r'(<span \n?class=)(?P<classname>[^>]+?)(>[^<]+?)</span>([ \n]*)<span \n?class=(?P=classname)>([^<]+?</span>)', repl_func_cleanup, html_source)
         if old_html == html_source:
             print("done")
         else:
