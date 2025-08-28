@@ -59,7 +59,7 @@ def create_html():
 
     tex_source = re.sub(r"\\ref\{eq:", r"\\eqref{eq:", tex_source)
     if "bibliography" not in tex_source:
-        tex_source = re.sub(r"\\end\{document\}", r"\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\end{document}", tex_source)
+        tex_source = re.sub(r"\\end\{document\}", r"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\end{document}", tex_source)
 
     with open(latex_fpath, "wt", encoding="utf-8") as f:
         f.write(tex_source)
@@ -277,7 +277,7 @@ def create_html():
     # for i in range(1, 7):
         # get html snippet
         html_snip = re.findall(
-            r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet|</body>)',
+            r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
             html_source,
             re.DOTALL)
         if len(html_snip) != 1:
@@ -311,6 +311,8 @@ def create_html():
                 "pyirk": module_snip
             }
         )
+    context["bib"] = re.findall(r"(?<=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n</p>)(.+?)(?=</body>)", html_source, re.DOTALL)[0]
+
     res = render_template("markup_complete_template.html", context)
     with open(os.path.join(output_dir, "Nichtlinear.html"), "wt", encoding="utf-8") as f:
         f.write(res)
@@ -326,7 +328,7 @@ def create_graph():
         if "contains" in p.ds.get_entity_by_uri(rel).R1.value:
             vm.REL_BLACKLIST.append(rel)
     # this takes a lot of time
-    vm.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False)
+    vm.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False, vis_relations=True)
 if True:
     create_html()
 if False:
