@@ -83,7 +83,7 @@ def create_html():
     html_fpath = os.path.join(fpath_head, output_dir, fpath_tail.replace(".tex", ".html"))
     with open(html_fpath, "rt", encoding="utf-8") as f:
         html_source = f.read()
-
+    html_source_og = html_source # for debugging
     # cleanup html
     ## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
     html_source = html_source.replace("<span \nclass", "<span class")
@@ -98,7 +98,7 @@ def create_html():
     while old_html != html_source:
         i += 1
         old_html = html_source
-        html_source = re.sub(r'(<span \n?class=)(?P<classname>.+?)(>.+?)</span>([ \n]*)<span \n?class=(?P=classname)>(.+?</span>)', repl_func_cleanup, html_source)
+        html_source = re.sub(r'(<span \n?class=)(?P<classname>[^>]+?)(>[^<]+?)</span>([ \n]*)<span \n?class=(?P=classname)>([^<]+?</span>)', repl_func_cleanup, html_source)
         if old_html == html_source:
             print("done")
         else:
@@ -276,6 +276,8 @@ def create_html():
     for i in range(1, max_num_snippets+1):
     # for i in range(1, 7):
         # get html snippet
+        if i == 17:
+            pass
         html_snip = re.findall(
             r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
             html_source,
@@ -285,7 +287,13 @@ def create_html():
             continue
         else:
             html_snip = html_snip[0]
-        # maybe get rid of "snippet"
+
+        # html converter spits out more </div> than <div> elements
+        # remove access ones.
+        if html_snip.count("</div>") > html_snip.count("<div"):
+            pass
+
+        # get rid of "snippet"
         html_snip = re.sub(r'<span class="cmbx-10">snippet '+str(i)+r'i?</span>', "", html_snip)
 
         # get fnl snippet
@@ -316,6 +324,7 @@ def create_html():
     res = render_template("markup_complete_template.html", context)
     with open(os.path.join(output_dir, "Nichtlinear.html"), "wt", encoding="utf-8") as f:
         f.write(res)
+    1
 
 def create_graph():
     nl = p.irkloader.load_mod_from_path(module_fpath, "nl", "nonlinear", reuse_loaded=True)
