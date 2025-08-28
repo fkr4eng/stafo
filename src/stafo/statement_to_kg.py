@@ -110,7 +110,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 727
+        self.stop_at_line = 2399
 
         self.q_ident = "qqq"
 
@@ -731,7 +731,7 @@ class ConversionManager:
         elif len(concepts) > 0 or len(defined) > 0:
             additional_content = self.get_sub_content(self.lines[i+1:])
             if self.current_snippet not in d["items"].keys():
-                self.add_new_item(d, self.current_snippet, language, additional_relations={"R4": "snippet"})
+                self.add_new_item(d, self.current_snippet, language, additional_relations={"R4": self.build_reference("snippet")})
             if len(concepts) > 0:
                 rel_key = self.d["relations"]["contains concept"]["key"] # todo get rid of hardcoded labels here
             else:
@@ -1773,6 +1773,7 @@ class ConversionManager:
                         # for logging down the line
                         self.latex_og = term
                         res.append(self.convert_latex_to_irklike_str(term, lookup, var_map, statement_item))
+                    break
 
         if only_term:
             # for logging down the line

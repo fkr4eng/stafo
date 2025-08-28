@@ -319,7 +319,6 @@
 - The type of argument1 of 'canonical scalar product' is 'vector'.
 - The type of argument2 of 'canonical scalar product' is 'vector'.
 - The result type of 'canonical scalar product' is 'real number'. // inferred knowledge: The components x_i and y_i are real numbers, thus the sum is a real number.
-- 'canonical scalar product' has the defining formula $\sum_{i=1}^{n}x_{i}y_{i}$.
 - Definition of 'canonical scalar product':
     - full source code: Zu zwei Vektoren $x,y\in{\mathbb{R}}^{n}$ definiert man durch \begin{equation} (x,y):=\sum_{i=1}^{n}x_{i}y_{i}\label{eq:skalarprodukt} \end{equation} das (\textbf{\em kanonische}) \textbf{\em Skalarprodukt}.
     - formalized setting:
@@ -1760,7 +1759,8 @@
                 - There is an equation:
                     - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('bstar', j)) == 0
 
-
+- There is a class: 'kronecker delta' @en
+- 'kronecker delta' has the alternative german label 'Kroneckersymbol'
 
 - Concepts in this snippet:
     - 'dual basis'
@@ -1775,9 +1775,11 @@
     - 'has basis'
     - 'natural pairing'
     - 'element of sequence'
+    - 'kronecker delta'
 - Defined in this snippet:
     - 'dual basis'
     - 'is dual basis of'
+    - 'kronecker delta'
 
 - // snippet(48)
 - 'natural pairing' 'is associated to' 'canonical scalar product'
@@ -1900,4 +1902,546 @@
 
 - // snippet(52i)
 - // ignored content
+
+
+- // snippet(53)
+- There is a property: 'open' @en
+- 'open' is applicable to 'set'
+- There is a class: 'scalar field' @en
+- 'scalar field' has the alternative german label 'Skalarfeld'
+- 'scalar field' is a subclass of 'general function'
+- There is a class: 'vector field' @en
+- 'vector field' has the alternative german label 'Vektorfeld'
+- 'vector field' is a subclass of 'general function'
+- There is a general statement:
+    - full source code: Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine offene Teilmenge des Vektorraums~${\mathbb{R}}^{n}$. Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$ bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$ nennt man \textbf{\em Skalarfeld} bzw. \textbf{\em Vektorfeld}.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'h' is an instance of 'general function'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+    - formalized assertion:
+        - 'h' is secondary instance of 'scalar field'
+        - 'f' is secondary instance of 'vector field'
+
+- Concepts in this snippet:
+    - 'open'
+    - 'set'
+    - 'scalar field'
+    - 'general function'
+    - 'vector field'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'is subset of'
+    - 'has domain'
+    - 'has codomain'
+    - 'set of real numbers'
+- Defined in this snippet:
+    - 'open'
+    - 'scalar field'
+    - 'vector field'
+
+
+- // snippet(54)
+- There is a class: 'covector field' @en
+- 'covector field' has the alternative german label 'Kovektorfeld'
+- 'covector field' is a subclass of 'general function'
+- 'covector field' has the alternative german label 'Differentialform ersten Grades'
+- 'covector field' has the alternative german label '1-Form'
+- 'covector field' has the alternative german label 'Pfaffsche Form'
+- There is a general statement:
+    - full source code: Eine Abbildung $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \textbf{\em Kovektorfeld}, \textbf{\em Differentialform ersten Grades} (kurz \textbf{\em 1-Form}) oder \textbf{\em Pfaffsche Form}.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'dualRn' is an instance of 'dual space'
+        - There is an equation:
+            - full source code: 'dualRn' == 'dual'('Rn')
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'omega' is an instance of 'general function'
+        - 'omega' 'has domain' 'M'
+        - 'omega' 'has codomain' 'dualRn'
+    - formalized assertion:
+        - 'omega' is secondary instance of 'covector field'
+
+
+- Concepts in this snippet:
+    - 'covector field'
+    - 'general function'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'dual space'
+    - 'dual'
+    - 'set'
+    - 'is subset of'
+    - 'has domain'
+    - 'has codomain'
+- Defined in this snippet:
+    - 'covector field'
+
+
+- // snippet(55)
+- There is a property: 'time-dependent' @en
+- 'time-dependent' is applicable to 'scalar field'
+- 'time-dependent' is applicable to 'vector field'
+- 'time-dependent' is applicable to 'covector field'
+- There is a property: 'parameter-dependent' @en
+- 'parameter-dependent' is applicable to 'scalar field'
+- 'parameter-dependent' is applicable to 'vector field'
+- 'parameter-dependent' is applicable to 'covector field'
+
+- Concepts in this snippet:
+    - 'time-dependent'
+    - 'parameter-dependent'
+    - 'scalar field'
+    - 'vector field'
+    - 'covector field'
+- Defined in this snippet:
+    - 'time-dependent'
+    - 'parameter-dependent'
+
+
+- // snippet(56)
+- There is a class: 'tangent space' @en
+- 'tangent space' has the alternative german label 'Tangentialraum'
+- 'tangent space' is a subclass of 'vector space' // inferred knowledge
+- There is a relation: 'is defined wrt point'
+- The result type of 'is defined wrt point' is 'vector'
+- The type of argument1 of 'is defined wrt point' is 'tangent space'
+- There is a relation: 'is defined wrt set'
+- The type of argument1 of 'is defined wrt set' is 'tangent space'
+- The result type of 'is defined wrt set' is 'set'
+- There is a general statement:
+    - full source code: Dabei symbolisiert \begin{equation} \left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\} \label{eq:Basisvektorfelder} \end{equation} die kanonische Basis, die im Punkt $x\in\mathcal{M}$ den sogenannten \textbf{\em Tangential\-raum}~$T_{x}\mathcal{M}$ aufspannt (siehe Anmerkungen~\ref{rem:tangentialraum} und~\ref{rem:Notation-Basis-Vektorfelder}).
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'x' is an instance of 'vector'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn' // inferred knowledge
+        - 'M' has the property 'open' // inferred knowledge
+        - 'x' is element of 'M'
+        - 'TxM' is an instance of 'tangent space'
+        - 'TxM' 'is defined wrt point' 'x'
+        - 'TxM' 'is defined wrt set' 'M'
+        - 'b' is an instance of 'canonical basis'
+    - formalized assertion:
+        - 'TxM' 'has basis' 'b'
+
+- 'canonical basis' has the associated LaTeX notation $\left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\}$
+- 'vector field' has the associated LaTeX notation \[ f(x)=\left(\begin{array}{c} f_{1}(x)\\ \vdots\\ f_{n}(x) \end{array}\right) \]
+- 'vector field' has the alternative associated LaTeX notation $f(x)=f_{1}(x)\frac{\partial}{\partial x_{1}}+\cdots+f_{n}(x)\frac{\partial}{\partial x_{n}}$
+
+- There is a general statement:
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'f' is an instance of 'vector field'
+        - 'x' is an instance of 'vector'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'x' is element of 'M'
+        - 'TxM' is an instance of 'tangent space'
+        - 'TxM' 'is defined wrt point' 'x'
+        - 'TxM' 'is defined wrt set' 'M'
+        - 'b' is an instance of 'canonical basis'
+        - 'TxM' 'has basis' 'b'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'f'('x') == \sum_{i=1}^n 'element of sequence'('f', 'i')('x') * 'element of sequence'('b', 'i')
+            // todo this will propbably not parse well
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'vector'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'general function'
+    - 'tangent space'
+    - 'vector space'
+    - 'basis'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'is element of'
+    - 'canonical basis'
+
+- Defined in this snippet:
+    - 'tangent space'
+
+
+
+- // snippet(57)
+- There is a general statement:
+    - full source code: Die zugehörige duale Basis wird mit $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $ bezeichnet, d.\,h. \[ \left\langle {\mathrm{d}} x_{i},\frac{\partial}{\partial x_{j}}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n. \]
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'x' is an instance of 'vector'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'x' is element of 'M'
+        - 'TxM' is an instance of 'tangent space'
+        - 'TxM' 'is defined wrt point' 'x'
+        - 'TxM' 'is defined wrt set' 'M'
+        - 'b' is an instance of 'canonical basis'
+        - 'TxM' 'has basis' 'b'
+        - 'dualTxM' is an instance of 'dual space'
+        - There is an equation:
+            - full source code: 'dualTxM' == 'dual'('TxM')
+        - 'bstar' is an instance of 'dual basis'
+        - 'dualTxM' 'has basis' 'bstar'
+        - 'bstar' 'is dual basis of' 'b'
+        - 'i' is an instance of 'integer number'
+        - 'j' is an instance of 'integer number'
+        - There is a mathematical relation:
+            - full source code: 1 <= i
+        - There is a mathematical relation:
+            - full source code: 1 <= j
+        - There is a mathematical relation:
+            - full source code: i <= n
+        - There is a mathematical relation:
+            - full source code: j <= n
+    - formalized assertion:
+        - There is an if-then-statement:
+            - formalized premise:
+                - There is an equation:
+                    - full source code: i == j
+            - formalized assertion:
+                - There is an equation:
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('b', j)) == 1
+        - There is an if-then-statement:
+            - formalized premise:
+                - There is an equation:
+                    - full source code: i != j
+            - formalized assertion:
+                - There is an equation:
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('b', j)) == 0
+- 'dual basis' has the associated LaTeX notation $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $
+- // todo define kronecker delta
+
+- Concepts in this snippet:
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - vector
+    - set
+    - is subset of
+    - open
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - canonical basis
+    - has basis
+    - dual space
+    - dual
+    - dual basis
+    - is dual basis of
+    - natural pairing
+    - element of sequence
+    - 'kronecker delta'
+
+
+- // snippet(58)
+- There is a class: 'cotangent space' @en
+- 'cotangent space' has the alternative german label 'Kotangentialraum'
+- 'cotangent space' is a subclass of 'dual space' // inferred knowledge
+- The type of argument1 of 'is defined wrt point' is 'cotangent space'
+- The type of argument1 of 'is defined wrt set' is 'cotangent space'
+- There is a general statement:
+    - full source code: Von der dualen Basis wird im Punkt~$x$ der \textbf{\em Kotangential\-raum}~$T_{x}^{*}\mathcal{M}$, d.\,h. der Dualraum des Tangentialraumes, aufgespannt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'x' is an instance of 'vector'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn' // inferred knowledge
+        - 'M' has the property 'open' // inferred knowledge
+        - 'x' is element of 'M'
+        - 'TxM' is an instance of 'tangent space'
+        - 'TxM' 'is defined wrt point' 'x'
+        - 'TxM' 'is defined wrt set' 'M'
+        - 'dualTxM' is an instance of 'cotangent space'
+        - 'dualTxM' 'is defined wrt point' 'x'
+        - 'dualTxM' 'is defined wrt set' 'M'
+        - 'b' is an instance of 'canonical basis'
+        - 'TxM' 'has basis' 'b'
+        - 'dualb' is an instance of 'dual basis'
+        - 'dualb' 'is dual basis of' 'b'
+    - formalized assertion:
+        - 'dualTxM' 'has basis' 'dualb'
+        - There is an equation:
+            - full source code: 'dualTxM' == 'dual'('TxM')
+
+
+- Concepts in this snippet:
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - vector
+    - set
+    - is subset of
+    - open
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - cotangent space
+    - dual space
+    - canonical basis
+    - has basis
+    - dual basis
+    - is dual basis of
+    - dual
+
+- Defined in this snippet:
+    - cotangent space
+
+
+- // snippet(59)
+- 'covector field' has the associated LaTeX notation $\omega(x) = (\omega_1(x), \dots, \omega_n(x))$.
+- 'covector field' has the alternative associated LaTeX notation $\omega(x)=\omega_{1}(x){\mathrm{d}} x_{1}+\cdots+\omega_{n}(x){\mathrm{d}} x_{n}$.
+- There is a general statement:
+    - full source code: Ein Kovektorfeld~$\omega$ kann dann als Zeilenvektor \[ \omega(x)=\left(\omega_{1}(x),\ldots,\omega_{n}(x)\right) \] oder in der Form \begin{equation} \omega(x)=\omega_{1}(x){\mathrm{d}} x_{1}+\cdots+\omega_{n}(x){\mathrm{d}} x_{n}\label{eq:Basisdarstellung-Kovektorfelder} \end{equation} angegeben werden.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'omega' is an instance of 'covector field'.
+        - 'x' is an instance of 'vector'.
+        - 'M' is an instance of 'set'.
+        - 'M' 'is subset of' 'Rn'. // inferred knowledge
+        - 'M' has the property 'open'. // inferred knowledge
+        - 'x' is element of 'M'.
+        - 'TxM' is an instance of 'tangent space'.
+        - 'TxM' 'is defined wrt point' 'x'.
+        - 'TxM' 'is defined wrt set' 'M'.
+        - 'dualTxM' is an instance of 'cotangent space'.
+        - 'dualTxM' 'is defined wrt point' 'x'.
+        - 'dualTxM' 'is defined wrt set' 'M'.
+        - 'b' is an instance of 'canonical basis'.
+        - 'TxM' 'has basis' 'b'.
+        - 'dualb' is an instance of 'dual basis'.
+        - 'dualTxM' 'has basis' 'dualb'.
+        - 'dualb' 'is dual basis of' 'b'.
+        - 'omegax' is an instance of 'covector'.
+        - There is an equation:
+            - full source code: 'omegax' == 'omega'(x)
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'omega'('x') == \sum_{i=1}^n 'element of sequence'('omega', 'i')('x') * 'element of sequence'('dualb', 'i')
+            // todo this will propbably not parse well
+
+
+- Concepts in this snippet:
+    - covector field
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - vector
+    - set
+    - is subset of
+    - open
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - cotangent space
+    - canonical basis
+    - has basis
+    - dual basis
+    - is dual basis of
+    - covector
+    - row vector
+    - element of sequence
+
+
+
+
+- // snippet(60i)
+- // ignored content
+- // snippet(61)
+- There is a class: 'tuple'
+- There is a binary operator: 'tuple op'
+- The result type of 'tuple op' is 'tuple'
+
+- Definition of 'tangent space':
+    - full source code: Für die hier betrachtete offene Teilmenge $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ kann man den im Punkt $p\in\mathcal{M}$ aufgespannten Tangentialraum $T_{p}\mathcal{M}$ durch \[ T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\} \] definieren.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'v' is an instance of 'vector' qqq: univ_quant.
+        - 'v' is element of 'Rn'
+        - 'TpM' is an instance of 'set'
+        - 'tpv' is an instance of 'tuple'
+        - There is an equation:
+            - full source code: 'tpv' == 'tuple op'('p', 'v')
+        - 'tpv' is element of 'TpM'
+    - formalized assertion:
+        - 'TpM' is secondary instance of 'tangent space'
+        - 'TpM' 'is defined wrt point' 'p'
+        - 'TpM' 'is defined wrt set' 'M'
+
+
+- Concepts in this snippet:
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - set
+    - is subset of
+    - open
+    - vector
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - tuple op
+    - tuple
+
+- Defined in this snippet:
+    - tangent space
+    - tuple op
+    - tuple
+
+- // snippet(62)
+- There is a general statement:
+    - full source code: Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$ und $\alpha\cdot(p,v):=(p,\alpha v)$ für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$ erhält man einen $n$-dimensionalen reellen Vektorraum, der von den Basisvektorfeldern \begin{equation} \frac{\partial}{\partial x_{i}}(p):\,p\mapsto(p,e_{i})\label{eq:Basisvektorfeld-Tangentialraum} \end{equation} für $i=1,\ldots,n$ aufgespannt wird (siehe Abb.~\ref{fig:Tangentialraum-Skizze}).
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'p' is an instance of 'vector'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'p' is element of 'M'
+        - 'v' is an instance of 'vector'
+        - 'v' is element of 'Rn'
+        - 'w' is an instance of 'vector'
+        - 'w' is element of 'Rn'
+        - 'alpha' is an instance of 'real number'
+        - 'TpM' is an instance of 'tangent space'
+        - 'TpM' 'is defined wrt point' 'p'
+        - 'TpM' 'is defined wrt set' 'M'
+        - 'i' is an instance of 'integer number'
+        - There is a mathematical relation:
+            - full source code: 1 <= i
+        - There is a mathematical relation:
+            - full source code: i <= n
+        - 'b' is an instance of 'canonical basis'
+        - 'Rn' 'has basis' 'b'
+        - 'ei' is an instance of 'unit vector'
+        - There is an equation:
+            - full source code: 'ei' == 'element of sequence'('b', 'i')
+    - formalized assertion:
+        - 'TpM' is secondary instance of 'n-dimensional real vector space'
+        - 'TpM' 'has dimension' 'n'
+        - 'TpM' 'has basis' 'b'
+        - There is an equation:
+            - full source code: 'element of sequence'('b', 'i')('p') == 'tuple op'('p', 'ei')
+            - // todo correct?
+        - There is an equation:
+            - full source code: 'tuple op'('p', 'v') + 'tuple op'('p', 'w') == 'tuple op'('p', 'v' + 'w')
+        - There is an equation:
+            - full source code: 'alpha' * 'tuple op'('p', 'v') == 'tuple op'('p', 'alpha' * 'v')
+
+- Concepts in this snippet:
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - vector
+    - set
+    - is subset of
+    - open
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - real number
+    - canonical basis
+    - has basis
+    - unit vector
+    - element of sequence
+    - tuple op
+    - tuple
+    - is secondary instance of
+
+
+
+
+- // snippet(63)
+- There is a general statement:
+    - full source code: Für verschiedene Punkte $p,q\in\mathcal{M}$ erhält man formal unterschiedliche Tangentialräume $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber jeweils isomorph (gleichwertig) zum Vektorraum~${\mathbb{R}}^{n}$ sind.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'pp' is an instance of 'vector'
+        - 'pp' is element of 'M'
+        - 'qq' is an instance of 'vector'
+        - 'qq' is element of 'M'
+        - There is a mathematical relation:
+            - full source code: 'pp' != 'qq'
+        - 'TpM' is an instance of 'tangent space'
+        - 'TpM' 'is defined wrt point' 'pp'
+        - 'TpM' 'is defined wrt set' 'M'
+        - 'TqM' is an instance of 'tangent space'
+        - 'TqM' 'is defined wrt point' 'qq'
+        - 'TqM' 'is defined wrt set' 'M'
+    - formalized assertion:
+        - 'TpM' 'is isomorphic to' 'Rn'
+        - 'TqM' 'is isomorphic to' 'Rn'
+        - There is a mathematical relation:
+            - full source code: 'TpM' != 'TqM'
+
+
+- There is an explanation:
+    - verbal summary: "Daher dürfen wir statt der Tangentialräume einfach den Vektorraum~$\mathbb{R}^n$ verwenden und können bei den Basisvektorfeldern~(\ref{eq:Basisvektorfeld-Tangentialraum}) den Bezugspunkt~$p$ weglassen."
+    - related to: 'tangent space'
+    - related to: 'n-dimensional real vector space'
+
+
+- Concepts in this snippet:
+    - integer number
+    - n-dimensional real vector space
+    - has dimension
+    - set
+    - is subset of
+    - open
+    - vector
+    - is element of
+    - tangent space
+    - is defined wrt point
+    - is defined wrt set
+    - is isomorphic to
 

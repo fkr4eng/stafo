@@ -7,6 +7,7 @@ import os
 import re, regex
 import numpy as np
 import pickle
+import shutil
 
 from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, del_latex_aux_files
 from stafo.preprocessor import clean_tex_linebreaks
@@ -14,11 +15,15 @@ from stafo.preprocessor import clean_tex_linebreaks
 # paths
 fnl_fpath = os.path.join(BASE_DIR, "data", "nichtlinear", "processed", "formalized_statements_nl.md")
 module_fpath = os.path.join(BASE_DIR, "output.py")
-# latex_fpath = os.path.join(BASE_DIR, "html", "kapitel_2_1.tex")
+latex_nl_fpath = os.path.join(BASE_DIR, "data", "nichtlinear", "processed", "kapitel2_annotated.tex")
 latex_fpath = os.path.join(BASE_DIR, "html", "nl_latex_copy.tex")
 output_dir = os.path.join(BASE_DIR, "html", "res")
 
-if True:
+# copy latest annotated latex file to working dir
+shutil.copy(latex_nl_fpath, latex_fpath)
+
+
+def create_html():
     clean_tex_linebreaks(latex_fpath)
     with open(latex_fpath, "rt", encoding="utf-8") as f:
         tex_source = f.read()
@@ -53,6 +58,8 @@ if True:
     relevant_words = [rw.replace("\n", " ") for rw in relevant_words]
 
     tex_source = re.sub(r"\\ref\{eq:", r"\\eqref{eq:", tex_source)
+    if "bibliography" not in tex_source:
+        tex_source = re.sub(r"\\end\{document\}", r"\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\end{document}", tex_source)
 
     with open(latex_fpath, "wt", encoding="utf-8") as f:
         f.write(tex_source)
@@ -81,7 +88,7 @@ if True:
     ## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
     html_source = html_source.replace("<span \nclass", "<span class")
     ## html looks like this: <span class="some">Mat</span><span class="some">rix</span> which needs to be corrected
-    def repl_func(matchobj):
+    def repl_func_cleanup(matchobj):
         res = ""
         for i in range(1,6):
             res += matchobj.group(i)
@@ -91,7 +98,7 @@ if True:
     while old_html != html_source:
         i += 1
         old_html = html_source
-        html_source = re.sub(r'(<span \n?class=)(?P<classname>.+?)(>.+?)</span>([ \n]*)<span \n?class=(?P=classname)>(.+?</span>)', repl_func, html_source)
+        html_source = re.sub(r'(<span \n?class=)(?P<classname>.+?)(>.+?)</span>([ \n]*)<span \n?class=(?P=classname)>(.+?</span>)', repl_func_cleanup, html_source)
         if old_html == html_source:
             print("done")
         else:
@@ -143,10 +150,10 @@ if True:
         if item is not None:
             short_key = item.short_key
             context = {"word": word, "short_key": short_key, "inner": True}
-            t += render_template("html_tooltip_template.html", context)
+            t += render_template("html_tooltip_template.html", context) + "&nbsp;"
         else:
             print(f"no item found in {word}")
-            t += word
+            t += word + "&nbsp;"
         return t
 
     def get_item_by_name(name):
@@ -172,10 +179,10 @@ if True:
         if item is not None:
             short_key = item.short_key
             context = {"word": mo.group(1), "short_key": short_key, "inner": True}
-            t = render_template("html_tooltip_template.html", context)
+            t = render_template("html_tooltip_template.html", context) + "&nbsp;"
         else:
             print(f"no item found in {mo.group(1)}")
-            t = mo.group(1)
+            t = mo.group(1) + "&nbsp;"
         return t
 
     def repl_func(matchobj):
@@ -236,7 +243,11 @@ if True:
         )*
         </span>
     ))
-    <div\ class="mathjax\ equation">.+?</div>[\ \n]*<span\ class="tooltip">
+    <div\ class="mathjax\ equation">
+    (?:
+        [^<]+
+        | <(?!/div)
+    )+?</div>[\ \n]*<span\ class="tooltip">
     (?:
         [^<]+
         | (?&SPAN)                              # allow nested spans (uses the DEFINEd group)
@@ -262,15 +273,15 @@ if True:
 
     context = {"snippets": [], "css_name": fpath_tail.replace(".tex", ".css")}
     max_num_snippets = int(re.findall(r"\\snippet\{(\d+)i?\}", tex_source)[-1])
-    for i in range(1, max_num_snippets):
+    for i in range(1, max_num_snippets+1):
     # for i in range(1, 7):
         # get html snippet
         html_snip = re.findall(
-            r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet)',
+            r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet|</body>)',
             html_source,
             re.DOTALL)
         if len(html_snip) != 1:
-            print(f"snippet {i} not found in latex, skipping")
+            print(f"snippet {i} not found in html, skipping")
             continue
         else:
             html_snip = html_snip[0]
@@ -304,7 +315,7 @@ if True:
     with open(os.path.join(output_dir, "Nichtlinear.html"), "wt", encoding="utf-8") as f:
         f.write(res)
 
-if False:
+def create_graph():
     nl = p.irkloader.load_mod_from_path(module_fpath, "nl", "nonlinear", reuse_loaded=True)
 
     s = p.ds.get_item_by_label("snippet(16)")
@@ -316,5 +327,8 @@ if False:
             vm.REL_BLACKLIST.append(rel)
     # this takes a lot of time
     vm.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False)
-
+if True:
+    create_html()
+if False:
+    create_graph()
 IPS()

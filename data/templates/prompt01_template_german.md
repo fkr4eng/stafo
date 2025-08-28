@@ -254,5 +254,3 @@ You are not supposed to convert this LaTeX code to formalized statements. Howeve
 Please generate a list of formalized statements (like in Input Part 4) which represent the information from Input Part 5. Thereby, adhere to the statement types given in Input Part 1 and the given instructions.
 At the end of the list, generate a list of all formalized concepts (classes, properties, relations, ...) that appeared in that snippet. Distinguish between concepts, that were defined in this snippet (usually indicatd by "There is a class:" or similar), those should be listed under "Defined in this snippet", and all concepts that occur in this snippet, those should be listed under "Concepts in this snippet". Keep in mind that the second category includes concepts that were defined in the snippet and also concepts, that occur inside nested statements.
 Only use the formalized names, no language alternatives. Dont use equations.
-Dont add any `` to indicate code. set all concepts in tick marks ('')
-"""

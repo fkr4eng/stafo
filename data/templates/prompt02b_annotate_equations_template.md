@@ -1,7 +1,7 @@
 Your job is to examine the given formalized knowledge and annotate the latex snippet code.
 
 
-# Input Part 1: The original latex source code:
+# Input Part 1: The annotated and processed latex source code:
 
 {{context.latex_og}}
 
@@ -20,7 +20,8 @@ Your job is to examine the given formalized knowledge and annotate the latex sni
 
 # Input Part 5: Output format:
 
-\eqnote{<original math code>}{concepts:<list of formalized entities in equation>}{statement:<formalized math code>}
+\eqnote{<unmodified code>}{concepts:<list of formalized entities in equation>}{statement:<formalized math code>}
+place this at the exact location the math expression was found.
 
 # Input Part 6: Example
 
@@ -97,11 +98,12 @@ stehen \textbf{\em senkrecht aufeinander}), falls
 
 # Input Part 7: Final Instructions:
 
-Process the current snippet in latex form and in formalized form. Look for mathematical expressions in the current snippet and annotate them as given in input 5. The first argument of the \eqnote command is the original math expression, dont change it. the second argument is a comma separated list of all formalized concepts that appear in this expression. only list concepts, that were officially formalized in the formalized statements in input 2 and 4. Do not hallucinate. In the third argument, try to represent the math statement in its structure with formalized concepts only. Do not hallucinate. if you think the third representation is not possible, leave the brakets empty. See also the example in input 6.
+Process the current snippet in latex form and in formalized form. Look for mathematical expressions in the current snippet and replace them as given in input 5. The first argument of the \eqnote command is the original math expression, dont change it. the second argument is a comma separated list of all formalized concepts that appear in this expression. only list concepts, that were officially formalized in the formalized statements in input 2 and 4. Do not hallucinate. In the third argument, try to represent the math statement in its structure with formalized concepts only. Do not hallucinate. if you think the third representation is not possible, leave the brakets empty. See also the example in input 6.
 Do not use latex code in the third argument!
 Do not use latex code in the third argument!
 If the third argument cannot be given by formalized objects only, leave it empty.
 If the third argument cannot be given by formalized objects only, leave it empty.
+
 
 With the first argument, always encapsulate the entire math part, like this:
 \eqnote{

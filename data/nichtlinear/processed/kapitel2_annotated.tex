@@ -364,13 +364,19 @@ Für einen gegebenen \setref{Unterraum}{label:subspace} sind sein \setref{orthog
 \section{Felder und Ableitungen\label{sec:Felder-und-Ableitungen}}
 
 \snippet{52i}
-Im vorangegangenen Abschnitt wurden konstante Größen, insbesondere Zeilen- und Spaltenvektoren, betrachtet. Hängen diese Größen von einem Vektor ab (z.\,B. der Position im Raum), dann wird man auf den Begriff des Feldes und damit in den Bereich der Differentialgeometrie geführt.
+Im vorangegangenen Abschnitt wurden konstante Größen, insbesondere
+Zeilen- und Spaltenvektoren, betrachtet. Hängen diese Größen von einem
+Vektor ab (z.\,B. der Position im Raum), dann wird man auf den Begriff
+des Feldes und damit in den Bereich der Differentialgeometrie geführt.
 
 \snippet{53}
-Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine \setref{offene Teilmenge}{label:open} des \setref{Vektorraums}{label:n-dimensional real vector space}~${\mathbb{R}}^{n}$. Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$\eqnote{concepts:'general function', 'has domain', 'has codomain', 'open', 'set of real numbers'}{statement:'general function'('has domain'='open''set', 'has codomain'='set of real numbers')} bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$\eqnote{concepts:'general function', 'has domain', 'has codomain', 'open', 'n-dimensional real vector space'}{statement:'general function'('has domain'='open''set', 'has codomain'='n-dimensional real vector space')} nennt man \setref{Skalarfeld}{label:scalar field} bzw. \setref{Vektorfeld}{label:vector field}.
+Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine \setref{offene Teilmenge}{label:open} des \setref{Vektorraums}{label:n-dimensional real vector space}~${\mathbb{R}}^{n}$.
+Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$\eqnote{concepts:'general function', 'has domain', 'has codomain', 'open', 'set of real numbers'}{statement:'general function'('has domain'='open''set', 'has codomain'='set of real numbers')} bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$\eqnote{concepts:'general function', 'has domain', 'has codomain', 'open', 'n-dimensional real vector space'}{statement:'general function'('has domain'='open''set', 'has codomain'='n-dimensional real vector space')}
+nennt man \setref{Skalarfeld}{label:scalar field} bzw. \setref{Vektorfeld}{label:vector field}.
 
 \snippet{54}
-Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field} (kurz \setref{1-Form}{label:covector field}) oder \setref{Pfaffsche Form}{label:covector field}.
+Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field}
+(kurz \setref{1-Form}{label:covector field}) oder \setref{Pfaffsche Form}{label:covector field}.
 
 \snippet{55}
 Bei den betreffenden
@@ -382,16 +388,19 @@ oder von Parametern. Dann würde man von \setref{\textbf{\em zeit-}}{label:'time
 
 Neben der Darstellung eines \setref{Vektorfeldes}{label:vector field}
 \[
-f(x)=\left(\begin{array}{c} f_{1}(x)\\
+f(x)=\left(\begin{array}{c}
+f_{1}(x)\\
 \vdots\\
 f_{n}(x)
 \end{array}\right)
 \]\eqnote{concepts:'vector field', 'vector'}{statement:{}}
-als \setref{Spaltenvektor}{label:column vector} mit den Komponenten $f_{1}(x),\ldots,f_{n}(x)$ wird häufig auch die Notation
+als \setref{Spaltenvektor}{label:column vector} mit den Komponenten $f_{1}(x),\ldots,f_{n}(x)$
+wird häufig auch die Notation
 \begin{equation}
 f(x)=f_{1}(x)\frac{\partial}{\partial x_{1}}+\cdots+f_{n}(x)\frac{\partial}{\partial x_{n}}\label{eq:Basisdarstellung-Vektorfelder}
 \end{equation}\eqnote{concepts:'vector field', 'vector'}{statement:'f'('x') == $\sum_{i=1}^n$ 'element of sequence'('f', 'i')('x') * 'element of sequence'('b', 'i')}
-verwendet. Dabei symbolisiert
+verwendet.
+Dabei symbolisiert
 \begin{equation}
 \left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\} \label{eq:Basisvektorfelder}
 \end{equation}\eqnote{concepts:'canonical basis'}{statement:}
@@ -400,16 +409,19 @@ die \setref{kanonische Basis}{label:canonical basis}, die im Punkt $x\in\mathcal
 aufspannt (siehe Anmerkungen~\ref{rem:tangentialraum} und~\ref{rem:Notation-Basis-Vektorfelder}).
 
 \snippet{57}
-Die zugehörige \setref{duale Basis}{label:dual basis} wird mit $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $ bezeichnet, d.\,h.
+Die zugehörige \setref{duale Basis}{label:dual basis} wird mit $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $
+bezeichnet, d.\,h.
 \[
 \left\langle {\mathrm{d}} x_{i},\frac{\partial}{\partial x_{j}}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n.
 \]\eqnote{concepts:'natural pairing', 'dual basis', 'canonical basis', 'kronecker delta', 'integer number'}{statement:'natural pairing'('element of sequence'('dual basis', 'integer number'), 'element of sequence'('canonical basis', 'integer number')) = 'kronecker delta'}
 
 \snippet{58}
-Von der \setref{dualen Basis}{label:dual basis} wird im \setref{Punkt}{label:vector}~$x$ der \textbf{\em \setref{Kotangential\-raum}{label:cotangent space}}~$T_{x}^{*}\mathcal{M}$, d.\,h. der \setref{Dualraum}{label:dual space} des \setref{Tangentialraumes}{label:tangent space}, aufgespannt.
+Von der \setref{dualen Basis}{label:dual basis} wird im \setref{Punkt}{label:vector}~$x$ der \textbf{\em \setref{Kotangential\-raum}{label:cotangent space}}~$T_{x}^{*}\mathcal{M}$,
+d.\,h. der \setref{Dualraum}{label:dual space} des \setref{Tangentialraumes}{label:tangent space}, aufgespannt.
 
 \snippet{59}
-Ein \setref{Kovektorfeld}{label:covector field}~$\omega$ kann dann als \setref{Zeilenvektor}{label:row vector}
+Ein \setref{Kovektorfeld}{label:covector field}~$\omega$
+kann dann als \setref{Zeilenvektor}{label:row vector}
 \[
 \omega(x)=\left(\omega_{1}(x),\ldots,\omega_{n}(x)\right)
 \]\eqnote{concepts:'covector field', 'vector', 'covector', 'row vector'}{statement: }
@@ -421,27 +433,30 @@ angegeben werden.
 
 \snippet{60i}
 \begin{remark}
-[Tangentialraum]\label{rem:tangentialraum}Der Begriff Tangentialraum ist im Zusammenhang mit differenzierbaren Mannigfaltigkeiten verbreitet~\cite{abraham1983,jaenich2005,lee2006}.
+[Tangentialraum]\label{rem:tangentialraum}Der Begriff Tangentialraum
+ist im Zusammenhang mit differenzierbaren Mannigfaltigkeiten verbreitet~\cite{abraham1983,jaenich2005,lee2006}.
 
 \snippet{61}
-Für die hier betrachtete \setref{offene}{label:open} \setref{Teilmenge}{label:set} $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ kann man den im \setref{Punkt}{label:vector} $p\in\mathcal{M}$ aufgespannten \setref{Tangentialraum}{label:tangent space} $T_{p}\mathcal{M}$ durch
+Für die hier betrachtete \setref{offene}{label:open} \setref{Teilmenge}{label:set} $\mathcal{M}\subseteq{\mathbb{R}}^{n}$
+kann man den im \setref{Punkt}{label:vector} $p\in\mathcal{M}$ aufgespannten \setref{Tangentialraum}{label:tangent space}
+$T_{p}\mathcal{M}$ durch
 \[
 T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\}
 \]\eqnote{concepts:'tangent space', 'tuple op', 'tuple', 'vector', 'n-dimensional real vector space', 'set'}{statement:'tangent space'=='set'('tuple op'('vector', 'vector'))}
 definieren.
 
 \snippet{62}
-Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$\eqnote{concepts:'tuple', 'vector'}{statement:'tuple op'('p', 'v') + 'tuple op'('p', 'w') == 'tuple op'('p', 'v' + 'w')} und $\alpha\cdot(p,v):=(p,\alpha v)$\eqnote{concepts:'tuple', 'vector'}{statement:'alpha' * 'tuple op'('p', 'v') == 'tuple op'('p', 'alpha' * 'v')} für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$ erhält man einen \setref{$n$-dimensionalen reellen Vektorraum}{label:n-dimensional real vector space}, der von den
+Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$\eqnote{concepts:'tuple', 'vector'}{statement:'tuple op'('p', 'v') + 'tuple op'('p', 'w') == 'tuple op'('p', 'v' + 'w')} und
+$\alpha\cdot(p,v):=(p,\alpha v)$\eqnote{concepts:'tuple', 'vector'}{statement:'alpha' * 'tuple op'('p', 'v') == 'tuple op'('p', 'alpha' * 'v')} für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$
+erhält man einen \setref{$n$-dimensionalen reellen Vektorraum}{label:n-dimensional real vector space}, der von den
 \setref{Basisvektorfeldern}{label:canonical basis}
 \begin{equation}
 \frac{\partial}{\partial x_{i}}(p):\,p\mapsto(p,e_{i})\label{eq:Basisvektorfeld-Tangentialraum}
 \end{equation}
 für $i=1,\ldots,n$ aufgespannt wird (siehe Abb.~\ref{fig:Tangentialraum-Skizze}).
 
-Für verschiedene \setref{Punkte}{label:vector} $p,q\in\mathcal{M}$ erhält man formal unterschiedliche \setref{Tangentialräume}{label:tangent space} $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber jeweils isomorph (gleichwertig) zum \setref{Vektorraum}{label:n-dimensional real vector space}~${\mathbb{R}}^{n}$ sind. Daher dürfen wir statt der \setref{Tangentialräume}{label:tangent space} einfach den Vektor\-raum~$\mathbb{R}^{n}$ verwenden und können bei den Basisvektorfeldern~(\eqref{eq:Basisvektorfeld-Tangentialraum}) den Bezugspunkt~$p$ weglassen.
+Für verschiedene \setref{Punkte}{label:vector} $p,q\in\mathcal{M}$ erhält man formal unterschiedliche \setref{Tangentialräume}{label:tangent space} $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber jeweils isomorph (gleichwertig) zum \setref{Vektorraum}{label:n-dimensional real vector space}~${\mathbb{R}}^{n}$ sind. Daher dürfen wir statt der \setref{Tangentialräume}{label:tangent space} einfach den Vektor\-raum~$\mathbb{R}^{n}$ verwenden und können bei den Basisvektorfeldern~(\ref{eq:Basisvektorfeld-Tangentialraum}) den Bezugspunkt~$p$ weglassen.
 \end{remark}
 
 
-\bibliographystyle{abbrv}
-\bibliography{dynamic}
 \end{document}

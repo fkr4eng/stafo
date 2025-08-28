@@ -71,6 +71,7 @@ class MainManager:
 
         # prepare the paths
         self.tex_fpath = os.path.join(BASE_DIR, "data", "chunk_full_source.tex") if tex_fpath is None else tex_fpath
+        self.annotated_tex_fpath = self.tex_fpath.replace(".tex", "_annotated.tex")
         self.statement_fpath = \
             os.path.join(BASE_DIR, "data", "formalized_statements0.md") if statement_fpath is None else statement_fpath
         self.snapshot_fpath = \
@@ -93,7 +94,7 @@ class MainManager:
 
         # for the statements the last snippet is relevant
         self.statement_snippet_list = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, self.statement_source)
-        assert self.statement_snippet_list[0].strip() == ""
+        # assert self.statement_snippet_list[0].strip() == ""
 
         # indices of latex_snippets now correspond to enumeration in the source
         # e.g. latex_snippets[2] starts with "% snippet(2)"
@@ -169,6 +170,57 @@ class MainManager:
 
         # this should be joined via the empty string to recreate the original latex code
         self.processed_latex_source = "".join((self.processed_latex_source, new_latex_source))
+
+        print("Now adapt fnl, before latex is annoated.")
+        IPS()
+        # todo case for ignored snippet
+        # reload statement_source
+        with open(self.statement_fpath, "rt", encoding="utf-8") as fp:
+            self.statement_source = fp.read()
+
+        # postprocess latex code to make annotations
+        context2 = {
+            "fnl_statements": self.statement_source,
+            "fnl_current": response.text,
+            "latex_og": "".join(self.tex_snippet_list[:i]),
+            "latex_current": new_latex_source,
+        }
+        message2 = render_template("prompt02_annotate_latex_template.md", context2)
+        response2 = self.tracked_model_response(message2, generation_config=self.llm_config)
+
+        context3 = {
+            "fnl_statements": self.statement_source,
+            "fnl_current": response.text,
+            "latex_og": "".join(self.tex_snippet_list[:i]),
+            "latex_current": response2.text,
+        }
+        message3 = render_template("prompt02b_annotate_equations_template.md", context3)
+        response3 = self.tracked_model_response(message3, generation_config=self.llm_config)
+
+        def repl_func(mo):
+            # wrong annotations by llm
+            if not (mo.group(1).startswith("$") or mo.group(1).startswith("\\begin") or mo.group(1).startswith("\\[")):
+                return mo.group(1)
+            # having equation inside arg does not work -> add arg behind equation (llm perfoms way worse if this is the task)
+            else:
+                # group3 = re.sub(r"(?=[^$])\\sum_\{.+?\}\^.+? ", lambda x: f"${x.group(0)}$", mo.group(3))
+                # todo find solution for this
+                return mo.group(1) + "\\eqnote{concepts:" + mo.group(2) + "}{statement:" + mo.group(3) + "}"
+
+        new_latex_content = re.sub(r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, response3.text, flags=re.DOTALL)
+
+
+
+        IPS()
+        with open(self.annotated_tex_fpath, "rt", encoding="utf-8") as f:
+            annotated_tex = f.read()
+
+        annotated_tex = annotated_tex.replace("\end{document}", new_latex_content + "\n\end{document}")
+
+        with open(self.annotated_tex_fpath, "wt", encoding="utf-8") as f:
+            f.write(annotated_tex)
+
+
         # write the message for debugging
 
         tmp_fname = f"tmp{i:02d}.md"
