@@ -1,5 +1,5 @@
-from rapidfuzz import fuzz, process, utils
-from rapidfuzz.distance import Indel, JaroWinkler
+# from rapidfuzz import fuzz, process, utils
+# from rapidfuzz.distance import Indel, JaroWinkler
 import subprocess
 import pyirk as p
 from ipydex import IPS
@@ -9,7 +9,7 @@ import numpy as np
 import pickle
 import shutil
 
-from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, del_latex_aux_files
+from stafo.utils import BASE_DIR, CONFIG_PATH, render_template, del_latex_aux_files, replace_last_n_occurance
 from stafo.preprocessor import clean_tex_linebreaks
 
 # paths
@@ -289,9 +289,10 @@ def create_html():
             html_snip = html_snip[0]
 
         # html converter spits out more </div> than <div> elements
-        # remove access ones.
+        # remove access ones. # todo investigate why.
         if html_snip.count("</div>") > html_snip.count("<div"):
-            pass
+            assert html_snip.count("</div>") - html_snip.count("<div") == 1, f"investigate snippet {i} for </div>'s"
+            html_snip = replace_last_n_occurance("</div>", html_snip, 1, "")
 
         # get rid of "snippet"
         html_snip = re.sub(r'<span class="cmbx-10">snippet '+str(i)+r'i?</span>', "", html_snip)

@@ -200,3 +200,18 @@ def del_latex_aux_files(folder_path, filename):
     del_files = [".4ct", ".4tc", ".aux", ".css", ".dvi", ".html", ".idv", ".lg", ".log", ".tmp", ".xref"]
     for ending in del_files:
         os.remove(os.path.join(folder_path, filename.split(".")[0] + ending))
+
+def replace_last_n_occurance(word: str, text:str, n:int, replacement:str):
+    parts = text.split(word)
+    len_parts = len(parts)
+    if n > len_parts:
+        print(f"Warning: n={n}>Anzahl Parts={len_parts}")
+    new_text = ""
+    for i, part in enumerate(parts):
+        new_text += part
+        if i < len_parts -1 - n:
+            new_text += word
+        elif i +1 < len_parts:
+            # dont add delimiter after last part
+            new_text += replacement
+    return new_text
