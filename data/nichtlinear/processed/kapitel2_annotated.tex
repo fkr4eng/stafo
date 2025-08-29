@@ -114,7 +114,7 @@ Die Zerlegung in \setref{direkte Summen}{label:direct sum of vector spaces} bede
 Die Ergänzung eines \setref{Unterraumes}{label:subspace}~$\mathbb{U}$ um einen \setref{Komplmentärraum}{label:complement space}~$\mathbb{V}$ ist nicht eindeutig. Wählt man den \setref{Komplementärraum}{label:complement space} unter Zuhilfenahme des \setref{Skalarprodukts}{label:canonical scalar product}~(\eqref{eq:skalarprodukt}) derart, dass alle \setref{Vektoren}{label:vector} $u\in\mathbb{U}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} und $v\in\mathbb{V}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} jeweils senkrecht aufeinander stehen, so erhält man das \setref{orthogonale Komplement}{label:orthogonal complement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$:
 \begin{equation}
 \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement}
-\end{equation}\eqnote{concepts:'orthogonal complement', 'n-dimensional real vector space', 'vector', 'vector space', 'canonical scalar product', 'is element of'}{statement:''}
+\end{equation}\eqnote{concepts:'orthogonal complement', 'n-dimensional real vector space', 'vector', 'vector space', 'canonical scalar product', 'is element of' 'subspace'}{statement:'orthogonal complement'('subspace') == 'set'('vector' 'is element of' 'n-dimensional real vector space'; 'vector' 'is element of' 'subspace': 'canonical scalar product'('vector', 'vector')=0)}
 Hinsichtlich der \setref{Dimensionen}{label:dimension} besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}):
 \begin{equation}
 \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl}
@@ -264,7 +264,7 @@ Die \setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$\eqnote{concepts
 behandelt.
 
 \snippet{36}
-Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'linear mapping', 'set of linear mappings', 'n-dimensional real vector space', 'is element of'}{statement:'linear mapping' 'is element of' 'set of linear mappings'}, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'set of linear mappings', 'n-dimensional real vector space', 'set of linear mappings op'}{statement:'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')} die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in den~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$\eqnote{concepts:'integer number'}{statement:''}.
+Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'linear mapping', 'set of linear mappings op', 'n-dimensional real vector space', 'is element of'}{statement:'linear mapping' 'is element of' 'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')}, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'set of linear mappings', 'n-dimensional real vector space', 'set of linear mappings op'}{statement:'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')} die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in den~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$\eqnote{concepts:'integer number'}{statement:''}.
 
 \snippet{37}
 Der \setref{Dualraum}{label:dual space} (engl. \setref{dual space}{label:dual space}) $({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'dual space', 'n-dimensional real vector space', 'dual'}{statement:'dual'('n-dimensional real vector space')} des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} besteht aus den auf~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} definierten \setref{linearen Funktionalen}{label:linear functional} (\setref{Linearformen}{label:linear functional}), d.\,h. aus \setref{linearen Abbildungen}{label:linear mapping} ${\mathbb{R}}^{n}\to{\mathbb{R}}$\eqnote{concepts:'n-dimensional real vector space', 'set of real numbers', 'linear mapping'}{statement:''}.
@@ -442,7 +442,7 @@ kann man den im \setref{Punkt}{label:vector} $p\in\mathcal{M}$ aufgespannten \se
 $T_{p}\mathcal{M}$ durch
 \[
 T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\}
-\]\eqnote{concepts:'tangent space', 'tuple op', 'tuple', 'vector', 'n-dimensional real vector space', 'set'}{statement:'tangent space'=='set'('tuple op'('vector', 'vector'))}
+\]\eqnote{concepts:'tangent space', 'tuple op', 'tuple', 'vector', 'n-dimensional real vector space', 'set'}{statement:'tangent space'=='set'('tuple op'('vector', 'vector'), 'vector' 'is element of' 'n-dimensional real vector space')}
 definieren.
 
 \snippet{62}
