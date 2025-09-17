@@ -93,3 +93,25 @@ R1111["lives_in"]
 R2222["from"]
 R3333["to"]
 ````
+
+
+## Workflow
+- Latex Source Doc
+    - Preprocessing:
+        - replace custom commands
+        - remove images
+        - linebreak anomalies
+- run statement Formalizer
+    - create FNL template
+        - extract concepts and statements
+    - review + adapt FNL template
+    - annotate latex doc with
+- run FNL to pyirk parser
+    - nested dict for FNL
+    - entity matching
+    - render into pyirk
+- run html export
+    - convert annotated latex to html
+    - posprocess html
+    - add tooltip at placeholder positions
+    - create pyirk graph

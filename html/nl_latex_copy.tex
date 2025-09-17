@@ -114,7 +114,7 @@ Die Zerlegung in \setref{direkte Summen}{label:direct sum of vector spaces} bede
 Die Ergänzung eines \setref{Unterraumes}{label:subspace}~$\mathbb{U}$ um einen \setref{Komplmentärraum}{label:complement space}~$\mathbb{V}$ ist nicht eindeutig. Wählt man den \setref{Komplementärraum}{label:complement space} unter Zuhilfenahme des \setref{Skalarprodukts}{label:canonical scalar product}~(\eqref{eq:skalarprodukt}) derart, dass alle \setref{Vektoren}{label:vector} $u\in\mathbb{U}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} und $v\in\mathbb{V}$\eqnote{concepts:'vector', 'vector space', 'is element of'}{statement:'vector' 'is element of' 'vector space'} jeweils senkrecht aufeinander stehen, so erhält man das \setref{orthogonale Komplement}{label:orthogonal complement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$:
 \begin{equation}
 \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement}
-\end{equation}\eqnote{concepts:'orthogonal complement', 'n-dimensional real vector space', 'vector', 'vector space', 'canonical scalar product', 'is element of'}{statement:''}
+\end{equation}\eqnote{concepts:'orthogonal complement', 'n-dimensional real vector space', 'vector', 'vector space', 'canonical scalar product', 'is element of' 'subspace'}{statement:'orthogonal complement'('subspace') == 'set'('vector' 'is element of' 'n-dimensional real vector space'; 'vector' 'is element of' 'subspace': 'canonical scalar product'('vector', 'vector')=0)}
 Hinsichtlich der \setref{Dimensionen}{label:dimension} besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}):
 \begin{equation}
 \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl}
@@ -235,7 +235,7 @@ Die \setref{Dimensionsformel}{label:dimension}~(\eqref{eq:dimensionsformel-ortho
 an~\cite{lorenz1992,beutelspacher2001}.
 
 \snippet{33}
-Der \setref{Zusammenhang}{label:general statement}~(\eqref{eq:dimensions-formel}) ist auch unter der Bezeichnung \textbf{\em \setref{Rangsatz}{label:Rangsatz}} bekannt.
+Der Zusammenhang~(\eqref{eq:dimensions-formel}) ist auch unter der Bezeichnung \textbf{\em Rangsatz} bekannt.
 
 \snippet{34i}
 
@@ -264,7 +264,7 @@ Die \setref{Matrix}{label:matrix} $A\in{\mathbb{R}}^{m\times n}$\eqnote{concepts
 behandelt.
 
 \snippet{36}
-Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'linear mapping', 'set of linear mappings', 'n-dimensional real vector space', 'is element of'}{statement:'linear mapping' 'is element of' 'set of linear mappings'}, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'set of linear mappings', 'n-dimensional real vector space', 'set of linear mappings op'}{statement:'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')} die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in den~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$\eqnote{concepts:'integer number'}{statement:''}.
+Dabei verwendet man die Notation $\mathcal{A}\in L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'linear mapping', 'set of linear mappings op', 'n-dimensional real vector space', 'is element of'}{statement:'linear mapping' 'is element of' 'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')}, wobei $L({\mathbb{R}}^{n},{\mathbb{R}}^{m})$\eqnote{concepts:'set of linear mappings', 'n-dimensional real vector space', 'set of linear mappings op'}{statement:'set of linear mappings op'('n-dimensional real vector space', 'n-dimensional real vector space')} die \setref{Menge}{label:set} der \setref{linearen Abbildungen}{label:linear mapping} vom~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} in den~${\mathbb{R}}^{m}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} bezeichnet. Diese \setref{Menge}{label:set} besitzt auch die Struktur eines \setref{Vektorraumes}{label:vector space} der Dimension $n\cdot m$\eqnote{concepts:'integer number'}{statement:''}.
 
 \snippet{37}
 Der \setref{Dualraum}{label:dual space} (engl. \setref{dual space}{label:dual space}) $({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'dual space', 'n-dimensional real vector space', 'dual'}{statement:'dual'('n-dimensional real vector space')} des~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} besteht aus den auf~${\mathbb{R}}^{n}$\eqnote{concepts:'n-dimensional real vector space'}{statement:''} definierten \setref{linearen Funktionalen}{label:linear functional} (\setref{Linearformen}{label:linear functional}), d.\,h. aus \setref{linearen Abbildungen}{label:linear mapping} ${\mathbb{R}}^{n}\to{\mathbb{R}}$\eqnote{concepts:'n-dimensional real vector space', 'set of real numbers', 'linear mapping'}{statement:''}.
@@ -332,7 +332,7 @@ x_{1}\\
 x_{n}
 \end{array}\right)=\sum_{i=1}^{n}\omega_{i}x_{i}\label{eq:inneres-produkt}
 \end{equation}\eqnote{concepts:'natural pairing', 'covector', 'vector', 'element of sequence', 'integer number'}{statement:'natural pairing'('covector', 'vector') == $\sum_{i=1}^{n}$ ('element of sequence'('covector', 'integer number') * 'element of sequence'('vector', 'integer number'))}
-eine \textbf{\em \setref{natürliche Paarung}{label:natural pairing}}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em \setref{Kontraktion}{label:contraction}} zwischen \setref{Kovektoren}{label:covector} und \setref{Vektoren}{label:vector} auffasst.
+eine \textbf{\em \setref{natürliche Paarung}{label:natural pairing}}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em \setref{Kontraktion}{label:natural pairing}} zwischen \setref{Kovektoren}{label:covector} und \setref{Vektoren}{label:vector} auffasst.
 
 \snippet{47}
 Die \setref{Basis}{label:basis} $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu $\left\{ e_{1},\ldots,e_{n}\right\} $ \setref{duale Basis}{label:dual basis}, d.\,h. es gilt
@@ -427,7 +427,7 @@ angegeben werden.
 Für die hier betrachtete \setref{offene}{label:open} \setref{Teilmenge}{label:set} $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ kann man den im \setref{Punkt}{label:vector} $p\in\mathcal{M}$ aufgespannten \setref{Tangentialraum}{label:tangent space} $T_{p}\mathcal{M}$ durch
 \[
 T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\}
-\]\eqnote{concepts:'tangent space', 'tuple op', 'tuple', 'vector', 'n-dimensional real vector space', 'set'}{statement:'tangent space'=='set'('tuple op'('vector', 'vector'))}
+\]\eqnote{concepts:'tangent space', 'tuple op', 'tuple', 'vector', 'n-dimensional real vector space', 'set'}{statement:'tangent space'=='set'('tuple op'('vector', 'vector'), 'vector' 'is element of' 'n-dimensional real vector space')}
 definieren.
 
 \snippet{62}
@@ -442,6 +442,7 @@ Für verschiedene \setref{Punkte}{label:vector} $p,q\in\mathcal{M}$ erhält man 
 \end{remark}
 
 
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 \bibliographystyle{abbrv}
 \bibliography{dynamic}
 \end{document}
