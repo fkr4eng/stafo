@@ -71,6 +71,7 @@ def create_html():
     os.chdir(fpath_head)
     os.makedirs(output_dir, exist_ok=True)
     res = subprocess.run(["make4ht", fpath_tail, "--output-dir", output_dir, '"mathjax"', "--config", "config.cfg"])
+    # res = subprocess.run(["make4ht", fpath_tail, "-a", "debug", "--output-dir", output_dir, '"mathjax"', "--config", "config.cfg"])
     if res.returncode == 0:
         print("conversion finished.")
     else:
