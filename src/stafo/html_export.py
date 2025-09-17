@@ -59,7 +59,7 @@ def create_html():
 
     tex_source = re.sub(r"\\ref\{eq:", r"\\eqref{eq:", tex_source)
     if "bibliography" not in tex_source:
-        tex_source = re.sub(r"\\end\{document\}", r"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\end{document}", tex_source)
+        tex_source = re.sub(r"\\end\{document\}", r"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\bibdata{dynamic}\n\\end{document}", tex_source)
 
     with open(latex_fpath, "wt", encoding="utf-8") as f:
         f.write(tex_source)
