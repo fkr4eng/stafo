@@ -45,6 +45,7 @@
 - 'set of real numbers' is an instance of 'set'
 - 'set of real numbers' has the associated LaTeX notation $\mathbb{R}$.
 - 'set of real numbers' has the alternative german label 'Menge der reellen Zahlen'
+- 'set of real numbers' 'has element type' 'real number'
 
 - // manually added 2
 - There is a class: 'integer number'

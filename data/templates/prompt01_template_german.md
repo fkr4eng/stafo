@@ -18,6 +18,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - There is a class: <arg1>.
 - There is a property: <arg1>.
 - There is a relation: <arg1>.
+- There is a general operator: <arg1>.
 - There is a unary operator: <arg1>.
 - There is a binary operator: <arg1>.
 - <arg1> is applicable to <arg2>.
