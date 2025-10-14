@@ -42,6 +42,8 @@ def main():
         help=f"evaluate the token-tracking csv file", metavar="TRACKING_FILE",
     )
 
+    parser.add_argument("--dbg", help="start debug routine", default=None, action="store_true")
+
     args = parser.parse_args()
 
     dev_mode = (args.dev_mode == "true")
@@ -67,5 +69,7 @@ def main():
         statement_to_kg.main(statement_file)
     elif args.llm_command:
         core.llm_command(dev_mode, statement_fpath=args.llm_command)
+    elif args.dbg:
+        IPS()
     else:
         core.main(dev_mode=dev_mode)

@@ -33,7 +33,7 @@ with open(CONFIG_PATH, "rb") as fp:
 
 # https://github.com/google-gemini/generative-ai-python
 genai.configure(api_key=config_dict["gemini_api_key"])
-model = genai.GenerativeModel('gemini-1.5-pro-latest')
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 # - It would be useful if you also would generate comments to explain your "chain of thought".
 

@@ -12,6 +12,7 @@ __pycache__
 output.py
 debug*.py
 output_no_error.py
+uv.lock
 
 # dont commit the pickle file
 *.pcl
