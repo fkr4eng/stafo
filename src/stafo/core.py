@@ -14,6 +14,7 @@ import time
 
 #! pip install google-generativeai
 import google.generativeai as genai
+import google.genai as genai2
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template
 
@@ -104,8 +105,14 @@ class MainManager:
         self.processed_latex_source = "".join(self.tex_snippet_list[:self.start_snippet_idx])
 
 
+
     def make_snapshot(self, source, snippet_number):
-        snapshot_file_names = os.listdir(self.snapshot_fpath)
+        def snapshot_sort(fname):
+            sn_number = int(fname.split("_")[0][2:])
+            sn_version = int(fname.split("_")[1].split(".")[0])
+            return (sn_number, sn_version)
+
+        snapshot_file_names = os.listdir(self.snapshot_fpath).sort(key=snapshot_sort)
         if len(snapshot_file_names) == 0:
             fname = f"sn{snippet_number}_0.md"
         else:
@@ -215,7 +222,7 @@ class MainManager:
         with open(self.annotated_tex_fpath, "rt", encoding="utf-8") as f:
             annotated_tex = f.read()
 
-        annotated_tex = annotated_tex.replace("\end{document}", new_latex_content + "\n\end{document}")
+        annotated_tex = annotated_tex.replace("\\end{document}", new_latex_content + "\n\\end{document}")
 
         with open(self.annotated_tex_fpath, "wt", encoding="utf-8") as f:
             f.write(annotated_tex)
