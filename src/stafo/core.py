@@ -112,7 +112,8 @@ class MainManager:
             sn_version = int(fname.split("_")[1].split(".")[0])
             return (sn_number, sn_version)
 
-        snapshot_file_names = os.listdir(self.snapshot_fpath).sort(key=snapshot_sort)
+        snapshot_file_names = os.listdir(self.snapshot_fpath)
+        snapshot_file_names.sort(key=snapshot_sort)
         if len(snapshot_file_names) == 0:
             fname = f"sn{snippet_number}_0.md"
         else:
@@ -124,7 +125,7 @@ class MainManager:
 
         fullpath = os.path.join(self.snapshot_fpath, fname)
         with open(fullpath, "wt", encoding="utf-8") as fp:
-            fp.write(self.statement_source)
+            fp.write(source)
         print(f"Snapshot {fullpath} written")
 
     def do_next_query_iteration(self):
