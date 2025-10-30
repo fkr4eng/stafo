@@ -119,7 +119,7 @@ class ConversionManager:
         return s.replace(" ", "_")
 
     ####################################################################################################################
-    # helper functions
+    # region helper functions
     ####################################################################################################################
 
     def strip(self, s):
@@ -454,7 +454,7 @@ class ConversionManager:
         }
 
     ####################################################################################################################
-    # parse formal natural language
+    # region parse FNL
     ####################################################################################################################
     @u.timing
     def step2_parse_fnl(self):
@@ -1262,7 +1262,7 @@ class ConversionManager:
         return current_dict
 
     ####################################################################################################################
-    # rendering
+    # region rendering
     ####################################################################################################################
     @u.timing
     def render(self, final_replacements: list = None) -> str:
@@ -1939,6 +1939,8 @@ class ConversionManager:
         self.step2_parse_fnl()
         res = self.render()
         return res
+
+# region main
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None, mod_uri="__stafo_default_uri__"):

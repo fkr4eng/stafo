@@ -2446,3 +2446,86 @@
     - is defined wrt set
     - is isomorphic to
 
+
+- // snippet(64)
+- There is a class: 'differentiable vector-valued function' @en
+- 'differentiable vector-valued function' has the alternative german label 'differenzierbare vektorielle Funktion'
+- 'differentiable vector-valued function' is a subclass of 'general function'
+- There is a class: 'Jacobian matrix' @en
+- 'Jacobian matrix' has the alternative german label 'Jacobimatrix'
+- 'Jacobian matrix' has the alternative german label 'Differential'
+- 'Jacobian matrix' is a subclass of 'matrix'
+- There is a relation: 'has Jacobian matrix'
+- The type of argument1 of 'has Jacobian matrix' is 'differentiable vector-valued function'
+- The result type of 'has Jacobian matrix' is 'Jacobian matrix'
+- 'differentiable vector-valued function' has the associated LaTeX notation $F:\mathcal{M}\to{\mathbb{R}}^{m}$
+- 'Jacobian matrix' has the associated LaTeX notation $F^{\prime}(x)={\mathrm{d}} F(x)=\frac{\partial F}{\partial x}(x):=\left(\begin{array}{ccc} \frac{\partial F_{1}}{\partial x_{1}}(x) & \cdots & \frac{\partial F_{1}}{\partial x_{n}}(x)\\ \vdots & \ddots & \vdots\\ \frac{\partial F_{m}}{\partial x_{1}}(x) & \cdots & \frac{\partial F_{m}}{\partial x_{n}}(x) \end{array}\right)$
+- There is a general statement:
+    - full source code: Die Ableitung einer differenzierbaren vektoriellen Funktion $F:\mathcal{M}\to{\mathbb{R}}^{m}$ ist die $m\times n$-Matrix \begin{equation} F^{\prime}(x)={\mathrm{d}} F(x)=\frac{\partial F}{\partial x}(x):=\left(\begin{array}{ccc} \frac{\partial F_{1}}{\partial x_{1}}(x) & \cdots & \frac{\partial F_{1}}{\partial x_{n}}(x)\\ \vdots & \ddots & \vdots\\ \frac{\partial F_{m}}{\partial x_{1}}(x) & \cdots & \frac{\partial F_{m}}{\partial x_{n}}(x) \end{array}\right),\label{eq:dF} \end{equation} die\textbf{\em Jacobimatrix} bzw. \textbf{\em Differential} genannt wird.
+    - formalized setting:
+        - 'm' is an instance of 'integer number'
+        - 'n' is an instance of 'integer number'
+        - 'Rm' is an instance of 'n-dimensional real vector space'
+        - 'Rm' 'has dimension' 'm'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'F' is an instance of 'differentiable vector-valued function'
+        - 'F' 'has domain' 'M'
+        - 'F' 'has codomain' 'Rm'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+    - formalized assertion:
+        - 'J' is an instance of 'Jacobian matrix'
+        - 'F' 'has Jacobian matrix' 'J'
+        - 'J' 'has number of rows' 'm'
+        - 'J' 'has number of columns' 'n'
+
+- There is a general statement:
+    - full source code: Die Jacobimatrix eines Vektor\-feldes $f:\mathcal{M}\to{\mathbb{R}}^{n}$ ist eine quadratische $n\times n$-Matrix.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+    - formalized assertion:
+        - 'J' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'J'
+        - 'J' 'has number of rows' 'n'
+        - 'J' 'has number of columns' 'n'
+        - 'J' is secondary instance of 'square matrix'
+
+- Concepts in this snippet:
+    - 'differentiable vector-valued function'
+    - 'general function'
+    - 'Jacobian matrix'
+    - 'matrix'
+    - 'has Jacobian matrix'
+    - 'integer number'
+    - 'n-dimensional real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'is element of'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'vector field'
+    - 'square matrix'
+    - 'is secondary instance of'
+
+- Defined in this snippet:
+    - 'differentiable vector-valued function'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+

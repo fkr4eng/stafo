@@ -492,15 +492,19 @@ nennt man die Ableitung
 h^{\prime}(x)={\mathrm{d}} h(x)=\frac{\partial h}{\partial x}(x):=\left(\frac{\partial h}{\partial x_{1}}(x),\ldots,\frac{\partial h}{\partial x_{n}}(x)\right)\label{eq:dh}
 \end{equation}
 \textbf{\em Gradient} bzw. \textbf{\em totales Differential}.
+\snippet{66}
 In Anlehnung an Gl.~(\ref{eq:Basisdarstellung-Kovektorfelder}) ist
 auch die Notation
 \[
 {\mathrm{d}} h(x)=\frac{\partial h(x)}{\partial x_{1}}{\mathrm{d}} x_{1}+\cdots+\frac{\partial h(x)}{\partial x_{n}}{\mathrm{d}} x_{n}
 \]
-gebräuchlich. Der in Gl.~(\ref{eq:dh}) definierte Gradient ist ein
+gebräuchlich.
+\snippet{67}
+Der in Gl.~(\ref{eq:dh}) definierte Gradient ist ein
 von~$x$ abhängiger Zeilenvektor, also ein Kovektorfeld. Diese Darstellung
 ist konsistent mit der in Gl.~(\ref{eq:dF}) definierten Jacobimatrix
 für $m=1$.
+\snippet{68}
 \begin{remark}
 [Gradientenfeld]\label{rem:Gradient-als-Vektorfeld}In einigen anderen
 Fachgebieten (u.\,a. der Vektoranalysis und der Optimierung) fasst
@@ -511,7 +515,7 @@ und damit als Vektorfeld auf:
 \]
 Ein solches Vektorfeld nennt man \textbf{\em Gradientenfeld}~\cite{koenigsberger2-2004,knauf2012}.
 \end{remark}
-
+\snippet{69}
 \begin{remark}
 [Notation der Basisvektorfelder]\label{rem:Notation-Basis-Vektorfelder}Die
 in Anmerkung~\ref{rem:tangentialraum} verwendete Notation~(\ref{eq:Basisdarstellung-Vektorfelder})
@@ -530,6 +534,7 @@ Setzt man für~$v$ den Einheitsvektor~$e_{i}$ ein, so erhält man
 d.\,h. $\frac{\partial}{\partial x_{i}}$ erzeugt die Richtungsableitung
 in Richtung des Einheitsvektors~$e_{i}$.
 \end{remark}
+\snippet{70}
 Mitunter benötigt man auch Ableitungen verschiedener Produkte von
 Feldern:
 \begin{proposition}
@@ -556,6 +561,7 @@ h^{\prime\prime}(x)=\left(\begin{array}{ccc}
 \end{array}\right)
 \]
 der zweiten partiellen Ableitungen des Skalarfeldes~$h$ heißt \textbf{\em Hessematrix}.
+\snippet{71i}
 \begin{example}
 \label{exa:grad-hess}Zu dem gegebenen Skalarfeld $h(x)=x_{1}^{2}x_{2}^{3}+1$
 sind der Gradient und die Hessematrix zu berechnen. Für die Berechnung
@@ -565,6 +571,7 @@ der Hessematrix erfolgt mit \texttt{hessian}:
 
 
 \end{example}
+\snippet{72}
 Sind die Elemente der Hessematrix wie in Beispiel~\ref{exa:grad-hess}
 auch stetig, dann ist die Matrix symmetrisch~\cite{koenigsberger2-2004}:
 
@@ -576,11 +583,14 @@ stetig differenzierbar. Dann gilt
 \frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(p)=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}(p)\quad\textrm{für}\quad i,j=1,\ldots,n.\label{eq:lemma-schwarz}
 \end{equation}
 \end{lemma}
+\snippet{73}
 Der Gradient ist selber ein Kovektorfeld. Lässt sich umgekehrt ein
 Kovektorfeld als Gradient eines Skalarfeldes darstellen, so nennt
 man es \textbf{\em exaktes Differential} bzw.
 \textbf{\em exakte Differentialform}. Das
-zugehörige Skalarfeld heißt \textbf{\em Potential}. Das
+zugehörige Skalarfeld heißt \textbf{\em Potential}.
+\snippet{74}
+Das
 Lemma von Schwarz führt auf eine Existenzbedingung eines solchen Potentials
 für ein gegebenes Kovektorfeld. Man spricht dabei auch von einer Integrabilitätsbedingung
 für Differentialformen:

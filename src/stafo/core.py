@@ -149,6 +149,7 @@ class MainManager:
     def iteration_step(self, i):
 
         new_latex_source = self.tex_snippet_list[i]
+        statement_source_before = self.statement_source
 
         look_ahead_latex_source = self.get_look_ahead_latex_source(i)
         context = self.create_context(new_latex_source, look_ahead_latex_source)
@@ -164,10 +165,23 @@ class MainManager:
             print(new_latex_source)
 
         response = self.tracked_model_response(message, generation_config=self.llm_config)
-
+        IPS()
         # make snapshot before and after response
         self.make_snapshot(self.statement_source, self.start_snippet_idx-1)
-        self.statement_source = "\n".join((self.statement_source, response.text))
+        statement_source_new = "\n".join((self.statement_source, response.text))
+        self.make_snapshot(statement_source_new, self.start_snippet_idx)
+
+        # quality control via llm
+        context_q = {
+            "processed_latex_source": self.processed_latex_source,
+            "resulting_statements": statement_source_before,
+            "new_latex_source": new_latex_source,
+            "new_statements": response.text,
+        }
+        message_q = render_template("prompt04_quality_control_template.md", context_q)
+        response_q = self.tracked_model_response(message_q, generation_config=self.llm_config)
+
+        self.statement_source = "\n".join((self.statement_source, "- // quality control", response_q.text))
         self.make_snapshot(self.statement_source, self.start_snippet_idx)
 
         if self.interactive_mode:
