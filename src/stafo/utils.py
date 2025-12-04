@@ -199,7 +199,9 @@ class OneToOneMapping(object):
 def del_latex_aux_files(folder_path, filename):
     del_files = [".4ct", ".4tc", ".aux", ".css", ".dvi", ".html", ".idv", ".lg", ".log", ".tmp", ".xref"]
     for ending in del_files:
-        os.remove(os.path.join(folder_path, filename.split(".")[0] + ending))
+        file = os.path.join(folder_path, filename.split(".")[0] + ending)
+        if os.path.isfile(file):
+            os.remove(file)
 
 def replace_last_n_occurance(word: str, text:str, n:int, replacement:str):
     parts = text.split(word)
