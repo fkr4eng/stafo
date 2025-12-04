@@ -300,7 +300,7 @@ def create_html():
         html_snip = re.sub(r'<span class="cmbx-10">snippet '+str(i)+r'i?</span>', "", html_snip)
 
         # get fnl snippet
-        fnl_snip = re.findall(f"- // snippet\({i}i?\).+?(?=- // snippet)", fnl_source, re.DOTALL)
+        fnl_snip = re.findall(r"- // snippet\("+str(i)+r"i?\).+?(?=- // snippet)", fnl_source, re.DOTALL)
         if len(fnl_snip) == 1:
             fnl_snip = fnl_snip[0]
         else:
@@ -308,7 +308,7 @@ def create_html():
             fnl_snip = ""
 
         # get module snippet
-        module_snip = re.findall(f'# snippet\({i}i?\).+?(?=\Z|# snippet\({i+1})', module_source, re.DOTALL)
+        module_snip = re.findall(r'# snippet\('+str(i)+r'i?\).+?(?=\Z|# snippet\('+str(i+1)+r')', module_source, re.DOTALL)
         if len(module_snip) == 1:
             module_snip = module_snip[0]
         else:

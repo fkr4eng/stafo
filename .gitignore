@@ -45,4 +45,5 @@ html/res/
 *.idx
 *.fls
 *.fdb_latexmk
+*.xdv
 .aider*
