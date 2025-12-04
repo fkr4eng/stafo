@@ -241,40 +241,48 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-document.querySelectorAll(".toggle-container").forEach(container => {
-    const states = Array.from(container.querySelectorAll(".state"));
-    let index = 0;
-
-    const box = container.querySelector(".content-box");
-    const button = container.querySelector(".toggle-btn");
-
-    async function showState(i) {
-        MathJax.typesetClear([box]);
-        MathJax.texReset();
-        await sleep(10);
-
-        box.innerHTML = states[i].innerHTML;
-
-        const btnLabel = states[i].dataset.button;
-        if (btnLabel) button.textContent = btnLabel;
-
-        // wire up and resize any textareas that just became visible
-        wireAndResizeTextareas(box);
-        // Re-render MathJax for the new content
-        setTimeout(() => {
-            if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise([box]).catch(err => console.log(err.message));
-            }
-        }, 50);
-    }
-
-    showState(index);
-
-    button.addEventListener("click", () => {
-        index = (index + 1) % states.length;
-        showState(index);
+window.addEventListener("DOMContentLoaded", () => {
+    MathJax.startup.promise.then(() => {
+        initializeToggles();
     });
 });
+
+function initializeToggles() {
+    document.querySelectorAll(".toggle-container").forEach(container => {
+        const states = Array.from(container.querySelectorAll(".state"));
+        let index = 0;
+
+        const box = container.querySelector(".content-box");
+        const button = container.querySelector(".toggle-btn");
+
+        async function showState(i) {
+            MathJax.typesetClear([box]);
+            MathJax.texReset();
+            await sleep(10);
+
+            box.innerHTML = states[i].innerHTML;
+
+            const btnLabel = states[i].dataset.button;
+            if (btnLabel) button.textContent = btnLabel;
+
+            // wire up and resize any textareas that just became visible
+            wireAndResizeTextareas(box);
+            // Re-render MathJax for the new content
+            setTimeout(() => {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([box]).catch(err => console.log(err.message));
+                }
+            }, 50);
+        }
+
+        showState(index);
+
+        button.addEventListener("click", () => {
+            index = (index + 1) % states.length;
+            showState(index);
+        });
+    });
+}
 </script>
 
 </body>

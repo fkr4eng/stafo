@@ -194,7 +194,7 @@ def create_html():
             try:
                 label = re.findall(r"(?<=label:).+?(?=<|$)", clean_html, re.DOTALL)
                 assert len(label) >= 1, f"label not found in {matchobj}"
-                label = label[-1].replace("\n", " ").replace("'", "").replace('"', "").replace("’", "")
+                label = label[-1].replace("\n", " ").replace("'", "").replace('"', "").replace("’", "").strip()
                 item = get_item_by_name(label)
                 assert item is not None, f"no item found for label {label, matchobj}"
                 short_key = item.short_key
@@ -260,7 +260,8 @@ def create_html():
         return f"""<div class="horizontal">{mo.group(0)}</div>"""
     html_source = regex.sub(pat, div_repl, html_source)
 
-
+    # depending on make4ht version, sometimes the wrong quotes are used
+    html_source = html_source.replace("'",'"')
 
 
     with open(html_fpath, "wt", encoding="utf-8") as f:
@@ -280,7 +281,7 @@ def create_html():
         if i == 17:
             pass
         html_snip = re.findall(
-            r'<p class="\w+?" ?> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class="\w+?" ?> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
+            r'<p class=[^>]*> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class=[^>]*> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
             html_source,
             re.DOTALL)
         if len(html_snip) != 1:
