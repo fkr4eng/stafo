@@ -2298,7 +2298,7 @@
         - 'M' has the property 'open'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
-        - 'v' is an instance of 'vector' qqq: univ_quant.
+        - 'v' is an instance of 'vector' qqq univ_quant.
         - 'v' is element of 'Rn'
         - 'TpM' is an instance of 'set'
         - 'tpv' is an instance of 'tuple'

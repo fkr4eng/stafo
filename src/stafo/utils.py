@@ -119,7 +119,6 @@ class MyDict(dict):
         print(f"warning: {key} was not found, return 'ut' instead")
         return "ut"
 
-
 def ensure_list(obj):
     """
     Converts `None` to empty list, otherwise converts any sequence to list.
@@ -134,8 +133,6 @@ def ensure_list(obj):
     else:
         return list(obj)
 
-
-
 def timing(f):
     @wraps(f)
     def wrap(*args, **kw):
@@ -146,7 +143,6 @@ def timing(f):
           (f.__name__, repr(args)[:20], repr(kw)[:20], te-ts))
         return result
     return wrap
-
 
 class OneToOneMapping(object):
     def __init__(self, a_dict: dict = None, **kwargs):

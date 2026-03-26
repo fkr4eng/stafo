@@ -1444,7 +1444,7 @@ class ConversionManager:
                             context["extra"].append(
                                 f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})')
                     else:
-                        r = "r" if key == "R2" else "" # escape potential math expressions in R2
+                        r = "r" if key in ["R2", "R24", "R81", "R82"] else "" # escape potential math expressions
                         context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={r}{quotes}{value}{quotes}')
                 # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
                 else:

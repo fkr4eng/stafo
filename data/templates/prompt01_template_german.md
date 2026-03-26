@@ -182,8 +182,8 @@ As arguments to the above statement types the following is allowed:
     - examples: 'set', 'infinite', 'union'
     - explanation: these entities will be defined below
 - applied operators
-    - example 1: 'intersection'(\SX, \SY)
-    - example 2: 'symmetric difference'(\SX, \SY)
+    - example 1: 'intersection'('SX', 'SY')
+    - example 2: 'symmetric difference'('SX', 'SY')
     - explanation: these operators will be defined below. The syntax is: '<operator_name>'(<argument_list>)
 
 ----
