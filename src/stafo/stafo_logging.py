@@ -17,15 +17,20 @@ class ExtraFormatter(logging.Formatter):
 
 defaul_loglevel = logging.INFO
 DATEFORMAT = "%H:%M:%S"
-h1 = logging.FileHandler("stafo.log", encoding="utf-8")
-h2 =  logging.StreamHandler(sys.stdout)
+h1 = logging.StreamHandler(sys.stdout)
+h2 = logging.FileHandler("stafo.log", encoding="utf-8")
+h3 = logging.FileHandler("sparql.log", encoding="utf-8")
 formatter = ExtraFormatter(None, DATEFORMAT)
-for handler in [h1, h2]:
+for handler in [h1, h2, h3]:
     handler.setFormatter(formatter)
 logging.basicConfig(
     level=defaul_loglevel,
-    handlers=[h1, h2],
+    handlers=[h1],
 )
 
 
 logger = logging.getLogger("stafo")
+logger.addHandler(h2)
+
+sparql_logger = logging.getLogger("sparql")
+sparql_logger.addHandler(h3)

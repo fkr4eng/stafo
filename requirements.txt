@@ -8,3 +8,5 @@ scholarly
 pytest
 black
 regex
+sentence-transformers
+google-genai
