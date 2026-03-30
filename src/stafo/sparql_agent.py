@@ -1,22 +1,3 @@
-"""
-LLM-based SPARQL Query Generation from Natural Language over Federated Knowledge Graphs https://arxiv.org/pdf/2410.06062
-FIRESPARQL: A LLM-based Framework for SPARQL Query Generation over Scholarly Knowledge Graphs https://arxiv.org/abs/2508.10467
-
-
-GPT-5.1 Instant: cannot reliably retrieve uncommon item ids from wikidata -> hallucinates numbers
-
-Proposed workflow
-- Question in natural language
-- use llm to disect question, extract relevant nouns and verbs
-- let LLM reason what other relation / aux items are needed
-- embed extractions
-- find relevant entities in KG
-- supply these to LLM, let create sparql
-- validate sparql
-
-
-"""
-
 import sys, os
 from google import genai
 from google.genai import types
