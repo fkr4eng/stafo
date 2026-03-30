@@ -43,9 +43,8 @@ with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 
-
 class SparqlAgent():
-    def __init__(self):
+    def __init__(self, load_irk_modules: list[dict]=[]):
         # parameters
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.generation_model = "gemini-2.5-flash"
@@ -56,9 +55,14 @@ class SparqlAgent():
         self.max_iterations = 3
 
         # init
-        ct = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/control_theory", prefix="ct", reuse_loaded=True)
-        ma = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/math", prefix="ma", reuse_loaded=True)
-        nl = p.irkloader.load_mod_from_path(os.path.join(BASE_DIR, "output.py"), "nl", "nonlinear", reuse_loaded=True)
+        if load_irk_modules:
+            for load_dict in load_irk_modules:
+                assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
+                if "uri" in load_dict.keys():
+                    mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
+                elif "path" in load_dict.keys():
+                    nl = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
+
 
         self.client = genai.Client(api_key=config_dict["gemini_api_key"])
         if os.path.isfile(self.embedding_csv_path):
@@ -336,9 +340,15 @@ class SparqlAgent():
         return sparql_result
 
 
-sa = SparqlAgent()
-# sa.setup_embeddings()
-res = sa.run("whats the connection between an equation and an inequation")
+if __name__ == "__main__":
+    ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
+    ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
+    nl_load_dict = {"path": os.path.join(BASE_DIR, "output.py"), "prefix": "nl", "module_name": "nl"}
+
+
+    sa = SparqlAgent([ct_load_dict, ma_load_dict, nl_load_dict])
+    # sa.setup_embeddings()
+    res = sa.run("whats the connection between an equation and an inequation")
 
 
 # todo space out llm call, avoid rate limit

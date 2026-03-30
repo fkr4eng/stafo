@@ -14,6 +14,7 @@ import pyirk as p
 from pyirk.utils import GeneralHousekeeperMixin
 
 from stafo import statement_to_kg as s2k
+from stafo.sparql_agent import SparqlAgent
 from stafo.stafo_logging import logger
 from stafo.utils import TESTA_DATA_DIR
 
@@ -295,3 +296,12 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
         rel_dict = get_item_by_name(res_mod_fpath, "gen stm l4", mod).scp__premise.get_inv_relations("R20")[0].subject.get_inv_relations()
         self.assertEqual(len(list(rel_dict.values())[0]), 2)
+
+    def test_s01__similar_entity(self):
+        ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
+        ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
+        sa = SparqlAgent([ma_load_dict, ct_load_dict])
+        self.assertIn("irk:/builtins#I23", sa.get_similar_entity("equation"))
+        lyapunov_res = sa.get_similar_entity("lyapunov")
+        self.assertIn("Lyapunov Function", lyapunov_res)
+        self.assertGreaterEqual(len(lyapunov_res), 3)
