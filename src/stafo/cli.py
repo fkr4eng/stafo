@@ -11,42 +11,50 @@ def main():
     parser = argparse.ArgumentParser()
 
     # default will be changed to true later
+    parser.add_argument("-d", "--dev-mode", help=f"toogle development mode", choices=("true", "false"), default="false")
+
     parser.add_argument(
-        "-d", "--dev-mode", help=f"toogle development mode", choices=("true", "false"), default="false"
+        "-asn",
+        "--auto-snippet-numbering",
+        help=f"process LaTeX source file to automatically enumerate snippets",
+        metavar="TEX_FILE",
+        default=None,
     )
 
     parser.add_argument(
-        "-asn", "--auto-snippet-numbering",
-        help=f"process LaTeX source file to automatically enumerate snippets", metavar="TEX_FILE",
-        default=None
-    )
-
-    parser.add_argument(
-        "-i", "--interactive-mode",
-        help=f"start interactive mode", metavar=("SOURCE_FILE", "STATEMENT_FILE", "SNAPSHOT_FOLDER"),
+        "-i",
+        "--interactive-mode",
+        help=f"start interactive mode",
+        metavar=("SOURCE_FILE", "STATEMENT_FILE", "SNAPSHOT_FOLDER"),
         nargs=3,
     )
 
     parser.add_argument(
-        "-llm", "--llm-command",
-        help=f"execute // llm: request in statement file", metavar="STATEMENT_FILE",
+        "-llm",
+        "--llm-command",
+        help=f"execute // llm: request in statement file",
+        metavar="STATEMENT_FILE",
     )
 
     parser.add_argument(
-        "-c", "--convert-statements-to-kg",
-        help=f"convert markdown statements to pyirk code", metavar="STATEMENT_FILE",
+        "-c",
+        "--convert-statements-to-kg",
+        help=f"convert markdown statements to pyirk code",
+        metavar="STATEMENT_FILE",
     )
 
     parser.add_argument(
-        "-tt", "--evaluate-token-tracking",
-        help=f"evaluate the token-tracking csv file", metavar="TRACKING_FILE",
+        "-tt",
+        "--evaluate-token-tracking",
+        help=f"evaluate the token-tracking csv file",
+        metavar="TRACKING_FILE",
     )
 
     parser.add_argument("--dbg", help="start debug routine", default=None, action="store_true")
 
     args = parser.parse_args()
 
-    dev_mode = (args.dev_mode == "true")
+    dev_mode = args.dev_mode == "true"
 
     src_fpath: str
     if (src_fpath := args.auto_snippet_numbering) is not None:
@@ -66,6 +74,7 @@ def main():
         core.interactive_mode(dev_mode, tex_fpath, statement_fpath, snapshot_path)
     elif (statement_file := args.convert_statements_to_kg) is not None:
         from . import statement_to_kg
+
         statement_to_kg.main(statement_file)
     elif args.llm_command:
         core.llm_command(dev_mode, statement_fpath=args.llm_command)

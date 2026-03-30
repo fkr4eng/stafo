@@ -3,8 +3,7 @@ import os
 import stafo.utils as u
 
 
-
-class Preprocessor():
+class Preprocessor:
     def __init__(self, folder_name, file_name, preamble_name=None):
         self.f_path = os.path.join("data", folder_name, file_name)
         self.new_path = os.path.join("data", folder_name, "processed", file_name)
@@ -27,9 +26,9 @@ class Preprocessor():
 
         # remove irrelevant content
         patterns_to_remove = [
-            re.compile(r"\\begin\{figure\}.+?\\end\{figure\}", re.DOTALL),      # figures
-            re.compile(r"\\begin\{maxima\}.+?\\end\{maxima\}", re.DOTALL),      # maxima code
-            re.compile(r"\\index\{.+?\}"),                                      # index ref
+            re.compile(r"\\begin\{figure\}.+?\\end\{figure\}", re.DOTALL),  # figures
+            re.compile(r"\\begin\{maxima\}.+?\\end\{maxima\}", re.DOTALL),  # maxima code
+            re.compile(r"\\index\{.+?\}"),  # index ref
         ]
 
         for pat in patterns_to_remove:
@@ -73,11 +72,12 @@ class Preprocessor():
                     n = len(match_obj.groups())
                     s = command[2]
                     for i in range(num_paras):
-                        replacement = match_obj.group(i+1)
+                        replacement = match_obj.group(i + 1)
                         if replacement is None:
                             replacement = ""
                         s = s.replace(str(f"#{i+1}"), replacement)
                     return s
+
                 content = re.sub(pattern, get_repl, content)
 
         # remove header
@@ -93,6 +93,7 @@ i have a latex file with line breaks in the middle of normal paragraphs of text,
 how can i automatically replace these line breaks with normal spaces, while keeping the relecant line breaks the same?
 
 """
+
 
 def fix_latex_linebreaks(text):
     lines = text.splitlines()
@@ -125,6 +126,7 @@ def fix_latex_linebreaks(text):
     flush_buffer()  # Flush remaining buffer at end
     return "\n".join(new_lines)
 
+
 def clean_tex_linebreaks(filepath):
 
     with open(filepath, "rt", encoding="utf-8") as f:
@@ -134,6 +136,7 @@ def clean_tex_linebreaks(filepath):
 
     with open(filepath, "wt", encoding="utf-8") as f:
         f.write(fixed)
+
 
 # todo incorporate into preprocessor
 

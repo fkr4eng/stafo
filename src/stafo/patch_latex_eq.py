@@ -31,7 +31,6 @@ for i in range(1, 51):
         print("skipping", i)
         continue
 
-
     context = {
         "fnl_statements": new_nl_content,
         "fnl_current": fnl_snippet,
@@ -41,6 +40,7 @@ for i in range(1, 51):
     message = render_template("prompt02b_annotate_equations_template.md", context)
     res = llm_api(message)
     new_latex_content += snip_str + "\n" + res + "\n"
+
 
 def repl_func(mo):
     # wrong annotations by llm
@@ -52,12 +52,15 @@ def repl_func(mo):
         # todo find solution for this
         return mo.group(1) + "\\eqnote{concepts:" + mo.group(2) + "}{statement:" + mo.group(3) + "}"
 
-new_latex_content = re.sub(r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, new_latex_content, flags=re.DOTALL)
+
+new_latex_content = re.sub(
+    r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, new_latex_content, flags=re.DOTALL
+)
 
 prelim = [
     "\\newcommand{\\setref}[2]{\\textcolor{red}{#1}\\textcolor{green}{#2}}",
     "\\newcommand{\\snippet}[1]{\\textbf{snippet #1}\\\\}",
-    "\\newcommand{\\eqnote}[2]{\\textcolor{orange}{#1}\\textcolor{magenta}{#2}}"
+    "\\newcommand{\\eqnote}[2]{\\textcolor{orange}{#1}\\textcolor{magenta}{#2}}",
 ]
 context = {
     "preliminaries": prelim,

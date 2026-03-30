@@ -1,4 +1,3 @@
-
 try:
     from .core import *
     from . import statement_to_kg

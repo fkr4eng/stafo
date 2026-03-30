@@ -6,6 +6,7 @@ import logging  # logging module from python std lib
 # initialize logging with default loglevel (might be overwritten by command line option)
 # see https://docs.python.org/3/howto/logging-cookbook.html
 
+
 class ExtraFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         if "line" in record.__dict__.keys():
@@ -14,6 +15,7 @@ class ExtraFormatter(logging.Formatter):
             line = ""
         s = f"{self.formatTime(record, self.datefmt)} - {record.name} - {record.levelname}{line} - {record.getMessage()}"
         return s
+
 
 defaul_loglevel = logging.INFO
 DATEFORMAT = "%H:%M:%S"

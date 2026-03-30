@@ -1,4 +1,5 @@
 import unittest
+
 # import logging
 import sys
 import os
@@ -44,10 +45,12 @@ tests/test_statements_to_kg.py::Test_02_FeatureRequest::test_c01__render_order_r
 
 TEST_URI = "irk://stafo/unittest"
 
+
 def create_key_tuple(number):
     item_keys = [f"I{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
     relation_keys = [f"R{i}" for i in range(2000 + number - 1, 2000 - 1, -1)]
     return (item_keys, relation_keys)
+
 
 def get_key_by_name(res_mod_fpath, name):
     with open(res_mod_fpath, "rt", encoding="utf-8") as f:
@@ -57,10 +60,12 @@ def get_key_by_name(res_mod_fpath, name):
     assert len(res) == 1, f"{name} not unique in mod. result: {res}"
     return res[0]
 
+
 def get_item_by_name(res_mod_fpath, name, mod):
     key = get_key_by_name(res_mod_fpath, name)
     item: p.Item = getattr(mod, key)
     return item
+
 
 class HousekeeperMixin(GeneralHousekeeperMixin):
     pass
@@ -93,7 +98,10 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         CM = s2k.ConversionManager(TEST_DATA8_FPATH, num_keys=20)
         with self.assertLogs(logger) as cm:
             res_mod_fpath = CM.run()
-        self.assertIn("WARNING:stafo:Trying to set 'R3' of 'Signal' with unrecognized item 'reelwertige Funktion', maybe check for typos?", cm.output)
+        self.assertIn(
+            "WARNING:stafo:Trying to set 'R3' of 'Signal' with unrecognized item 'reelwertige Funktion', maybe check for typos?",
+            cm.output,
+        )
 
     @unittest.expectedFailure
     def test_l01__logs(self):
@@ -109,7 +117,6 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertIn("- stafo - INFO - test", lines[-2])
         self.assertIn("- stafo - WARNING - FNL l.5 - test", lines[-1])
 
-
     def test_r01__render_order_ring_problem(self):
         CM = s2k.ConversionManager(TEST_DATA2_FPATH, num_keys=40)
         res_mod_fpath = CM.run()
@@ -118,9 +125,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         A = get_item_by_name(res_mod_fpath, "A", mod)
         rel_key = get_key_by_name(res_mod_fpath, "has some relation to")
         self.assertEqual(
-            A.get_relations(f"{mod.__URI__}#{rel_key}")[0]
-            .object.get_relations(f"{mod.__URI__}#{rel_key}")[0]
-            .object,
+            A.get_relations(f"{mod.__URI__}#{rel_key}")[0].object.get_relations(f"{mod.__URI__}#{rel_key}")[0].object,
             A,
         )
 
@@ -265,7 +270,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         # check if this also works inside statements
         if_then_stm = get_item_by_name(res_mod_fpath, "it stm l26", mod)
         stms3 = if_then_stm._ns_setting["s"].get_relations(f"{mod.__URI__}#{rel_key}")
-        self.assertEqual(len(stms3[0].qualifiers), 2) # univ_quant and defining scope
+        self.assertEqual(len(stms3[0].qualifiers), 2)  # univ_quant and defining scope
         self.assertEqual(stms3[0].qualifiers[0].relation.R1.value, "is universally quantified")
         self.assertEqual(stms3[0].qualifiers[0].object, True)
 
@@ -276,7 +281,7 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
 
         # check exis_quant
         stms4 = if_then_stm._ns_setting["k"].get_relations("R4")
-        self.assertEqual(len(stms4[0].qualifiers), 1) # exis_quant and defining scope
+        self.assertEqual(len(stms4[0].qualifiers), 1)  # exis_quant and defining scope
         self.assertEqual(stms4[0].qualifiers[0].relation.R1.value, "is existentially quantified")
         self.assertEqual(stms4[0].qualifiers[0].object, True)
 
@@ -294,7 +299,11 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         with open(res_mod_fpath, "rt") as f:
             res = f.read()
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
-        rel_dict = get_item_by_name(res_mod_fpath, "gen stm l4", mod).scp__premise.get_inv_relations("R20")[0].subject.get_inv_relations()
+        rel_dict = (
+            get_item_by_name(res_mod_fpath, "gen stm l4", mod)
+            .scp__premise.get_inv_relations("R20")[0]
+            .subject.get_inv_relations()
+        )
         self.assertEqual(len(list(rel_dict.values())[0]), 2)
 
     def test_s01__similar_entity(self):

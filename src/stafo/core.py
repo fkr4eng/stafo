@@ -25,15 +25,17 @@ activate_ips_on_exception()
 SNIPPET_LATEX_MACRO_PATTERN = r"\\snippet{(.*?)}"
 SNIPPET_MD_COMMENT_PATTERN = r"- // snippet\((.*?)\)"
 
+
 class Container:
     pass
+
 
 with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 # https://github.com/google-gemini/generative-ai-python
 genai.configure(api_key=config_dict["gemini_api_key"])
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 # - It would be useful if you also would generate comments to explain your "chain of thought".
 
@@ -44,13 +46,13 @@ class MainManager:
     """
 
     def __init__(
-            self,
-            dev_mode: bool,
-            tex_fpath: str = None,
-            statement_fpath: str = None,
-            snapshot_fpath: str = None,
-            interactive_mode: bool = False,
-        ) -> None:
+        self,
+        dev_mode: bool,
+        tex_fpath: str = None,
+        statement_fpath: str = None,
+        snapshot_fpath: str = None,
+        interactive_mode: bool = False,
+    ) -> None:
 
         self.dev_mode = dev_mode
         self.interactive_mode = interactive_mode
@@ -72,10 +74,10 @@ class MainManager:
         # prepare the paths
         self.tex_fpath = os.path.join(BASE_DIR, "data", "chunk_full_source.tex") if tex_fpath is None else tex_fpath
         self.annotated_tex_fpath = self.tex_fpath.replace(".tex", "_annotated.tex")
-        self.statement_fpath = \
+        self.statement_fpath = (
             os.path.join(BASE_DIR, "data", "formalized_statements0.md") if statement_fpath is None else statement_fpath
-        self.snapshot_fpath = \
-            os.path.join(BASE_DIR, "snapshots", "math") if snapshot_fpath is None else snapshot_fpath
+        )
+        self.snapshot_fpath = os.path.join(BASE_DIR, "snapshots", "math") if snapshot_fpath is None else snapshot_fpath
         os.makedirs(self.snapshot_fpath, exist_ok=True)
 
         self.get_data()
@@ -101,9 +103,7 @@ class MainManager:
 
         # initialize iteration process:
         self.start_snippet_idx = len(self.statement_snippet_list)  # the first snippet which is not included
-        self.processed_latex_source = "".join(self.tex_snippet_list[:self.start_snippet_idx])
-
-
+        self.processed_latex_source = "".join(self.tex_snippet_list[: self.start_snippet_idx])
 
     def make_snapshot(self, source, snippet_number):
         def snapshot_sort(fname):
@@ -135,7 +135,9 @@ class MainManager:
 
         if last_line in ("// please continue", "// pc"):
             if last_line == "// pc":
-                self.statement_snippet_list[-1] = self.statement_snippet_list[-1].replace("\n// pc", "\n// please continue")
+                self.statement_snippet_list[-1] = self.statement_snippet_list[-1].replace(
+                    "\n// pc", "\n// please continue"
+                )
                 self.statement_source = "".join(self.statement_snippet_list)
 
             self.continue_mode = True
@@ -166,7 +168,7 @@ class MainManager:
         response = self.tracked_model_response(message, generation_config=self.llm_config)
         IPS()
         # make snapshot before and after response
-        self.make_snapshot(self.statement_source, self.start_snippet_idx-1)
+        self.make_snapshot(self.statement_source, self.start_snippet_idx - 1)
         statement_source_new = "\n".join((self.statement_source, response.text))
         self.make_snapshot(statement_source_new, self.start_snippet_idx)
 
@@ -228,9 +230,9 @@ class MainManager:
                 # todo find solution for this
                 return mo.group(1) + "\\eqnote{concepts:" + mo.group(2) + "}{statement:" + mo.group(3) + "}"
 
-        new_latex_content = re.sub(r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, response3.text, flags=re.DOTALL)
-
-
+        new_latex_content = re.sub(
+            r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, response3.text, flags=re.DOTALL
+        )
 
         IPS()
         with open(self.annotated_tex_fpath, "rt", encoding="utf-8") as f:
@@ -240,7 +242,6 @@ class MainManager:
 
         with open(self.annotated_tex_fpath, "wt", encoding="utf-8") as f:
             f.write(annotated_tex)
-
 
         # write the message for debugging
 
@@ -270,7 +271,7 @@ class MainManager:
 
         # note: this slice does not result in an IndexError even if i+1 would be too big
         # the result is just an empty list
-        rest: list = self.tex_snippet_list[i+1:i + 1+ N]
+        rest: list = self.tex_snippet_list[i + 1 : i + 1 + N]
         if len(rest) < N:
             rest.append("\n\n% This is the end of the LaTeX code of this section.")
 
@@ -307,8 +308,6 @@ class MainManager:
         self.token_count_cache[message] = res
         return res
 
-
-
     def tracked_model_response(self, message, **kwargs):
         """
         if ignore_flag:
@@ -343,9 +342,7 @@ class MainManager:
         if len(res) == 0:
             print("no llm command (- // llm: do something) found.")
         elif len(res) == 1:
-            context = {
-                "statements": self.statement_source
-            }
+            context = {"statements": self.statement_source}
             message = render_template("task_template.md", context)
             response = model.generate_content(message, generation_config=self.llm_config)
             self.statement_source = "\n".join((self.statement_source, response.text))
@@ -358,10 +355,13 @@ class MainManager:
             raise NotImplementedError("No support for mutiple commands.")
         self.statement_source
 
+
 def llm_api(message):
     return model.generate_content(message, generation_config=genai.GenerationConfig(temperature=0)).text
 
+
 # split without consuming the delimiter
+
 
 def nonconsuming_regex_split(pattern, string):
     matches = list(re.finditer(pattern, string))
@@ -377,7 +377,7 @@ def nonconsuming_regex_split(pattern, string):
 
     parts = []
     for i1, i2 in zip(starts, ends):
-        parts.append(string[i1: i2])
+        parts.append(string[i1:i2])
 
     return parts
 
@@ -394,6 +394,7 @@ class SourceSnippet:
     # classvariable undefined for this abstract class
     PATTERN = None
     MARKER = None
+
     def __init__(self, snippet_source):
         self.snippet_source = snippet_source
         self.process()
@@ -406,7 +407,7 @@ class SourceSnippet:
         assert self.PATTERN is not None
         matches = list(re.finditer(self.PATTERN, self.snippet_source))
         assert len(matches) == 1
-        match, = matches
+        (match,) = matches
         self.snippet_delimiter_inner_content = match.group(1)
         # \snippet{XXi} or \snippet{123i} should be ignored -> only placeholder statements should be generated
         self.ignore_flag = self.snippet_delimiter_inner_content.endswith("i")
@@ -454,7 +455,6 @@ def auto_tex_snippet_numbering(src_fpath):
         src = fp.read()
 
     parts: List[str] = nonconsuming_regex_split(SNIPPET_LATEX_MACRO_PATTERN, src)
-
 
     part0 = parts[0].strip()
     if not (part0.startswith(r"\snippet{") or part0 == ""):
@@ -505,9 +505,13 @@ def interactive_mode(dev_mode, tex_fpath, statement_fpath, snapshot_fpath):
     mm = MainManager(dev_mode, tex_fpath, statement_fpath, snapshot_fpath, interactive_mode=True)
     mm.do_next_query_iteration()
 
+
 def llm_command(dev_mode, statement_fpath):
-    mm = MainManager(dev_mode, tex_fpath=None, statement_fpath=statement_fpath, snapshot_fpath=None, interactive_mode=True)
+    mm = MainManager(
+        dev_mode, tex_fpath=None, statement_fpath=statement_fpath, snapshot_fpath=None, interactive_mode=True
+    )
     mm.llm_task()
+
 
 def evaluate_token_tracking(fpath: str):
     try:

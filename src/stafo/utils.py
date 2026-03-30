@@ -4,6 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 import sympy as sp
 from functools import wraps
 from time import time
+
 try:
     # this will be part of standard library for python >= 3.11
     import tomllib
@@ -29,6 +30,7 @@ else:
 class ParserError(Exception):
     pass
 
+
 def render_template(template: str, context: dict):
     """
     :param template:    path to template file relative to TEMPLATE_DIR
@@ -43,6 +45,7 @@ def render_template(template: str, context: dict):
     res = template_doc.render(context=context)
 
     return res
+
 
 def set_nested_value(data, keys, value):
     """set a given nested dict with given key sequence and value
@@ -63,6 +66,7 @@ def set_nested_value(data, keys, value):
     current[keys[-1]] = value
     return data
 
+
 def get_nested_value(data, keys):
     """get a given nested dict with given key sequence
 
@@ -80,6 +84,7 @@ def get_nested_value(data, keys):
     except Exception as e:
         raise e
 
+
 class TreeTraverser:
     def __init__(self, apply_func, get_args_func):
         self.apply_func = apply_func
@@ -88,6 +93,7 @@ class TreeTraverser:
     def run(self, node):
         args = [self.run(arg) for arg in self.get_args_func(node)]
         return self.apply_func(node, args)
+
 
 def number_type_convert(n):
     if isinstance(n, sp.Number):
@@ -102,10 +108,12 @@ def number_type_convert(n):
     else:
         return n
 
+
 def flatten(iterable):
     ret = []
     _unpack(ret, iterable)
     return ret
+
 
 def _unpack(ret, iterable):
     if isinstance(iterable, (tuple, list)):
@@ -114,10 +122,12 @@ def _unpack(ret, iterable):
     else:
         return ret.append(iterable)
 
+
 class MyDict(dict):
     def __missing__(self, key):
         print(f"warning: {key} was not found, return 'ut' instead")
         return "ut"
+
 
 def ensure_list(obj):
     """
@@ -133,16 +143,18 @@ def ensure_list(obj):
     else:
         return list(obj)
 
+
 def timing(f):
     @wraps(f)
     def wrap(*args, **kw):
         ts = time()
         result = f(*args, **kw)
         te = time()
-        print('func:%r args:[%r, %r] took: %2.4f sec' % \
-          (f.__name__, repr(args)[:20], repr(kw)[:20], te-ts))
+        print("func:%r args:[%r, %r] took: %2.4f sec" % (f.__name__, repr(args)[:20], repr(kw)[:20], te - ts))
         return result
+
     return wrap
+
 
 class OneToOneMapping(object):
     def __init__(self, a_dict: dict = None, **kwargs):
@@ -199,7 +211,8 @@ def del_latex_aux_files(folder_path, filename):
         if os.path.isfile(file):
             os.remove(file)
 
-def replace_last_n_occurance(word: str, text:str, n:int, replacement:str):
+
+def replace_last_n_occurance(word: str, text: str, n: int, replacement: str):
     parts = text.split(word)
     len_parts = len(parts)
     if n > len_parts:
@@ -207,9 +220,9 @@ def replace_last_n_occurance(word: str, text:str, n:int, replacement:str):
     new_text = ""
     for i, part in enumerate(parts):
         new_text += part
-        if i < len_parts -1 - n:
+        if i < len_parts - 1 - n:
             new_text += word
-        elif i +1 < len_parts:
+        elif i + 1 < len_parts:
             # dont add delimiter after last part
             new_text += replacement
     return new_text

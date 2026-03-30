@@ -46,7 +46,6 @@ def create_html():
             continue
         relevant_items.append(item)
 
-
     item_label_list = []
     for item in relevant_items:
         item_label_list.append([item, item.R1.value])
@@ -54,16 +53,21 @@ def create_html():
             item_label_list.append([item, literal.value])
     item_label_list = np.array(item_label_list)
 
-    relevant_words = re.findall(r"(?<=\{\\em ).+?(?=\})", tex_source, re.DOTALL) # DOTALL to manage arbitrary linebreaks in tex
+    relevant_words = re.findall(
+        r"(?<=\{\\em ).+?(?=\})", tex_source, re.DOTALL
+    )  # DOTALL to manage arbitrary linebreaks in tex
     relevant_words = [rw.replace("\n", " ") for rw in relevant_words]
 
     tex_source = re.sub(r"\\ref\{eq:", r"\\eqref{eq:", tex_source)
     if "bibliography" not in tex_source:
-        tex_source = re.sub(r"\\end\{document\}", r"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\bibdata{dynamic}\n\\end{document}", tex_source)
+        tex_source = re.sub(
+            r"\\end\{document\}",
+            r"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\\bibliographystyle{abbrv}\n\\bibliography{dynamic}\n\\bibdata{dynamic}\n\\end{document}",
+            tex_source,
+        )
 
     with open(latex_fpath, "wt", encoding="utf-8") as f:
         f.write(tex_source)
-
 
     # convert latex to html
     cwd = os.getcwd()
@@ -71,7 +75,9 @@ def create_html():
     os.chdir(fpath_head)
     os.makedirs(output_dir, exist_ok=True)
     # res = subprocess.run(["make4ht", fpath_tail, "--output-dir", output_dir, '"mathjax"', "--config", "config.cfg"])
-    res = subprocess.run(["make4ht", fpath_tail, "-a", "debug", "--output-dir", output_dir, '"mathjax"', "--config", "config.cfg"])
+    res = subprocess.run(
+        ["make4ht", fpath_tail, "-a", "debug", "--output-dir", output_dir, '"mathjax"', "--config", "config.cfg"]
+    )
     if res.returncode == 0:
         print("conversion finished.")
     else:
@@ -84,22 +90,28 @@ def create_html():
     html_fpath = os.path.join(fpath_head, output_dir, fpath_tail.replace(".tex", ".html"))
     with open(html_fpath, "rt", encoding="utf-8") as f:
         html_source = f.read()
-    html_source_og = html_source # for debugging
+    html_source_og = html_source  # for debugging
     # cleanup html
     ## converter leaves weird line breaks and unnecessary span elements that interfere with tooltip replacement
     html_source = html_source.replace("<span \nclass", "<span class")
+
     ## html looks like this: <span class="some">Mat</span><span class="some">rix</span> which needs to be corrected
     def repl_func_cleanup(matchobj):
         res = ""
-        for i in range(1,6):
+        for i in range(1, 6):
             res += matchobj.group(i)
         return res.replace("\n", " ")
+
     old_html = ""
     i = 0
     while old_html != html_source:
         i += 1
         old_html = html_source
-        html_source = re.sub(r'(<span \n?class=)(?P<classname>[^>]+?)(>[^<]+?)</span>([ \n]*)<span \n?class=(?P=classname)>([^<]+?</span>)', repl_func_cleanup, html_source)
+        html_source = re.sub(
+            r"(<span \n?class=)(?P<classname>[^>]+?)(>[^<]+?)</span>([ \n]*)<span \n?class=(?P=classname)>([^<]+?</span>)",
+            repl_func_cleanup,
+            html_source,
+        )
         if old_html == html_source:
             print("done")
         else:
@@ -118,7 +130,8 @@ def create_html():
     html_source = html_source.replace("<head>", "<head>\n" + style)
 
     # add tooltip
-    pattern = regex.compile(r"""
+    pattern = regex.compile(
+        r"""
     (?(DEFINE)                              # Define span pattern
     (?P<SPAN>
         <span\b[^>]*>                      # any opening <span ...>
@@ -144,7 +157,10 @@ def create_html():
         | <(?!/span)[^>]+>
     )*
     </span>
-    """, regex.VERBOSE | regex.IGNORECASE)
+    """,
+        regex.VERBOSE | regex.IGNORECASE,
+    )
+
     def add_tt_concept(word, t):
         word = word.replace("\n", " ").replace("'", "").replace('"', "").replace("’", "")
         item = get_item_by_name(word)
@@ -164,8 +180,8 @@ def create_html():
             d = fnl_dict["relations"][name]
         else:
             return None
-        key = d['key']
-        if pre :=d["prefix"]:
+        key = d["key"]
+        if pre := d["prefix"]:
             if pre == "p":
                 pre = "bi"
         else:
@@ -198,14 +214,15 @@ def create_html():
                 item = get_item_by_name(label)
                 assert item is not None, f"no item found for label {label, matchobj}"
                 short_key = item.short_key
-                context = {"word": matchobj.group(2),
-                        "short_key": short_key,
-                        "inner": False,
+                context = {
+                    "word": matchobj.group(2),
+                    "short_key": short_key,
+                    "inner": False,
                 }
                 tt = render_template("html_tooltip_template.html", context)
             except Exception as e:
                 print(e)
-                tt = matchobj.group(0) # to show whats not working
+                tt = matchobj.group(0)  # to show whats not working
                 # tt = matchobj.group(2) # during operation
         # equation annotation
         elif "concepts" in clean_html:
@@ -223,7 +240,7 @@ def create_html():
             context = {
                 "img_path": os.path.join(BASE_DIR, "html", "info.png"),
                 "concepts": concepts,
-                "statement": statement
+                "statement": statement,
             }
             tt = render_template("html_equation_info_template.html", context)
         else:
@@ -233,7 +250,8 @@ def create_html():
     html_source = regex.sub(pattern, repl_func, html_source)
 
     # put icon and equations on same line
-    pat = regex.compile(r"""
+    pat = regex.compile(
+        r"""
     (?(DEFINE)                              # Define span pattern
     (?P<SPAN>
         <span\b[^>]*>                      # any opening <span ...>
@@ -255,14 +273,17 @@ def create_html():
         | <(?!/span)[^>]+>
     )*
     </span>                              # allow nested spans (uses the DEFINEd group)
-    """, regex.VERBOSE | regex.IGNORECASE | re.DOTALL)
+    """,
+        regex.VERBOSE | regex.IGNORECASE | re.DOTALL,
+    )
+
     def div_repl(mo):
         return f"""<div class="horizontal">{mo.group(0)}</div>"""
+
     html_source = regex.sub(pat, div_repl, html_source)
 
     # depending on make4ht version, sometimes the wrong quotes are used
-    html_source = html_source.replace("'",'"')
-
+    html_source = html_source.replace("'", '"')
 
     with open(html_fpath, "wt", encoding="utf-8") as f:
         f.write(html_source)
@@ -275,15 +296,18 @@ def create_html():
 
     context = {"snippets": [], "css_name": fpath_tail.replace(".tex", ".css")}
     max_num_snippets = int(re.findall(r"\\snippet\{(\d+)i?\}", tex_source)[-1])
-    for i in range(1, max_num_snippets+1):
-    # for i in range(1, 7):
+    for i in range(1, max_num_snippets + 1):
+        # for i in range(1, 7):
         # get html snippet
         if i == 17:
             pass
         html_snip = re.findall(
-            r'<p class=[^>]*> *<span class="cmbx-10">snippet '+str(i)+r'i?</span>.+?(?=<p class=[^>]*> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
+            r'<p class=[^>]*> *<span class="cmbx-10">snippet '
+            + str(i)
+            + r'i?</span>.+?(?=<p class=[^>]*> *<span class="cmbx-10">snippet|<p class="\w+?" ?> *aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)',
             html_source,
-            re.DOTALL)
+            re.DOTALL,
+        )
         if len(html_snip) != 1:
             print(f"snippet {i} not found in html, skipping")
             continue
@@ -297,10 +321,10 @@ def create_html():
             html_snip = replace_last_n_occurance("</div>", html_snip, 1, "")
 
         # get rid of "snippet"
-        html_snip = re.sub(r'<span class="cmbx-10">snippet '+str(i)+r'i?</span>', "", html_snip)
+        html_snip = re.sub(r'<span class="cmbx-10">snippet ' + str(i) + r"i?</span>", "", html_snip)
 
         # get fnl snippet
-        fnl_snip = re.findall(r"- // snippet\("+str(i)+r"i?\).+?(?=- // snippet)", fnl_source, re.DOTALL)
+        fnl_snip = re.findall(r"- // snippet\(" + str(i) + r"i?\).+?(?=- // snippet)", fnl_source, re.DOTALL)
         if len(fnl_snip) == 1:
             fnl_snip = fnl_snip[0]
         else:
@@ -308,26 +332,24 @@ def create_html():
             fnl_snip = ""
 
         # get module snippet
-        module_snip = re.findall(r'# snippet\('+str(i)+r'i?\).+?(?=\Z|# snippet\('+str(i+1)+r')', module_source, re.DOTALL)
+        module_snip = re.findall(
+            r"# snippet\(" + str(i) + r"i?\).+?(?=\Z|# snippet\(" + str(i + 1) + r")", module_source, re.DOTALL
+        )
         if len(module_snip) == 1:
             module_snip = module_snip[0]
         else:
             print(f"module snippet {i} not found")
             module_snip = ""
-        context["snippets"].append(
-            {
-                "snippet": i,
-                "tex": html_snip,
-                "fnl": fnl_snip,
-                "pyirk": module_snip
-            }
-        )
-    context["bib"] = re.findall(r"(?<=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n</p>)(.+?)(?=</body>)", html_source, re.DOTALL)[0]
+        context["snippets"].append({"snippet": i, "tex": html_snip, "fnl": fnl_snip, "pyirk": module_snip})
+    context["bib"] = re.findall(r"(?<=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n</p>)(.+?)(?=</body>)", html_source, re.DOTALL)[
+        0
+    ]
 
     res = render_template("markup_complete_template.html", context)
     with open(os.path.join(output_dir, "Nichtlinear.html"), "wt", encoding="utf-8") as f:
         f.write(res)
     1
+
 
 def create_graph():
     nl = p.irkloader.load_mod_from_path(module_fpath, "nl", "nonlinear", reuse_loaded=True)
@@ -341,6 +363,8 @@ def create_graph():
             vm.REL_BLACKLIST.append(rel)
     # this takes a lot of time
     vm.create_interactive_graph(output_dir=output_dir, skip_auto_items=True, skip_existing=False, vis_relations=True)
+
+
 if True:
     create_html()
 if False:

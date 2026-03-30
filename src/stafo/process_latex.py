@@ -30,7 +30,6 @@ for i in range(1, 51):
         print("skipping", i)
         continue
 
-
     context = {
         "fnl_statements": new_nl_content,
         "fnl_current": fnl_snippet,

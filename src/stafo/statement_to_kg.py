@@ -24,6 +24,7 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 from .stafo_logging import logger
+
 lark = import_module("lark")
 if lark:
     from lark import Transformer, Token, Tree
@@ -33,12 +34,12 @@ else:
 from .utils import BASE_DIR, CONFIG_PATH, render_template, get_nested_value, set_nested_value, ParserError
 import stafo.utils as u
 
+
 def get_md_lines(fpath) -> list[str]:
     with open(fpath, "rt", encoding="utf-8") as f:
         raw = f.read()
     lines = raw.split("\n")
     return lines
-
 
 
 # TODO: improve handling of default value of mod_uri
@@ -49,7 +50,7 @@ class ConversionManager:
     def __init__(
         self,
         statements_fpath: str,
-        load_irk_modules: list[dict]=[],
+        load_irk_modules: list[dict] = [],
         # TODO: improve this; see comment above class definition
         mod_uri="__stafo_default_uri__",  # This will be replaced by a system-dependent hardcoded URI below
         force_key_tuple: tuple = None,
@@ -78,13 +79,15 @@ class ConversionManager:
         self.load_irk_modules = load_irk_modules
         if load_irk_modules:
             for load_dict in load_irk_modules:
-                assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
+                assert isinstance(
+                    load_dict, dict
+                ), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
                 # mod = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
                 mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
                 self.loaded_modules.__setattr__(load_dict["prefix"], mod)
                 self.irk_module_names[load_dict["module_name"]] = load_dict["prefix"]
 
-        self.default_language = "de" # todo this needs to be set for each document
+        self.default_language = "de"  # todo this needs to be set for each document
         self.entity_matching_report = ""
 
         # TODO: improve handling of duplicate labels (current strategy: making them at least explicit)
@@ -105,7 +108,7 @@ class ConversionManager:
             p.ds.uri_keymanager_dict[self.mod_uri] = p.KeyManager()
 
         if force_key_tuple is None:
-            self.get_keys(num_keys, uri=self.mod_uri) # todo hand over correct uri, see also below (self.mod_uri)
+            self.get_keys(num_keys, uri=self.mod_uri)  # todo hand over correct uri, see also below (self.mod_uri)
         # in case of unittest, dynamically created keys are hard to test for, so you can pass some predefined ones
         else:
             self.item_keys, self.relation_keys = force_key_tuple
@@ -133,7 +136,7 @@ class ConversionManager:
                 new.append(self.strip(v))
             return tuple(new)
         elif isinstance(s, str):
-            return s.replace("'", "").replace('"', '').replace(".", "").replace(":", "").rstrip().lstrip()
+            return s.replace("'", "").replace('"', "").replace(".", "").replace(":", "").rstrip().lstrip()
         else:
             raise TypeError(s)
 
@@ -146,8 +149,10 @@ class ConversionManager:
         s = s.replace('"', "'")
         # s = s.replace("^", "**") # replace power operator
         symbol_pattern = re.compile(r"'.+?'")
+
         def repl_func(matchobj):
             return matchobj.group(0).replace(" ", "_").replace("-", "_")
+
         return self.strip(re.sub(symbol_pattern, repl_func, s))
 
     def strip_math(self, s):
@@ -161,7 +166,7 @@ class ConversionManager:
                 new.append(self.strip(v))
             return tuple(new)
         elif isinstance(s, str):
-            return s.replace("\\", "").replace('$', '')
+            return s.replace("\\", "").replace("$", "")
         else:
             raise TypeError(s)
 
@@ -173,7 +178,7 @@ class ConversionManager:
         self.item_keys = [p.generate_new_key("I", mod_uri=uri) for i in range(num_keys)]
         self.relation_keys = [p.generate_new_key("R", mod_uri=uri) for i in range(num_keys)]
 
-    def get_indent(self, line:str):
+    def get_indent(self, line: str):
         """get indentation (number of spaces) of string"""
         if line == "":
             return 0
@@ -206,7 +211,7 @@ class ConversionManager:
         """create a dict for the relations that can be addressed by pyirk keys (R1)
         to get the long (and possibly different) literal key in self.d["relations"]"""
         rel_dict = {}
-        for k,v in self.d["relations"].items():
+        for k, v in self.d["relations"].items():
             rel_dict[v["key"]] = k
         return rel_dict
 
@@ -221,11 +226,11 @@ class ConversionManager:
         this is used for the local dict inside scopes
         """
         rel_dict = {}
-        for k,v in d["items"].items():
+        for k, v in d["items"].items():
             rel_dict[v["key"]] = k
         return rel_dict
 
-    def get_qualifier_name(self, relation_dict:dict):
+    def get_qualifier_name(self, relation_dict: dict):
         if "qual_name" in relation_dict.keys():
             name = relation_dict["qual_name"]
         else:
@@ -271,7 +276,7 @@ class ConversionManager:
                 "has the verbal description": {
                     "key": "R2",
                     "R1": "has description",
-                    "R22": True, # todo I would disagree that this should be functional
+                    "R22": True,  # todo I would disagree that this should be functional
                     "prefix": "p",
                 },
                 "is a subclass of": {
@@ -308,13 +313,13 @@ class ConversionManager:
                     "prefix": "p",
                 },
                 "is applicable to": {
-                    "key": self.applicable_to_key, # todo
+                    "key": self.applicable_to_key,  # todo
                     "R1": "is applicable to",
                     "prefix": "p",
                 },
-                "is a subproperty of": {                # this is the dict key the way it occurs in document
-                    "key": "R17",                       # this is the irk key
-                    "R1": "is subproperty of",          # this is the label in irk
+                "is a subproperty of": {  # this is the dict key the way it occurs in document
+                    "key": "R17",  # this is the irk key
+                    "R1": "is subproperty of",  # this is the label in irk
                     "prefix": "p",
                 },
                 "is functional": {
@@ -332,7 +337,7 @@ class ConversionManager:
                 "has the associated LaTeX notation": {
                     "key": "R24",
                     "R1": "has LaTeX string",
-                    "R22": True, # Todo does it have to be functional?
+                    "R22": True,  # Todo does it have to be functional?
                     "prefix": "p",
                 },
                 "has the alternative associated LaTeX notation": {
@@ -383,16 +388,17 @@ class ConversionManager:
                     "R1": "is universally quantified",
                     "prefix": "p",
                     "is_qualifier": True,
-                    "qual_name": "p.univ_quant"
+                    "qual_name": "p.univ_quant",
                 },
                 "exis_quant": {
                     "key": "R66",
                     "R1": "is existentially quantified",
                     "prefix": "p",
                     "is_qualifier": True,
-                    "qual_name": "p.exis_quant"
+                    "qual_name": "p.exis_quant",
                 },
-            }}
+            },
+        }
         """
             # todo:
             "is associate with",
@@ -410,7 +416,7 @@ class ConversionManager:
 
         self.comment_pattern = re.compile(r"- //")
         self.new_section_pattern = re.compile(r"New.+?section")
-        self.class_pattern = re.compile(r"(?<=There is a class)(?::? )(.+)")                 # sometimes : is forgotten
+        self.class_pattern = re.compile(r"(?<=There is a class)(?::? )(.+)")  # sometimes : is forgotten
         self.property_pattern = re.compile(r"(?<=There is a property)(?::? )(.+)")
         self.relation_pattern = re.compile(r"(?<=There is a relation)(?::? )(.+)")
         self.general_operator_pattern = re.compile(r"(?<=There is a general operator)(?::? )(.+)")
@@ -423,7 +429,7 @@ class ConversionManager:
         self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+)")
         self.definition_pattern = re.compile(r"(?<=Definition of )(.+)")
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
-        self.equation_pattern = re.compile(r"There is an equation") # omit : at eol since llm sometimes forgets it
+        self.equation_pattern = re.compile(r"There is an equation")  # omit : at eol since llm sometimes forgets it
         self.math_rel_pattern = re.compile(r"There is a mathematical relation")
         self.equivalence_pattern = re.compile(r"There is an equivalence-statement")
         self.if_then_pattern = re.compile(r"There is an if(?:-| )then(?:-| )statement")
@@ -445,7 +451,7 @@ class ConversionManager:
             "lhs_formal": re.compile(r"(?<=- formalized left hand side)(?::? )(.+?)(?=\.$|$)"),
             "rhs_formal": re.compile(r"(?<=- formalized right hand side)(?::? )(.+?)(?=\.$|$)"),
             "reference": re.compile(r"(?<=- reference)(?::? )(.+)"),
-            "description": re.compile(r"(?<= - description)(?::? )(.+)(?=\.$|$)")
+            "description": re.compile(r"(?<= - description)(?::? )(.+)(?=\.$|$)"),
             # "sys_eq": re.compile(r"(?<=- sys_eq)(?::? )(.+)"),
         }
         self.explanation_pattern_dict = {
@@ -486,7 +492,7 @@ class ConversionManager:
                 self.d = self.process_line(self.d, i, line)
         # IPS()
 
-    def process_line(self, d:dict, i:int, line:str, skip_entity_order=False, *args, **kwargs):
+    def process_line(self, d: dict, i: int, line: str, skip_entity_order=False, *args, **kwargs):
         """process the line given
 
         Args:
@@ -548,21 +554,53 @@ class ConversionManager:
             return d
         # new class?
         elif len(new_class) > 0:
-            self.add_new_item(d, self.strip(new_class[0]), language, {"R4": 'p.I2["Metaclass"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d, self.strip(new_class[0]), language, {"R4": 'p.I2["Metaclass"]'}, skip_entity_order=skip_entity_order
+            )
         # new property?
         elif len(new_property) > 0:
-            self.add_new_item(d, self.strip(new_property[0]), language, {"R4": 'p.I54["mathematical property"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d,
+                self.strip(new_property[0]),
+                language,
+                {"R4": 'p.I54["mathematical property"]'},
+                skip_entity_order=skip_entity_order,
+            )
         # new relation?
         elif len(new_relation) > 0:
             self.add_new_rel(d, self.strip(new_relation[0]), language)
         elif len(new_general_operator) > 0:
-            self.add_new_item(d, self.strip(new_general_operator[0]), language, {"R3": 'p.I6["mathematical operation"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d,
+                self.strip(new_general_operator[0]),
+                language,
+                {"R3": 'p.I6["mathematical operation"]'},
+                skip_entity_order=skip_entity_order,
+            )
         elif len(new_unary_operator) > 0:
-            self.add_new_item(d, self.strip(new_unary_operator[0]), language, {"R4": 'p.I7["mathematical operation with arity 1"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d,
+                self.strip(new_unary_operator[0]),
+                language,
+                {"R4": 'p.I7["mathematical operation with arity 1"]'},
+                skip_entity_order=skip_entity_order,
+            )
         elif len(new_binary_operator) > 0:
-            self.add_new_item(d, self.strip(new_binary_operator[0]), language, {"R4": 'p.I8["mathematical operation with arity 2"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d,
+                self.strip(new_binary_operator[0]),
+                language,
+                {"R4": 'p.I8["mathematical operation with arity 2"]'},
+                skip_entity_order=skip_entity_order,
+            )
         elif len(new_ternary_operator) > 0:
-            self.add_new_item(d, self.strip(new_ternary_operator[0]), language, {"R4": 'p.I9["mathematical operation with arity 3"]'}, skip_entity_order=skip_entity_order)
+            self.add_new_item(
+                d,
+                self.strip(new_ternary_operator[0]),
+                language,
+                {"R4": 'p.I9["mathematical operation with arity 3"]'},
+                skip_entity_order=skip_entity_order,
+            )
         elif len(type_of_arg_1) > 0:
             self.handle_R8_R9_R10_R11(d, type_of_arg_1, "R8", language, skip_entity_order)
         elif len(type_of_arg_2) > 0:
@@ -576,12 +614,12 @@ class ConversionManager:
             process_next_line = True
             i_plus = 1
             while process_next_line:
-                rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i+i_plus])[0])
+                rarg1, rarg2 = self.strip(re.findall(self.replace_definition_pattern, self.lines[i + i_plus])[0])
                 for k, v in self.d["items"][arg1].items():
                     if v == self.build_reference(rarg1):
                         d["items"][arg1][k]["object"] = self.build_reference(rarg2)
                 i_plus += 1
-                if not self.lines[i+i_plus].startswith(" "):
+                if not self.lines[i + i_plus].startswith(" "):
                     # indentation ended
                     process_next_line = False
         # equation or mathematical relation
@@ -592,19 +630,18 @@ class ConversionManager:
             else:
                 type = "mathematical relation"
                 item_name = f"math_relation_{i}"
-            lines = self.get_sub_content(self.lines[i+1:])
+            lines = self.get_sub_content(self.lines[i + 1 :])
             key = self.item_keys.pop()
-            eq_dict = {
-                "type": type,
-                "key": key,
-                "snip": self.current_snippet
-                }
+            eq_dict = {"type": type, "key": key, "snip": self.current_snippet}
             for l in lines:
                 for name, pattern in self.equation_pattern_dict.items():
                     res = re.findall(pattern, l)
                     if res:
                         if name == "reference":
-                            self.eq_reference_dict[self.strip(res[0])] = {"key": key, "statement_name": self.new_item_name}
+                            self.eq_reference_dict[self.strip(res[0])] = {
+                                "key": key,
+                                "statement_name": self.new_item_name,
+                            }
                         if name == "full_source":
                             rel_signs = ["<=", ">=", "<", ">", "==", "!="]
                             for rs in rel_signs:
@@ -621,11 +658,16 @@ class ConversionManager:
         # system of equations
         elif len(sys_equation) > 0:
             name = f"system_of_equations_{i}"
-            self.add_new_item(d, name, language, additional_relations={"R4": self.build_reference("system of equations")}, skip_entity_order=True)
-            additional_content = self.get_sub_content(self.lines[i+1:])
+            self.add_new_item(
+                d,
+                name,
+                language,
+                additional_relations={"R4": self.build_reference("system of equations")},
+                skip_entity_order=True,
+            )
+            additional_content = self.get_sub_content(self.lines[i + 1 :])
             for ii, line in enumerate(additional_content):
-                self.process_line(d, i+ii+1, line, sys_eq=self.build_reference(name))
-
+                self.process_line(d, i + ii + 1, line, sys_eq=self.build_reference(name))
 
         # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0 or len(definition) > 0:
@@ -644,16 +686,16 @@ class ConversionManager:
                 additional_context = {"R4": 'p.I20["mathematical definition"]', "comments": []}
                 new_item_name = f"definition of {definition} "
 
-            additional_content = self.get_sub_content(self.lines[i+1:])
-            top_level_indent = self.get_indent(self.lines[i+1])
+            additional_content = self.get_sub_content(self.lines[i + 1 :])
+            top_level_indent = self.get_indent(self.lines[i + 1])
             temp_dict = {"items": {}, "relations": {}}
             # note: statement name only allowed as first line in statement to prevent mid parsing name changes
-            name = re.findall(r"statement name: (.+?)(?=\.$|$)", self.lines[i+1])
+            name = re.findall(r"statement name: (.+?)(?=\.$|$)", self.lines[i + 1])
             if name:
                 assert name_given == False, "multiple name assignments for statement is not supported"
                 new_item_name += f"{self.strip(name[0])}"
                 name_given = True
-            new_item_name +=  f"l{i}"
+            new_item_name += f"l{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 description = re.findall(self.equation_pattern_dict["description"], l)
@@ -672,20 +714,22 @@ class ConversionManager:
                     temp_dict = copy.deepcopy(temp_dict)
                     # pass this item name down the recursion chain to the point where equations are added so we can find them later
                     self.new_item_name = new_item_name + "__" + f"formal_{formal[0]}"
-                    temp_dict = self.recurse_nested_statements(additional_content[ii+1:], i+ii+2, temp_dict)
+                    temp_dict = self.recurse_nested_statements(additional_content[ii + 1 :], i + ii + 2, temp_dict)
                     additional_context[f"formal_{formal[0]}"] = temp_dict
             # now differentiate between the dicts
             formal_keys = [key for key in additional_context.keys() if "formal" in key]
             dict_list = [additional_context[key] for key in formal_keys]
             if len(dict_list) > 1:
                 diff_list = []
-                for index in range(len(dict_list)-1):
+                for index in range(len(dict_list) - 1):
                     # see https://zepworks.com/deepdiff/current/optimizations.html#threshold-to-diff-deeper-label
                     # this SEEMS to prevent new dict items from being classified as values changed which fucks up
                     # the current workings of self.get_diffed_dict. Also this seems to work more intuitively
-                    diff_list.append(deepdiff.DeepDiff(dict_list[index], dict_list[index+1], threshold_to_diff_deeper=0))
+                    diff_list.append(
+                        deepdiff.DeepDiff(dict_list[index], dict_list[index + 1], threshold_to_diff_deeper=0)
+                    )
                 for index, diff in enumerate(diff_list):
-                    additional_context[formal_keys[index+1]] = self.get_diffed_dict(diff)
+                    additional_context[formal_keys[index + 1]] = self.get_diffed_dict(diff)
 
             d = self.add_new_item(d, new_item_name, language, additional_context, skip_entity_order=skip_entity_order)
             if len(definition) > 0:
@@ -696,24 +740,31 @@ class ConversionManager:
             # this should not be used any other way, but just to be sure, reset this
             self.new_item_name = None
         elif len(explanation) > 0:
-            additional_content = self.get_sub_content(self.lines[i+1:])
+            additional_content = self.get_sub_content(self.lines[i + 1 :])
             for ii, l in enumerate(additional_content):
                 res = re.findall(self.explanation_pattern_dict["related"], l)
-                if res: related_to = self.strip(res[0])
-                res= re.findall(self.explanation_pattern_dict["verbal"], l)
-                if res: verbal_sum = self.strip(res[0])
+                if res:
+                    related_to = self.strip(res[0])
+                res = re.findall(self.explanation_pattern_dict["verbal"], l)
+                if res:
+                    verbal_sum = self.strip(res[0])
             if related_to and verbal_sum:
                 # self.d["items"][related_to][self.d["relations"]["has explanation"]["key"]] = verbal_sum
                 tag = self.get_entity_type_from_label(related_to)
-                self.add_relation_inplace(self.d[tag][related_to], self.d["relations"]["has explanation"]["key"], verbal_sum)
+                self.add_relation_inplace(
+                    self.d[tag][related_to], self.d["relations"]["has explanation"]["key"], verbal_sum
+                )
             else:
-                logger.warning(f"explanation {explanation} did not specify 'related to' {related_to} AND 'verbal \
-                    summary' {verbal_sum}", extra={"line": i})
+                logger.warning(
+                    f"explanation {explanation} did not specify 'related to' {related_to} AND 'verbal \
+                    summary' {verbal_sum}",
+                    extra={"line": i},
+                )
         elif len(for_loop) > 0:
             index_var, start, stop = self.strip(for_loop[0])
-            additional_content = self.get_sub_content(self.lines[i+1:])
+            additional_content = self.get_sub_content(self.lines[i + 1 :])
             temp_dict = {"items": {}, "relations": {}}
-            temp_dict = self.recurse_nested_statements(additional_content, i+1, temp_dict)
+            temp_dict = self.recurse_nested_statements(additional_content, i + 1, temp_dict)
             key = self.item_keys.pop()
             for_dict = {
                 "key": key,
@@ -722,18 +773,20 @@ class ConversionManager:
                 "index_var": index_var,
                 "start": start,
                 "stop": stop,
-                }
+            }
             d["items"][f"for_loop_{i}"] = for_dict
         elif len(qualifier) > 0:
             rel = self.strip(qualifier[0])
             if rel in self.d["relations"].keys():
                 self.d["relations"][rel]["is_qualifier"] = True
         elif len(concepts) > 0 or len(defined) > 0:
-            additional_content = self.get_sub_content(self.lines[i+1:])
+            additional_content = self.get_sub_content(self.lines[i + 1 :])
             if self.current_snippet not in d["items"].keys():
-                self.add_new_item(d, self.current_snippet, language, additional_relations={"R4": self.build_reference("snippet")})
+                self.add_new_item(
+                    d, self.current_snippet, language, additional_relations={"R4": self.build_reference("snippet")}
+                )
             if len(concepts) > 0:
-                rel_key = self.d["relations"]["contains concept"]["key"] # todo get rid of hardcoded labels here
+                rel_key = self.d["relations"]["contains concept"]["key"]  # todo get rid of hardcoded labels here
             else:
                 rel_key = self.d["relations"]["contains definition of"]["key"]
             for sub_line in additional_content:
@@ -795,12 +848,26 @@ class ConversionManager:
                             arg2 = self.eq_reference_dict[arg2]["key"]
                     # instance of
                     if v["key"] == "R4":
-                        self.add_new_item(d, arg1, language, {"R3": None, "R4": arg2}, qualifiers=q_dict, skip_entity_order=skip_entity_order)
+                        self.add_new_item(
+                            d,
+                            arg1,
+                            language,
+                            {"R3": None, "R4": arg2},
+                            qualifiers=q_dict,
+                            skip_entity_order=skip_entity_order,
+                        )
                         # if qual_string:
                         #     logger.warning(f"line {line} has qualifiers for R4, which is neglected")
                     # subclass of
                     elif v["key"] == "R3":
-                        self.add_new_item(d, arg1, language, {"R3": arg2, "R4": None},qualifiers=q_dict, skip_entity_order=skip_entity_order)
+                        self.add_new_item(
+                            d,
+                            arg1,
+                            language,
+                            {"R3": arg2, "R4": None},
+                            qualifiers=q_dict,
+                            skip_entity_order=skip_entity_order,
+                        )
                         if qual_string:
                             logger.warning(f"{arg1} has qualifiers for R3, which is neglected", extra={"line": i})
                     # alternative label
@@ -819,7 +886,7 @@ class ConversionManager:
                             existing_item = None
                         if existing_item:
                             key = existing_item.short_key
-                            prefix = self.irk_module_names[existing_item.base_uri.split('/')[-1]]
+                            prefix = self.irk_module_names[existing_item.base_uri.split("/")[-1]]
                             self.entity_matching_report += f"matched '{arg1}' with {prefix}.{key}[{existing_item.R1}]\n"
                             # now we need to replace the old key from the item declaration order with the existing key
                             self.entity_order.remove(d[tag][arg1]["key"])
@@ -830,10 +897,16 @@ class ConversionManager:
                             # add the alternative label in the correct language
                             if existing_item.__getattr__(f"R1__has_label__{language}") is None:
                                 # d[tag][arg1][f"R77__{language}"] = arg1
-                                self.add_relation_inplace(d[tag][arg1], f"R77__{language}", arg1, q_dict) # arg1 is correct here
+                                self.add_relation_inplace(
+                                    d[tag][arg1], f"R77__{language}", arg1, q_dict
+                                )  # arg1 is correct here
                             # remove default R4 typing and possible duplicate types
                             r4_label = d[tag][arg1]["R4"]["object"].split('"')[1]
-                            if "Metaclass" in d[tag][arg1]["R4"]["object"] or (existing_item.R4 and r4_label == existing_item.R4.R1.value) or (existing_item.R3 and r4_label == existing_item.R3.R1.value):
+                            if (
+                                "Metaclass" in d[tag][arg1]["R4"]["object"]
+                                or (existing_item.R4 and r4_label == existing_item.R4.R1.value)
+                                or (existing_item.R3 and r4_label == existing_item.R3.R1.value)
+                            ):
                                 del d[tag][arg1]["R4"]
 
                         else:
@@ -843,7 +916,9 @@ class ConversionManager:
                             else:
                                 self.add_relation_inplace(d[tag][arg1], v["key"], arg2, q_dict)
                     else:
-                        if not (arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]):
+                        if not (
+                            arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]
+                        ):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
                             logger.info(f"dummy item {arg1} added", extra={"line": i})
                         if arg1 in d["items"]:
@@ -855,7 +930,9 @@ class ConversionManager:
                         elif arg1 in self.d["relations"]:
                             self.add_relation_inplace(self.d["relations"][arg1], v["key"], arg2, q_dict)
                         else:
-                            raise ParserError("why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?")
+                            raise ParserError(
+                                "why would a scope reference something outside as a subject? Maybe the relation should change sub and obj?"
+                            )
 
                     break
                 elif len(res2) > 0:
@@ -925,7 +1002,7 @@ class ConversionManager:
         key_wants_literal = False
         if pr := self.d["relations"][label]["prefix"]:
             # relation is defined in existing module -> check R11 there
-            if pr == "p": # official prefix of builtins is bi
+            if pr == "p":  # official prefix of builtins is bi
                 pr = "bi"
             e = p.ds.get_entity_by_uri(f'{p.ds.uri_prefix_mapping.b[pr]}#{key.split("__")[0]}')
             eR11 = e.get_relations("R11", return_obj=True)
@@ -963,7 +1040,9 @@ class ConversionManager:
         return r1_key
 
     # @u.timing
-    def add_new_item(self, d, label, language, additional_relations:dict={}, qualifiers=None, skip_entity_order=False):
+    def add_new_item(
+        self, d, label, language, additional_relations: dict = {}, qualifiers=None, skip_entity_order=False
+    ):
         prefix = False
         # check if item already exists in KG
         existing_item = self.get_existing_item(label)
@@ -973,7 +1052,7 @@ class ConversionManager:
             existing_item = None
         if existing_item:
             key = existing_item.short_key
-            prefix = self.irk_module_names[existing_item.base_uri.split('/')[-1]]
+            prefix = self.irk_module_names[existing_item.base_uri.split("/")[-1]]
             self.entity_matching_report += f"matched '{label}' with {prefix}.{key}[{existing_item.R1}]\n"
         else:
             key = self.item_keys.pop()
@@ -1011,7 +1090,7 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_new_rel(self, d, label, language, additional_relations:dict={}):
+    def add_new_rel(self, d, label, language, additional_relations: dict = {}):
         prefix = False
         # check if item already exists in KG
         existing_rel = self.get_existing_relation(label)
@@ -1021,7 +1100,7 @@ class ConversionManager:
             existing_rel = None
         if existing_rel:
             key = existing_rel.short_key
-            prefix = self.irk_module_names[existing_rel.base_uri.split('/')[-1]]
+            prefix = self.irk_module_names[existing_rel.base_uri.split("/")[-1]]
             self.entity_matching_report += f"matched '{label}' with {prefix}.{key}[{existing_rel.R1}]\n"
         else:
             key = self.relation_keys.pop()
@@ -1035,7 +1114,8 @@ class ConversionManager:
                 r1_key: label,
                 "render": f"""{pre}{key}__{self.sp_to_us(label)}""",
                 "snip": self.current_snippet,
-                "prefix": prefix}
+                "prefix": prefix,
+            }
         else:
             key = d["relations"][label]["key"]
         for k, v in additional_relations.items():
@@ -1044,7 +1124,7 @@ class ConversionManager:
             self.entity_order.append(key)
         return d
 
-    def add_relation_inplace(self, subject_dict:dict, rel_key:str, obj:str, qualifier:Union[dict, list[dict]]={}):
+    def add_relation_inplace(self, subject_dict: dict, rel_key: str, obj: str, qualifier: Union[dict, list[dict]] = {}):
         """add a relation between subject and object to a given dict (inplace)
 
         Args:
@@ -1112,7 +1192,7 @@ class ConversionManager:
                 assert not rel_key.startswith("R"), f"is {rel_key} maybe a relation key that should be in d[relations]?"
                 subject_dict[rel_key] = object_dict
 
-    def recurse_nested_statements(self, content, line_no:int, temp_dict=None):
+    def recurse_nested_statements(self, content, line_no: int, temp_dict=None):
         """parse the content of nested definition statements recursively.
         Goal format:
         {"OR_1":
@@ -1138,8 +1218,10 @@ class ConversionManager:
                 op_pattern = re.compile(r"(OR|AND|NOT)")
                 operator = re.findall(op_pattern, line)
                 if operator:
-                    sub_content = self.get_sub_content(content[i+1:])
-                    res = self.recurse_nested_statements(sub_content, line_no+i+1, temp_dict=copy.deepcopy(temp_dict))
+                    sub_content = self.get_sub_content(content[i + 1 :])
+                    res = self.recurse_nested_statements(
+                        sub_content, line_no + i + 1, temp_dict=copy.deepcopy(temp_dict)
+                    )
                     # skip next lines that were processed in subroutine
                     i += len(sub_content)
                     # dict diff, only add new part to opKey
@@ -1151,7 +1233,9 @@ class ConversionManager:
                     op_count += 1
                 else:
                     if temp_dict is not None:
-                        temp_dict = self.process_line(copy.deepcopy(temp_dict), line_no+i, line, skip_entity_order=True)
+                        temp_dict = self.process_line(
+                            copy.deepcopy(temp_dict), line_no + i, line, skip_entity_order=True
+                        )
                         # I think this is the same as before: inplace without deepcopy
                     else:
                         raise ValueError("temp_dict should be preconfigured")
@@ -1190,7 +1274,7 @@ class ConversionManager:
         # todo add functionality that this also takes a key as argument
         if arg2 in self.d["items"].keys():
             arg2v = self.d["items"][arg2]
-            key = arg2v['key']
+            key = arg2v["key"]
             if arg2v["prefix"]:
                 arg2 = f"""{arg2v["prefix"]}.{key}["{arg2v['R1']}"]"""
             else:
@@ -1198,7 +1282,7 @@ class ConversionManager:
 
         elif arg2 in self.d["relations"].keys():
             arg2v = self.d["relations"][arg2]
-            key = arg2v['key']
+            key = arg2v["key"]
             if "R77" in key:
                 key = "R77"
             if arg2v["prefix"]:
@@ -1212,7 +1296,7 @@ class ConversionManager:
                 arg2 = arg2.replace(" ", "_")
         return arg2
 
-    def get_diffed_dict(self, diff:deepdiff.DeepDiff):
+    def get_diffed_dict(self, diff: deepdiff.DeepDiff):
         """return the difference dict between two dicts. Note: currently only works for addition "info(dict1)<info(dict2)"
 
         Args:
@@ -1224,7 +1308,7 @@ class ConversionManager:
         Returns:
             dict: difference dictionary
         """
-        dbg = 0 # a counter to make sure every change in dicts is considered, since only some cases are implemented
+        dbg = 0  # a counter to make sure every change in dicts is considered, since only some cases are implemented
         current_dict = {"items": {}, "relations": {}}
         if "iterable_item_added" in diff.keys():
             for ikey, ivalue in diff["iterable_item_added"].items():
@@ -1258,7 +1342,9 @@ class ConversionManager:
                 set_nested_value(current_dict, res, diff["values_changed"][ikey]["new_value"])
             dbg += 1
         if dbg != len(diff.keys()):
-            raise ParserError("apparently some change between the dicts was not considered. please investigate diff.keys()")
+            raise ParserError(
+                "apparently some change between the dicts was not considered. please investigate diff.keys()"
+            )
         return current_dict
 
     ####################################################################################################################
@@ -1304,10 +1390,12 @@ class ConversionManager:
             res = render_template(f"basic_entity_template.py", context)
             output += res + "\n\n"
             count += 1
-            if "R4" in v.keys() and (v["R4"]["object"] == 'p.I15["implication proposition"]' or \
-                v["R4"]["object"] == 'p.I17["equivalence proposition"]' or \
-                v["R4"]["object"] == 'p.I14["mathematical proposition"]' or \
-                v["R4"]["object"] == 'p.I20["mathematical definition"]'):
+            if "R4" in v.keys() and (
+                v["R4"]["object"] == 'p.I15["implication proposition"]'
+                or v["R4"]["object"] == 'p.I17["equivalence proposition"]'
+                or v["R4"]["object"] == 'p.I14["mathematical proposition"]'
+                or v["R4"]["object"] == 'p.I20["mathematical definition"]'
+            ):
                 context = {"id": self.build_reference(name), "rd": 1}
                 if "snip" in v.keys():
                     context["snip"] = v["snip"]
@@ -1333,11 +1421,12 @@ class ConversionManager:
                 res = render_template("statement_template.py", context)
                 output += res + "\n\n"
 
-        pyirk_context = {"uri_name": self.mod_uri,
-                         "entity_declaration": entity_declaration,
-                         "content": output,
-                         "load_irk_modules": self.load_irk_modules
-                        }
+        pyirk_context = {
+            "uri_name": self.mod_uri,
+            "entity_declaration": entity_declaration,
+            "content": output,
+            "load_irk_modules": self.load_irk_modules,
+        }
 
         res = render_template("pyirk_template.py", pyirk_context)
 
@@ -1348,7 +1437,6 @@ class ConversionManager:
             res = black.format_file_contents(res, fast=False, mode=black.Mode(line_length=120))
         except Exception as e:
             logger.error(f"Black failed with {e}")
-
 
         fpath = "output.py"
         with open(fpath, "wt", encoding="utf-8") as f:
@@ -1372,7 +1460,6 @@ class ConversionManager:
         for old, new in rplmts:
             txt = txt.replace(old, new)
         return txt
-
 
     def prune_dict(self, value_dict):
         matched_entity = self.get_existing_entity(value_dict["R1"])
@@ -1410,7 +1497,7 @@ class ConversionManager:
                     # the object of this relation is a reference string that appears in the 'reference' key of some equation item
                     # todo find this equation
                     pass
-                elif (key == "R4" or key == "R3"):
+                elif key == "R4" or key == "R3":
                     # this already assumes that R3 and R4 are functional
                     if "p.I2[" in value["object"]:
                         self.entity_matching_report += f'Unmatched entity: {self.build_reference(value_dict["R1"])}\n'
@@ -1442,10 +1529,13 @@ class ConversionManager:
                                 q_str += f"""{self.get_qualifier_name(self.d["relations"][self.rel_interpr[rel_key]])}({self.build_reference(qual_value)}), """
                             q_str += "]"
                             context["extra"].append(
-                                f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})')
+                                f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {quotes}{value}{quotes}, qualifiers={q_str})'
+                            )
                     else:
-                        r = "r" if key in ["R2", "R24", "R81", "R82"] else "" # escape potential math expressions
-                        context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={r}{quotes}{value}{quotes}')
+                        r = "r" if key in ["R2", "R24", "R81", "R82"] else ""  # escape potential math expressions
+                        context["rel"].append(
+                            f'{self.d["relations"][self.rel_interpr[key]]["render"]}={r}{quotes}{value}{quotes}'
+                        )
                 # handle multiple objects -> list (R8__=[I000[".."], I111[".."]])
                 else:
                     # we need to manually construct a string here instead of a list, since we might want python objects
@@ -1466,7 +1556,7 @@ class ConversionManager:
                                     # this means, that there is no reference item -> quote the string
                                     obj = f'"{v}"'
                                 else:
-                                    obj = f'{ref}'
+                                    obj = f"{ref}"
                             # handle qualifier
                             for q_dict in q_list:
                                 q_str = "["
@@ -1475,7 +1565,7 @@ class ConversionManager:
                                 q_str += "]"
                                 context["extra"].append(
                                     f'{self.build_reference(value_dict["R1"])}.set_relation({self.build_reference(self.rel_interpr[key])}, {obj}, qualifiers={q_str})'
-                                    )
+                                )
                         else:
 
                             res = re.findall(r"[R|I]\d+", str(v))
@@ -1489,12 +1579,14 @@ class ConversionManager:
                                     # or v was matched to an existing entity and now we want the alt. label instead of exsiting entity
                                     l.append(f'"{v}"')
                                 else:
-                                    l.append(f'{ref}')
+                                    l.append(f"{ref}")
                     if l:
                         string = f"[{', '.join(l)}]"
                         context["rel"].append(f'{self.d["relations"][self.rel_interpr[key]]["render"]}={string}')
             elif key == "is_qualifier" and value == True:
-                context["extra"].append(f"""{self.get_qualifier_name(value_dict)} = p.QualifierFactory({self.build_reference(value_dict["R1"])})""")
+                context["extra"].append(
+                    f"""{self.get_qualifier_name(value_dict)} = p.QualifierFactory({self.build_reference(value_dict["R1"])})"""
+                )
         # sort the relations in ascending number oder
         context["rel"].sort(key=lambda x: int(re.findall(r"(?<=R)\d+(?=__)", x)[0]))
         # get rid of R1, since we use the entity.update method
@@ -1502,7 +1594,9 @@ class ConversionManager:
             del context["rel"][0]
         return context
 
-    def get_statement_context_recursively(self, statement_item:dict, subdict:dict, context_recursion_depth=1, indent_depth=1):
+    def get_statement_context_recursively(
+        self, statement_item: dict, subdict: dict, context_recursion_depth=1, indent_depth=1
+    ):
         """step through nested dicts and generate output
         Note: different context_recursion_depths are necessary since some structures (i.e. for loop) need normal (+1)
         indentation but no additional (+0) context variable count
@@ -1518,7 +1612,7 @@ class ConversionManager:
 
         Returns:
             list[str]: output
-        """        """"""
+        """ """"""
         # output
         out = []
         # insertion index makes sure that item creation happens before relations are added, that reference said items
@@ -1535,17 +1629,21 @@ class ConversionManager:
                 else:
                     raise TypeError()
             elif "OR" in key or "AND" in key or "NOT" in key:
-                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], context_recursion_depth+1, indent_depth+1)
+                res = self.get_statement_context_recursively(
+                    statement_item, subdict["items"][key], context_recursion_depth + 1, indent_depth + 1
+                )
                 context = {
                     "content": res,
                     "logic_operator": key.split("_")[0],
                     "rd": context_recursion_depth,
                     "new_rd": context_recursion_depth + 1,
                     "indent": " " * 4 * indent_depth,
-                    }
+                }
                 out.append(render_template("and_or_not_template.py", context))
             elif "for_loop" in key:
-                res = self.get_statement_context_recursively(statement_item, subdict["items"][key], context_recursion_depth, indent_depth+1)
+                res = self.get_statement_context_recursively(
+                    statement_item, subdict["items"][key], context_recursion_depth, indent_depth + 1
+                )
                 if value["start"].isnumeric():
                     start = int(value["start"])
                 else:
@@ -1560,38 +1658,48 @@ class ConversionManager:
                     "start": start,
                     "stop": stop,
                     "index_var": f"""{value["index_var"]}""",
-                    }
+                }
                 out.append(render_template("integer_range_template.py", context))
             elif "it stm" in key:
                 context = {
-                    "rd": context_recursion_depth+1,
+                    "rd": context_recursion_depth + 1,
                     "indent": " " * 4 * indent_depth,
-                    }
+                }
 
                 if "formal_set" in value.keys():
-                    logger.warning(f'setting found in nested statement {statement_item["key"]} which is not yet supported')
+                    logger.warning(
+                        f'setting found in nested statement {statement_item["key"]} which is not yet supported'
+                    )
                 if "formal_pre" in value.keys():
-                    premises = self.get_statement_context_recursively(statement_item, value[f"formal_pre"], context_recursion_depth+1, indent_depth)
+                    premises = self.get_statement_context_recursively(
+                        statement_item, value[f"formal_pre"], context_recursion_depth + 1, indent_depth
+                    )
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["premise"] = []
                     for prem in premises:
                         if "new_math_relation" in prem:
-                            context["premise"].append(prem.split("new_math_relation")[1].split("force_key")[0]+")")
+                            context["premise"].append(prem.split("new_math_relation")[1].split("force_key")[0] + ")")
                         else:
-                            logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
-                                {prem} which is not yet supported')
+                            logger.error(
+                                f'nested statement {statement_item["key"]} has non math_relation statement \
+                                {prem} which is not yet supported'
+                            )
                 if "formal_ass" in value.keys():
-                    assertions = self.get_statement_context_recursively(statement_item, value[f"formal_ass"], context_recursion_depth+1, indent_depth)
+                    assertions = self.get_statement_context_recursively(
+                        statement_item, value[f"formal_ass"], context_recursion_depth + 1, indent_depth
+                    )
                     # extract the kwargs from the rendered statement
                     # todo this could probably be solved more elegantly
                     context["assertion"] = []
                     for ass in assertions:
                         if "new_math_relation" in ass:
-                            context["assertion"].append(ass.split("new_math_relation")[1].split("force_key")[0]+")")
+                            context["assertion"].append(ass.split("new_math_relation")[1].split("force_key")[0] + ")")
                         else:
-                            logger.error(f'nested statement {statement_item["key"]} has non math_relation statement \
-                                {ass} which is not yet supported')
+                            logger.error(
+                                f'nested statement {statement_item["key"]} has non math_relation statement \
+                                {ass} which is not yet supported'
+                            )
                 out.append(render_template("nested_statement_template.py", context))
             else:
                 key_render = self.strip_math(key).replace(" ", "_")
@@ -1607,14 +1715,16 @@ class ConversionManager:
                                 q_list.append(f'{self.d["relations"][self.rel_interpr[k]]["qual_name"]}({v})')
                     if q_list:
                         qualifiers = f', qualifiers=[{", ".join(q_list)}]'
-                    out.insert(insertion_index,
-                               f'cm{context_recursion_depth}.new_var({key_render}=p.{uq}instance_of({value["R4"]["object"]}{qualifiers}))')
+                    out.insert(
+                        insertion_index,
+                        f'cm{context_recursion_depth}.new_var({key_render}=p.{uq}instance_of({value["R4"]["object"]}{qualifiers}))',
+                    )
                     insertion_index += 1
                     # Note: if there is no R4 relation, the item must be already existing in cm.
                     # todo find a way to verify the existance
                 for kk, vv in value.items():
                     number = re.findall(r"(?<=R)\d+", kk)
-                    if number and int(number[0]) > 4: # just exclude R1-R4 here
+                    if number and int(number[0]) > 4:  # just exclude R1-R4 here
                         if not isinstance(vv, list):
                             vv = [vv]
                         for vvv in vv:
@@ -1652,8 +1762,10 @@ class ConversionManager:
                                 quotes = '"'
                             else:
                                 quotes = ""
-                            out.append(f'cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}'
-                                + f'{key_render}, {self.build_reference(self.rel_interpr[kk])}, {quotes}{obj_str}{quotes}{extra}{q_str})')
+                            out.append(
+                                f"cm{context_recursion_depth}.new_rel({self.get_context_r(key, statement_item)}"
+                                + f"{key_render}, {self.build_reference(self.rel_interpr[kk])}, {quotes}{obj_str}{quotes}{extra}{q_str})"
+                            )
         return out
 
     def get_context_r(self, name, statement_item, r=1):
@@ -1665,7 +1777,7 @@ class ConversionManager:
                     if k == "items" or "formal" in k:
                         res = self.get_context_r(name, v, r)
                     else:
-                        res = self.get_context_r(name, v, r+1)
+                        res = self.get_context_r(name, v, r + 1)
                     if res:
                         return res
         return ""
@@ -1679,7 +1791,10 @@ class ConversionManager:
         if "comments" in eq_dict.keys():
             context["comments"] = eq_dict["comments"]
         if "sys_eq" in eq_dict.keys():
-            context["sys_eq"] = {"rel": self.build_reference("is part of system of equations"), "obj": eq_dict["sys_eq"]}
+            context["sys_eq"] = {
+                "rel": self.build_reference("is part of system of equations"),
+                "obj": eq_dict["sys_eq"],
+            }
 
         if eq_dict["type"] == "equation":
             context["rsgn"] = '"=="'
@@ -1733,7 +1848,7 @@ class ConversionManager:
             sp.Sum: """ma.I5441["sum over index"]""",
             sp.Integral: """ma.I5442["general integral"]""",
             sp.Tuple: lambda *args: tuple(args),
-            sp.Derivative: lambda *args: f"""ma.derivative({", ".join(u.flatten(args))})"""
+            sp.Derivative: lambda *args: f"""ma.derivative({", ".join(u.flatten(args))})""",
         }
 
         # add local variables to lookup
@@ -1744,7 +1859,7 @@ class ConversionManager:
                 lookup.update(statement_item[formal]["items"])
 
         # strip
-        latex = latex_og.replace('$', '')
+        latex = latex_og.replace("$", "")
         latex = re.sub(r"^\\[(]", "", latex)
         latex = re.sub(r"\\[)]$", "", latex)
 
@@ -1755,11 +1870,13 @@ class ConversionManager:
         string_with_vars_removed = re.sub(r"'.+?'", "", latex)
         open_vars = list(set(ascii_letters) - set(string_with_vars_removed))
         var_map = u.OneToOneMapping()
+
         def repl_func(matchobj):
             long_var = self.strip(matchobj.group(0))
             if not long_var in var_map.a.keys():
                 var_map.add_pair(long_var, open_vars.pop())
             return var_map.a[long_var]
+
         latex = re.sub(r"'.+?'", repl_func, latex)
 
         only_term = True
@@ -1796,10 +1913,14 @@ class ConversionManager:
         if isinstance(sp_expr, Tree):
             # todo this is a quick fix, but might prove troublesome in the future, beware of the warning
             sp_expr = sp_expr.children[0]
-            logger.warning(f"Warning: lark result not unique, using first structural option: {sp_expr} for {self.latex_og}")
+            logger.warning(
+                f"Warning: lark result not unique, using first structural option: {sp_expr} for {self.latex_og}"
+            )
         if len(sp_expr.free_symbols) > 5:
             # latex code like "func(var)" will be interpreted as f*u*n*c(v*a*r) if not properly ticked '
-            logger.warning(f"equation {self.latex_og} was rendered to {sp_expr} with a lot of symbols, is this intentional?")
+            logger.warning(
+                f"equation {self.latex_og} was rendered to {sp_expr} with a lot of symbols, is this intentional?"
+            )
 
         # 2. traverse tree
         res = self.convert_sympy_to_irklike_str(sp_expr, item_lookup, var_map, statement_item)
@@ -1816,8 +1937,9 @@ class ConversionManager:
                 if og_var_name in self.d["items"]:
                     res = self.build_reference(og_var_name)
                 else:
-                    res = self.get_context_r(og_var_name, statement_item) + \
-                        self.build_reference(og_var_name, local_dict={"items": item_lookup})
+                    res = self.get_context_r(og_var_name, statement_item) + self.build_reference(
+                        og_var_name, local_dict={"items": item_lookup}
+                    )
                 return res
             # callable custom Funktions e.g. f(x)
             elif isinstance(type(sp_expr), sp.core.function.UndefinedFunction):
@@ -1831,8 +1953,9 @@ class ConversionManager:
                 if og_var_name in self.d["items"]:
                     function_type = self.build_reference(og_var_name)
                 else:
-                    function_type = self.get_context_r(og_var_name, statement_item) + \
-                        self.build_reference(og_var_name, local_dict={"items": item_lookup})
+                    function_type = self.get_context_r(og_var_name, statement_item) + self.build_reference(
+                        og_var_name, local_dict={"items": item_lookup}
+                    )
                 return f"""{function_type}({", ".join(args)})"""
             # numbers
             elif isinstance(sp_expr, (int, float, complex, sp.Number)):
@@ -1892,7 +2015,7 @@ class ConversionManager:
             parsed_expr = parsed_expr.subs(subs_list)
         return parsed_expr
 
-    def _get_repl_list_rec(self, parsed_expr, statement_item, repl_list:list=[], subs_list:list=[]):
+    def _get_repl_list_rec(self, parsed_expr, statement_item, repl_list: list = [], subs_list: list = []):
         """create a list of replacements: new functions and variables with their names as needed for the string in pyirk.
         this differentiates between local (context) names (cm.local_var) and global names (I1234["Operator1"])
         """
@@ -1914,7 +2037,12 @@ class ConversionManager:
             elif parsed_expr.name.replace("_", " ") in self.d["items"].keys():
                 subs_list.append((parsed_expr, sp.Symbol(self.build_reference(parsed_expr.name.replace("_", " ")))))
             else:
-                subs_list.append((parsed_expr, sp.Symbol(f"{self.get_context_r(parsed_expr.name, statement_item)}{parsed_expr.name}")))
+                subs_list.append(
+                    (
+                        parsed_expr,
+                        sp.Symbol(f"{self.get_context_r(parsed_expr.name, statement_item)}{parsed_expr.name}"),
+                    )
+                )
         # this is necessary, since sp.N is some existing function and the Symbol 'N' maps onto that function, which has no args
         if hasattr(parsed_expr, "args"):
             for subexpr in parsed_expr.args:
@@ -1926,7 +2054,7 @@ class ConversionManager:
 
     def get_expr_from_lookup(self, eq):
         # this is not a static dict, since it needs dynamic references
-        if eq == 's**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))':
+        if eq == "s**i * F(s) - sum(j=0, i-1, s**(i-1-j) * f**(j)(+0))":
             s = self.build_reference("s")
             dt = self.build_reference("höhere Zeitableitung")
             return f"""{s}**cm1.i * cm1.F({s}) - ma.I5441["sum over index"]({s}**(cm1.i-1-cm1.j) * {dt}(cm1.f, cm1.j)(0), cm1.j, ma.I5440["limits"](0, cm1.i-1))"""
@@ -1940,7 +2068,9 @@ class ConversionManager:
         res = self.render()
         return res
 
+
 # region main
+
 
 @u.timing
 def main(statements_fpath: str, force_key_tuple=None, mod_uri="__stafo_default_uri__"):

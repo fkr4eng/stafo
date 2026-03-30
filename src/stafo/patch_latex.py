@@ -31,7 +31,6 @@ for i in range(1, 51):
         print("skipping", i)
         continue
 
-
     context = {
         "fnl_statements": new_nl_content,
         "fnl_current": fnl_snippet,
@@ -43,8 +42,10 @@ for i in range(1, 51):
     new_latex_content += snip_str + "\n" + res + "\n"
 
 
-prelim = ["\\newcommand{\\setref}[2]{\\textcolor{red}{#1}\\textcolor{green}{#2}}",
-          "\\newcommand{\\snippet}[1]{\\textbf{snippet #1}\\\\}"]
+prelim = [
+    "\\newcommand{\\setref}[2]{\\textcolor{red}{#1}\\textcolor{green}{#2}}",
+    "\\newcommand{\\snippet}[1]{\\textbf{snippet #1}\\\\}",
+]
 context = {
     "preliminaries": prelim,
     "content": new_latex_content,

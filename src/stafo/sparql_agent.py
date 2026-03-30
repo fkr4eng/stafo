@@ -16,10 +16,12 @@ Proposed workflow
 
 
 """
+
 import sys, os
 from google import genai
 from google.genai import types
 import re, regex
+
 try:
     # available in python >=3.11
     import tomllib
@@ -43,8 +45,8 @@ with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 
-class SparqlAgent():
-    def __init__(self, load_irk_modules: list[dict]=[]):
+class SparqlAgent:
+    def __init__(self, load_irk_modules: list[dict] = []):
         # parameters
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.generation_model = "gemini-2.5-flash"
@@ -57,12 +59,15 @@ class SparqlAgent():
         # init
         if load_irk_modules:
             for load_dict in load_irk_modules:
-                assert isinstance(load_dict, dict), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
+                assert isinstance(
+                    load_dict, dict
+                ), "load_irk_modules takes list of dicts. dicts must have keys path, module_name, prefix"
                 if "uri" in load_dict.keys():
                     mod = p.irkloader.load_mod_from_uri(load_dict["uri"], prefix=load_dict["prefix"], reuse_loaded=True)
                 elif "path" in load_dict.keys():
-                    nl = p.irkloader.load_mod_from_path(load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True)
-
+                    nl = p.irkloader.load_mod_from_path(
+                        load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True
+                    )
 
         self.client = genai.Client(api_key=config_dict["gemini_api_key"])
         if os.path.isfile(self.embedding_csv_path):
@@ -102,22 +107,20 @@ class SparqlAgent():
         contents = [
             types.Content(
                 role="model",
-                parts=[types.Part(
-                    text="You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
-                    "Your Task is to write a SPARQL query answering the user question. "
-                    "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
-                    "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
-                    "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
-                    "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
-                    "Afterwards, create SPARQL code answering the user Question. "
-                    # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-            )]),
-            types.Content(
-                role="user",
-                parts=[types.Part(
-                    text=f"User Question:\n{question}"
-                )]
-            )
+                parts=[
+                    types.Part(
+                        text="You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
+                        "Your Task is to write a SPARQL query answering the user question. "
+                        "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
+                        "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
+                        "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
+                        "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
+                        "Afterwards, create SPARQL code answering the user Question. "
+                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
+                    )
+                ],
+            ),
+            types.Content(role="user", parts=[types.Part(text=f"User Question:\n{question}")]),
         ]
 
         logger.info(f"Prompt:\n{contents}")
@@ -164,11 +167,15 @@ class SparqlAgent():
         # embed phrase
         embedding = np.float64(self.embedding_model.encode(phrase))
         # calc similarity with embedded pyirk entities
-        scores = self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy())).numpy().flatten()
+        scores = (
+            self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy()))
+            .numpy()
+            .flatten()
+        )
         # find results >=95% as good as best
         max_score = np.max(scores)
         # if max_score > self.min_sim_score:
-        res = list(self.df.index[np.where(scores > max_score*self.score_interval)[0]].values)
+        res = list(self.df.index[np.where(scores > max_score * self.score_interval)[0]].values)
         # combine uri and name
         output = ""
         for r in res:
@@ -218,7 +225,8 @@ class SparqlAgent():
 
     def extract_sparql(self, response: genai.types.GenerateContentResponse):
         """find the sparql code in the answer of the llm. maybe there are ticks ``` or additional explanations."""
-        pattern = regex.compile(r"""
+        pattern = regex.compile(
+            r"""
         (?(DEFINE)                              # Define BRACKET pattern
         (?P<BRACKET>
             \{                                  # any opening {
@@ -230,14 +238,16 @@ class SparqlAgent():
         )
         )
         SELECT .+? (?&BRACKET)
-        """, regex.DOTALL | regex.VERBOSE | regex.IGNORECASE)
+        """,
+            regex.DOTALL | regex.VERBOSE | regex.IGNORECASE,
+        )
         res = regex.search(pattern, response.text)
         if res is not None:
             logger.info(f"sparql extracted:\n{res.group(0)}")
             query = res.group(0)
             unique_prefixes = set(re.findall(r"irk:/(.+?)#", query))
             for up in unique_prefixes:
-                prefix = re.findall(r"\w+", up)[0] + ":" # cut off ocse/0.2 -> ocse
+                prefix = re.findall(r"\w+", up)[0] + ":"  # cut off ocse/0.2 -> ocse
                 query = re.sub(f"irk:/{up}#", prefix, query)
                 query = f"PREFIX {prefix} <irk:/{up}#>\n" + query
 
@@ -265,29 +275,32 @@ class SparqlAgent():
         contents = [
             types.Content(
                 role="model",
-                parts=[types.Part(
-                    text="You are a helpful SPARQL assistent. Your task is to correct a given SPARQL query answering the users question. "
-                    "You will also have access to the extracted nodes and edges of the corresponding knowledge graph. "
-                    "You also will see the error message produced by running the given Query. "
-                    "Rewrite the SPARQL query without errors, so that it can be used to answer the user question. "
-                    "Only use URIs you got from tools or from the calling history."
-                    # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-            )]),
+                parts=[
+                    types.Part(
+                        text="You are a helpful SPARQL assistent. Your task is to correct a given SPARQL query answering the users question. "
+                        "You will also have access to the extracted nodes and edges of the corresponding knowledge graph. "
+                        "You also will see the error message produced by running the given Query. "
+                        "Rewrite the SPARQL query without errors, so that it can be used to answer the user question. "
+                        "Only use URIs you got from tools or from the calling history."
+                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
+                    )
+                ],
+            ),
             types.Content(
                 role="user",
-                parts=[types.Part(
-                    text=f"User Question:\n{question}\n"
-                    f"Wrong SPARQL query and calling history:\n{self.get_calling_history(response)}\n"
-                    f"Error Message when running the SPARQL code:\n{result}"
-                )]
-            )
+                parts=[
+                    types.Part(
+                        text=f"User Question:\n{question}\n"
+                        f"Wrong SPARQL query and calling history:\n{self.get_calling_history(response)}\n"
+                        f"Error Message when running the SPARQL code:\n{result}"
+                    )
+                ],
+            ),
         ]
         logger.info("Rework SPARQL")
         logger.info(f"Prompt:\n{contents}")
         response = self.client.models.generate_content(
-            model=self.generation_model,
-            contents=contents,
-            config=self.config
+            model=self.generation_model, contents=contents, config=self.config
         )
         logger.info(f"Response:\n{response.text}")
 
@@ -297,20 +310,25 @@ class SparqlAgent():
         contents = [
             types.Content(
                 role="model",
-                parts=[types.Part(
-                    text="You are a helpful SPARQL assistent. Your task is to answer the user question with the help of a knowledge graph. "
-                    "You are provided with the result of a sparql query. And the data leading up the query. "
-                    "Utilize only the provided information to answer the question."
-                    # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-            )]),
+                parts=[
+                    types.Part(
+                        text="You are a helpful SPARQL assistent. Your task is to answer the user question with the help of a knowledge graph. "
+                        "You are provided with the result of a sparql query. And the data leading up the query. "
+                        "Utilize only the provided information to answer the question."
+                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
+                    )
+                ],
+            ),
             types.Content(
                 role="user",
-                parts=[types.Part(
-                    text=f"User Question:\n{question}\n"
-                    f"SPARQL query and calling history:\n{self.get_calling_history(response_data)}\n"
-                    f"Result:\n{sparql_result}"
-                )]
-            )
+                parts=[
+                    types.Part(
+                        text=f"User Question:\n{question}\n"
+                        f"SPARQL query and calling history:\n{self.get_calling_history(response_data)}\n"
+                        f"Result:\n{sparql_result}"
+                    )
+                ],
+            ),
         ]
         logger.info("interpret SPARQL")
         logger.info(f"Prompt:\n{contents}")
@@ -322,7 +340,6 @@ class SparqlAgent():
         logger.info(f"Response:\n{response.text}")
 
         return response
-
 
     def run(self, question):
 
@@ -336,7 +353,6 @@ class SparqlAgent():
             else:
                 response = self.rework_sparql(question, response, sparql_result)
 
-
         return sparql_result
 
 
@@ -345,7 +361,6 @@ if __name__ == "__main__":
     ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
     nl_load_dict = {"path": os.path.join(BASE_DIR, "output.py"), "prefix": "nl", "module_name": "nl"}
 
-
     sa = SparqlAgent([ct_load_dict, ma_load_dict, nl_load_dict])
     # sa.setup_embeddings()
     res = sa.run("whats the connection between an equation and an inequation")
@@ -353,4 +368,3 @@ if __name__ == "__main__":
 
 # todo space out llm call, avoid rate limit
 # todo local llm?
-
