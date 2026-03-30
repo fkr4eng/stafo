@@ -52,10 +52,14 @@ class SparqlAgent():
         self.embedding_csv_path = "pyirk_embeddings.csv"
         self.llm_log_path = "llm_log.txt"
         self.min_sim_score = 0.6
-        self.score_interval = 0.95
+        self.score_interval = 0.9
         self.max_iterations = 3
 
         # init
+        ct = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/control_theory", prefix="ct", reuse_loaded=True)
+        ma = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/math", prefix="ma", reuse_loaded=True)
+        nl = p.irkloader.load_mod_from_path(os.path.join(BASE_DIR, "output.py"), "nl", "nonlinear", reuse_loaded=True)
+
         self.client = genai.Client(api_key=config_dict["gemini_api_key"])
         if os.path.isfile(self.embedding_csv_path):
             self.df = pd.read_csv(self.embedding_csv_path)
@@ -75,9 +79,6 @@ class SparqlAgent():
         )
 
     def setup_embeddings(self):
-        ct = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/control_theory", prefix="ct", reuse_loaded=True)
-        ma = p.irkloader.load_mod_from_uri(r"irk:/ocse/0.2/math", prefix="ma", reuse_loaded=True)
-        nl = p.irkloader.load_mod_from_path(os.path.join(BASE_DIR, "output.py"), "nl", "nonlinear", reuse_loaded=True)
 
         pyirk_entities_path = "pyirk_entities.yaml"
 

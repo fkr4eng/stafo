@@ -14,7 +14,6 @@ import time
 
 #! pip install google-generativeai
 import google.generativeai as genai
-import google.genai as genai2
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template
 
