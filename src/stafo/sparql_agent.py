@@ -47,7 +47,7 @@ with open(CONFIG_PATH, "rb") as fp:
 class SparqlAgent():
     def __init__(self):
         # parameters
-        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2") # "gemini-embedding-001"
+        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.generation_model = "gemini-2.5-flash"
         self.embedding_csv_path = "pyirk_embeddings.csv"
         self.llm_log_path = "llm_log.txt"
@@ -86,35 +86,7 @@ class SparqlAgent():
         pyirk_entities = p.core.export_entities(pyirk_entities_path, uris=False)
         data = list(pyirk_entities.values())
 
-        if 1:
-            # free transformer
-            model = SentenceTransformer("all-MiniLM-L6-v2")
-            embeddings = model.encode(data)
-
-        else:
-            # gemini
-            batches = [data[i:i + 100] for i in range(0, len(data), 100)] # max batch size 100
-            embeddings = []
-            for batch in batches:
-                result = self.client.models.embed_content(
-                    model=self.embedding_model,
-                    contents= batch
-                )
-                embeddings.extend([e.values for e in result.embeddings])
-                print("Wait 40s for next LLM call.")
-                time.sleep(40)
-            # todo why not do this with a local model -> Sentence Transformer lib
-
-
-            # for i, (k, text) in enumerate(pyirk_entities.items()):
-            #     print(f"{i}/{len(pyirk_entities.items())}")
-            #     result = self.client.models.embed_content(
-            #         model=self.model,
-            #         contents=text,
-            #     )
-            #     embeddings.append(result.embeddings[0].values)
-            #     # we wait here to not get timed out by the LLM, can maybe be optimized
-            #     time.sleep(0.5)
+        embeddings = self.embedding_model.encode(data)
 
         self.df = pd.DataFrame(embeddings)
         self.df.insert(0, "uri", pyirk_entities.keys())
@@ -185,20 +157,10 @@ class SparqlAgent():
         Returns:
             list[str]: list of uris corresponding to entities in the knowledge graph
         """
-        if 1:
-            embedding = np.float64(self.embedding_model.encode(phrase))
-            scores = self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy())).numpy().flatten()
-
-        else:
-            # embed phrase
-            result = self.client.models.embed_content(
-                model=self.embedding_model,
-                contents=phrase,
-            )
-            embedding = np.array(result.embeddings[0].values, dtype=float)
-            # cosine similarity
-            scores = util.cos_sim(torch.tensor(embedding), torch.tensor(self.df[self.df.columns[1:]].to_numpy())).numpy().flatten()
-
+        # embed phrase
+        embedding = np.float64(self.embedding_model.encode(phrase))
+        # calc similarity with embedded pyirk entities
+        scores = self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy())).numpy().flatten()
         # find results >=95% as good as best
         max_score = np.max(scores)
         # if max_score > self.min_sim_score:
