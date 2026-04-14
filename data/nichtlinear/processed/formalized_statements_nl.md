@@ -66,10 +66,10 @@
 - There is a class: 'vector space' @en
 - 'vector space' has the alternative german label 'Vektorraum'
 - 'vector space' is a subclass of 'set'
-- There is a class: 'n-dimensional real vector space' @en
-- 'n-dimensional real vector space' has the associated LaTeX notation $\mathbb{R}^n$
-- 'n-dimensional real vector space' has the alternative german label '$n$-dimensionaler reeller Vektorraum'
-- 'n-dimensional real vector space' is a subclass of 'vector space'
+- There is a class: 'real vector space' @en
+- 'real vector space' has the associated LaTeX notation $\mathbb{R}^n$
+- 'real vector space' has the alternative german label '$n$-dimensionaler reeller Vektorraum'
+- 'real vector space' is a subclass of 'vector space'
 - There is a class: 'vector' @en
 - 'vector' is a subclass of 'sequence'
 - 'vector' has the alternative german label 'Vektor'
@@ -81,7 +81,7 @@
 - Concepts in this snippet:
     - 'vector space'
     - 'set'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'vector'
     - 'sequence'
     - 'has element type'
@@ -89,7 +89,7 @@
     - 'integer number'
 - Defined in this snippet:
     - 'vector space'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'vector'
     - 'has dimension'
 
@@ -147,7 +147,7 @@
 - Definition of 'canonical basis':
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 's' is an instance of 'set'
         - 's' 'has element type' 'unit vector'
@@ -169,7 +169,7 @@
     - 'has basis'
     - 'vector space'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'has element type'
     - 'has length'
@@ -244,7 +244,7 @@
         - 'n' is an instance of 'integer number'
         - 'v' is an instance of 'sequence'
         - 'v' 'has element type' 'vector'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'alpha' is an instance of 'sequence of coefficients' qqq exis_quant True // todo ist dieser quantor sinnvoll?
         - 'alpha' 'has element type' 'real number'
@@ -269,7 +269,7 @@
     - 'sequence'
     - 'has element type'
     - 'vector'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'sequence of coefficients'
     - 'real number'
@@ -294,7 +294,7 @@
     - formalized setting:
         - 'lh' is an instance of 'linear hull'
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
     - formalized assertion:
         - 'lh' 'is subspace of' 'Rn'
@@ -305,7 +305,7 @@
     - 'is subspace of'
     - 'linear hull'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
 - Defined in this snippet:
     - 'subspace'
@@ -326,7 +326,7 @@
         - 'x' is an instance of 'vector'.
         - 'y' is an instance of 'vector'.
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'x' is element of 'Rn'.
         - 'y' is element of 'Rn'.
@@ -341,7 +341,7 @@
     - 'vector'
     - 'real number'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is element of'
     - 'element of sequence'
@@ -365,7 +365,7 @@
         - 'x' is an instance of 'vector'.
         - 'y' is an instance of 'vector'.
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'x' is element of 'Rn'.
         - 'y' is element of 'Rn'.
@@ -381,7 +381,7 @@
     - 'is orthogonal to'
     - 'vector'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is element of'
     - 'canonical scalar product'
@@ -400,7 +400,7 @@
     - full source code: Jeder Unterraum~$\mathbb{U}$ des ${\mathbb{R}}^{n}$ kann mit Hilfe eines geeignet gewählten weiteren Unterraums~$\mathbb{V}$ zum ursprünglichen Vektorraum~${\mathbb{R}}^{n}$ ergänzt werden, so dass \[ {\mathbb{R}}^{n}=\mathbb{U}+\mathbb{V}. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space' qqq univ_quant True
         - 'U' 'is subspace of' 'Rn'.
@@ -414,7 +414,7 @@
     - 'sum of vector spaces'
     - 'vector space'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is subspace of'
 - Defined in this snippet:
@@ -453,7 +453,7 @@
     - full source code: Haben zusätzlich beide Unterräume nur den Nullvektor gemeinsam, d.\,h. \[ \mathbb{U}\cap\mathbb{V}=\{0\}, \] dann ist der Unterraum~$\mathbb{V}$ der \textbf{\em Komplementärraum} (bzw. das \textbf{\em Komplement}) des Unterraumes~$\mathbb{U}$. In diesem Fall kann man den Vektorraum~${\mathbb{R}}^{n}$ als \textbf{\em direkte Summe} der beiden Unterräume darstellen: \[ {\mathbb{R}}^{n}=\mathbb{U}\oplus\mathbb{V}. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'z' is an instance of 'zero vector'
         - 'z' 'is element of' 'Rn'
@@ -481,7 +481,7 @@
     - 'vector space'
     - 'direct sum of vector spaces'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is element of'
     - 'is subspace of'
@@ -499,7 +499,7 @@
     - full source code: Die Zerlegung in direkte Summen bedeutet, dass es für jeden Vektor $x\in{\mathbb{R}}^{n}$ eine eindeutige Darstellung $x=u+v$ mit $u\in\mathbb{U}$ und $v\in\mathbb{V}$ gibt.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -521,7 +521,7 @@
     - full source code:  If a vector x can be represented as two sums of vectors u1+v1 and u2+v2 where u1, u2 are in U and v1, v2 are in V, then u1=u2 and v1=v2.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -553,7 +553,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'vector space'
     - 'is subspace of'
@@ -566,7 +566,7 @@
 - There is a general statement:
     - full source code: Die Ergänzung eines Unterraumes~$\mathbb{U}$ um einen Komplmentärraum~$\mathbb{V}$ ist nicht eindeutig.
     - formalized setting:
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
         - 'V1' is an instance of 'vector space'.
@@ -587,7 +587,7 @@
     - full source code: Wählt man den Komplementärraum unter Zuhilfenahme des Skalarprodukts~(\ref{eq:skalarprodukt}) derart, dass alle Vektoren $u\in\mathbb{U}$ und $v\in\mathbb{V}$ jeweils senkrecht aufeinander stehen, so erhält man das \textbf{\em orthogonale Komplement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$: \begin{equation} \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement} \end{equation}
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -615,7 +615,7 @@
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -628,7 +628,7 @@
 
 
 - Concepts in this snippet:
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'vector space'
     - 'is subspace of'
     - 'has complement space'
@@ -795,9 +795,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'.
@@ -843,7 +843,7 @@
     - 'image of matrix op'
     - 'matrix'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'has number of rows'
     - 'has number of columns'
@@ -864,7 +864,7 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
         - 'a' is an instance of 'sequence'.
         - 'a' 'has element type' 'vector'.
@@ -886,7 +886,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'sequence'
     - 'has element type'
@@ -906,7 +906,7 @@
     - full source code: Das Bild ist somit ein Untervektorraum des~${\mathbb{R}}^{m}$.
     - formalized setting:
         - 'm' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'.
@@ -918,7 +918,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'has number of rows'
@@ -972,7 +972,7 @@
     - full source code: Der \textbf{\em Kern} oder \textbf{\em Nullraum} (engl. \textbf{\em kernel}, \textbf{\em null space}) einer Matrix~$A$ ist definiert durch \[ \ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} , \] d.\,h. er ist die Lösungsmenge des zur Matrix~$A$ gehörenden linearen homogenen Gleichungssystems.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of columns' 'n'. // inferred knowledge: since x is in Rn, A must have n columns
@@ -994,7 +994,7 @@
     - 'ker'
     - 'matrix'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'has number of columns'
     - 'vector'
@@ -1009,7 +1009,7 @@
     - full source code: Der Kern ist ein Untervektorraum des~${\mathbb{R}}^{n}$.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'kerA' is an instance of 'set'
@@ -1024,7 +1024,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'set'
@@ -1052,7 +1052,7 @@
     - full source code: Die Dimension des Kerns heißt \textbf{\em Defekt} (engl. \textbf{\em nullity}, \textbf{\em corank}): \begin{equation} {\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank} \end{equation}
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of columns' 'n'. // inferred knowledge: since ker A is a subspace of Rn, A must have n columns
@@ -1068,7 +1068,7 @@
     - 'corank op'
     - 'matrix'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'has number of columns'
     - 'dimension op'
@@ -1097,9 +1097,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'. // inferred knowledge
@@ -1113,7 +1113,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'has number of rows'
@@ -1129,9 +1129,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'. // inferred knowledge
@@ -1155,7 +1155,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'has number of rows'
@@ -1171,7 +1171,7 @@
     - full source code: Die sich zum Vektorraum ${\mathbb{R}}^{n}$ ergänzenden Unterräume haben nur den Nullvektor gemeinsam: \[ {\operatorname{im}}\,A\cap\ker\,A^{T}=\{0\}\quad\text{und}\quad\ker\,A\cap{\operatorname{im}}\,A^{T}=\{0\}. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'imA' is an instance of 'set'
@@ -1192,7 +1192,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'set'
@@ -1208,7 +1208,7 @@
     - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt \begin{equation} \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel} \end{equation} an~\cite{lorenz1992,beutelspacher2001}.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of columns' 'n'. // inferred knowledge: since ker A is a subspace of Rn, A must have n columns
@@ -1219,7 +1219,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'matrix'
     - 'has number of columns'
@@ -1248,9 +1248,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'.
@@ -1269,7 +1269,7 @@
     - 'is treated synonymously to'
     - 'matrix'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'has number of rows'
     - 'has number of columns'
@@ -1298,9 +1298,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'.
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
-        - 'Rm' is an instance of 'n-dimensional real vector space'.
+        - 'Rm' is an instance of 'real vector space'.
         - 'Rm' 'has dimension' 'm'.
         - 'L' is an instance of 'set of linear mappings'
         - 'd' is an instance of 'integer number'
@@ -1321,7 +1321,7 @@
     - 'set of linear mappings op'
     - 'vector space'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is secondary instance of'
 - Defined in this snippet:
@@ -1359,7 +1359,7 @@
     - full source code: Der \textbf{\em Dualraum} (engl. \textbf{\em dual space}) $({\mathbb{R}}^{n})^{*}$ des~${\mathbb{R}}^{n}$ besteht aus den auf~${\mathbb{R}}^{n}$ definierten \textbf{\em linearen Funktionalen} (\textbf{\em Linearformen}), d.\,h. aus linearen Abbildungen ${\mathbb{R}}^{n}\to{\mathbb{R}}$.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'
         - There is an equation:
@@ -1373,7 +1373,7 @@
 - Concepts in this snippet:
     - 'dual space'
     - 'dual'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'integer number'
     - 'has dimension'
     - 'set of linear mappings op'
@@ -1393,7 +1393,7 @@
     - full source code: Die Elemente $\omega\in({\mathbb{R}}^{n})^{*}$ des Dualraums, die man auch \textbf{\em Kovektoren} oder \textbf{\em kovariante Vektoren} nennt, kann man als Zeilenvektoren \[ \omega=\left(\omega_{1},\ldots,\omega_{n}\right) \] darstellen.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'
         - There is an equation:
@@ -1410,7 +1410,7 @@
     - 'dual space'
     - 'has element type'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is element of'
     - 'row vector'
@@ -1423,20 +1423,20 @@
     - full source code: Der Dualraum~$({\mathbb{R}}^{n})^{*}$ ist selber ein $n$-dimensionaler reeller Vektorraum mit der kanonischen Basis \[ \begin{array}{lcl} e_{1}^{*} & = & \left(1,0,\ldots,0\right),\\  & \vdots\\ e_{n}^{*} & = & (0,\ldots,0,1). \end{array} \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'
         - There is an equation:
             - full source code: 'dualRn' == 'dual'('Rn')
     - formalized assertion:
-        - 'dualRn' is secondary instance of 'n-dimensional real vector space'.
+        - 'dualRn' is secondary instance of 'real vector space'.
         - 'dualRn' 'has dimension' 'n'.
 
 
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1584,7 +1584,7 @@
     - full source code: Mit einer solchen Abbildung, die man \textbf{\em Isomorphismus} nennt, kann jeder Vektor des Primalraumes eindeutig einem Kovektor des Dualraumes zugeordnet werden und umgekehrt.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'.
         - There is an equation:
@@ -1608,7 +1608,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1626,7 +1626,7 @@
     - full source code: Bei der Darstellung der Vektoren und Kovektoren als Spalten- und Zeilenvektoren wird dieser Isomorphismus für beide Abbildungsrichtungen durch die \textbf{\em Transposition} beschrieben, d.\,h. \[ x\in{\mathbb{R}}^{n}\;\Rightarrow\;x^{T}\in({\mathbb{R}}^{n})^{*}\quad\text{und}\quad\omega\in({\mathbb{R}}^{n})^{*}\;\Rightarrow\;\omega^{T}\in{\mathbb{R}}^{n}. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'.
         - There is an equation:
@@ -1653,7 +1653,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1688,7 +1688,7 @@
     - full source code: Durch Verknüpfung von Elementen aus Primal- und Dualraum erhält man mit \begin{equation} \left\langle \omega,x\right\rangle =\omega\cdot x=\left(\omega_{1},\ldots,\omega_{n}\right)\left(\begin{array}{c} x_{1}\\ \vdots\\ x_{n} \end{array}\right)=\sum_{i=1}^{n}\omega_{i}x_{i}\label{eq:inneres-produkt} \end{equation} eine \textbf{\em natürliche Paarung}  $\left\langle \cdot,\cdot\right\rangle :({\mathbb{R}}^{n})^{*}\times{\mathbb{R}}^{n}\to{\mathbb{R}}$, die man auch als \textbf{\em duale Paarung}, \textbf{\em inneres Produkt} oder \textbf{\em Kontraktion} zwischen Kovektoren und Vektoren auffasst.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'.
         - There is an equation:
@@ -1709,7 +1709,7 @@
     - 'vector'
     - 'real number'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1731,7 +1731,7 @@
     - full source code: Die Basis $\left\{ e_{1}^{*},\ldots,e_{n}^{*}\right\} $ ist die zu $\left\{ e_{1},\ldots,e_{n}\right\} $ \textbf{\em duale Basis}, d.\,h. es gilt \[ \left\langle e_{i}^{*},e_{j}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n \] mit dem \textbf{\em Kroneckersymbol} \[ \delta_{ij}=\left\{ \begin{array}{cl} 1 & \textrm{für }i=j,\\ 0 & \textrm{sonst.} \end{array}\right. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'.
         - There is an equation:
@@ -1768,7 +1768,7 @@
     - 'is dual basis of'
     - 'basis'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1803,7 +1803,7 @@
     - full source code: In der gleichen Weise, wie mit dem Skalarprodukt zu einem gegebenen Unterraum $\mathbb{U}\subset{\mathbb{R}}^{n}$ das orthogonale Komplement~(\ref{eq:ortho-komplement}) konstruiert wird, kann man mit der natürlichen Paarung den \textbf{\em Annihilatorraum} \begin{equation} \mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum} \end{equation} erzeugen.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'dualRn' is an instance of 'dual space'.
         - There is an equation:
@@ -1831,7 +1831,7 @@
     - 'annihilator'
     - 'vector space'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -1850,7 +1850,7 @@
     - full source code: Für einen gegebenen Unterraum sind sein orthogonales Komplement und sein Annihilatorraum zueinander isomorph, so dass wir ohne Probleme in~(\ref{eq:ortho-komplement}) und~(\ref{eq:annihilatorraum}) die gleiche Bezeichnung verwenden können.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -1871,7 +1871,7 @@
     - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) gilt daher auch in gleiche Weise für den Annihilatorraum~(\ref{eq:annihilatorraum}).
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
@@ -1886,7 +1886,7 @@
 
 - Concepts in this snippet:
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'vector space'
     - 'is subspace of'
@@ -1918,7 +1918,7 @@
     - full source code: Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine offene Teilmenge des Vektorraums~${\mathbb{R}}^{n}$. Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$ bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$ nennt man \textbf{\em Skalarfeld} bzw. \textbf{\em Vektorfeld}.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'M' is an instance of 'set'
         - 'M' 'is subset of' 'Rn'
@@ -1940,7 +1940,7 @@
     - 'general function'
     - 'vector field'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'is subset of'
     - 'has domain'
@@ -1963,7 +1963,7 @@
     - full source code: Eine Abbildung $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \textbf{\em Kovektorfeld}, \textbf{\em Differentialform ersten Grades} (kurz \textbf{\em 1-Form}) oder \textbf{\em Pfaffsche Form}.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'dualRn' is an instance of 'dual space'
         - There is an equation:
@@ -1982,7 +1982,7 @@
     - 'covector field'
     - 'general function'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'dual space'
     - 'dual'
@@ -2029,7 +2029,7 @@
     - full source code: Dabei symbolisiert \begin{equation} \left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\} \label{eq:Basisvektorfelder} \end{equation} die kanonische Basis, die im Punkt $x\in\mathcal{M}$ den sogenannten \textbf{\em Tangential\-raum}~$T_{x}\mathcal{M}$ aufspannt (siehe Anmerkungen~\ref{rem:tangentialraum} und~\ref{rem:Notation-Basis-Vektorfelder}).
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'x' is an instance of 'vector'
         - 'M' is an instance of 'set'
@@ -2050,7 +2050,7 @@
 - There is a general statement:
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'f' is an instance of 'vector field'
         - 'x' is an instance of 'vector'
@@ -2094,7 +2094,7 @@
     - full source code: Die zugehörige duale Basis wird mit $\left\{ {\mathrm{d}} x_{1},\dots,{\mathrm{d}} x_{n}\right\} $ bezeichnet, d.\,h. \[ \left\langle {\mathrm{d}} x_{i},\frac{\partial}{\partial x_{j}}\right\rangle =\delta_{ij}\quad\textrm{für}\quad1\leq i,j\leq n. \]
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'x' is an instance of 'vector'
         - 'M' is an instance of 'set'
@@ -2142,7 +2142,7 @@
 
 - Concepts in this snippet:
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - vector
     - set
@@ -2173,7 +2173,7 @@
     - full source code: Von der dualen Basis wird im Punkt~$x$ der \textbf{\em Kotangential\-raum}~$T_{x}^{*}\mathcal{M}$, d.\,h. der Dualraum des Tangentialraumes, aufgespannt.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'x' is an instance of 'vector'
         - 'M' is an instance of 'set'
@@ -2198,7 +2198,7 @@
 
 - Concepts in this snippet:
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - vector
     - set
@@ -2227,7 +2227,7 @@
     - full source code: Ein Kovektorfeld~$\omega$ kann dann als Zeilenvektor \[ \omega(x)=\left(\omega_{1}(x),\ldots,\omega_{n}(x)\right) \] oder in der Form \begin{equation} \omega(x)=\omega_{1}(x){\mathrm{d}} x_{1}+\cdots+\omega_{n}(x){\mathrm{d}} x_{n}\label{eq:Basisdarstellung-Kovektorfelder} \end{equation} angegeben werden.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
-        - 'Rn' is an instance of 'n-dimensional real vector space'.
+        - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'omega' is an instance of 'covector field'.
         - 'x' is an instance of 'vector'.
@@ -2258,7 +2258,7 @@
 - Concepts in this snippet:
     - covector field
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - vector
     - set
@@ -2291,7 +2291,7 @@
     - full source code: Für die hier betrachtete offene Teilmenge $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ kann man den im Punkt $p\in\mathcal{M}$ aufgespannten Tangentialraum $T_{p}\mathcal{M}$ durch \[ T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\} \] definieren.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'M' is an instance of 'set'
         - 'M' 'is subset of' 'Rn'
@@ -2313,7 +2313,7 @@
 
 - Concepts in this snippet:
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - set
     - is subset of
@@ -2336,7 +2336,7 @@
     - full source code: Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$ und $\alpha\cdot(p,v):=(p,\alpha v)$ für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$ erhält man einen $n$-dimensionalen reellen Vektorraum, der von den Basisvektorfeldern \begin{equation} \frac{\partial}{\partial x_{i}}(p):\,p\mapsto(p,e_{i})\label{eq:Basisvektorfeld-Tangentialraum} \end{equation} für $i=1,\ldots,n$ aufgespannt wird (siehe Abb.~\ref{fig:Tangentialraum-Skizze}).
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'p' is an instance of 'vector'
         - 'M' is an instance of 'set'
@@ -2362,7 +2362,7 @@
         - There is an equation:
             - full source code: 'ei' == 'element of sequence'('b', 'i')
     - formalized assertion:
-        - 'TpM' is secondary instance of 'n-dimensional real vector space'
+        - 'TpM' is secondary instance of 'real vector space'
         - 'TpM' 'has dimension' 'n'
         - 'TpM' 'has basis' 'b'
         - There is an equation:
@@ -2375,7 +2375,7 @@
 
 - Concepts in this snippet:
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - vector
     - set
@@ -2402,7 +2402,7 @@
     - full source code: Für verschiedene Punkte $p,q\in\mathcal{M}$ erhält man formal unterschiedliche Tangentialräume $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber jeweils isomorph (gleichwertig) zum Vektorraum~${\mathbb{R}}^{n}$ sind.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'M' is an instance of 'set'
         - 'M' 'is subset of' 'Rn'
@@ -2429,12 +2429,12 @@
 - There is an explanation:
     - verbal summary: "Daher dürfen wir statt der Tangentialräume einfach den Vektorraum~$\mathbb{R}^n$ verwenden und können bei den Basisvektorfeldern~(\ref{eq:Basisvektorfeld-Tangentialraum}) den Bezugspunkt~$p$ weglassen."
     - related to: 'tangent space'
-    - related to: 'n-dimensional real vector space'
+    - related to: 'real vector space'
 
 
 - Concepts in this snippet:
     - integer number
-    - n-dimensional real vector space
+    - real vector space
     - has dimension
     - set
     - is subset of
@@ -2465,9 +2465,9 @@
     - formalized setting:
         - 'm' is an instance of 'integer number'
         - 'n' is an instance of 'integer number'
-        - 'Rm' is an instance of 'n-dimensional real vector space'
+        - 'Rm' is an instance of 'real vector space'
         - 'Rm' 'has dimension' 'm'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'M' is an instance of 'set'
         - 'M' 'is subset of' 'Rn'
@@ -2487,7 +2487,7 @@
     - full source code: Die Jacobimatrix eines Vektor\-feldes $f:\mathcal{M}\to{\mathbb{R}}^{n}$ ist eine quadratische $n\times n$-Matrix.
     - formalized setting:
         - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'n-dimensional real vector space'
+        - 'Rn' is an instance of 'real vector space'
         - 'Rn' 'has dimension' 'n'
         - 'M' is an instance of 'set'
         - 'M' 'is subset of' 'Rn'
@@ -2509,7 +2509,7 @@
     - 'matrix'
     - 'has Jacobian matrix'
     - 'integer number'
-    - 'n-dimensional real vector space'
+    - 'real vector space'
     - 'has dimension'
     - 'set'
     - 'is subset of'
