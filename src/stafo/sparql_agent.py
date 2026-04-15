@@ -91,12 +91,13 @@ class SparqlAgent:
                 parts=[
                     types.Part(
                         text="You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
-                        "Your Task is to write a SPARQL query answering the user question. "
+                        "Your Task is to write a SPARQL query that helps answering the user question. "
                         "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
                         "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
                         "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
                         "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
-                        "Afterwards, create SPARQL code answering the user Question. "
+                        "Afterwards, create SPARQL code that helps answering the question. "
+                        "Your SPARQL query will be fed back to you later to help you answer the question. For now, do not answer in sentences, just write SPARQL. "
                         # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
                     )
                 ],
@@ -172,7 +173,7 @@ class SparqlAgent:
         Returns:
             str: correct uri
         """
-        res = re.findall(r"\w+:/\w+#[I|R]\d+", uri)
+        res = re.findall(r"\w+:/.+?#[I|R]\d+", uri)
         if len(res) == 1:
             return res[0]
         else:
@@ -249,8 +250,12 @@ class SparqlAgent:
             logger.info(f"Error:\n{e}")
             return False, e
         res2 = p.aux.apply_func_to_table_cells(p.rdfstack.convert_from_rdf_to_pyirk, res)
-        # todo right format
-        return True, res2
+        if res2 == []:
+            return False, "SPARQL code was valid, but query did not return any results, Try again!"
+        else:
+            # todo right format
+            return True, res2
+
 
     def rework_sparql(self, question, response, result):
         contents = [
@@ -323,14 +328,13 @@ class SparqlAgent:
         return response
 
     def run(self, question):
-
         response = self.generate_sparql_from_question(question, verbose=True)
         for i in range(self.max_iterations):
             sparql = self.extract_sparql(response)
             success, sparql_result = self.execute_sparql(sparql)
             if success:
                 # todo run another loop? how to evaluate the answer?
-                return self.process_sparql_result(question, response, sparql_result)
+                return sparql_result, self.process_sparql_result(question, response, sparql_result)
             else:
                 response = self.rework_sparql(question, response, sparql_result)
 
@@ -344,8 +348,10 @@ if __name__ == "__main__":
 
     sa = SparqlAgent([ct_load_dict, ma_load_dict, nl_load_dict])
     # sa.setup_embeddings()
-    res = sa.run("whats the connection between an equation and an inequation")
-
+    # res = sa.run("whats the connection between an equation and an inequation")
+    res = sa.run("Whats the difference between a vector field and a covector field?")
+    print(res)
 
 # todo space out llm call, avoid rate limit
 # todo local llm?
+# todo also return KG nodes
