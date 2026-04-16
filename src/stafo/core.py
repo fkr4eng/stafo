@@ -14,6 +14,7 @@ import time
 
 #! pip install google-generativeai
 import google.generativeai as genai
+from ollama import Client, ChatResponse
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template
 
@@ -35,7 +36,26 @@ with open(CONFIG_PATH, "rb") as fp:
 
 # https://github.com/google-gemini/generative-ai-python
 genai.configure(api_key=config_dict["gemini_api_key"])
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
+
+class LLMInfo():
+    gemini = "gemini"
+    ollama = "ollama"
+    info_dict = {
+        "gemini": {
+            "generation_model": "gemini-2.5-flash",
+            # "client": genai.Client(api_key=config_dict["gemini_api_key"])
+        },
+        "ollama": {
+            "generation_model": "gpt-oss:120b",
+            "client": Client(
+                host='https://ollama.com',
+                headers={'Authorization': 'Bearer ' + config_dict["ollama_api_key"]}
+            )
+        }
+    }
+
+
 
 # - It would be useful if you also would generate comments to explain your "chain of thought".
 
@@ -53,6 +73,9 @@ class MainManager:
         snapshot_fpath: str = None,
         interactive_mode: bool = False,
     ) -> None:
+
+        # choose LLM
+        self.llm = LLMInfo.ollama
 
         self.dev_mode = dev_mode
         self.interactive_mode = interactive_mode
@@ -166,7 +189,7 @@ class MainManager:
             print(new_latex_source)
 
         response = self.tracked_model_response(message, generation_config=self.llm_config)
-        IPS()
+        # IPS()
         # make snapshot before and after response
         self.make_snapshot(self.statement_source, self.start_snippet_idx - 1)
         statement_source_new = "\n".join((self.statement_source, response.text))
@@ -234,7 +257,7 @@ class MainManager:
             r"\\eqnote\{(.+?)\}\{concepts:(.+?)\}\{statement:(.+?)\}", repl_func, response3.text, flags=re.DOTALL
         )
 
-        IPS()
+        # IPS()
         with open(self.annotated_tex_fpath, "rt", encoding="utf-8") as f:
             annotated_tex = f.read()
 
@@ -303,7 +326,10 @@ class MainManager:
         if self.dev_mode:
             res = 1000
         else:
-            res = model.count_tokens(message).total_tokens
+            # todo with ollama token counting is difficult
+            res = 1000
+            # raise NotImplementedError()
+            # res = model.count_tokens(message).total_tokens
 
         self.token_count_cache[message] = res
         return res
@@ -329,7 +355,15 @@ class MainManager:
         elif not self.dev_mode:
             with open("_token_tracking.txt", "a") as fp:
                 fp.write(track_line)
-            res = model.generate_content(message, generation_config=self.llm_config)
+            if self.llm == LLMInfo.gemini:
+                res = model.generate_content(message, generation_config=self.llm_config)
+            elif self.llm == LLMInfo.ollama:
+                messages = [{"role": "user", "content": message}]
+                response: ChatResponse = LLMInfo.info_dict["ollama"]["client"].chat(
+                    model=LLMInfo.info_dict["ollama"]["generation_model"], messages=messages
+                )
+                res.text = response.message.content
+
         else:
             res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- response text\n- response text\n"
 
@@ -344,9 +378,9 @@ class MainManager:
         elif len(res) == 1:
             context = {"statements": self.statement_source}
             message = render_template("task_template.md", context)
-            response = model.generate_content(message, generation_config=self.llm_config)
-            self.statement_source = "\n".join((self.statement_source, response.text))
-            print(f"Response:\n\n{response.text}")
+            response = self.llm_api(message)
+            self.statement_source = "\n".join((self.statement_source, response))
+            print(f"Response:\n\n{response}")
             # IPS()
             with open(self.statement_fpath, "wt", encoding="utf-8") as fp:
                 fp.write(self.statement_source)
@@ -356,8 +390,8 @@ class MainManager:
         self.statement_source
 
 
-def llm_api(message):
-    return model.generate_content(message, generation_config=genai.GenerationConfig(temperature=0)).text
+    def llm_api(self, message):
+        return model.generate_content(message, generation_config=genai.GenerationConfig(temperature=0)).text
 
 
 # split without consuming the delimiter

@@ -1,6 +1,7 @@
 import sys, os
 from google import genai
 from google.genai import types
+from ollama import Client, ChatResponse
 import re, regex
 
 try:
@@ -18,7 +19,6 @@ import torch
 import pyirk as p
 
 from stafo.utils import BASE_DIR, CONFIG_PATH
-from stafo.core import llm_api
 from stafo.stafo_logging import sparql_logger as logger
 
 
@@ -26,18 +26,45 @@ with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 
+class LLMInfo():
+    gemini = "gemini"
+    ollama = "ollama"
+    info_dict = {
+        "gemini": {
+            "generation_model": "gemini-2.5-flash",
+            "client": genai.Client(api_key=config_dict["gemini_api_key"])
+        },
+        "ollama": {
+            "generation_model": "gpt-oss:120b",
+            "client": Client(
+                host='https://ollama.com',
+                headers={'Authorization': 'Bearer ' + config_dict["ollama_api_key"]}
+            )
+        }
+    }
+
+
 class SparqlAgent:
-    def __init__(self, load_irk_modules: list[dict] = []):
+    def __init__(self, load_irk_modules: list[dict] = [], verbose=True):
         # parameters
+        # Generation Model
+        # self.llm = LLMInfo.gemini
+        self.llm = LLMInfo.ollama
+        self.generation_model = LLMInfo.info_dict[self.llm]["generation_model"]
+        self.client = LLMInfo.info_dict[self.llm]["client"]
+        self.tools = [self.get_similar_entity, self.get_entity_info, self.execute_sparql]
+
+        # Embedding Model
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        self.generation_model = "gemini-2.5-flash"
         self.embedding_csv_path = "pyirk_embeddings.csv"
         self.llm_log_path = "llm_log.txt"
         self.min_sim_score = 0.6
         self.score_interval = 0.9
         self.max_iterations = 3
 
-        # init
+        self.verbose = verbose
+
+        # init pyirk
         if load_irk_modules:
             for load_dict in load_irk_modules:
                 assert isinstance(
@@ -50,7 +77,6 @@ class SparqlAgent:
                         load_dict["path"], prefix=load_dict["prefix"], reuse_loaded=True
                     )
 
-        self.client = genai.Client(api_key=config_dict["gemini_api_key"])
         if os.path.isfile(self.embedding_csv_path):
             self.df = pd.read_csv(self.embedding_csv_path)
         else:
@@ -60,13 +86,14 @@ class SparqlAgent:
             else:
                 sys.exit()
 
-        self.config = types.GenerateContentConfig(
-            tools=[self.get_similar_entity, self.get_entity_info],
-            automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                disable=False,
-                maximum_remote_calls=30,
-            ),
-        )
+        if self.llm == LLMInfo.gemini:
+            self.config = types.GenerateContentConfig(
+                tools=self.tools,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                    disable=False,
+                    maximum_remote_calls=30,
+                ),
+            )
 
     def setup_embeddings(self):
 
@@ -85,43 +112,79 @@ class SparqlAgent:
     def generate_sparql_from_question(self, question, verbose=False):
         logger.info("#################################################################################################")
         logger.info(f"Question:\n{question}")
-        contents = [
-            types.Content(
-                role="model",
-                parts=[
-                    types.Part(
-                        text="You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
-                        "Your Task is to write a SPARQL query that helps answering the user question. "
-                        "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
-                        "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
-                        "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
-                        "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
-                        "Afterwards, create SPARQL code that helps answering the question. "
-                        "Your SPARQL query will be fed back to you later to help you answer the question. For now, do not answer in sentences, just write SPARQL. "
-                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-                    )
-                ],
-            ),
-            types.Content(role="user", parts=[types.Part(text=f"User Question:\n{question}")]),
-        ]
-
-        logger.info(f"Prompt:\n{contents}")
-        response = self.client.models.generate_content(
-            model=self.generation_model,
-            contents=contents,
-            config=self.config,
+        system_prompt = (
+            "You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
+            "Your Task is to write a SPARQL query that helps answering the user question. "
+            "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
+            "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
+            "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
+            "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
+            "Afterwards, create SPARQL code that helps answering the question. "
+            "Your SPARQL query will be fed back to you later to help you answer the question. For now, do not answer in sentences, just write SPARQL. "
+            # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
         )
-        verbose_response = self.get_calling_history(response)
-        logger.info(f"Response:\n{verbose_response}")
-        if verbose:
-            print(verbose_response)
+        user_prompt = f"User Question:\n{question}"
+        if self.llm == LLMInfo.gemini:
+            contents = [
+                types.Content(
+                    role="model",
+                    parts=[
+                        types.Part(
+                            text=system_prompt
+                        )
+                    ],
+                ),
+                types.Content(role="user", parts=[types.Part(text=user_prompt)]),
+            ]
+
+            logger.info(f"Prompt:\n{contents}")
+            response = self.client.models.generate_content(
+                model=self.generation_model,
+                contents=contents,
+                config=self.config,
+            )
+            verbose_response = self.get_calling_history(response)
+            logger.info(f"Response:\n{verbose_response}")
+            if verbose:
+                print(verbose_response)
+
+            answer = response.text
+
+        elif self.llm == LLMInfo.ollama:
+            messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
+            verbose_response = ""
+            while True:
+                response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=self.tools, think=True)
+                messages.append(response.message)
+                thinking = "Thinking: " + response.message.thinking
+                content = "Content: " + response.message.content
+                verbose_response += thinking + "\n" + content + "\n"
+                if self.verbose:
+                    print(thinking)
+                    print(content)
+                if response.message.tool_calls:
+                    for tc in response.message.tool_calls:
+                        toolcall = f"Calling {tc.function.name} with arguments {tc.function.arguments}"
+                        result = getattr(self, tc.function.name)(**tc.function.arguments)
+                        tc_res = f"Result: {result}"
+                        verbose_response += toolcall + "\n" + tc_res + "\n"
+                        if self.verbose:
+                            print(toolcall)
+                            print(tc_res)
+                        # add the tool result to the messages
+                        messages.append({'role': 'tool', 'tool_name': tc.function.name, 'content': str(result)})
+                else:
+                    # end the loop when there are no more tool calls
+                    break
+            # continue the loop with the updated messages
+            answer = response.message.content
 
         with open(self.llm_log_path, "at") as f:
             f.write("\n#########################################################\n")
             f.write(f"Question: {question}\n")
             f.write(f"Answer:\n{verbose_response}")
 
-        return response
+        return answer
 
     def get_calling_history(self, response: genai.types.GenerateContentResponse):
         out = "Output: " + response.text + "\n"
@@ -239,22 +302,33 @@ class SparqlAgent:
             logger.info(f"no sparql found in {response.text}")
             raise ValueError(f"No valid SPARQL found in {response.text}")
 
-    def execute_sparql(self, sparql: str):
+    def execute_sparql(self, sparql: str) -> tuple[bool, list]:
+        """Execute a given SPARQL query on the knowledge graph
+
+        Args:
+            sparql (str): pure SPARQL code
+
+        Returns:
+            tuple[bool, list]: Success, Result. If Success is True, Result will contain the result of the query.
+            If Success is False, Result will contain the error message.
+        """
+
         logger.info(f"executing sparql code")
+        logger.info(sparql)
+        # prune input
+        sparql = re.sub(r"`+.+", "", sparql)
         p.ds.rdfgraph = p.rdfstack.create_rdf_triples()
         try:
             res = p.ds.rdfgraph.query(sparql)
-            assert res != [], "SPARQL code was valid, but query did not return any results, Try again!"
+            res2 = p.aux.apply_func_to_table_cells(p.rdfstack.convert_from_rdf_to_pyirk, res)
+            assert res2 != [], "SPARQL code was valid, but query did not return any results, Try again!"
             logger.info("success")
         except Exception as e:
             logger.info(f"Error:\n{e}")
             return False, e
-        res2 = p.aux.apply_func_to_table_cells(p.rdfstack.convert_from_rdf_to_pyirk, res)
-        if res2 == []:
-            return False, "SPARQL code was valid, but query did not return any results, Try again!"
-        else:
-            # todo right format
-            return True, res2
+
+        # todo right format
+        return True, res2
 
 
     def rework_sparql(self, question, response, result):
@@ -292,40 +366,57 @@ class SparqlAgent:
 
         return response
 
-    def process_sparql_result(self, question, response_data, sparql_result: list):
-        contents = [
-            types.Content(
-                role="model",
-                parts=[
-                    types.Part(
-                        text="You are a helpful SPARQL assistent. Your task is to answer the user question with the help of a knowledge graph. "
-                        "You are provided with the result of a sparql query. And the data leading up the query. "
-                        "Utilize only the provided information to answer the question."
-                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-                    )
-                ],
-            ),
-            types.Content(
-                role="user",
-                parts=[
-                    types.Part(
-                        text=f"User Question:\n{question}\n"
-                        f"SPARQL query and calling history:\n{self.get_calling_history(response_data)}\n"
-                        f"Result:\n{sparql_result}"
-                    )
-                ],
-            ),
-        ]
-        logger.info("interpret SPARQL")
-        logger.info(f"Prompt:\n{contents}")
-        response = self.client.models.generate_content(
-            model=self.generation_model,
-            contents=contents,
-            # config=self.config
+    def process_sparql_result(self, question, sparql_result: list):
+        system_prompt = (
+            "You are a helpful SPARQL assistent. Your task is to answer the user question with the help of a knowledge graph. "
+            "You are provided with the result of a sparql query. And the data leading up the query. "
+            "Utilize only the provided information to answer the question."
+            # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
         )
-        logger.info(f"Response:\n{response.text}")
+        user_prompt = (
+            f"User Question:\n{question}\n"
+            f"Result:\n{sparql_result}"
+        )
+        logger.info("interpret SPARQL")
+        logger.info(f"system Prompt:\n{system_prompt}, user_prompt:\n {user_prompt}")
+        if self.llm == LLMInfo.gemini:
+            contents = [
+                types.Content(
+                    role="model",
+                    parts=[
+                        types.Part(
+                            text= system_prompt
+                        )
+                    ],
+                ),
+                types.Content(
+                    role="user",
+                    parts=[
+                        types.Part(
+                            text= user_prompt
+                        )
+                    ],
+                ),
+            ]
+            response = self.client.models.generate_content(
+                model=self.generation_model,
+                contents=contents,
+            )
+            logger.info(f"Response:\n{response.text}")
+            answer = response.text
 
-        return response
+        elif self.llm == LLMInfo.ollama:
+            messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
+            response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, think=True)
+            thinking = "Thinking: " + response.message.thinking
+            content = "Content: " + response.message.content
+            logger.info("Response:\n", thinking + "\n" + content + "\n")
+            if self.verbose:
+                print(thinking)
+                print(content)
+            answer = response.message.content
+
+        return answer
 
     def run(self, question):
         response = self.generate_sparql_from_question(question, verbose=True)
@@ -334,11 +425,52 @@ class SparqlAgent:
             success, sparql_result = self.execute_sparql(sparql)
             if success:
                 # todo run another loop? how to evaluate the answer?
-                return sparql_result, self.process_sparql_result(question, response, sparql_result)
+                return sparql_result, self.process_sparql_result(question, sparql_result)
             else:
                 response = self.rework_sparql(question, response, sparql_result)
 
         return sparql_result
+
+    def run_all_at_once(self, question):
+        logger.info("#################################################################################################")
+        logger.info(f"Question:\n{question}")
+        system_prompt = (
+            "You are a helpful semantic assistent. You have access to a knowledge graph with nodes and edges. "
+            "Your task is to answer the user question solely based on the on the information extracted from this knowledge graph. "
+            "You have tools at your disposal. First, analyze the user input and extract relevant concepts or phrases that could be modeled in the graph. "
+            "Use the tools to find the corresponding entities in the graph. If you think you need additional concepts to model the question, "
+            "try to find them in the graph as well using the tools. Always start with the tool 'get_similar_entity'. "
+            "An Uri looks like this: base:/module#I1234. Only use URIs you get from tool calls! "
+            "You can use the tools as many times as you wish. "
+            "When you have found the relevant uris of nodes and relations, you can also use the sparql tool to submit a query and recieve an answer from the graph. "
+            "Continue using the tools, until you can confidently answer the user question from the extracted knowledge."
+        )
+        user_prompt = f"User Question:\n{question}"
+        messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
+        while True:
+            response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=self.tools, think=True)
+            messages.append(response.message)
+            thinking = "Thinking: " + response.message.thinking
+            content = "Content: " + response.message.content
+            logger.info(thinking + "\n" + content + "\n")
+
+            if response.message.tool_calls:
+                for tc in response.message.tool_calls:
+                    toolcall = f"Calling {tc.function.name} with arguments {tc.function.arguments}"
+                    result = getattr(self, tc.function.name)(**tc.function.arguments)
+                    tc_res = f"Result: {result}"
+                    logger.info(toolcall + "\n" + tc_res + "\n")
+                    # add the tool result to the messages
+                    messages.append({'role': 'tool', 'tool_name': tc.function.name, 'content': str(result)})
+            else:
+                # end the loop when there are no more tool calls
+                break
+
+        answer = response.message.content
+        logger.info("Answer: "+ answer)
+        return answer
+
+
 
 
 if __name__ == "__main__":
@@ -349,7 +481,7 @@ if __name__ == "__main__":
     sa = SparqlAgent([ct_load_dict, ma_load_dict, nl_load_dict])
     # sa.setup_embeddings()
     # res = sa.run("whats the connection between an equation and an inequation")
-    res = sa.run("Whats the difference between a vector field and a covector field?")
+    res = sa.run_all_at_once("Whats the difference between a vector field and a covector field?")
     print(res)
 
 # todo space out llm call, avoid rate limit
