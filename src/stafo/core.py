@@ -12,8 +12,9 @@ except ModuleNotFoundError:
 
 import time
 
-#! pip install google-generativeai
-import google.generativeai as genai
+# import google.generativeai as genai #! deprecated
+from google import genai
+
 from ollama import Client, ChatResponse
 
 from .utils import BASE_DIR, CONFIG_PATH, render_template
@@ -34,9 +35,9 @@ class Container:
 with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
-# https://github.com/google-gemini/generative-ai-python
-genai.configure(api_key=config_dict["gemini_api_key"])
-model = genai.GenerativeModel("gemini-2.5-flash")
+# # https://github.com/google-gemini/generative-ai-python
+# genai.configure(api_key=config_dict["gemini_api_key"])
+# model = genai.GenerativeModel("gemini-2.5-flash")
 
 class LLMInfo():
     gemini = "gemini"
@@ -44,7 +45,7 @@ class LLMInfo():
     info_dict = {
         "gemini": {
             "generation_model": "gemini-2.5-flash",
-            # "client": genai.Client(api_key=config_dict["gemini_api_key"])
+            "client": genai.Client(api_key=config_dict["gemini_api_key"])
         },
         "ollama": {
             "generation_model": "gpt-oss:120b",
@@ -92,7 +93,7 @@ class MainManager:
         # will refer to the currently processed snippet
         self.snippet_object: LatexSourceSnippet = None
 
-        self.llm_config = genai.GenerationConfig(temperature=0)
+        # self.llm_config = genai.GenerationConfig(temperature=0)
 
         # prepare the paths
         self.tex_fpath = os.path.join(BASE_DIR, "data", "chunk_full_source.tex") if tex_fpath is None else tex_fpath
@@ -355,14 +356,7 @@ class MainManager:
         elif not self.dev_mode:
             with open("_token_tracking.txt", "a") as fp:
                 fp.write(track_line)
-            if self.llm == LLMInfo.gemini:
-                res = model.generate_content(message, generation_config=self.llm_config)
-            elif self.llm == LLMInfo.ollama:
-                messages = [{"role": "user", "content": message}]
-                response: ChatResponse = LLMInfo.info_dict["ollama"]["client"].chat(
-                    model=LLMInfo.info_dict["ollama"]["generation_model"], messages=messages
-                )
-                res.text = response.message.content
+            res.text = call_llm_api(self.llm, message, return_text_only=True)
 
         else:
             res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- response text\n- response text\n"
@@ -378,7 +372,7 @@ class MainManager:
         elif len(res) == 1:
             context = {"statements": self.statement_source}
             message = render_template("task_template.md", context)
-            response = self.llm_api(message)
+            response = call_llm_api(self.llm, message)
             self.statement_source = "\n".join((self.statement_source, response))
             print(f"Response:\n\n{response}")
             # IPS()
@@ -390,9 +384,48 @@ class MainManager:
         self.statement_source
 
 
-    def llm_api(self, message):
-        return model.generate_content(message, generation_config=genai.GenerationConfig(temperature=0)).text
+def call_llm_api(llm, user_prompt, system_prompt=None, tools=None, return_text_only=True, **kwargs):
+    if llm == LLMInfo.gemini:
+        config = genai.types.GenerateContentConfig(temperature=0)
+        if tools:
+            config.tools = tools
+        contents = []
 
+        if system_prompt is not None:
+            contents.append(genai.types.Content(role="model", parts=[genai.types.Part(text=system_prompt)]))
+        contents.append(genai.types.Content(role="user", parts=[genai.types.Part(text=user_prompt)]))
+
+        client : genai.Client = LLMInfo.info_dict["gemini"]["client"]
+        response = client.models.generate_content(
+            model=LLMInfo.info_dict["gemini"]["generation_model"],
+            contents=contents,
+            config=config,
+            **kwargs
+        )
+        if return_text_only:
+            return response.text
+        else:
+            return response
+
+    elif llm == LLMInfo.ollama:
+        messages = []
+        if system_prompt is not None:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_prompt})
+
+        client: Client = LLMInfo.info_dict["ollama"]["client"]
+        response: ChatResponse = client.chat(
+            model=LLMInfo.info_dict["ollama"]["generation_model"],
+            messages=messages,
+            tools=tools,
+            **kwargs
+        )
+        if return_text_only:
+            return response.message.content
+        else:
+            return response
+    else:
+        raise NotImplementedError("Your LLM family is not supported")
 
 # split without consuming the delimiter
 

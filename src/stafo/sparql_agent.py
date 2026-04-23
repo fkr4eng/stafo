@@ -19,6 +19,7 @@ import torch
 import pyirk as p
 
 from stafo.utils import BASE_DIR, CONFIG_PATH
+from stafo.core import call_llm_api, LLMInfo
 from stafo.stafo_logging import sparql_logger as logger
 
 
@@ -26,28 +27,10 @@ with open(CONFIG_PATH, "rb") as fp:
     config_dict = tomllib.load(fp)
 
 
-class LLMInfo():
-    gemini = "gemini"
-    ollama = "ollama"
-    info_dict = {
-        "gemini": {
-            "generation_model": "gemini-2.5-flash",
-            "client": genai.Client(api_key=config_dict["gemini_api_key"])
-        },
-        "ollama": {
-            "generation_model": "gpt-oss:120b",
-            "client": Client(
-                host='https://ollama.com',
-                headers={'Authorization': 'Bearer ' + config_dict["ollama_api_key"]}
-            )
-        }
-    }
-
-
 class SparqlAgent:
     def __init__(self, load_irk_modules: list[dict] = [], verbose=True):
         # parameters
-        # Generation Model
+        # select LLM Family Library
         # self.llm = LLMInfo.gemini
         self.llm = LLMInfo.ollama
         self.generation_model = LLMInfo.info_dict[self.llm]["generation_model"]
@@ -125,24 +108,7 @@ class SparqlAgent:
         )
         user_prompt = f"User Question:\n{question}"
         if self.llm == LLMInfo.gemini:
-            contents = [
-                types.Content(
-                    role="model",
-                    parts=[
-                        types.Part(
-                            text=system_prompt
-                        )
-                    ],
-                ),
-                types.Content(role="user", parts=[types.Part(text=user_prompt)]),
-            ]
-
-            logger.info(f"Prompt:\n{contents}")
-            response = self.client.models.generate_content(
-                model=self.generation_model,
-                contents=contents,
-                config=self.config,
-            )
+            call_llm_api(self.llm, user_prompt, system_prompt=system_prompt, tools=self.tools, return_text_only=False)
             verbose_response = self.get_calling_history(response)
             logger.info(f"Response:\n{verbose_response}")
             if verbose:
@@ -332,37 +298,23 @@ class SparqlAgent:
 
 
     def rework_sparql(self, question, response, result):
-        contents = [
-            types.Content(
-                role="model",
-                parts=[
-                    types.Part(
-                        text="You are a helpful SPARQL assistent. Your task is to correct a given SPARQL query answering the users question. "
-                        "You will also have access to the extracted nodes and edges of the corresponding knowledge graph. "
-                        "You also will see the error message produced by running the given Query. "
-                        "Rewrite the SPARQL query without errors, so that it can be used to answer the user question. "
-                        "Only use URIs you got from tools or from the calling history."
-                        # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
-                    )
-                ],
-            ),
-            types.Content(
-                role="user",
-                parts=[
-                    types.Part(
-                        text=f"User Question:\n{question}\n"
-                        f"Wrong SPARQL query and calling history:\n{self.get_calling_history(response)}\n"
-                        f"Error Message when running the SPARQL code:\n{result}"
-                    )
-                ],
-            ),
-        ]
-        logger.info("Rework SPARQL")
-        logger.info(f"Prompt:\n{contents}")
-        response = self.client.models.generate_content(
-            model=self.generation_model, contents=contents, config=self.config
+        system_prompt=(
+            "You are a helpful SPARQL assistent. Your task is to correct a given SPARQL query answering the users question. "
+            "You will also have access to the extracted nodes and edges of the corresponding knowledge graph. "
+            "You also will see the error message produced by running the given Query. "
+            "Rewrite the SPARQL query without errors, so that it can be used to answer the user question. "
+            "Only use URIs you got from tools or from the calling history."
+            # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
         )
-        logger.info(f"Response:\n{response.text}")
+        user_prompt=(
+            f"User Question:\n{question}\n"
+            f"Wrong SPARQL query and calling history:\n{self.get_calling_history(response)}\n"
+            f"Error Message when running the SPARQL code:\n{result}"
+        )
+        logger.info("Rework SPARQL")
+        logger.info(f"Prompt:\n{system_prompt}, {user_prompt}")
+        response = call_llm_api(self.llm, user_prompt=user_prompt, system_prompt=system_prompt, tools=self.tools)
+        logger.info(f"Response:\n{response}")
 
         return response
 
@@ -379,42 +331,8 @@ class SparqlAgent:
         )
         logger.info("interpret SPARQL")
         logger.info(f"system Prompt:\n{system_prompt}, user_prompt:\n {user_prompt}")
-        if self.llm == LLMInfo.gemini:
-            contents = [
-                types.Content(
-                    role="model",
-                    parts=[
-                        types.Part(
-                            text= system_prompt
-                        )
-                    ],
-                ),
-                types.Content(
-                    role="user",
-                    parts=[
-                        types.Part(
-                            text= user_prompt
-                        )
-                    ],
-                ),
-            ]
-            response = self.client.models.generate_content(
-                model=self.generation_model,
-                contents=contents,
-            )
-            logger.info(f"Response:\n{response.text}")
-            answer = response.text
-
-        elif self.llm == LLMInfo.ollama:
-            messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
-            response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, think=True)
-            thinking = "Thinking: " + response.message.thinking
-            content = "Content: " + response.message.content
-            logger.info("Response:\n", thinking + "\n" + content + "\n")
-            if self.verbose:
-                print(thinking)
-                print(content)
-            answer = response.message.content
+        answer = call_llm_api(self.llm, user_prompt, system_prompt=system_prompt)
+        logger.info(f"Response:\n{answer}")
 
         return answer
 
