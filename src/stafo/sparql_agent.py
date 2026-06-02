@@ -28,7 +28,7 @@ with open(CONFIG_PATH, "rb") as fp:
 
 
 class SparqlAgent:
-    def __init__(self, load_irk_modules: list[dict] = [], verbose=True):
+    def __init__(self, load_irk_modules: list[dict] = [], verbose=True, embedding_csv_path=None):
         # parameters
         # select LLM Family Library
         # self.llm = LLMInfo.gemini
@@ -39,7 +39,7 @@ class SparqlAgent:
 
         # Embedding Model
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        self.embedding_csv_path = "pyirk_embeddings.csv"
+        self.embedding_csv_path = embedding_csv_path if embedding_csv_path is not None else os.path.join(BASE_DIR, "pyirk_embeddings.csv")
         self.llm_log_path = "llm_log.txt"
         self.min_sim_score = 0.6
         self.score_interval = 0.9
@@ -62,6 +62,8 @@ class SparqlAgent:
 
         if os.path.isfile(self.embedding_csv_path):
             self.df = pd.read_csv(self.embedding_csv_path)
+        elif embedding_csv_path is not None:
+            self.df = None  # custom path provided; caller must invoke setup_embeddings()
         else:
             yn = input("No embedding for pyirk entities found. Create it now? [y/n]")
             if yn == "y":
@@ -90,7 +92,7 @@ class SparqlAgent:
 
         self.df = pd.DataFrame(embeddings)
         self.df.insert(0, "uri", pyirk_entities.keys())
-        self.df.to_csv(os.path.join(BASE_DIR, self.embedding_csv_path), index=False)
+        self.df.to_csv(self.embedding_csv_path, index=False)
 
     def generate_sparql_from_question(self, question, verbose=False):
         logger.info("#################################################################################################")
@@ -119,10 +121,11 @@ class SparqlAgent:
         elif self.llm == LLMInfo.ollama:
             messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
             verbose_response = ""
+            lookup_tools = [self.get_similar_entity, self.get_entity_info]
             while True:
-                response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=self.tools, think=True)
+                response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=lookup_tools, think=True)
                 messages.append(response.message)
-                thinking = "Thinking: " + response.message.thinking
+                thinking = "Thinking: " + (response.message.thinking or "")
                 content = "Content: " + response.message.content
                 verbose_response += thinking + "\n" + content + "\n"
                 if self.verbose:
@@ -176,10 +179,10 @@ class SparqlAgent:
             list[str]: list of uris corresponding to entities in the knowledge graph
         """
         # embed phrase
-        embedding = np.float64(self.embedding_model.encode(phrase))
+        embedding = self.embedding_model.encode(phrase)
         # calc similarity with embedded pyirk entities
         scores = (
-            self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy()))
+            self.embedding_model.similarity(embedding, torch.tensor(self.df[self.df.columns[1:]].to_numpy(), dtype=torch.float32))
             .numpy()
             .flatten()
         )
@@ -234,8 +237,9 @@ class SparqlAgent:
         except:
             return "Entity not found"
 
-    def extract_sparql(self, response: genai.types.GenerateContentResponse):
+    def extract_sparql(self, response):
         """find the sparql code in the answer of the llm. maybe there are ticks ``` or additional explanations."""
+        text = response.text if hasattr(response, "text") else response
         pattern = regex.compile(
             r"""
         (?(DEFINE)                              # Define BRACKET pattern
@@ -252,21 +256,28 @@ class SparqlAgent:
         """,
             regex.DOTALL | regex.VERBOSE | regex.IGNORECASE,
         )
-        res = regex.search(pattern, response.text)
+        res = regex.search(pattern, text)
         if res is not None:
             logger.info(f"sparql extracted:\n{res.group(0)}")
             query = res.group(0)
-            unique_prefixes = set(re.findall(r"irk:/(.+?)#", query))
-            for up in unique_prefixes:
-                prefix = re.findall(r"\w+", up)[0] + ":"  # cut off ocse/0.2 -> ocse
-                query = re.sub(f"irk:/{up}#", prefix, query)
-                query = f"PREFIX {prefix} <irk:/{up}#>\n" + query
+            # only add PREFIX declarations when the query uses bare full URIs (no existing PREFIX block)
+            if not re.search(r"PREFIX\s+\w+:", text, re.IGNORECASE):
+                unique_prefixes = set(re.findall(r"irk:/(.+?)#", query))
+                for up in unique_prefixes:
+                    prefix = re.findall(r"\w+", up)[0] + ":"  # cut off ocse/0.2 -> ocse
+                    query = re.sub(f"irk:/{up}#", prefix, query)
+                    query = f"PREFIX {prefix} <irk:/{up}#>\n" + query
+            else:
+                # prepend any PREFIX lines that appear before SELECT in the full LLM text
+                prefix_block = "\n".join(re.findall(r"PREFIX\s+\S+\s+<[^>]+>", text, re.IGNORECASE))
+                if prefix_block:
+                    query = prefix_block + "\n" + query
 
             logger.info(f"query with correct prefixes:\n{query}")
             return query
         else:
-            logger.info(f"no sparql found in {response.text}")
-            raise ValueError(f"No valid SPARQL found in {response.text}")
+            logger.info(f"no sparql found in {text}")
+            raise ValueError(f"No valid SPARQL found in {text}")
 
     def execute_sparql(self, sparql: str) -> tuple[bool, list]:
         """Execute a given SPARQL query on the knowledge graph
@@ -306,14 +317,15 @@ class SparqlAgent:
             "Only use URIs you got from tools or from the calling history."
             # "If you find that you are missing information or cannot complete the task, describe your problem in detail."
         )
+        calling_history = self.get_calling_history(response) if hasattr(response, "automatic_function_calling_history") else response
         user_prompt=(
             f"User Question:\n{question}\n"
-            f"Wrong SPARQL query and calling history:\n{self.get_calling_history(response)}\n"
+            f"Wrong SPARQL query and calling history:\n{calling_history}\n"
             f"Error Message when running the SPARQL code:\n{result}"
         )
         logger.info("Rework SPARQL")
         logger.info(f"Prompt:\n{system_prompt}, {user_prompt}")
-        response = call_llm_api(self.llm, user_prompt=user_prompt, system_prompt=system_prompt, tools=self.tools)
+        response = call_llm_api(self.llm, user_prompt=user_prompt, system_prompt=system_prompt)
         logger.info(f"Response:\n{response}")
 
         return response
@@ -347,7 +359,7 @@ class SparqlAgent:
             else:
                 response = self.rework_sparql(question, response, sparql_result)
 
-        return sparql_result
+        return sparql_result, f"Failed to answer after {self.max_iterations} attempts. Last error: {sparql_result}"
 
     def run_all_at_once(self, question):
         logger.info("#################################################################################################")
@@ -365,10 +377,11 @@ class SparqlAgent:
         )
         user_prompt = f"User Question:\n{question}"
         messages = [{'role': 'system', 'content': system_prompt}, {"role": "user", "content": user_prompt}]
+        lookup_tools = [self.get_similar_entity, self.get_entity_info]
         while True:
-            response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=self.tools, think=True)
+            response: ChatResponse = self.client.chat(model='gpt-oss:120b', messages=messages, tools=lookup_tools, think=True)
             messages.append(response.message)
-            thinking = "Thinking: " + response.message.thinking
+            thinking = "Thinking: " + (response.message.thinking or "")
             content = "Content: " + response.message.content
             logger.info(thinking + "\n" + content + "\n")
 

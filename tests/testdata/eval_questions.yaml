@@ -1,0 +1,23 @@
+# Benchmark questions for SparqlAgent evaluation.
+# expected_labels: subset of entity labels that must appear (case-insensitive) in the answer.
+
+- question: "What is the result type of the gradient operator?"
+  expected_labels:
+    - "covector field"
+
+- question: "Which operators take a scalar field as input?"
+  expected_labels:
+    - "gradient op"
+
+- question: "What is a subclass of function?"
+  expected_labels:
+    - "scalar field"
+
+- question: "What does the 'has Jacobian matrix' relation connect?"
+  expected_labels:
+    - "Jacobian matrix"
+    - "differentiable vector-valued function"
+
+- question: "What class is real vector space a subclass of?"
+  expected_labels:
+    - "vector space"
