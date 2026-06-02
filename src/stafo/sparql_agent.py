@@ -108,7 +108,7 @@ class SparqlAgent:
         )
         user_prompt = f"User Question:\n{question}"
         if self.llm == LLMInfo.gemini:
-            call_llm_api(self.llm, user_prompt, system_prompt=system_prompt, tools=self.tools, return_text_only=False)
+            response = call_llm_api(self.llm, user_prompt, system_prompt=system_prompt, tools=self.tools, return_text_only=False)
             verbose_response = self.get_calling_history(response)
             logger.info(f"Response:\n{verbose_response}")
             if verbose:
