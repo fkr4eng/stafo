@@ -482,17 +482,32 @@ nennt man die Ableitung
 \begin{equation}
 h^{\prime}(x)={\mathrm{d}} h(x)=\frac{\partial h}{\partial x}(x):=\left(\frac{\partial h}{\partial x_{1}}(x),\ldots,\frac{\partial h}{\partial x_{n}}(x)\right)\label{eq:dh}
 \end{equation}\eqnote{concepts:'gradient op', 'partial derivative op', 'vector', 'scalar field', 'covector field'}{statement: 'gradient op'('scalar field')('vector') == 'covector field'('partial derivative op'('scalar field', 'vector', 'integer number')('vector'))}
-\textbf{\em \setref{Gradient}{label: gradient op}} bzw. \textbf{\em \setref{totales Differential}{label: gradient op}}.
+\textbf{\em \setref{Gradient}{label:gradient op}} bzw. \textbf{\em \setref{totales Differential}{label:gradient op}}.
 
+\snippet{66}
+In Anlehnung an Gl.~(\ref{eq:Basisdarstellung-Kovektorfelder}) ist
+auch die Notation
+\[
+{\mathrm{d}} h(x)=\frac{\partial h(x)}{\partial x_{1}}{\mathrm{d}} x_{1}+\cdots+\frac{\partial h(x)}{\partial x_{n}}{\mathrm{d}} x_{n}
+\]\eqnote{concepts:'gradient op', 'dual basis', 'scalar field', 'partial derivative op', 'covector field'}{statement:'gradient op'('scalar field')('vector') == $\sum_{i=1}^n$ 'partial derivative op'('scalar field', 'vector', i)('vector') * 'element of sequence'('dual basis', i)}
+gebräuchlich.
+
+\snippet{67}
+Der in Gl.~(\ref{eq:dh}) definierte \setref{Gradient}{label:gradient op} ist ein
+von~$x$ abhängiger \setref{Zeilenvektor}{label:row vector}, also ein \setref{Kovektorfeld}{label:covector field}. Diese Darstellung
+ist konsistent mit der in Gl.~(\ref{eq:dF}) definierten \setref{Jacobimatrix}{label:Jacobian matrix}
+für $m=1$.
+
+\snippet{68}
 \begin{remark}
 [\setref{Gradientenfeld}{label:gradient field}]\label{rem:Gradient-als-Vektorfeld}In einigen anderen
 Fachgebieten (u.\,a. der Vektoranalysis und der Optimierung) fasst
-man den Gradienten nicht als Zeilenvektor, sondern als Spaltenvektor
+man den \setref{Gradienten}{label:gradient op} nicht als \setref{Zeilenvektor}{label:row vector}, sondern als \setref{Spaltenvektor}{label:column vector}
 und damit als \setref{Vektorfeld}{label:vector field} auf:
-
 \[
 \nabla h(x):=({\mathrm{d}} h)^{\sharp}(x)=({\mathrm{d}} h)^{T}(x)
-\]
-{label:vector field} nennt man \textbf{\em \setref{Gradientenfeld}{label:gradient field}}~\cite{koenigsberger2-2004,knauf2012}.
+\]\eqnote{concepts:'gradient field', 'gradient op', 'sharp', 'covector field', 'vector field', 'transpose', 'is gradient field of'}{statement:'gradient field'(h) == 'sharp'('gradient op'(h))}
+Ein solches \setref{Vektorfeld}{label:vector field} nennt man \textbf{\em \setref{Gradientenfeld}{label:gradient field}}~\cite{koenigsberger2-2004,knauf2012}.
 \end{remark}
+
 \end{document}

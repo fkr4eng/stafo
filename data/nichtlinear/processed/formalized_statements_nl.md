@@ -2547,7 +2547,7 @@
 - The type of argument2 of 'partial derivative op' is 'vector'
 - The type of argument3 of 'partial derivative op' is 'integer number'
 - The result type of 'partial derivative op' is 'scalar field'
-- 'partial derivative op' has the verbal description 'operator that returns the partial derivative of a scalar function with respect to a component of a vector'
+- 'partial derivative op' has the verbal description 'operator that returns the partial derivative of a scalar function with respect to the ith component of a vector'
 
 
 - // snippet(65)
