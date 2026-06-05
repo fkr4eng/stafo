@@ -78,9 +78,14 @@
 - 'vector' is a subclass of 'sequence'
 - 'vector' has the alternative german label 'Vektor'
 - 'vector space' 'has element type' 'vector'
+- There is a class: 'dimension' @en
+- 'dimension' has the alternative german label 'Dimension'
+- 'dimension' is a subclass of 'integer number'
+- 'dimension' has the verbal description 'the dimension of a vector space, i.e. the number of elements in any basis'
 - There is a relation: 'has dimension'
 - The type of argument1 of 'has dimension' is 'vector space'
-- The result type of 'has dimension' is 'integer number'
+- The result type of 'has dimension' is 'dimension'
+- 'has dimension' 'is used to model' 'dimension'
 
 - Concepts in this snippet:
     - 'vector space'
@@ -89,12 +94,14 @@
     - 'vector'
     - 'sequence'
     - 'has element type'
+    - 'dimension'
     - 'has dimension'
     - 'integer number'
 - Defined in this snippet:
     - 'vector space'
     - 'real vector space'
     - 'vector'
+    - 'dimension'
     - 'has dimension'
 
 - // snippet(5)
@@ -612,9 +619,8 @@
 - 'dimension op' has the alternative german label 'dimension op'.
 - 'dimension op' has the associated LaTeX notation $\dim$.
 - The type of argument1 of 'dimension op' is 'vector space'.
-- The result type of 'dimension op' is 'integer number'.
+- The result type of 'dimension op' is 'dimension'.
 - 'dimension op' 'is used to model' 'dimension'
-- 'has dimension' 'is used to model' 'dimension'
 - There is a general statement:
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
     - formalized setting:
