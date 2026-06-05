@@ -375,7 +375,7 @@ Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$\eqnote{concepts:'general fun
 nennt man \setref{Skalarfeld}{label:scalar field} bzw. \setref{Vektorfeld}{label:vector field}.
 
 \snippet{54}
-Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field}
+Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'covector field', 'general function', 'has domain', 'has codomain', 'dual space'}{statement:'omega' is secondary instance of 'covector field'} heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field}
 (kurz \setref{1-Form}{label:covector field}) oder \setref{Pfaffsche Form}{label:covector field}.
 
 \snippet{55}
@@ -455,6 +455,7 @@ erhält man einen \setref{$n$-dimensionalen reellen Vektorraum}{label:real vecto
 \end{equation}
 für $i=1,\ldots,n$ aufgespannt wird (siehe Abb.~\ref{fig:Tangentialraum-Skizze}).
 
+\snippet{63}
 Für verschiedene \setref{Punkte}{label:vector} $p,q\in\mathcal{M}$ erhält man formal unterschiedliche \setref{Tangentialräume}{label:tangent space} $T_{p}\mathcal{M}$ und $T_{q}\mathcal{M}$, die aber jeweils isomorph (gleichwertig) zum \setref{Vektorraum}{label:real vector space}~${\mathbb{R}}^{n}$ sind. Daher dürfen wir statt der \setref{Tangentialräume}{label:tangent space} einfach den Vektor\-raum~$\mathbb{R}^{n}$ verwenden und können bei den Basisvektorfeldern~(\ref{eq:Basisvektorfeld-Tangentialraum}) den Bezugspunkt~$p$ weglassen.
 \end{remark}
 
@@ -470,9 +471,28 @@ F^{\prime}(x)={\mathrm{d}} F(x)=\frac{\partial F}{\partial x}(x):=\left(\begin{a
 \vdots & \ddots & \vdots\\
 \frac{\partial F_{m}}{\partial x_{1}}(x) & \cdots & \frac{\partial F_{m}}{\partial x_{n}}(x)
 \end{array}\right),\label{eq:dF}
-\end{equation}
-{label:Jacobian matrix} bzw. \textbf{\em Differential}
+\end{equation}\eqnote{concepts: 'Jacobian matrix', 'differentiable vector-valued function', 'vector field', 'partial derivative op', 'vector', 'scalar field'}{statement: 'Jacobian matrix'('vector field')('vector') == 'matrix'('partial derivative op'('scalar field', 'vector', 'integer number'))}
+die\textbf{\em \setref{Jacobimatrix}{label:Jacobian matrix}} bzw. \textbf{\em \setref{Differential}{label:Jacobian matrix}}
 genannt wird. Die \setref{Jacobimatrix}{label:Jacobian matrix} eines \setref{Vektorfeldes}{label:vector field} $f:\mathcal{M}\to{\mathbb{R}}^{n}$
 ist eine \setref{quadratische}{label:square matrix} $n\times n$-\setref{Matrix}{label:matrix}.
 
+\snippet{65}
+Bei einem \setref{Skalarfeld}{label:scalar field} $h:\mathcal{M}\to{\mathbb{R}}$
+nennt man die Ableitung
+\begin{equation}
+h^{\prime}(x)={\mathrm{d}} h(x)=\frac{\partial h}{\partial x}(x):=\left(\frac{\partial h}{\partial x_{1}}(x),\ldots,\frac{\partial h}{\partial x_{n}}(x)\right)\label{eq:dh}
+\end{equation}\eqnote{concepts:'gradient op', 'partial derivative op', 'vector', 'scalar field', 'covector field'}{statement: 'gradient op'('scalar field')('vector') == 'covector field'('partial derivative op'('scalar field', 'vector', 'integer number')('vector'))}
+\textbf{\em \setref{Gradient}{label: gradient op}} bzw. \textbf{\em \setref{totales Differential}{label: gradient op}}.
+
+\begin{remark}
+[\setref{Gradientenfeld}{label:gradient field}]\label{rem:Gradient-als-Vektorfeld}In einigen anderen
+Fachgebieten (u.\,a. der Vektoranalysis und der Optimierung) fasst
+man den Gradienten nicht als Zeilenvektor, sondern als Spaltenvektor
+und damit als \setref{Vektorfeld}{label:vector field} auf:
+
+\[
+\nabla h(x):=({\mathrm{d}} h)^{\sharp}(x)=({\mathrm{d}} h)^{T}(x)
+\]
+{label:vector field} nennt man \textbf{\em \setref{Gradientenfeld}{label:gradient field}}~\cite{koenigsberger2-2004,knauf2012}.
+\end{remark}
 \end{document}
