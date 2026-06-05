@@ -2529,3 +2529,138 @@
     - 'Jacobian matrix'
     - 'has Jacobian matrix'
 
+
+- // quality control
+- // manually added (9)
+- There is a ternary operator: 'partial derivative op' @en
+- 'partial derivative op' has the associated LaTeX notation $\frac{\partial}{\partial x_i}$
+- The type of argument1 of 'partial derivative op' is 'scalar function'
+- The type of argument2 of 'partial derivative op' is 'vector'
+- The type of argument3 of 'partial derivative op' is 'integer number'
+- The result type of 'partial derivative op' is 'scalar function'
+- 'partial derivative op' has the verbal description 'operator that returns the partial derivative of a scalar function with respect to a component of a vector'
+
+
+- // snippet(65)
+- There is a unary operator: 'gradient op' @en
+- 'gradient op' has the alternative german label 'Gradient'
+- 'gradient op' has the alternative german label 'totales Differential'
+- 'gradient op' has the associated LaTeX notation $h^{\prime}(x)$
+- 'gradient op' has the alternative associated LaTeX notation ${\mathrm{d}} h(x)$
+- 'gradient op' has the alternative associated LaTeX notation $\frac{\partial h}{\partial x}(x)$
+- The type of argument1 of 'gradient op' is 'scalar field'
+- The result type of 'gradient op' is 'covector field'
+- Definition of 'gradient op':
+    - full source code: Bei einem Skalarfeld $h:\mathcal{M}\to{\mathbb{R}}$ nennt man die Ableitung \begin{equation} h^{\prime}(x)={\mathrm{d}} h(x)=\frac{\partial h}{\partial x}(x):=\left(\frac{\partial h}{\partial x_{1}}(x),\ldots,\frac{\partial h}{\partial x_{n}}(x)\right)\label{eq:dh} \end{equation} \textbf{\em Gradient} bzw. \textbf{\em totales Differential}.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'M' is an instance of 'set'.
+        - 'M' 'is subset of' 'Rn'.
+        - 'M' has the property 'open'.
+        - 'h' is an instance of 'scalar field'.
+        - 'h' 'has domain' 'M'.
+        - 'h' 'has codomain' 'set of real numbers'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'M'.
+        - 'i' is an instance of 'integer number'.
+        - There is a mathematical relation:
+            - full source code: 1 <= i
+        - There is a mathematical relation:
+            - full source code: i <= n
+        - 'grad_h_x' is an instance of 'covector'.
+    - formalized assertion:
+        - There is an equation:
+            - formalized left hand side: 'gradient op'('h')('x')
+            - formalized right hand side: 'grad_h_x'
+        - For all 'i' from 1 to 'n':
+            - There is an equation:
+                - formalized left hand side: 'element of sequence'('grad_h_x', 'i')
+                - formalized right hand side: 'partial derivative op'('h', 'x', 'i')('x')
+
+- Concepts in this snippet:
+    - 'gradient op'
+    - 'scalar field'
+    - 'covector field'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'has domain'
+    - 'has codomain'
+    - 'set of real numbers'
+    - 'vector'
+    - 'is element of'
+    - 'covector'
+    - 'element of sequence'
+    - 'partial derivative op'
+- Defined in this snippet:
+    - 'gradient op'
+
+
+- // quality control
+- // snippet(66)
+- 'gradient op' has the alternative associated LaTeX notation ${\mathrm{d}} h(x)=\frac{\partial h(x)}{\partial x_{1}}{\mathrm{d}} x_{1}+\cdots+\frac{\partial h(x)}{\partial x_{n}}{\mathrm{d}} x_{n}$.
+
+- Concepts in this snippet:
+    - 'gradient op'
+- Defined in this snippet:
+    - // No new concepts are defined in this snippet.
+
+- // quality control
+- // snippet(67)
+- There is a general statement:
+    - full source code: Der in Gl.~(\ref{eq:dh}) definierte Gradient ist ein von~$x$ abhängiger Zeilenvektor, also ein Kovektorfeld. Diese Darstellung ist konsistent mit der in Gl.~(\ref{eq:dF}) definierten Jacobimatrix für $m=1$.
+- There is a general statement:
+    - formalized setting:
+        - 'n' is an instance of 'integer number'.
+        - 'Rn' is an instance of 'real vector space'.
+        - 'Rn' 'has dimension' 'n'.
+        - 'M' is an instance of 'set'.
+        - 'M' 'is subset of' 'Rn'.
+        - 'M' has the property 'open'.
+        - 'x' is an instance of 'vector'.
+        - 'x' is element of 'M'.
+        - 'h' is an instance of 'scalar field'.
+        - 'h' 'has domain' 'M'.
+        - 'h' 'has codomain' 'set of real numbers'.
+        - 'grad_h' is an instance of 'covector field'.
+        - There is an equation:
+            - full source code: 'grad_h' == 'gradient op'('h')
+        - 'F' is an instance of 'differentiable vector-valued function'.
+        - 'F' 'has domain' 'M'.
+        - 'F' 'has codomain' 'set of real numbers'.
+        - 'J_F' is an instance of 'Jacobian matrix'.
+        - 'F' 'has Jacobian matrix' 'J_F'.
+    - formalized assertion:
+        - 'grad_h' is secondary instance of 'row vector'.
+        - There is an equation:
+            - full source code: 'J_F' == 'grad_h'
+
+- // quality control
+- // snippet(68)
+- There is a class: 'gradient field' @en.
+- 'gradient field' has the alternative german label 'Gradientenfeld'.
+- 'gradient field' is a subclass of 'vector field'.
+- There is a relation: 'is gradient field of'.
+- The type of argument1 of 'is gradient field of' is 'gradient field'.
+- The result type of 'is gradient field of' is 'scalar field'.
+- There is a unary operator: 'sharp'.
+- The type of argument1 of 'sharp' is 'covector field'.
+- The result type of 'sharp' is 'vector field'.
+- // The gradient field of a scalar field h is defined by the expression ∇h(x) := (sharp∘dh)(x) = (transpose ∘ dh)(x).
+
+- Concepts in this snippet:
+    - 'gradient field'
+    - 'vector field'
+    - 'scalar field'
+    - 'covector field'
+    - 'sharp'
+
+- Defined in this snippet:
+    - 'gradient field'
+    - 'is gradient field of'
+    - 'sharp'
