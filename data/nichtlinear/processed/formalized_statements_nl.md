@@ -369,7 +369,7 @@
 - The result type of 'is orthogonal to' is 'vector'
 - 'is orthogonal to' has the alternative german label 'ist senkrecht zu'
 - 'is orthogonal to' 'is used to model' 'orthogonality'
-- 'is orthogonal to' 'is symmetrical' 'True'.
+- 'is orthogonal to' 'is symmetrical' True.
 - There is an equivalence-statement:
     - full source code: Die Vektoren~$x$ und~$y$ sind zueinander \textbf{\em orthogonal} (bzw. stehen \textbf{\em senkrecht aufeinander}), falls \[ (x,y)=0. \]
     - formalized setting:
@@ -765,7 +765,6 @@
 - There is a class: 'image of matrix' @en
 - 'image of matrix' has the alternative german label 'Bild'
 - 'image of matrix' has the alternative english label 'range'
-- 'image of matrix' is a subclass of 'set' // inferred knowledge
 - 'image of matrix' has the associated LaTeX notation ${\operatorname{im}}\,A$.
 - 'image of matrix' is a subclass of 'set'
 
@@ -1300,7 +1299,7 @@
 - The type of argument1 of 'set of linear mappings op' is 'vector space'
 - The type of argument2 of 'set of linear mappings op' is 'vector space'
 - The result type of 'set of linear mappings op' is 'set of linear mappings'
-- 'set of linear mappings op' is used to model 'set of linear mappings'
+- 'set of linear mappings op' 'is used to model' 'set of linear mappings'
 
 
 - There is a general statement:
@@ -2151,25 +2150,25 @@
 - // todo define kronecker delta
 
 - Concepts in this snippet:
-    - integer number
-    - real vector space
-    - has dimension
-    - vector
-    - set
-    - is subset of
-    - open
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - canonical basis
-    - has basis
-    - dual space
-    - dual
-    - dual basis
-    - is dual basis of
-    - natural pairing
-    - element of sequence
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'vector'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'canonical basis'
+    - 'has basis'
+    - 'dual space'
+    - 'dual'
+    - 'dual basis'
+    - 'is dual basis of'
+    - 'natural pairing'
+    - 'element of sequence'
     - 'kronecker delta'
 
 
@@ -2207,27 +2206,27 @@
 
 
 - Concepts in this snippet:
-    - integer number
-    - real vector space
-    - has dimension
-    - vector
-    - set
-    - is subset of
-    - open
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - cotangent space
-    - dual space
-    - canonical basis
-    - has basis
-    - dual basis
-    - is dual basis of
-    - dual
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'vector'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'cotangent space'
+    - 'dual space'
+    - 'canonical basis'
+    - 'has basis'
+    - 'dual basis'
+    - 'is dual basis of'
+    - 'dual'
 
 - Defined in this snippet:
-    - cotangent space
+    - 'cotangent space'
 
 
 - // snippet(59)
@@ -2266,26 +2265,26 @@
 
 
 - Concepts in this snippet:
-    - covector field
-    - integer number
-    - real vector space
-    - has dimension
-    - vector
-    - set
-    - is subset of
-    - open
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - cotangent space
-    - canonical basis
-    - has basis
-    - dual basis
-    - is dual basis of
-    - covector
-    - row vector
-    - element of sequence
+    - 'covector field'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'vector'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'cotangent space'
+    - 'canonical basis'
+    - 'has basis'
+    - 'dual basis'
+    - 'is dual basis of'
+    - 'covector'
+    - 'row vector'
+    - 'element of sequence'
 
 
 
@@ -2322,24 +2321,24 @@
 
 
 - Concepts in this snippet:
-    - integer number
-    - real vector space
-    - has dimension
-    - set
-    - is subset of
-    - open
-    - vector
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - tuple op
-    - tuple
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'tuple op'
+    - 'tuple'
 
 - Defined in this snippet:
-    - tangent space
-    - tuple op
-    - tuple
+    - 'tangent space'
+    - 'tuple op'
+    - 'tuple'
 
 - // snippet(62)
 - There is a general statement:
@@ -2384,25 +2383,25 @@
             - full source code: 'alpha' * 'tuple op'('p', 'v') == 'tuple op'('p', 'alpha' * 'v')
 
 - Concepts in this snippet:
-    - integer number
-    - real vector space
-    - has dimension
-    - vector
-    - set
-    - is subset of
-    - open
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - real number
-    - canonical basis
-    - has basis
-    - unit vector
-    - element of sequence
-    - tuple op
-    - tuple
-    - is secondary instance of
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'vector'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'real number'
+    - 'canonical basis'
+    - 'has basis'
+    - 'unit vector'
+    - 'element of sequence'
+    - 'tuple op'
+    - 'tuple'
+    - 'is secondary instance of'
 
 
 
@@ -2443,18 +2442,18 @@
 
 
 - Concepts in this snippet:
-    - integer number
-    - real vector space
-    - has dimension
-    - set
-    - is subset of
-    - open
-    - vector
-    - is element of
-    - tangent space
-    - is defined wrt point
-    - is defined wrt set
-    - is isomorphic to
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'tangent space'
+    - 'is defined wrt point'
+    - 'is defined wrt set'
+    - 'is isomorphic to'
 
 
 - // snippet(64)
