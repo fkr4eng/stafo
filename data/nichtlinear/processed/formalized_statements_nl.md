@@ -29,9 +29,13 @@
 - There is a class: 'sequence of coefficients'
 - 'sequence of coefficients' is a subclass of 'sequence'
 - // todo all instances of 'sequence of coefficients' have element type 'real number'
+- There is a relation: 'has cardinality'
+- The type of argument1 of 'has cardinality' is 'set'
+- The result type of 'has cardinality' is 'integer number'
+- 'has cardinality' has the verbal description 'specifies the number of elements in a finite set'
 - There is a relation: 'is valid on set'
 - 'is valid on set' is a qualifier.
-- There is a general operator: 'univeral quantifier'
+- There is a general operator: 'universal quantifier'
 - There is a general operator: 'existential quantifier'
 - There is a ternary operator: 'sum over index'
 
@@ -50,7 +54,7 @@
 - // manually added 2
 - There is a class: 'integer number'
 - 'integer number' is a subclass of 'real number'
-- 'integer number' has the alternative german label 'Natürliche Zahl'
+- 'integer number' has the alternative german label 'ganze Zahl'
 
 - Concepts in this snippet:
     - 'real number'
@@ -151,7 +155,7 @@
         - 'Rn' 'has dimension' 'n'
         - 's' is an instance of 'set'
         - 's' 'has element type' 'unit vector'
-        - 's' 'has length' 'n'
+        - 's' 'has cardinality' 'n'
         - 's' has the verbal description 'set of all n unit vectors'
     - formalized assertion
         - 'b' is an instance of 'canonical basis' // todo should this be part of assertion?
@@ -172,7 +176,7 @@
     - 'real vector space'
     - 'has dimension'
     - 'has element type'
-    - 'has length'
+    - 'has cardinality'
     - 'is subset of'
 - Defined in this snippet:
     - 'unit vector'
@@ -580,9 +584,9 @@
 - 'orthogonal complement' is a subclass of 'complement space'.
 - 'orthogonal complement' has the associated LaTeX notation $\mathbb{U}^{\perp}$.
 - There is a relation 'has orthogonal complement'
-- The type of argument1 of has orthogonal complement' is 'vector space'
+- The type of argument1 of 'has orthogonal complement' is 'vector space'
 - The result type of 'has orthogonal complement' is 'vector space'
-- 'has orthogonal complement' 'is used to model' 'complement space'
+- 'has orthogonal complement' 'is used to model' 'orthogonal complement'
 - There is a general statement:
     - full source code: Wählt man den Komplementärraum unter Zuhilfenahme des Skalarprodukts~(\ref{eq:skalarprodukt}) derart, dass alle Vektoren $u\in\mathbb{U}$ und $v\in\mathbb{V}$ jeweils senkrecht aufeinander stehen, so erhält man das \textbf{\em orthogonale Komplement}~$\mathbb{U}^{\perp}$ von~$\mathbb{U}$: \begin{equation} \mathbb{U}^{\perp}:=\{v\in{\mathbb{R}}^{n};\;\forall u\in\mathbb{U}:\,(u,v)=0\}.\label{eq:ortho-komplement} \end{equation}
     - formalized setting:
@@ -1636,7 +1640,7 @@
         - 'iso' 'has codomain' 'dualRn'
 
         - 'x' is an instance of 'vector'.
-        - 'x' is seondary instance of 'column vector'
+        - 'x' is secondary instance of 'column vector'
         - 'x' is element of 'Rn'.
         - 'omega' is an instance of 'covector'.
         - 'omega' is secondary instance of 'row vector'
@@ -1751,14 +1755,14 @@
                     - full source code: i == j
             - formalized assertion:
                 - There is an equation:
-                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('bstar', j)) == 1
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('b', j)) == 1
         - There is an if-then-statement:
             - formalized premise:
                 - There is an equation:
                     - full source code: i != j
             - formalized assertion:
                 - There is an equation:
-                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('bstar', j)) == 0
+                    - full source code: 'natural pairing'('element of sequence'('bstar', i), 'element of sequence'('b', j)) == 0
 
 - There is a class: 'kronecker delta' @en
 - 'kronecker delta' has the alternative german label 'Kroneckersymbol'
@@ -2534,10 +2538,10 @@
 - // manually added (9)
 - There is a ternary operator: 'partial derivative op' @en
 - 'partial derivative op' has the associated LaTeX notation $\frac{\partial}{\partial x_i}$
-- The type of argument1 of 'partial derivative op' is 'scalar function'
+- The type of argument1 of 'partial derivative op' is 'scalar field'
 - The type of argument2 of 'partial derivative op' is 'vector'
 - The type of argument3 of 'partial derivative op' is 'integer number'
-- The result type of 'partial derivative op' is 'scalar function'
+- The result type of 'partial derivative op' is 'scalar field'
 - 'partial derivative op' has the verbal description 'operator that returns the partial derivative of a scalar function with respect to a component of a vector'
 
 
