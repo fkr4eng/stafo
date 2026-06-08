@@ -113,7 +113,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 2399
+        self.stop_at_line = 1119
 
         self.q_ident = "qqq"
 
@@ -307,6 +307,11 @@ class ConversionManager:
                     "R1": "has domain of argument 2",
                     "prefix": "p",
                 },
+                "has domain of argument 3": {
+                    "key": "R10",
+                    "R1": "has domain of argument 3",
+                    "prefix": "p",
+                },
                 "has range of result": {
                     "key": "R11",
                     "R1": "has range of result",
@@ -397,6 +402,12 @@ class ConversionManager:
                     "is_qualifier": True,
                     "qual_name": "p.exis_quant",
                 },
+                "is symmetrical": {
+                    "key": "R42",
+                    "R1": "is symmetrical",
+                    "R22": True,
+                    "prefix": "p",
+                }
             },
         }
         """
@@ -549,7 +560,7 @@ class ConversionManager:
 
         # debug
         if i == self.stop_at_line:
-            44
+            "stop"
         if len(new_section) > 0:
             return d
         # new class?
@@ -812,7 +823,7 @@ class ConversionManager:
                 if len(res) > 0:
                     arg1, arg2 = self.strip(res[0])
                     # relation expects an entity
-                    if not self.key_wants_literal(label=k):
+                    if not self.key_wants_literal(label=k) and arg2 != "True" and arg2 != "False":
                         # arg2 is not in self.d, dont search local d here since we dont want to match local vars here
                         if self.build_reference(arg2) == arg2:
                             existing = self.get_existing_item(arg2)
@@ -918,6 +929,7 @@ class ConversionManager:
                     else:
                         if not (
                             arg1 in self.d["items"].keys() or arg1 in d["items"].keys() or arg1 in self.d["relations"]
+                            and arg2 != "True" or arg2 != "False"
                         ):
                             self.add_new_item(d, arg1, language, skip_entity_order=skip_entity_order)
                             logger.info(f"dummy item {arg1} added", extra={"line": i})
@@ -1116,6 +1128,9 @@ class ConversionManager:
                 "snip": self.current_snippet,
                 "prefix": prefix,
             }
+            # also add R1 key for internal referencing, even though it might not be the desired language
+            if "R1" not in d["relations"][label].keys():
+                d["relations"][label]["R1"] = label
         else:
             key = d["relations"][label]["key"]
         for k, v in additional_relations.items():
@@ -1168,6 +1183,9 @@ class ConversionManager:
 
                 # relation is functional: only one object, might be overwriting old one
                 if "R22" in relation.keys() and relation["R22"] == True:
+                    # detect erronious overwrites of items inside scopes
+                    if rel_key == "R4" and "R4" in subject_dict.keys() and "Metaclass" not in subject_dict["R4"]["object"] and obj is not None:
+                        logger.warning(f"overwriting existing R4 relation {subject_dict["R4"]} with {obj}. is this intended? maybe use secondary instance R30")
                     subject_dict[rel_key] = object_dict
                 # relation is not functional: make list or append to it
                 else:
@@ -1364,7 +1382,7 @@ class ConversionManager:
         entity_declaration = ""
         output = ""
         count = 0
-        self.stop_at_snip = 47
+        self.stop_at_snip = 75
 
         for key in self.entity_order:
             name = self.key_to_name[key]
@@ -1707,6 +1725,7 @@ class ConversionManager:
                     uq = ""
                     qualifiers = ""
                     q_list = []
+                    assert "q" in value["R4"].keys(), "check that R4 was not overwritten in assertion, use secondary instance instead."
                     for qual_dict in value["R4"]["q"]:
                         for k, v in qual_dict.items():
                             if k == "R44" and v == "True":
