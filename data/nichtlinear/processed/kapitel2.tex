@@ -551,7 +551,7 @@ seien differenzierbar. Dann gilt \begin{subequations}\label{eq:Ableitungsregeln}
 Die Gln.~(\ref{eq:Ableitung-SF-VF})-(\ref{eq:Ableitung-Skalarprodukt})
 ergeben sich unmittelbar aus der klassischen Produktregel (Leibniz-Formel),
 vgl. Übungsaufgabe~\ref{aufgabe-gr-Ableitungsregeln}.
-
+\snippet{71}
 Die $n\times n$-Matrix
 \[
 h^{\prime\prime}(x)=\left(\begin{array}{ccc}
@@ -561,7 +561,7 @@ h^{\prime\prime}(x)=\left(\begin{array}{ccc}
 \end{array}\right)
 \]
 der zweiten partiellen Ableitungen des Skalarfeldes~$h$ heißt \textbf{\em Hessematrix}.
-\snippet{71i}
+\snippet{72i}
 \begin{example}
 \label{exa:grad-hess}Zu dem gegebenen Skalarfeld $h(x)=x_{1}^{2}x_{2}^{3}+1$
 sind der Gradient und die Hessematrix zu berechnen. Für die Berechnung
@@ -571,7 +571,7 @@ der Hessematrix erfolgt mit \texttt{hessian}:
 
 
 \end{example}
-\snippet{72}
+\snippet{73}
 Sind die Elemente der Hessematrix wie in Beispiel~\ref{exa:grad-hess}
 auch stetig, dann ist die Matrix symmetrisch~\cite{koenigsberger2-2004}:
 
@@ -583,13 +583,13 @@ stetig differenzierbar. Dann gilt
 \frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(p)=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}(p)\quad\textrm{für}\quad i,j=1,\ldots,n.\label{eq:lemma-schwarz}
 \end{equation}
 \end{lemma}
-\snippet{73}
+\snippet{74}
 Der Gradient ist selber ein Kovektorfeld. Lässt sich umgekehrt ein
 Kovektorfeld als Gradient eines Skalarfeldes darstellen, so nennt
 man es \textbf{\em exaktes Differential} bzw.
 \textbf{\em exakte Differentialform}. Das
 zugehörige Skalarfeld heißt \textbf{\em Potential}.
-\snippet{74}
+\snippet{75}
 Das
 Lemma von Schwarz führt auf eine Existenzbedingung eines solchen Potentials
 für ein gegebenes Kovektorfeld. Man spricht dabei auch von einer Integrabilitätsbedingung
@@ -609,10 +609,12 @@ wenn
 \forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\quad\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x).\label{eq:lemma-poincare}
 \end{equation}
 \end{lemma}
+\snippet{76}
 Eine Differentialform~$\omega$, die Gl.~(\ref{eq:lemma-poincare})
 erfüllt, heißt \textbf{\em geschlossene} Differentialform.
 Nach dem Poincaréschen Lemma ist eine Differentialform also genau
 dann (lokal) exakt, wenn sie geschlossen ist.
+\snippet{77}
 \begin{svmultproof}
 \glqq$\Rightarrow$\grqq\ Das Kovektorfeld $\omega$ sei exakt, d.\,h. es gibt
 ein Skalarfeld $h:\mathcal{U}\to{\mathbb{R}}$ mit ${\mathrm{d}} h=\omega$ bzw. $\omega_{i}=\partial h/\partial x_{i}$.

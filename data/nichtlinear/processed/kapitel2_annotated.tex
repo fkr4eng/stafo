@@ -375,7 +375,7 @@ Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$\eqnote{concepts:'general fun
 nennt man \setref{Skalarfeld}{label:scalar field} bzw. \setref{Vektorfeld}{label:vector field}.
 
 \snippet{54}
-Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'covector field', 'general function', 'has domain', 'has codomain', 'dual space'}{statement:'omega' is secondary instance of 'covector field'} heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field}
+Eine \setref{Abbildung}{label:general function} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$\eqnote{concepts:'covector field', 'general function', 'has domain', 'has codomain', 'dual space'}{statement:'covector field'('has domain'='open''set', 'has codomain'='dual space')} heißt \setref{Kovektorfeld}{label:covector field}, \setref{Differentialform ersten Grades}{label:covector field}
 (kurz \setref{1-Form}{label:covector field}) oder \setref{Pfaffsche Form}{label:covector field}.
 
 \snippet{55}
@@ -393,17 +393,17 @@ f_{1}(x)\\
 \vdots\\
 f_{n}(x)
 \end{array}\right)
-\]\eqnote{concepts:'vector field', 'vector'}{statement:{}}
+\]\eqnote{concepts:'vector field', 'vector'}{statement:''}
 als \setref{Spaltenvektor}{label:column vector} mit den Komponenten $f_{1}(x),\ldots,f_{n}(x)$
 wird häufig auch die Notation
 \begin{equation}
 f(x)=f_{1}(x)\frac{\partial}{\partial x_{1}}+\cdots+f_{n}(x)\frac{\partial}{\partial x_{n}}\label{eq:Basisdarstellung-Vektorfelder}
-\end{equation}\eqnote{concepts:'vector field', 'vector'}{statement:'f'('x') == $\sum_{i=1}^n$ 'element of sequence'('f', 'i')('x') * 'element of sequence'('b', 'i')}
+\end{equation}\eqnote{concepts:'vector field', 'vector'}{statement:'vector field'('vector') == $\sum_{i=1}^n$ 'element of sequence'('vector field', 'integer number')('vector') * 'element of sequence'('basis', 'integer number')}
 verwendet.
 Dabei symbolisiert
 \begin{equation}
 \left\{ \frac{\partial}{\partial x_{1}},\ldots,\frac{\partial}{\partial x_{n}}\right\} \label{eq:Basisvektorfelder}
-\end{equation}\eqnote{concepts:'canonical basis'}{statement:}
+\end{equation}\eqnote{concepts:'canonical basis'}{statement:''}
 die \setref{kanonische Basis}{label:canonical basis}, die im Punkt $x\in\mathcal{M}$ den sogenannten
 \setref{Tangential\-raum}{label:tangent space}~$T_{x}\mathcal{M}$
 aufspannt (siehe Anmerkungen~\ref{rem:tangentialraum} und~\ref{rem:Notation-Basis-Vektorfelder}).
@@ -424,11 +424,11 @@ Ein \setref{Kovektorfeld}{label:covector field}~$\omega$
 kann dann als \setref{Zeilenvektor}{label:row vector}
 \[
 \omega(x)=\left(\omega_{1}(x),\ldots,\omega_{n}(x)\right)
-\]\eqnote{concepts:'covector field', 'vector', 'covector', 'row vector'}{statement: }
+\]\eqnote{concepts:'covector field', 'vector', 'covector', 'row vector'}{statement:''}
 oder in der Form
 \begin{equation}
 \omega(x)=\omega_{1}(x){\mathrm{d}} x_{1}+\cdots+\omega_{n}(x){\mathrm{d}} x_{n}\label{eq:Basisdarstellung-Kovektorfelder}
-\end{equation}\eqnote{concepts:'covector field', 'vector', 'dual basis', 'covector'}{statement: 'omega'('x') == $\sum_{i=1}^n$ 'element of sequence'('omega', 'i')('x') * 'element of sequence'('dualb', 'i')}
+\end{equation}\eqnote{concepts:'covector field', 'vector', 'dual basis', 'covector'}{statement:'covector field'('vector') == $\sum_{i=1}^n$ 'element of sequence'('covector field', 'integer number')('vector') * 'element of sequence'('dual basis', 'integer number')}
 angegeben werden.
 
 \snippet{60i}
@@ -446,8 +446,8 @@ T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\}
 definieren.
 
 \snippet{62}
-Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$\eqnote{concepts:'tuple', 'vector'}{statement:'tuple op'('p', 'v') + 'tuple op'('p', 'w') == 'tuple op'('p', 'v' + 'w')} und
-$\alpha\cdot(p,v):=(p,\alpha v)$\eqnote{concepts:'tuple', 'vector'}{statement:'alpha' * 'tuple op'('p', 'v') == 'tuple op'('p', 'alpha' * 'v')} für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$
+Zusammen mit den Operationen $(p,v)+(p,w):=(p,v+w)$\eqnote{concepts:'tuple', 'vector'}{statement:'tuple op'('vector', 'vector') + 'tuple op'('vector', 'vector') == 'tuple op'('vector', 'vector' + 'vector')} und
+$\alpha\cdot(p,v):=(p,\alpha v)$\eqnote{concepts:'tuple', 'vector'}{statement:'real number' * 'tuple op'('vector', 'vector') == 'tuple op'('vector', 'real number' * 'vector')} für $v,w\in{\mathbb{R}}^{n}$ und $\alpha\in{\mathbb{R}}$
 erhält man einen \setref{$n$-dimensionalen reellen Vektorraum}{label:real vector space}, der von den
 \setref{Basisvektorfeldern}{label:canonical basis}
 \begin{equation}
@@ -489,7 +489,7 @@ In Anlehnung an Gl.~(\ref{eq:Basisdarstellung-Kovektorfelder}) ist
 auch die Notation
 \[
 {\mathrm{d}} h(x)=\frac{\partial h(x)}{\partial x_{1}}{\mathrm{d}} x_{1}+\cdots+\frac{\partial h(x)}{\partial x_{n}}{\mathrm{d}} x_{n}
-\]\eqnote{concepts:'gradient op', 'dual basis', 'scalar field', 'partial derivative op', 'covector field'}{statement:'gradient op'('scalar field')('vector') == $\sum_{i=1}^n$ 'partial derivative op'('scalar field', 'vector', i)('vector') * 'element of sequence'('dual basis', i)}
+\]\eqnote{concepts:'gradient op', 'dual basis', 'scalar field', 'partial derivative op', 'covector field'}{statement:'gradient op'('scalar field')('vector') == $\sum_{i=1}^n$ 'partial derivative op'('scalar field', 'vector', 'integer number')('vector') * 'element of sequence'('dual basis', 'integer number')}
 gebräuchlich.
 
 \snippet{67}
@@ -506,8 +506,108 @@ man den \setref{Gradienten}{label:gradient op} nicht als \setref{Zeilenvektor}{l
 und damit als \setref{Vektorfeld}{label:vector field} auf:
 \[
 \nabla h(x):=({\mathrm{d}} h)^{\sharp}(x)=({\mathrm{d}} h)^{T}(x)
-\]\eqnote{concepts:'gradient field', 'gradient op', 'sharp', 'covector field', 'vector field', 'transpose', 'is gradient field of'}{statement:'gradient field'(h) == 'sharp'('gradient op'(h))}
+\]\eqnote{concepts:'gradient field', 'gradient op', 'sharp', 'covector field', 'vector field', 'transpose', 'is gradient field of'}{statement:'gradient field'('scalar field') == 'sharp'('gradient op'('scalar field'))}
 Ein solches \setref{Vektorfeld}{label:vector field} nennt man \textbf{\em \setref{Gradientenfeld}{label:gradient field}}~\cite{koenigsberger2-2004,knauf2012}.
 \end{remark}
+
+\snippet{69}
+\begin{remark}
+[\setref{Notation der Basisvektorfelder}{label:canonical basis}]\label{rem:Notation-Basis-Vektorfelder}Die
+in Anmerkung~\ref{rem:tangentialraum} verwendete Notation~(\ref{eq:Basisdarstellung-Vektorfelder})
+bzw.~(\ref{eq:Basisvektorfeld-Tangentialraum}) der \setref{Basisvektorfelder}{label:canonical basis}
+erscheint auf den ersten Blick willkürlich und in keinerlei Verbindung
+mit einer Ableitung zu stehen. Zur Veranschaulichung betrachten wir
+die Richtungsableitung eines \setref{Skalarfeldes}{label:scalar field}~$h$ im Punkt $p\in\mathcal{M}$
+in Richtung $v\in{\mathbb{R}}^{n}$:
+\[
+\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left.h(p+vt)\right|_{t=0}=\left\langle h^{\prime}(p),v\right\rangle =\sum_{j=1}^{n}v_{j}\frac{\partial h}{\partial x_{j}}(p).
+\]\eqnote{concepts:'scalar field', 'natural pairing', 'gradient op', 'vector', 'partial derivative op'}{statement:'natural pairing'('gradient op'('scalar field')('vector'), 'vector') == $\sum_{j=1}^n$ ('element of sequence'('vector', 'integer number') * 'partial derivative op'('scalar field', 'vector', 'integer number')('vector'))}
+Setzt man für~$v$ den \setref{Einheitsvektor}{label:unit vector}~$e_{i}$ ein, so erhält man
+\[
+\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left.h(p+e_{i}t)\right|_{t=0}=\left\langle h^{\prime}(p),e_{i}\right\rangle =\frac{\partial}{\partial x_{i}}h(p),
+\]\eqnote{concepts:'scalar field', 'natural pairing', 'gradient op', 'unit vector', 'canonical basis', 'partial derivative op'}{statement:'natural pairing'('gradient op'('scalar field')('vector'), 'element of sequence'('canonical basis', 'integer number')) == 'partial derivative op'('scalar field', 'vector', 'integer number')('vector')}
+d.\,h. $\frac{\partial}{\partial x_{i}}$ erzeugt die Richtungsableitung
+in Richtung des \setref{Einheitsvektors}{label:unit vector}~$e_{i}$.
+\end{remark}
+
+\snippet{70}
+Mitunter benötigt man auch Ableitungen verschiedener Produkte von
+\setref{Feldern}{label:general function}:
+\begin{proposition}
+\label{pro:Ableitungsregeln-Felder}Die \setref{Vektorfelder}{label:vector field} $f,g:\mathcal{M}{\to{\mathbb{R}}}^{n}$,
+das \setref{Skalarfeld}{label:scalar field} $h:\mathcal{M}\to{\mathbb{R}}$ und das \setref{Kovektorfeld}{label:covector field} $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$
+seien differenzierbar. Dann gilt \begin{subequations}\label{eq:Ableitungsregeln}
+\begin{eqnarray}
+\frac{\partial}{\partial x}\left(h(x)f(x)\right) & = & h(x)f^{\prime}(x)+f(x)h^{\prime}(x),\label{eq:Ableitung-SF-VF}\\
+\frac{\partial}{\partial x}\left(g^{T}(x)f(x)\right) & = & g^{T}(x)f^{\prime}(x)+f^{T}(x)g^{\prime}(x),\label{eq:Ableitung-VF-VF}\\
+\frac{\partial}{\partial x}\left\langle \omega,f\right\rangle (x) & = & \omega(x)f^{\prime}(x)+f^{T}(x)\frac{\partial\omega^{T}(x)}{\partial x}.\label{eq:Ableitung-Skalarprodukt}
+\end{eqnarray}
+\end{subequations}\eqnote{concepts:'scalar field', 'vector field', 'covector field', 'gradient op', 'Jacobian matrix', 'natural pairing', 'transpose'}{statement:''}
+\end{proposition}
+Die Gln.~(\ref{eq:Ableitung-SF-VF})-(\ref{eq:Ableitung-Skalarprodukt})
+ergeben sich unmittelbar aus der klassischen Produktregel (Leibniz-Formel),
+vgl. Übungsaufgabe~\ref{aufgabe-gr-Ableitungsregeln}.
+\snippet{71}
+Die $n\times n$-\setref{Matrix}{label:matrix}
+\[
+h^{\prime\prime}(x)=\left(\begin{array}{ccc}
+\frac{\partial^{2}h}{\partial x_{1}^{2}}(x) & \cdots & \frac{\partial^{2}h}{\partial x_{1}\partial x_{n}}(x)\\
+\vdots & \ddots & \vdots\\
+\frac{\partial^{2}h}{\partial x_{n}\partial x_{1}}(x) & \cdots & \frac{\partial^{2}h}{\partial x_{n}^{2}}(x)
+\end{array}\right)
+\]\eqnote{concepts:'Hessian matrix', 'scalar field', 'partial derivative op', 'square matrix'}{statement:'element of sequence'('Hessian matrix', 'integer number', 'integer number') == 'partial derivative op'('partial derivative op'('scalar field', 'vector', 'integer number'), 'vector', 'integer number')('vector')}
+der zweiten partiellen Ableitungen des \setref{Skalarfeldes}{label:scalar field}~$h$ heißt \textbf{\em \setref{Hessematrix}{label:Hessian matrix}}.
+
+\snippet{72i}
+\begin{example}
+\label{exa:grad-hess}Zu dem gegebenen Skalarfeld $h(x)=x_{1}^{2}x_{2}^{3}+1$
+sind der Gradient und die Hessematrix zu berechnen. Für die Berechnung
+mit \textsc{Maxima} fassen wir den Gradienten als Spezialfall einer
+Jacobimatrix auf und nutzen die Funktion \texttt{jacobian}. Die Berechnung
+der Hessematrix erfolgt mit \texttt{hessian}:
+
+
+\end{example}
+
+\snippet{73}
+Sind die Elemente der \setref{Hessematrix}{label:Hessian matrix} wie in Beispiel~\ref{exa:grad-hess}
+auch stetig, dann ist die \setref{Matrix}{label:matrix} symmetrisch~\cite{koenigsberger2-2004}:
+
+\begin{lemma}
+[Satz/Lemma von Schwarz]\label{lem:Schwarz}Das
+\setref{Skalarfeld}{label:scalar field} $h:\mathcal{M}\to{\mathbb{R}}$\eqnote{concepts:'scalar field', 'has domain', 'has codomain', 'open', 'set of real numbers'}{statement:'scalar field'('has domain'='open''set', 'has codomain'='set of real numbers')} sei im Punkt $p\in\mathcal{M}$ zweimal
+stetig differenzierbar. Dann gilt
+\begin{equation}
+\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(p)=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}(p)\quad\textrm{für}\quad i,j=1,\ldots,n.\label{eq:lemma-schwarz}
+\end{equation}\eqnote{concepts:'partial derivative op', 'scalar field', 'vector', 'integer number'}{statement:'partial derivative op'('partial derivative op'('scalar field', 'vector', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('partial derivative op'('scalar field', 'vector', 'integer number'), 'vector', 'integer number')('vector')}
+\end{lemma}
+
+\snippet{74}
+Der \setref{Gradient}{label:gradient op} ist selber ein \setref{Kovektorfeld}{label:covector field}. Lässt sich umgekehrt ein
+\setref{Kovektorfeld}{label:covector field} als Gradient eines \setref{Skalarfeldes}{label:scalar field} darstellen, so nennt
+man es \textbf{\em \setref{exaktes Differential}{label:exact differential form}} bzw.
+\textbf{\em \setref{exakte Differentialform}{label:exact differential form}}. Das
+zugehörige Skalarfeld heißt \textbf{\em \setref{Potential}{label:potential}}.
+
+\snippet{75}
+Das
+Lemma von Schwarz führt auf eine Existenzbedingung eines solchen \setref{Potentials}{label:potential}
+für ein gegebenes \setref{Kovektorfeld}{label:covector field}. Man spricht dabei auch von einer Integrabilitätsbedingung
+für \setref{Differentialformen}{label:exact differential form}:
+
+\begin{lemma}
+[{Poincar\'{e}sches Lemma}]\label{lem:poincare}Sei
+$\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ ein stetig differenzierbares
+\setref{Kovektorfeld}{label:covector field} und $\mathcal{U}\subseteq\mathcal{M}$ eine \setref{offene Kugel}{label:open ball}
+mit Zentrum $p\in\mathcal{M}$, d.\,h.
+\[
+\mathcal{U}=\left\{ x\in\mathcal{M};\,\left\Vert x-p\right\Vert <r\right\} \quad\textrm{für ein}\quad r>0.
+\]\eqnote{concepts:'open ball', 'has center', 'has radius', 'vector'}{statement:'open ball' == \{'vector' \in 'set' ; norm('vector' - 'vector') < 'real number'\}}
+Die \setref{Differentialform}{label:exact differential form} $\omega$ ist auf $\mathcal{U}$ genau dann \setref{exakt}{label:exact differential form},
+wenn
+\begin{equation}
+\forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\quad\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x).\label{eq:lemma-poincare}
+\end{equation}\eqnote{concepts:'partial derivative op', 'element of sequence', 'covector field', 'exact differential form'}{statement:'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector')}
+\end{lemma}
 
 \end{document}

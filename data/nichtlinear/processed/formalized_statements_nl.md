@@ -33,6 +33,11 @@
 - The type of argument1 of 'has cardinality' is 'set'
 - The result type of 'has cardinality' is 'integer number'
 - 'has cardinality' has the verbal description 'specifies the number of elements in a finite set'
+- There is a relation: 'has differentiability class' @en
+- 'has differentiability class' has the alternative german label 'Differenzierbarkeitsklasse'
+- 'has differentiability class' has the verbal description 'specifies that a function is in class C^n: n-times continuously differentiable (C^0=continuous, C^1=once cont. diff., etc.)'
+- The type of argument1 of 'has differentiability class' is 'general function'
+- The result type of 'has differentiability class' is 'integer number'
 - There is a relation: 'is valid on set'
 - 'is valid on set' is a qualifier.
 - There is a general operator: 'universal quantifier'
@@ -601,13 +606,13 @@
         - 'Rn' is an instance of 'real vector space'.
         - 'Rn' 'has dimension' 'n'.
         - 'U' is an instance of 'vector space'.
+        - 'V' is an instance of 'vector space'.
         - 'U' 'is subspace of' 'Rn'.
         - 'U' 'has complement space' 'V'.
         - 'u' is an instance of 'vector'.
         - 'u' is element of 'U' qqq univ_quant True
         - 'v' is an instance of 'vector'.
         - 'v' is element of 'Rn' qqq univ_quant True. // todo is this correct?
-        - 'V' is an instance of 'vector space'.
         - 'v' 'is element of' 'V'
     - formalized premise:
         - There is an equation:
@@ -877,16 +882,12 @@
         - 'Rm' 'has dimension' 'm'.
         - 'a' is an instance of 'sequence'.
         - 'a' 'has element type' 'vector'.
-        - 'ai' is an instance of 'vector'
         - 'A' is an instance of 'matrix'.
         - 'A' 'has number of rows' 'm'.
         - 'A' 'has number of columns' 'n'.
         - For all 'i' from 1 to 'n':
             - There is an equation:
-                - full source code: 'ai' == 'element of sequence'('a', 'i')
-            - 'ai' 'is element of' 'Rm'
-            - There is an equation:
-                - full source code: 'column op'('A', 'i') == 'ai'
+                - full source code: 'column op'('A', 'i') == 'element of sequence'('a', 'i')
     - formalized assertion:
         - There is an equation:
             - full source code: 'image of matrix op'(A) == 'span'(a)
@@ -2460,6 +2461,12 @@
 - There is a class: 'differentiable vector-valued function' @en
 - 'differentiable vector-valued function' has the alternative german label 'differenzierbare vektorielle Funktion'
 - 'differentiable vector-valued function' is a subclass of 'general function'
+- // All instances of 'differentiable vector-valued function' have differentiability class at least 1 (C^1)
+- There is a general statement:
+    - formalized setting:
+        - 'F' is an instance of 'differentiable vector-valued function'
+    - formalized assertion:
+        - 'F' 'has differentiability class' 1
 - There is a class: 'Jacobian matrix' @en
 - 'Jacobian matrix' has the alternative german label 'Jacobimatrix'
 - 'Jacobian matrix' has the alternative german label 'Differential'
@@ -2532,6 +2539,7 @@
     - 'vector field'
     - 'square matrix'
     - 'is secondary instance of'
+    - 'has differentiability class'
 
 - Defined in this snippet:
     - 'differentiable vector-valued function'
@@ -2616,8 +2624,6 @@
 
 - Concepts in this snippet:
     - 'gradient op'
-- Defined in this snippet:
-    - // No new concepts are defined in this snippet.
 
 - // quality control
 - // snippet(67)
@@ -2673,3 +2679,349 @@
     - 'gradient field'
     - 'is gradient field of'
     - 'sharp'
+
+- // snippet(69)
+- There is a general statement:
+    - full source code: Die in Anmerkung~\ref{rem:tangentialraum} verwendete Notation~(\ref{eq:Basisdarstellung-Vektorfelder}) bzw.~(\ref{eq:Basisvektorfeld-Tangentialraum}) der Basisvektorfelder erscheint auf den ersten Blick willkürlich und in keinerlei Verbindung mit einer Ableitung zu stehen. Zur Veranschaulichung betrachten wir die Richtungsableitung eines Skalarfeldes~$h$ im Punkt $p\in\mathcal{M}$ in Richtung $v\in{\mathbb{R}}^{n}$: $\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left.h(p+vt)\right|_{t=0}=\left\langle h^{\prime}(p),v\right\rangle =\sum_{j=1}^{n}v_{j}\frac{\partial h}{\partial x_{j}}(p).$
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'v' is an instance of 'vector'
+        - 'v' is element of 'Rn'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'natural pairing'('gradient op'('h')('p'), 'v') == \sum_{j=1}^n ('element of sequence'('v', j) * 'partial derivative op'('h', 'p', j)('p'))
+
+- There is a general statement:
+    - full source code: Setzt man für~$v$ den Einheitsvektor~$e_{i}$ ein, so erhält man $\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left.h(p+e_{i}t)\right|_{t=0}=\left\langle h^{\prime}(p),e_{i}\right\rangle =\frac{\partial}{\partial x_{i}}h(p)$, d.\,h. $\frac{\partial}{\partial x_{i}}$ erzeugt die Richtungsableitung in Richtung des Einheitsvektors~$e_{i}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'b' is an instance of 'canonical basis'
+        - 'Rn' 'has basis' 'b'
+        - 'i' is an instance of 'integer number'
+        - 'ei' is an instance of 'unit vector'
+        - There is an equation:
+            - full source code: 'ei' == 'element of sequence'('b', 'i')
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'natural pairing'('gradient op'('h')('p'), 'ei') == 'partial derivative op'('h', 'p', 'i')('p')
+
+- Concepts in this snippet:
+    - 'scalar field'
+    - 'real vector space'
+    - 'has dimension'
+    - 'integer number'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'natural pairing'
+    - 'gradient op'
+    - 'partial derivative op'
+    - 'element of sequence'
+    - 'canonical basis'
+    - 'has basis'
+    - 'unit vector'
+
+- // snippet(70)
+- There is a general statement:
+    - full source code: Die Vektorfelder $f,g:\mathcal{M}{\to{\mathbb{R}}}^{n}$, das Skalarfeld $h:\mathcal{M}\to{\mathbb{R}}$ und das Kovektorfeld $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ seien differenzierbar. Dann gilt: $\frac{\partial}{\partial x}(h(x)f(x)) = h(x)f^{\prime}(x)+f(x)h^{\prime}(x)$, $\frac{\partial}{\partial x}(g^{T}(x)f(x)) = g^{T}(x)f^{\prime}(x)+f^{T}(x)g^{\prime}(x)$, $\frac{\partial}{\partial x}\langle\omega,f\rangle(x) = \omega(x)f^{\prime}(x)+f^{T}(x)\frac{\partial\omega^{T}(x)}{\partial x}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'g' is an instance of 'vector field'
+        - 'g' 'has domain' 'M'
+        - 'g' 'has codomain' 'Rn'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'omega' is an instance of 'covector field'
+        - 'omega' 'has domain' 'M'
+        - 'Jf' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'Jf'
+        - 'Jg' is an instance of 'Jacobian matrix'
+        - 'g' 'has Jacobian matrix' 'Jg'
+        - 'grad_h' is an instance of 'covector field'
+        - There is an equation:
+            - full source code: 'grad_h' == 'gradient op'('h')
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'gradient op'(h * f)(x) == h(x) * 'Jf'(x) + f(x) * 'grad_h'(x)
+            - reference: 'eq:Ableitung-SF-VF'
+        - There is an equation:
+            - full source code: 'gradient op'('transpose'('g') * 'f')('x') == 'transpose'('g'('x')) * 'Jf'('x') + 'transpose'(f(x)) * 'Jg'(x)
+            - reference: 'eq:Ableitung-VF-VF'
+        - There is an equation:
+            - full source code: 'gradient op'('natural pairing'('omega', f))(x) == 'omega'(x) * 'Jf'(x) + 'transpose'(f(x)) * 'gradient op'('transpose'('omega'))(x)
+            - reference: 'eq:Ableitung-Skalarprodukt'
+
+- Concepts in this snippet:
+    - 'vector field'
+    - 'scalar field'
+    - 'covector field'
+    - 'gradient op'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'natural pairing'
+    - 'transpose'
+    - 'real vector space'
+    - 'has dimension'
+    - 'integer number'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'partial derivative op'
+    - 'element of sequence'
+
+
+- // snippet(71)
+- There is a class: 'Hessian matrix' @en
+- 'Hessian matrix' has the alternative german label 'Hessematrix'
+- 'Hessian matrix' is a subclass of 'square matrix'
+- 'Hessian matrix' has the verbal description 'matrix of second-order partial derivatives of a scalar field'
+- There is a relation: 'has Hessian matrix'
+- The type of argument1 of 'has Hessian matrix' is 'scalar field'
+- The result type of 'has Hessian matrix' is 'Hessian matrix'
+
+- Definition of 'Hessian matrix':
+    - full source code: Die $n\times n$-Matrix $h^{\prime\prime}(x)=\left(\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(x)\right)_{i,j=1,\ldots,n}$ der zweiten partiellen Ableitungen des Skalarfeldes~$h$ heißt \textbf{\em Hessematrix}.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'H' is an instance of 'square matrix'
+        - 'H' 'has number of rows' 'n'
+        - 'H' 'has number of columns' 'n'
+        - 'i' is an instance of 'integer number'
+        - 'j' is an instance of 'integer number'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+    - formalized assertion:
+        - For all 'i' from 1 to 'n':
+            - For all 'j' from 1 to 'n':
+                - There is an equation:
+                    - full source code: 'element of sequence'('H', 'i', 'j') == 'partial derivative op'('partial derivative op'('h', 'x', 'i'), 'x', 'j')('x')
+        - 'h' 'is secondary instance of' 'Hessian matrix'
+        - 'h' 'has Hessian matrix' 'H'
+
+- Concepts in this snippet:
+    - 'scalar field'
+    - 'real vector space'
+    - 'has dimension'
+    - 'integer number'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'partial derivative op'
+    - 'element of sequence'
+    - 'square matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'Hessian matrix'
+    - 'has Hessian matrix'
+- Defined in this snippet:
+    - 'Hessian matrix'
+    - 'has Hessian matrix'
+
+- // snippet(72i)
+- // ignored content
+
+- // snippet(73)
+- There is an if-then-statement:
+    - // name: Schwarz lemma
+    - full source code: Das Skalarfeld $h:\mathcal{M}\to{\mathbb{R}}$ sei im Punkt $p\in\mathcal{M}$ zweimal stetig differenzierbar. Dann gilt $\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(p)=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}(p)$ für $i,j=1,\ldots,n$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'i' is an instance of 'integer number'
+        - 'j' is an instance of 'integer number'
+    - formalized premise:
+        - 'h' 'has differentiability class' 2
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'partial derivative op'('partial derivative op'('h', 'p', 'i'), 'p', 'j')('p') == 'partial derivative op'('partial derivative op'('h', 'p', 'j'), 'p', 'i')('p')
+            - reference: 'eq:lemma-schwarz'
+
+- Concepts in this snippet:
+    - 'has differentiability class'
+    - 'scalar field'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'partial derivative op'
+    - 'Hessian matrix'
+    - 'has Hessian matrix'
+
+
+- // snippet(74)
+- There is a class: 'exact differential form' @en
+- 'exact differential form' has the alternative german label 'exaktes Differential'
+- 'exact differential form' has the alternative german label 'exakte Differentialform'
+- 'exact differential form' is a subclass of 'covector field'
+- 'exact differential form' has the verbal description 'covector field that can be represented as the gradient of a scalar field'
+- There is a class: 'potential' @en
+- 'potential' is a subclass of 'scalar field'
+- 'potential' has the verbal description 'scalar field h such that gradient(h) equals a given exact differential form'
+- There is a relation: 'has potential' @en
+- The type of argument1 of 'has potential' is 'exact differential form'
+- The result type of 'has potential' is 'scalar field'
+- 'has potential' 'is used to model' 'potential'
+
+- Definition of 'exact differential form':
+    - full source code: Lässt sich ein Kovektorfeld als Gradient eines Skalarfeldes darstellen, so nennt man es exaktes Differential bzw. exakte Differentialform. Das zugehörige Skalarfeld heißt Potential.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'omega' is an instance of 'covector field'
+        - 'omega' 'has domain' 'M'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'M'
+        - 'h' 'has codomain' 'set of real numbers'
+    - formalized assertion:
+        - 'omega' 'is secondary instance of' 'exact differential form'
+        - There is an equation:
+            - full source code: 'omega' == 'gradient op'('h')
+        - 'omega' 'has potential' 'h'
+
+- Concepts in this snippet:
+    - 'covector field'
+    - 'scalar field'
+    - 'gradient op'
+    - 'real vector space'
+    - 'has dimension'
+    - 'integer number'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'exact differential form'
+    - 'potential'
+    - 'has potential'
+- Defined in this snippet:
+    - 'exact differential form'
+    - 'potential'
+    - 'has potential'
+
+- // snippet(75)
+- There is a class: 'open ball' @en
+- 'open ball' has the alternative german label 'offene Kugel'
+- 'open ball' is a subclass of 'set'
+- 'open ball' has the verbal description 'set of all points within distance r of a center point p: {x : ||x - p|| < r}'
+- There is a relation: 'has center' @en
+- The type of argument1 of 'has center' is 'open ball'
+- The result type of 'has center' is 'vector'
+- There is a relation: 'has radius' @en
+- The type of argument1 of 'has radius' is 'open ball'
+- The result type of 'has radius' is 'real number'
+
+- There is an equivalence-statement:
+    - // name: Poincaré lemma
+    - full source code: Sei $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ ein stetig differenzierbares Kovektorfeld und $\mathcal{U}\subseteq\mathcal{M}$ eine offene Kugel mit Zentrum $p\in\mathcal{M}$. Die Differentialform $\omega$ ist auf $\mathcal{U}$ genau dann exakt, wenn $\forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x)$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'omega' is an instance of 'covector field'
+        - 'omega' 'has domain' 'M'
+        - 'omega' 'has differentiability class' 1
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'r' is an instance of 'real number'
+        - 'U' is an instance of 'open ball'
+        - 'U' 'has center' 'p'
+        - 'U' 'has radius' 'r'
+        - 'U' 'is subset of' 'M'
+        - 'i' is an instance of 'integer number'
+        - 'j' is an instance of 'integer number'
+        - 'x' is an instance of 'vector'
+    - formalized premise:
+        - 'x' is element of 'U' qqq univ_quant True
+        - For all 'i' from 1 to 'n':
+            - For all 'j' from 1 to 'n':
+                - There is an equation:
+                    - full source code: 'partial derivative op'('element of sequence'('omega', 'i'), 'x', 'j')('x') == 'partial derivative op'('element of sequence'('omega', 'j'), 'x', 'i')('x')
+                    - reference: 'eq:lemma-poincare'
+    - formalized assertion:
+        - 'omega' is secondary instance of 'exact differential form'
+
+- Concepts in this snippet:
+    - 'covector field'
+    - 'has differentiability class'
+    - 'open ball'
+    - 'has center'
+    - 'has radius'
+    - 'real number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'integer number'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'partial derivative op'
+    - 'element of sequence'
+    - 'exact differential form'
+- Defined in this snippet:
+    - 'open ball'
+    - 'has center'
+    - 'has radius'
