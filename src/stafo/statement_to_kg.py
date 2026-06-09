@@ -1822,8 +1822,17 @@ class ConversionManager:
 
         #! TODO WIP
         if "lhs_formal" in eq_dict.keys() and "rhs_formal" in eq_dict.keys():
-            context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"], statement_item)
-            context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"], statement_item)
+            # Use process_latex (lark path) rather than replace_expr (sp.parse_expr path):
+            # replace_expr fails on 'quoted name' notation since sp.parse_expr treats them
+            # as Python string literals, and also can't handle curried calls f(a)(b).
+            # process_latex handles both via var_map substitution and _preprocess_curried_calls.
+            try:
+                context["lhs_formal"] = self.process_latex(statement_item, eq_dict["lhs_formal"])
+                context["rhs_formal"] = self.process_latex(statement_item, eq_dict["rhs_formal"])
+            except Exception as e:
+                logger.warning(f"process_latex failed for lhs/rhs_formal ({e}), falling back to replace_expr")
+                context["lhs_formal"] = self.replace_expr(eq_dict["lhs_formal"], statement_item)
+                context["rhs_formal"] = self.replace_expr(eq_dict["rhs_formal"], statement_item)
         elif "lhs_source" in eq_dict.keys() and "rhs_source" in eq_dict.keys():
             try:
                 what = "lhs_source"
@@ -1890,6 +1899,10 @@ class ConversionManager:
         open_vars = list(set(ascii_letters) - set(string_with_vars_removed))
         var_map = u.OneToOneMapping()
 
+        # Reserve one char for the synthetic evalat operator (curried call handling)
+        evalat_char = open_vars.pop()
+        var_map.add_pair("evalat", evalat_char)
+
         def repl_func(matchobj):
             long_var = self.strip(matchobj.group(0))
             if not long_var in var_map.a.keys():
@@ -1897,6 +1910,7 @@ class ConversionManager:
             return var_map.a[long_var]
 
         latex = re.sub(r"'.+?'", repl_func, latex)
+        latex = self._preprocess_curried_calls(latex, evalat_char)
 
         only_term = True
         if full:
@@ -1917,6 +1931,61 @@ class ConversionManager:
             res = self.convert_latex_to_irklike_str(latex, lookup, var_map, statement_item)
 
         return res
+
+    def _preprocess_curried_calls(self, latex: str, evalat_char: str) -> str:
+        """Rewrite f(args)(point) as evalat_char(f(args), point) so lark can parse it.
+
+        Lark's LaTeX grammar has no rule for consecutive application f(a)(b).
+        After var_map substitution all named entities are single chars, so balanced-paren
+        matching is straightforward. Multiple passes handle nested cases like k(k(h,x,i),x,j)(x).
+        """
+
+        def find_matching_paren(s, start):
+            """Return index of the ')' matching the '(' at s[start]."""
+            depth = 0
+            for idx in range(start, len(s)):
+                if s[idx] == "(":
+                    depth += 1
+                elif s[idx] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        return idx
+            return -1
+
+        changed = True
+        while changed:
+            changed = False
+            result = []
+            i = 0
+            n = len(latex)
+            while i < n:
+                # Trigger: an opening paren directly preceded by a letter — potential function call.
+                # After var_map substitution every named entity is a single letter, so this reliably
+                # identifies function-call sites without false-positives from LaTeX commands (\sum etc.).
+                if i > 0 and latex[i] == "(" and latex[i - 1].isalpha():
+                    close1 = find_matching_paren(latex, i)
+                    if close1 != -1:
+                        # Skip optional whitespace between the two paren groups
+                        j = close1 + 1
+                        while j < n and latex[j] == " ":
+                            j += 1
+                        if j < n and latex[j] == "(":
+                            # Second paren group found right after the first — this is f(args)(point).
+                            close2 = find_matching_paren(latex, j)
+                            if close2 != -1:
+                                # Remove the function letter we already appended to result,
+                                # then rebuild as evalat_char(letter(args), point).
+                                func_letter = result.pop()
+                                func_call = func_letter + latex[i : close1 + 1]   # e.g. "k(h, x, i)"
+                                second_args = latex[j + 1 : close2]               # e.g. "x"
+                                result.extend(f"{evalat_char}({func_call}, {second_args})")
+                                i = close2 + 1
+                                changed = True  # Re-scan: the new string may expose more curried calls
+                                continue
+                result.append(latex[i])
+                i += 1
+            latex = "".join(result)
+        return latex
 
     def clean_latex_var(self, latex):
         l = self.strip(latex)
@@ -1965,6 +2034,12 @@ class ConversionManager:
                 # this typing is a little weird
                 # f(x) -type-> f -type-> sp.core.function.UndefinedFunction
                 sp_expr = type(sp_expr)
+                # Synthetic evalat operator introduced by _preprocess_curried_calls.
+                # evalat_char(f(args), point) must render as f(args)(point) in IRK —
+                # i.e. call the operator to get a function, then evaluate it at point.
+                # args[0] is the already-rendered IRK for f(args), args[1] for point.
+                if sp_expr.name in var_map.b and var_map.b[sp_expr.name] == "evalat":
+                    return f"{args[0]}({', '.join(args[1:])})"
                 if sp_expr.name in var_map.b.keys():
                     og_var_name = var_map.b[sp_expr.name]
                 else:
