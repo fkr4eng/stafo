@@ -113,7 +113,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 1119
+        self.stop_at_line = 2472
 
         self.q_ident = "qqq"
 
@@ -1559,6 +1559,7 @@ class ConversionManager:
                     # we need to manually construct a string here instead of a list, since we might want python objects
                     # and not strings of python objects inside that list: ['p.12[..]'] would be bad
                     l = []
+                    r = "r" if key in ["R2", "R24", "R81", "R82"] else ""  # escape potential math expressions
                     for v_dict in value:
                         v = v_dict["object"]
                         q_list = v_dict["q"]
@@ -1595,7 +1596,7 @@ class ConversionManager:
                                 if ref == v or key_wants_literal:
                                     # this means, that there is no reference to the original entity -> quote the string
                                     # or v was matched to an existing entity and now we want the alt. label instead of exsiting entity
-                                    l.append(f'"{v}"')
+                                    l.append(f'{r}"{v}"')
                                 else:
                                     l.append(f"{ref}")
                     if l:

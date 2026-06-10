@@ -624,7 +624,7 @@
 - 'dimension op' has the alternative german label 'dimension op'.
 - 'dimension op' has the associated LaTeX notation $\dim$.
 - The type of argument1 of 'dimension op' is 'vector space'.
-- The result type of 'dimension op' is 'dimension'.
+- The result type of 'dimension op' is 'integer number'.
 - 'dimension op' 'is used to model' 'dimension'
 - There is a general statement:
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
@@ -2075,7 +2075,7 @@
         - 'TxM' 'has basis' 'b'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'f'('x') == \sum_{i=1}^n 'element of sequence'('f', 'i')('x') * 'element of sequence'('b', 'i')
+            - full source code: 'f'('x') == \sum_{i=1}^n 'element of sequence'('f'('x'), 'i') * 'element of sequence'('b', 'i')
             // todo this will propbably not parse well
 
 - Concepts in this snippet:
@@ -2261,7 +2261,7 @@
             - full source code: 'omegax' == 'omega'(x)
     - formalized assertion:
         - There is an equation:
-            - full source code: 'omega'('x') == \sum_{i=1}^n 'element of sequence'('omega', 'i')('x') * 'element of sequence'('dualb', 'i')
+            - full source code: 'omega'('x') == \sum_{i=1}^n 'element of sequence'('omega'('x'), 'i') * 'element of sequence'('dualb', 'i')
             // todo this will propbably not parse well
 
 
@@ -2375,9 +2375,8 @@
         - 'TpM' is secondary instance of 'real vector space'
         - 'TpM' 'has dimension' 'n'
         - 'TpM' 'has basis' 'b'
-        - There is an equation:
-            - full source code: 'element of sequence'('b', 'i')('p') == 'tuple op'('p', 'ei')
-            - // todo correct?
+        - // There is an equation:
+            - // full source code: 'element of sequence'('b'('p'), 'i') == 'tuple op'('p', 'ei')
         - There is an equation:
             - full source code: 'tuple op'('p', 'v') + 'tuple op'('p', 'w') == 'tuple op'('p', 'v' + 'w')
         - There is an equation:
@@ -2470,7 +2469,8 @@
 - There is a class: 'Jacobian matrix' @en
 - 'Jacobian matrix' has the alternative german label 'Jacobimatrix'
 - 'Jacobian matrix' has the alternative german label 'Differential'
-- 'Jacobian matrix' is a subclass of 'matrix'
+- 'Jacobian matrix' is a subclass of 'general function'
+- 'Jacobian matrix' 'is secondary subclass of' 'matrix'
 - There is a relation: 'has Jacobian matrix'
 - The type of argument1 of 'has Jacobian matrix' is 'differentiable vector-valued function'
 - The result type of 'has Jacobian matrix' is 'Jacobian matrix'
