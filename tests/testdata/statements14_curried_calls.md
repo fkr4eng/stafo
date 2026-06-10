@@ -1,0 +1,20 @@
+- There is a general operator: 'general function'
+- There is a unary operator: 'diff op'
+- There is a class: 'function'
+- 'function' is a subclass of 'general function'
+- The result type of 'diff op' is 'function'
+- There is a class: 'smooth function'
+- 'smooth function' is a subclass of 'function'
+- There is a class: 'real variable'
+
+- There is a general statement:
+    - formalized setting:
+        - 'f' is an instance of 'smooth function'
+        - 'x' is an instance of 'real variable'
+        - 'y' is an instance of 'real variable'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'y' == 'diff op'('f')('x')
+        - There is an equation:
+            - formalized left hand side: 'diff op'('f')('x')
+            - formalized right hand side: 'y'

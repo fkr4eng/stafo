@@ -35,6 +35,7 @@ TEST_DATA9_FPATH = os.path.join(TESTA_DATA_DIR, "statements09_strings.md")
 TEST_DATA10_FPATH = os.path.join(TESTA_DATA_DIR, "statements10_nested_statements.md")
 TEST_DATA11_FPATH = os.path.join(TESTA_DATA_DIR, "statements11_sys_equations.md")
 TEST_DATA12_FPATH = os.path.join(TESTA_DATA_DIR, "statements12_R77.md")
+TEST_DATA14_FPATH = os.path.join(TESTA_DATA_DIR, "statements14_curried_calls.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -305,6 +306,62 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
             .subject.get_inv_relations()
         )
         self.assertEqual(len(list(rel_dict.values())[0]), 2)
+
+    def _run_conversion_capturing_logs(self, fpath, num_keys=20):
+        import logging
+
+        class LogCapture(logging.Handler):
+            def __init__(self):
+                super().__init__(level=logging.INFO)
+                self.messages = []
+
+            def emit(self, record):
+                self.messages.append(record.getMessage())
+
+        CM = s2k.ConversionManager(fpath, num_keys=num_keys)
+        handler = LogCapture()
+        logger.addHandler(handler)
+        try:
+            res_mod_fpath = CM.run()
+        finally:
+            logger.removeHandler(handler)
+        return res_mod_fpath, handler.messages
+
+    def test_c01__preprocess_curried_calls(self):
+        """Unit test for the string-level curried-call rewrite that runs before lark parsing."""
+        # _preprocess_curried_calls uses no instance state; we only need an instance to call it.
+        CM = s2k.ConversionManager(TEST_DATA1_FPATH, num_keys=10)
+        preprocess = CM._preprocess_curried_calls
+        E = "E"  # stand-in evalat_char
+
+        # Simple curried call
+        self.assertEqual(preprocess("f(x)(y)", E), "E(f(x), y)")
+        # Multi-arg inner call
+        self.assertEqual(preprocess("f(a, b)(c)", E), "E(f(a, b), c)")
+        # Nested inner call: k(k(h,x,i),x,j)(x)
+        self.assertEqual(preprocess("k(k(h,x,i),x,j)(x)", E), "E(k(k(h,x,i),x,j), x)")
+        # No curried call — string must be unchanged
+        self.assertEqual(preprocess("f(x) + g(y)", E), "f(x) + g(y)")
+        # Whitespace between first close-paren and second open-paren is allowed
+        self.assertEqual(preprocess("f(x) (y)", E), "E(f(x), y)")
+
+    def test_c02__no_rendering_failures_for_curried_calls(self):
+        """Equations with curried calls f(args)(point) must not produce 'rendering failed' warnings."""
+        res_mod_fpath, messages = self._run_conversion_capturing_logs(TEST_DATA14_FPATH)
+        rendering_failures = [m for m in messages if "rendering failed" in m]
+        self.assertEqual(rendering_failures, [], f"Got rendering failures: {rendering_failures}")
+        p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+    def test_c03__lhs_rhs_formal_no_sympy_fallback(self):
+        """formalized lhs/rhs with multi-word quoted names must be parsed by process_latex, not replace_expr.
+
+        Before the fix, render_math_relation called replace_expr for lhs_formal/rhs_formal, which used
+        sp.parse_expr and failed on 'quoted name' notation, logging 'sympy parsing failed'.
+        """
+        res_mod_fpath, messages = self._run_conversion_capturing_logs(TEST_DATA14_FPATH)
+        sympy_failures = [m for m in messages if "sympy parsing failed" in m]
+        self.assertEqual(sympy_failures, [], f"Got sympy parsing failures: {sympy_failures}")
+        p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
     def test_s01__similar_entity(self):
         ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
