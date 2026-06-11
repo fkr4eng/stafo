@@ -2979,7 +2979,7 @@
 - The type of argument1 of 'has radius' is 'open ball'
 - The result type of 'has radius' is 'real number'
 
-- There is an equivalence-statement ('Poincaré lemma'):
+- There is an equivalence-statement ('Poincare lemma'):
     - full source code: Sei $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ ein stetig differenzierbares Kovektorfeld und $\mathcal{U}\subseteq\mathcal{M}$ eine offene Kugel mit Zentrum $p\in\mathcal{M}$. Die Differentialform $\omega$ ist auf $\mathcal{U}$ genau dann exakt, wenn $\forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x)$.
     - formalized setting:
         - 'n' is an instance of 'integer number'
@@ -3054,7 +3054,7 @@
     - formalized assertion:
         - 'omega' has the property 'closed'
 - There is an equivalence-statement:
-    - full source code: Nach dem Poincaréschen Lemma ist eine Differentialform genau dann (lokal) exakt, wenn sie geschlossen ist.
+    - full source code: Nach dem Poincareschen Lemma ist eine Differentialform genau dann (lokal) exakt, wenn sie geschlossen ist.
     - formalized setting:
         - 'omega' is an instance of 'covector field'
         - 'U' is an instance of 'open ball'
@@ -3073,13 +3073,13 @@
     - 'element of sequence'
     - 'open ball'
     - 'exact'
-    - 'Poincaré lemma'
+    - 'Poincare lemma'
 - Defined in this snippet:
     - 'closed'
 
 - // snippet(77)
 - There is a relation: 'has proof' @en
-- There is an if-then-statement ('Proof => of Poincaré lemma'):
+- There is an if-then-statement ('Proof => of Poincare lemma'):
     - full source code: Das Kovektorfeld $\omega$ sei exakt, d.h. es gibt ein Skalarfeld $h:\mathcal{U}\to\mathbb{R}$ mit $\mathrm{d}h=\omega$ bzw. $\omega_i=\partial h/\partial x_i$. Wegen Lemma von Schwarz gilt $\frac{\partial\omega_i}{\partial x_j}=\frac{\partial^2 h}{\partial x_j\partial x_i}=\frac{\partial^2 h}{\partial x_i\partial x_j}=\frac{\partial\omega_j}{\partial x_i}$.
     - formalized setting:
         - 'U' is an instance of 'open ball'
@@ -3093,7 +3093,7 @@
         - 'omega' has the property 'closed'
         - // via Schwarz lemma: mixed partials of h commute
 
-- 'Poincaré lemma' 'has proof' 'Proof => of Poincaré lemma'
+- 'Poincare lemma' 'has proof' 'Proof => of Poincare lemma'
 
 - Concepts in this snippet:
     - 'has proof'
@@ -3103,20 +3103,26 @@
     - 'exact'
     - 'closed'
     - 'Schwarz lemma'
-    - 'Poincaré lemma'
+    - 'Poincare lemma'
 - Defined in this snippet:
     - 'has proof'
 
 - // snippet(78)
-- There is an if-then-statement ('Proof <= of Poincaré lemma'):
+- There is an if-then-statement ('Proof <= of Poincare lemma'):
     - full source code: Sei $x\in\mathcal{U}$, o.B.d.A. $p=0$. Man definiert $h(x):=\int_0^1\left(\sum_{i=1}^n\omega_i(tx)x_i\right)\mathrm{d}t$. Differentiation unter dem Integral mit der Produktregel und Gl.~(\ref{eq:lemma-poincare}) liefert $\frac{\partial h}{\partial x_k}(x)=\omega_k(x)$. Damit ist $\omega$ exakt.
     - formalized setting:
+        - 'n' is an instance of 'integer number'
         - 'U' is an instance of 'open ball'
+        - 'p' is an instance of 'vector'
         - 'U' 'has center' 'p'
         - 'omega' is an instance of 'covector field'
         - 'omega' 'has domain' 'U'
         - 'h' is an instance of 'scalar field'
         - 'h' 'has domain' 'U'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'U'
+        - 't' is an instance of 'real number'
+        - 'i' is an instance of 'integer number'
         - There is an equation:
             - full source code: 'h'('x') == 'definite integral'(\sum_{'i'=1}^'n' ('element of sequence'('omega', 'i')('t' * 'x') * 'element of sequence'('x', 'i')), 't', 'tuple op'(0, 1))
             - reference: 'eq:potential-poincare'
@@ -3126,7 +3132,7 @@
         - 'omega' has the property 'exact'
         - 'omega' 'has potential' 'h'
 
-- 'Poincaré lemma' 'has proof' 'Proof <= of Poincaré lemma'
+- 'Poincare lemma' 'has proof' 'Proof <= of Poincare lemma'
 
 - Concepts in this snippet:
     - 'covector field'
@@ -3137,7 +3143,7 @@
     - 'exact'
     - 'has potential'
     - 'has proof'
-    - 'Poincaré lemma'
+    - 'Poincare lemma'
 
 - // snippet(79i)
 - // ignored content
@@ -3189,3 +3195,63 @@
     - 'time-dependent'
     - 'cartesian product op'
     - 'time derivative op'
+
+- // snippet(83)
+- There is a class: 'trajectory' @en
+- 'trajectory' has the alternative english label 'integral curve'
+- 'trajectory' has the alternative english label 'local solution'
+- 'trajectory' has the alternative german label 'Integralkurve'
+- 'trajectory' has the alternative german label 'lokale Lösung'
+- 'trajectory' has the alternative german label 'Trajektorie'
+- Definition of 'trajectory':
+    - full source code: Eine auf einem Teilintervall $\tilde{\mathcal{I}}\subseteq\mathcal{I}$ definierte Kurve $\phi:\tilde{\mathcal{I}}\to\mathcal{M}$, die $\forall t\in\tilde{\mathcal{I}}:\dot{\phi}(t)=F(\phi(t),t)$ erfüllt, heißt (lokale) Lösung, Integralkurve oder Trajektorie.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 'I_tilde' is an instance of 'set'
+        - 'I_tilde' 'is subset of' 'I'
+        - 'I_tilde' has the property 'open'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I_tilde'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' 'has differentiability class' 1
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I_tilde' qqq univ_quant True
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'time derivative op'('phi')('t') == 'F'('phi'('t'), 't')
+    - formalized assertion:
+        - 'phi' is secondary instance of 'trajectory'
+
+- Concepts in this snippet:
+    - 'trajectory'
+    - 'general function'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'has differentiability class'
+    - 'real number'
+    - 'is element of'
+    - 'time derivative op'
+- Defined in this snippet:
+    - 'trajectory'

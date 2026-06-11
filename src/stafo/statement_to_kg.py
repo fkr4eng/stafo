@@ -805,7 +805,7 @@ class ConversionManager:
             for sub_line in additional_content:
                 arg1 = re.findall(r"- '?(.+?)'?$", sub_line)
                 if arg1:
-                    self.add_relation_inplace(d["items"][self.current_snippet], rel_key, arg1[0])
+                    self.add_relation_inplace(d["items"][self.current_snippet], rel_key, self.build_reference(arg1[0]))
 
         else:
             for k, v in self.d["relations"].items():
@@ -1540,7 +1540,7 @@ class ConversionManager:
                     res = re.findall(r"[R|I]\d+", str(value))
                     if not quotes and len(res) == 0:
                         # then maybe the object of rel was set before the item was introduced (order in FNL)
-                        if value in self.d["items"].keys():
+                        if value in self.d["items"].keys() or value in self.d["relations"].keys():
                             value = self.build_reference(value)
                     if qualifier_list:
                         for qualifier_dict in qualifier_list:
