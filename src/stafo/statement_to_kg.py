@@ -414,7 +414,6 @@ class ConversionManager:
             # todo:
             "is associate with",
             "There is an example:",
-            "There is special terminology:"
             "alternative verbal description?
         """
         for key, value in self.d["relations"].items():

@@ -585,15 +585,15 @@ stetig differenzierbar. Dann gilt
 \snippet{74}
 Der \setref{Gradient}{label:gradient op} ist selber ein \setref{Kovektorfeld}{label:covector field}. Lässt sich umgekehrt ein
 \setref{Kovektorfeld}{label:covector field} als Gradient eines \setref{Skalarfeldes}{label:scalar field} darstellen, so nennt
-man es \textbf{\em \setref{exaktes Differential}{label:exact differential form}} bzw.
-\textbf{\em \setref{exakte Differentialform}{label:exact differential form}}. Das
+man es \textbf{\em \setref{exaktes Differential}{label:exact}} bzw.
+\textbf{\em \setref{exakte Differentialform}{label:exact}}. Das
 zugehörige Skalarfeld heißt \textbf{\em \setref{Potential}{label:potential}}.
 
 \snippet{75}
 Das
 Lemma von Schwarz führt auf eine Existenzbedingung eines solchen \setref{Potentials}{label:potential}
 für ein gegebenes \setref{Kovektorfeld}{label:covector field}. Man spricht dabei auch von einer Integrabilitätsbedingung
-für \setref{Differentialformen}{label:exact differential form}:
+für \setref{Differentialformen}{label:exact}:
 
 \begin{lemma}
 [{Poincar\'{e}sches Lemma}]\label{lem:poincare}Sei
@@ -603,11 +603,17 @@ mit Zentrum $p\in\mathcal{M}$, d.\,h.
 \[
 \mathcal{U}=\left\{ x\in\mathcal{M};\,\left\Vert x-p\right\Vert <r\right\} \quad\textrm{für ein}\quad r>0.
 \]\eqnote{concepts:'open ball', 'has center', 'has radius', 'vector'}{statement:'open ball' == \{'vector' \in 'set' ; norm('vector' - 'vector') < 'real number'\}}
-Die \setref{Differentialform}{label:exact differential form} $\omega$ ist auf $\mathcal{U}$ genau dann \setref{exakt}{label:exact differential form},
+Die \setref{Differentialform}{label:exact} $\omega$ ist auf $\mathcal{U}$ genau dann \setref{exakt}{label:exact},
 wenn
 \begin{equation}
 \forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\quad\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x).\label{eq:lemma-poincare}
-\end{equation}\eqnote{concepts:'partial derivative op', 'element of sequence', 'covector field', 'exact differential form'}{statement:'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector')}
+\end{equation}\eqnote{concepts:'partial derivative op', 'element of sequence', 'covector field', 'exact'}{statement:'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector')}
 \end{lemma}
+
+\snippet{76}
+Eine \setref{Differentialform}{label:covector field}~$\omega$, die Gl.~(\ref{eq:lemma-poincare})
+erfüllt, heißt \textbf{\em \setref{geschlossene}{label:closed}} Differentialform.
+Nach dem \setref{Poincaréschen Lemma}{label:Poincaré lemma} ist eine Differentialform also genau
+dann (lokal) \setref{exakt}{label:exact}, wenn sie \setref{geschlossen}{label:closed} ist.
 
 \end{document}

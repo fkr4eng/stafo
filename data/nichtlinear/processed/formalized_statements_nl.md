@@ -2906,20 +2906,19 @@
 
 
 - // snippet(74)
-- There is a class: 'exact differential form' @en
-- 'exact differential form' has the alternative german label 'exaktes Differential'
-- 'exact differential form' has the alternative german label 'exakte Differentialform'
-- 'exact differential form' is a subclass of 'covector field'
-- 'exact differential form' has the verbal description 'covector field that can be represented as the gradient of a scalar field'
+- There is a property: 'exact' @en
+- 'exact' has the alternative german label 'exakt'
+- 'exact' has the verbal description 'covector field that can be represented as the gradient of a scalar field (exaktes Differential / exakte Differentialform)'
+- 'exact' is applicable to 'covector field'
 - There is a class: 'potential' @en
 - 'potential' is a subclass of 'scalar field'
-- 'potential' has the verbal description 'scalar field h such that gradient(h) equals a given exact differential form'
+- 'potential' has the verbal description 'scalar field h such that gradient(h) equals a given exact covector field'
 - There is a relation: 'has potential' @en
-- The type of argument1 of 'has potential' is 'exact differential form'
+- The type of argument1 of 'has potential' is 'covector field'
 - The result type of 'has potential' is 'scalar field'
 - 'has potential' 'is used to model' 'potential'
 
-- Definition of 'exact differential form':
+- Definition of 'exact':
     - full source code: Lässt sich ein Kovektorfeld als Gradient eines Skalarfeldes darstellen, so nennt man es exaktes Differential bzw. exakte Differentialform. Das zugehörige Skalarfeld heißt Potential.
     - formalized setting:
         - 'n' is an instance of 'integer number'
@@ -2934,7 +2933,7 @@
         - 'h' 'has domain' 'M'
         - 'h' 'has codomain' 'set of real numbers'
     - formalized assertion:
-        - 'omega' 'is secondary instance of' 'exact differential form'
+        - 'omega' has the property 'exact'
         - There is an equation:
             - full source code: 'omega' == 'gradient op'('h')
         - 'omega' 'has potential' 'h'
@@ -2949,11 +2948,11 @@
     - 'set'
     - 'is subset of'
     - 'open'
-    - 'exact differential form'
+    - 'exact'
     - 'potential'
     - 'has potential'
 - Defined in this snippet:
-    - 'exact differential form'
+    - 'exact'
     - 'potential'
     - 'has potential'
 
@@ -2999,7 +2998,7 @@
                     - full source code: 'partial derivative op'('element of sequence'('omega', 'i'), 'x', 'j')('x') == 'partial derivative op'('element of sequence'('omega', 'j'), 'x', 'i')('x')
                     - reference: 'eq:lemma-poincare'
     - formalized assertion:
-        - 'omega' is secondary instance of 'exact differential form'
+        - 'omega' has the property 'exact'
 
 - Concepts in this snippet:
     - 'covector field'
@@ -3018,8 +3017,50 @@
     - 'is element of'
     - 'partial derivative op'
     - 'element of sequence'
-    - 'exact differential form'
+    - 'exact'
 - Defined in this snippet:
     - 'open ball'
     - 'has center'
     - 'has radius'
+
+- // snippet(76)
+- There is a property: 'closed' @en
+- 'closed' has the alternative german label 'geschlossen'
+- 'closed' is applicable to 'covector field'
+- Definition of 'closed':
+    - full source code: Eine Differentialform $\omega$, die Gl.~(\ref{eq:lemma-poincare}) erfüllt, heißt geschlossene Differentialform.
+    - formalized setting:
+        - 'omega' is an instance of 'covector field'
+        - 'i' is an instance of 'integer number'
+        - 'j' is an instance of 'integer number'
+        - 'x' is an instance of 'vector'
+        - 'n' is an instance of 'integer number'
+    - formalized premise:
+        - For all 'i' from 1 to 'n':
+            - For all 'j' from 1 to 'n':
+                - 'partial derivative op'('element of sequence'('omega', 'i'), 'x', 'j')('x') == 'partial derivative op'('element of sequence'('omega', 'j'), 'x', 'i')('x')
+    - formalized assertion:
+        - 'omega' has the property 'closed'
+- There is an equivalence-statement:
+    - full source code: Nach dem Poincaréschen Lemma ist eine Differentialform genau dann (lokal) exakt, wenn sie geschlossen ist.
+    - formalized setting:
+        - 'omega' is an instance of 'covector field'
+        - 'U' is an instance of 'open ball'
+        - 'omega' 'has domain' 'U'
+    - formalized premise:
+        - 'omega' has the property 'closed'
+    - formalized assertion:
+        - 'omega' has the property 'exact'
+
+- Concepts in this snippet:
+    - 'closed'
+    - 'covector field'
+    - 'integer number'
+    - 'vector'
+    - 'partial derivative op'
+    - 'element of sequence'
+    - 'open ball'
+    - 'exact'
+    - 'Poincaré lemma'
+- Defined in this snippet:
+    - 'closed'

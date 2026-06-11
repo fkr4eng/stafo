@@ -622,6 +622,7 @@ Wegen Lemma~\ref{lem:Schwarz} gilt
 \[
 \frac{\partial\omega_{i}}{\partial x_{j}}=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}=\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}=\frac{\partial\omega_{j}}{\partial x_{i}}.
 \]
+\snippet{78}
 \glqq$\Leftarrow$\grqq\ Sei $x\in\mathcal{U}$. Die Verbindungsstrecke $\left\{ (1-t)p+tx;\,0\leq t\leq1\right\} $
 liegt ganz in~$\mathcal{U}$. Ohne Einschränkung sei $p=0$ (andernfalls
 Verschiebung des Koordinatensystems). Für $\omega(x)=(\omega_{1}(x),\ldots,\omega_{n}(x))$
@@ -645,7 +646,7 @@ und der Produktregel
 \]
 Damit ist $\omega$ eine exakte Differentialform.
 \end{svmultproof}
-
+\snippet{79}
 In Gl.~(\ref{eq:lemma-poincare}) durchlaufen die Indizes $i$ und
 $j$ die natürlichen Zahlen von $1$ bis $n$, d.\,h. für das Überprüfen
 einer Differentialform auf Geschlossenheit würde man zunächst von
@@ -655,6 +656,7 @@ werden. Aufgrund der Symmetrie beider Seiten von~(\ref{eq:lemma-poincare})
 reicht es aus, diese Gleichungen für $i<j$ zu verifizieren. Die Überprüfung
 der Integrabilitätsbedingung~(\ref{eq:lemma-poincare}) reduziert
 sich damit auf $\frac{n(n-1)}{2}$ Gleichungen.
+\snippet{80i}
 \begin{example}
 \label{exa:Integration-Differentialform-Poincare}Die Differentialform
 $\omega(x)=2x_{1}x_{2}^{3}\D x_{1}+3x_{1}^{2}x_{2}^{2}\D x_{2}$ ist
@@ -671,12 +673,12 @@ mit dem Potential aus Beispiel~\ref{exa:grad-hess}
 
 
 \end{example}
-
+\snippet{81i}
 \section{Vektorfelder und Flüsse\label{sec:Vektorfelder-und-Fluesse}}
 
 Dieser Abschnitt vermittelt dem Leser einige qualitative Grundlagen
 aus der Theorie der gewöhnlichen Differentialgleichungen~\cite{arnold2001}.
-
+\snippet{82}
 Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ offen und $\mathcal{I}\subseteq{\mathbb{R}}$
 ein offenes Intervall. Die Abbildung $F:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$
 ist dann ein zeitvariantes Vektorfeld, welches sich unmittelbar mit
@@ -684,7 +686,9 @@ dem System gewöhnlicher Differentialgleichungen erster Ordnung
 \begin{equation}
 \dot{x}=F(x,t)\label{eq:dgl1}
 \end{equation}
-assoziieren lässt. Eine auf einem Teilintervall $\tilde{\mathcal{I}}\subseteq\mathcal{I}$
+assoziieren lässt.
+\snippet{83}
+Eine auf einem Teilintervall $\tilde{\mathcal{I}}\subseteq\mathcal{I}$
 definierte Kurve $\phi:\tilde{\mathcal{I}}\to\mathcal{M}$, die die
 Differentialgleichung~(\ref{eq:dgl1}) erfüllt, d.\,h.
 \[
@@ -692,12 +696,14 @@ Differentialgleichung~(\ref{eq:dgl1}) erfüllt, d.\,h.
 \]
 heißt \textbf{\em (lokale) Lösung, Integralkurve}
 oder \textbf{\em Trajektorie} von~(\ref{eq:dgl1}).
+\snippet{84}
 Die zu~(\ref{eq:dgl1}) gehörige Anfangswertaufgabe
 mit dem Anfangszeitpunkt $t=t_{0}\in\mathcal{I}$ und einem Anfangswert
 $p\in\mathcal{M}$ lautet
 \begin{equation}
 \dot{x}=F(x,t),\quad x(t_{0})=p.\label{eq:awa1}
 \end{equation}
+\snippet{85}
 Eine Lösung~$\phi$ von~(\ref{eq:dgl1}) ist Lösung der Anfangswertaufgabe~(\ref{eq:awa1}),
 wenn zusätzlich $\phi(t_{0})=p$ gilt. Die Lösung~$\phi$ der Anfangswertaufgabe~(\ref{eq:awa1})
 heißt \textbf{\em eindeutig}, wenn sie mit jeder weiteren Lösung $\bar{\phi}:\bar{\mathcal{I}}\subseteq\mathcal{I}\to\mathcal{M}$
@@ -705,19 +711,21 @@ auf dem gemeinsamen Existenzintervall übereinstimmt, d.\,h.
 \[
 \forall t\in\bar{\mathcal{I}}\cap\mathcal{I}:\quad\phi(t)=\bar{\phi}(t).
 \]
-
+\snippet{86}
 Eine konstante Lösung, also $\phi(t)=p$ für alle $t\in\mathcal{I}$,
 nennt man \textbf{\em Ruhelage}, \textbf{\em Gleichgewichtslage}
 oder \textbf{\em Arbeitspunkt} (engl. \textbf{\em equilibrium
 point}, \textbf{\em operating point}). Dabei assoziiert man die Ruhelage
 als Lösung bzw. Zeitfunktion unmittelbar mit den zugehörigen Punkt
-(Vektor) $p\in\mathcal{M}$. Die Ruhelagen $x\in\mathcal{M}$ der
+(Vektor) $p\in\mathcal{M}$.
+\snippet{87}
+Die Ruhelagen $x\in\mathcal{M}$ der
 Differentialgleichung~(\ref{eq:dgl1}) lässt sich aus der Bestimmungsgleichung
 \[
 \forall t\in\mathcal{I}:\quad0=F(x,t)
 \]
 ermitteln.
-
+\snippet{88}
 \begin{theorem}
 [Existenz- und Eindeutigkeitssatz von Picard-Lindelöff]\label{thm:Picard-Lindeloeff}Das
 zeitvariante Vektorfeld~$F$ sei stetig und genüge zusätzlich einer\textbf{\em
@@ -733,6 +741,7 @@ stetig differenzierbare Abbildung $\phi:\mathcal{I}_{p}\to\mathcal{M}$,
 welche eine eindeutige Lösung der Anfangswertaufgabe~(\ref{eq:awa1})
 ist.
 \end{theorem}
+\snippet{89}
 \begin{proofsketch}Die Anfangswertaufgabe~(\ref{eq:awa1}) der Differentialgleichung~(\ref{eq:dgl1})
 ist äquivalent zur Integralgleichung
 \begin{equation}
@@ -749,11 +758,11 @@ zu der \textbf{\em Picard-Iteration}
 mit der Startfunktion $\phi_{0}(t)\equiv p$ über. Unter Ausnutzung
 der Lipschitz-Eigenschaft von~$F$ kann die Konvergenz dieser Iteration
 mit dem Banachschen Fixpunkt-Satz gezeigt werden~\cite[§~31]{arnold2001}.\end{proofsketch}
-
+\snippet{90i}
 Eine direkte Überprüfung der Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Satz-PL})
 ist oft nicht praktikabel, entsprechend der nachfolgenden Aussage
 in vielen Fällen auch nicht nötig~\cite[Abschn.~{4.2}]{koenigsberger2-2004}:
-
+\snippet{91}
 \begin{corollary}
 [Folgerung aus dem Mittelwertsatz der Differentialrechnung]\label{cor:Lipschitz-Mittelwertsatz}Sei
 $F:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$ stetig differenzierbar.
