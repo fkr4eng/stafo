@@ -43,6 +43,20 @@
 - There is a general operator: 'universal quantifier'
 - There is a general operator: 'existential quantifier'
 - There is a ternary operator: 'sum over index'
+- There is a class: 'tuple'
+- There is a binary operator: 'tuple op'
+- The result type of 'tuple op' is 'tuple'
+- There is a ternary operator: 'definite integral'
+- // the 3 arguments of 'definite integral' are integrand, integration variable and a tuple with the limits
+- There is a unary operator: 'time derivative op' @en
+- 'time derivative op' has the associated LaTeX notation $\dot{}$
+- The type of argument1 of 'time derivative op' is 'general function'
+- The result type of 'time derivative op' is 'general function'
+- There is a binary operator: 'cartesian product op' @en
+- 'cartesian product op' has the associated LaTeX notation $\times$
+- The type of argument1 of 'cartesian product op' is 'set'
+- The type of argument2 of 'cartesian product op' is 'set'
+- The result type of 'cartesian product op' is 'set'
 
 - // snippet(2)
 - New section: "Lineare Algebra".
@@ -2293,9 +2307,6 @@
 - // snippet(60i)
 - // ignored content
 - // snippet(61)
-- There is a class: 'tuple'
-- There is a binary operator: 'tuple op'
-- The result type of 'tuple op' is 'tuple'
 
 - Definition of 'tangent space':
     - full source code: Für die hier betrachtete offene Teilmenge $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ kann man den im Punkt $p\in\mathcal{M}$ aufgespannten Tangentialraum $T_{p}\mathcal{M}$ durch \[ T_{p}\mathcal{M}:=\{(p,v);\,v\in{\mathbb{R}}^{n}\} \] definieren.
@@ -3038,7 +3049,8 @@
     - formalized premise:
         - For all 'i' from 1 to 'n':
             - For all 'j' from 1 to 'n':
-                - 'partial derivative op'('element of sequence'('omega', 'i'), 'x', 'j')('x') == 'partial derivative op'('element of sequence'('omega', 'j'), 'x', 'i')('x')
+                - There is an equation:
+                    - full source code: 'partial derivative op'('element of sequence'('omega', 'i'), 'x', 'j')('x') == 'partial derivative op'('element of sequence'('omega', 'j'), 'x', 'i')('x')
     - formalized assertion:
         - 'omega' has the property 'closed'
 - There is an equivalence-statement:
@@ -3064,3 +3076,116 @@
     - 'Poincaré lemma'
 - Defined in this snippet:
     - 'closed'
+
+- // snippet(77)
+- There is a relation: 'has proof' @en
+- There is an if-then-statement ('Proof => of Poincaré lemma'):
+    - full source code: Das Kovektorfeld $\omega$ sei exakt, d.h. es gibt ein Skalarfeld $h:\mathcal{U}\to\mathbb{R}$ mit $\mathrm{d}h=\omega$ bzw. $\omega_i=\partial h/\partial x_i$. Wegen Lemma von Schwarz gilt $\frac{\partial\omega_i}{\partial x_j}=\frac{\partial^2 h}{\partial x_j\partial x_i}=\frac{\partial^2 h}{\partial x_i\partial x_j}=\frac{\partial\omega_j}{\partial x_i}$.
+    - formalized setting:
+        - 'U' is an instance of 'open ball'
+        - 'omega' is an instance of 'covector field'
+        - 'omega' 'has domain' 'U'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'U'
+    - formalized premise:
+        - 'omega' has the property 'exact'
+    - formalized assertion:
+        - 'omega' has the property 'closed'
+        - // via Schwarz lemma: mixed partials of h commute
+
+- 'Poincaré lemma' 'has proof' 'Proof => of Poincaré lemma'
+
+- Concepts in this snippet:
+    - 'has proof'
+    - 'covector field'
+    - 'open ball'
+    - 'scalar field'
+    - 'exact'
+    - 'closed'
+    - 'Schwarz lemma'
+    - 'Poincaré lemma'
+- Defined in this snippet:
+    - 'has proof'
+
+- // snippet(78)
+- There is an if-then-statement ('Proof <= of Poincaré lemma'):
+    - full source code: Sei $x\in\mathcal{U}$, o.B.d.A. $p=0$. Man definiert $h(x):=\int_0^1\left(\sum_{i=1}^n\omega_i(tx)x_i\right)\mathrm{d}t$. Differentiation unter dem Integral mit der Produktregel und Gl.~(\ref{eq:lemma-poincare}) liefert $\frac{\partial h}{\partial x_k}(x)=\omega_k(x)$. Damit ist $\omega$ exakt.
+    - formalized setting:
+        - 'U' is an instance of 'open ball'
+        - 'U' 'has center' 'p'
+        - 'omega' is an instance of 'covector field'
+        - 'omega' 'has domain' 'U'
+        - 'h' is an instance of 'scalar field'
+        - 'h' 'has domain' 'U'
+        - There is an equation:
+            - full source code: 'h'('x') == 'definite integral'(\sum_{'i'=1}^'n' ('element of sequence'('omega', 'i')('t' * 'x') * 'element of sequence'('x', 'i')), 't', 'tuple op'(0, 1))
+            - reference: 'eq:potential-poincare'
+    - formalized premise:
+        - 'omega' has the property 'closed'
+    - formalized assertion:
+        - 'omega' has the property 'exact'
+        - 'omega' 'has potential' 'h'
+
+- 'Poincaré lemma' 'has proof' 'Proof <= of Poincaré lemma'
+
+- Concepts in this snippet:
+    - 'covector field'
+    - 'open ball'
+    - 'has center'
+    - 'scalar field'
+    - 'closed'
+    - 'exact'
+    - 'has potential'
+    - 'has proof'
+    - 'Poincaré lemma'
+
+- // snippet(79i)
+- // ignored content
+- // snippet(80i)
+- // ignored content
+- // snippet(81i)
+- // ignored content
+
+- // snippet(82)
+- New section: "Vektorfelder und Flüsse".
+- There is a general statement:
+    - full source code: Sei $\mathcal{M}\subseteq\mathbb{R}^n$ offen und $\mathcal{I}\subseteq\mathbb{R}$ ein offenes Intervall. Die Abbildung $F:\mathcal{M}\times\mathcal{I}\to\mathbb{R}^n$ ist dann ein zeitvariantes Vektorfeld, welches sich unmittelbar mit dem System gewöhnlicher Differentialgleichungen erster Ordnung $\dot{x}=F(x,t)$ assoziieren lässt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - // I is an open interval
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'time derivative op'('x') == 'F'('x', 't')
+            - reference: 'eq:dgl1'
+
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'time derivative op'

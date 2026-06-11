@@ -616,4 +616,83 @@ erfüllt, heißt \textbf{\em \setref{geschlossene}{label:closed}} Differentialfo
 Nach dem \setref{Poincaréschen Lemma}{label:Poincaré lemma} ist eine Differentialform also genau
 dann (lokal) \setref{exakt}{label:exact}, wenn sie \setref{geschlossen}{label:closed} ist.
 
+\snippet{77}
+\begin{svmultproof}
+\glqq$\Rightarrow$\grqq\ Das \setref{Kovektorfeld}{label:covector field} $\omega$ sei \setref{exakt}{label:exact}, d.\,h. es gibt
+ein \setref{Skalarfeld}{label:scalar field} $h:\mathcal{U}\to{\mathbb{R}}$ mit ${\mathrm{d}} h=\omega$ bzw. $\omega_{i}=\partial h/\partial x_{i}$.
+Wegen \setref{Lemma~\ref{lem:Schwarz}}{label:Schwarz lemma} gilt
+\[
+\frac{\partial\omega_{i}}{\partial x_{j}}=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}=\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}=\frac{\partial\omega_{j}}{\partial x_{i}}.
+\]\eqnote{concepts:'partial derivative op', 'element of sequence', 'covector field', 'scalar field', 'Schwarz lemma'}{statement:'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector')}
+
+\snippet{78}
+\glqq$\Leftarrow$\grqq\ Sei $x\in\mathcal{U}$. Die Verbindungsstrecke $\left\{ (1-t)p+tx;\,0\leq t\leq1\right\} $
+liegt ganz in~$\mathcal{U}$. Ohne Einschränkung sei $p=0$ (andernfalls
+Verschiebung des Koordinatensystems). Für $\omega(x)=(\omega_{1}(x),\ldots,\omega_{n}(x))$
+definiert man das \setref{Skalarfeld}{label:scalar field}~$h$ durch
+\begin{equation}
+h(x):=\int_{0}^{1}\left(\sum_{i=1}^{n}\omega_{i}(tx)x_{i}\right)\D t.\label{eq:potential-poincare}
+\end{equation}\eqnote{concepts:'definite integral', 'sum over index', 'element of sequence', 'covector field', 'scalar field', 'has potential'}{statement:'scalar field'('vector') == 'definite integral'(\sum_{'integer number'=1}^'integer number' ('element of sequence'('covector field', 'integer number')('real number' * 'vector') * 'element of sequence'('vector', 'integer number')), 'real number', 'tuple op'(0, 1))}
+ Da die Komponenten~$\omega_{i}$ stetig differenzierbar sind, ergibt
+die Differentiation unter dem Integral bei Berücksichtung von Gl.~(\ref{eq:lemma-poincare})
+und der Produktregel
+\[
+\begin{array}{ccl}
+\frac{\partial h}{\partial x_{k}}(x) & = & \int_{0}^{1}\frac{\partial}{\partial x_{k}}\left(\sum_{i=1}^{n}\omega_{i}(tx)x_{i}\right)\D t\\
+ & = & \int_{0}^{1}\left(\sum_{i=1}^{n}\frac{\partial\omega_{i}}{\partial x_{k}}(tx)tx_{i}+\omega_{k}(tx)\right)\D t\\
+ & \stackrel{(\ref{eq:lemma-poincare})}{=} & \int_{0}^{1}\left(t\left(\sum_{i=1}^{n}\frac{\partial\omega_{k}}{\partial x_{i}}(tx)x_{i}\right)+\omega_{k}(tx)\right)\D t\\
+ & = & \int_{0}^{1}\left(t\frac{{\mathrm{d}}}{{\mathrm{d}} t}\omega_{k}(tx)+\omega_{k}(tx)\right)\D t\\
+ & = & \int_{0}^{1}\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left(t\omega_{k}(tx)\right)\D t\\
+ & = & \left.t\omega_{k}(tx)\right|_{t=0}^{t=1}\\
+ & = & \omega_{k}(x).
+\end{array}
+\]\eqnote{concepts:'partial derivative op', 'definite integral', 'scalar field', 'covector field', 'element of sequence'}{statement:'partial derivative op'('scalar field', 'vector', 'integer number')('vector') == 'element of sequence'('covector field', 'integer number')('vector')}
+Damit ist $\omega$ eine \setref{exakte Differentialform}{label:exact}.
+\end{svmultproof}
+
+\snippet{79}
+In Gl.~(\ref{eq:lemma-poincare}) durchlaufen die Indizes $i$ und
+$j$ die natürlichen Zahlen von $1$ bis $n$, d.\,h. für das Überprüfen
+einer \setref{Differentialform}{label:covector field} auf \setref{Geschlossenheit}{label:closed} würde man zunächst von
+$n^{2}$ Bedingungen ausgehen. Die Bedingung~(\ref{eq:lemma-poincare})
+ist für $i=j$ erfüllt und muss daher nur für $i\neq j$ überprüft
+werden. Aufgrund der Symmetrie beider Seiten von~(\ref{eq:lemma-poincare})
+reicht es aus, diese Gleichungen für $i<j$ zu verifizieren. Die Überprüfung
+der \setref{Integrabilitätsbedingung}{label:Poincaré lemma}~(\ref{eq:lemma-poincare}) reduziert
+sich damit auf $\frac{n(n-1)}{2}$ Gleichungen.
+
+\snippet{80i}
+\begin{example}
+\label{exa:Integration-Differentialform-Poincare}Die \setref{Differentialform}{label:covector field}
+$\omega(x)=2x_{1}x_{2}^{3}\D x_{1}+3x_{1}^{2}x_{2}^{2}\D x_{2}$ ist
+wegen
+\[
+\frac{\partial\omega_{1}(x)}{\partial x_{2}}=6x_{1}x_{2}^{2}=\frac{\partial\omega_{2}(x)}{\partial x_{1}}
+\]\eqnote{concepts:'partial derivative op', 'element of sequence', 'covector field'}{statement:'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector') == 'partial derivative op'('element of sequence'('covector field', 'integer number'), 'vector', 'integer number')('vector')}
+\setref{geschlossen}{label:closed}. Nach \setref{Lemma~\ref{lem:poincare}}{label:Poincaré lemma} ist die Differentialform
+auch \setref{exakt}{label:exact}. Das zugehörige \setref{Potential}{label:potential}
+$h(x)=x_{1}^{2}x_{2}^{3}$, welches bis auf die frei wählbare Integrationskonstante
+mit dem Potential aus Beispiel~\ref{exa:grad-hess}
+überein stimmt, erhält man beispielsweise mit der \textsc{Maxima}-Funktion
+\texttt{potential} des \texttt{vect}-Pakets:
+
+
+\end{example}
+
+\snippet{81i}
+\section{Vektorfelder und Flüsse\label{sec:Vektorfelder-und-Fluesse}}
+
+Dieser Abschnitt vermittelt dem Leser einige qualitative Grundlagen
+aus der Theorie der gewöhnlichen Differentialgleichungen~\cite{arnold2001}.
+
+\snippet{82}
+Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ offen und $\mathcal{I}\subseteq{\mathbb{R}}$
+ein offenes Intervall. Die Abbildung $F:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$
+ist dann ein \setref{zeitvariantes Vektorfeld}{label:time-dependent}, welches sich unmittelbar mit
+dem System gewöhnlicher Differentialgleichungen erster Ordnung
+\begin{equation}
+\dot{x}=F(x,t)\label{eq:dgl1}
+\end{equation}\eqnote{concepts:'time derivative op', 'vector field', 'time-dependent', 'cartesian product op'}{statement:'time derivative op'('vector') == 'vector field'('vector', 'real number')}
+assoziieren lässt.
+
 \end{document}
