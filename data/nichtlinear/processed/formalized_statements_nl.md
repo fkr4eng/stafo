@@ -626,7 +626,7 @@
 - The type of argument1 of 'dimension op' is 'vector space'.
 - The result type of 'dimension op' is 'integer number'.
 - 'dimension op' 'is used to model' 'dimension'
-- There is a general statement:
+- There is a general statement ('Dimensionsformel'):
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
     - formalized setting:
         - 'n' is an instance of 'integer number'.
@@ -1214,7 +1214,7 @@
     - 'intersection of sets'
 
 - // snippet(32)
-- There is a general statement:
+- There is a general statement ('Rangsatz'):
     - full source code: Die Dimensionsformel~(\ref{eq:dimensionsformel-ortho-kompl}) nimmt in diesem Fall die Gestalt \begin{equation} \dim(\ker\,A)+\dim({\operatorname{im}}\,A)=n\label{eq:dimensions-formel} \end{equation} an~\cite{lorenz1992,beutelspacher2001}.
     - formalized setting:
         - 'n' is an instance of 'integer number'.
@@ -2866,8 +2866,7 @@
 - // ignored content
 
 - // snippet(73)
-- There is an if-then-statement:
-    - // name: Schwarz lemma
+- There is an if-then-statement ('Schwarz lemma'):
     - full source code: Das Skalarfeld $h:\mathcal{M}\to{\mathbb{R}}$ sei im Punkt $p\in\mathcal{M}$ zweimal stetig differenzierbar. Dann gilt $\frac{\partial^{2}h}{\partial x_{i}\partial x_{j}}(p)=\frac{\partial^{2}h}{\partial x_{j}\partial x_{i}}(p)$ für $i,j=1,\ldots,n$.
     - formalized setting:
         - 'n' is an instance of 'integer number'
@@ -2970,8 +2969,7 @@
 - The type of argument1 of 'has radius' is 'open ball'
 - The result type of 'has radius' is 'real number'
 
-- There is an equivalence-statement:
-    - // name: Poincaré lemma
+- There is an equivalence-statement ('Poincaré lemma'):
     - full source code: Sei $\omega:\mathcal{M}\to({\mathbb{R}}^{n})^{*}$ ein stetig differenzierbares Kovektorfeld und $\mathcal{U}\subseteq\mathcal{M}$ eine offene Kugel mit Zentrum $p\in\mathcal{M}$. Die Differentialform $\omega$ ist auf $\mathcal{U}$ genau dann exakt, wenn $\forall x\in\mathcal{U}\;\forall i,j\in\{1,\ldots,n\}:\frac{\partial\omega_{i}}{\partial x_{j}}(x)=\frac{\partial\omega_{j}}{\partial x_{i}}(x)$.
     - formalized setting:
         - 'n' is an instance of 'integer number'

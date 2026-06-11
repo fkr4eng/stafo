@@ -442,9 +442,9 @@ class ConversionManager:
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
         self.equation_pattern = re.compile(r"There is an equation")  # omit : at eol since llm sometimes forgets it
         self.math_rel_pattern = re.compile(r"There is a mathematical relation")
-        self.equivalence_pattern = re.compile(r"There is an equivalence-statement")
-        self.if_then_pattern = re.compile(r"There is an if(?:-| )then(?:-| )statement")
-        self.general_statement_pattern = re.compile(r"There is a general statement")
+        self.equivalence_pattern = re.compile(r"There is an equivalence-statement(?: \((.+?)\))?")
+        self.if_then_pattern = re.compile(r"There is an if(?:-| )then(?:-| )statement(?: \((.+?)\))?")
+        self.general_statement_pattern = re.compile(r"There is a general statement(?: \((.+?)\))?")
         self.explanation_pattern = re.compile(r"There is an explanation")
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
         self.qualifier_pattern = re.compile(r"(?<=- )(.+?)(?= is a qualifier)")
@@ -682,31 +682,34 @@ class ConversionManager:
 
         # statements
         elif len(equivalence) > 0 or len(if_then) > 0 or len(general_statement) > 0 or len(definition) > 0:
-            name_given = False
+            inline_name = False
             if len(equivalence) > 0:
                 additional_context = {"R4": 'p.I17["equivalence proposition"]', "comments": []}
                 new_item_name = f"eq stm "
+                _inline = self.strip(equivalence[0]) if equivalence[0] else None
             elif len(if_then) > 0:
                 additional_context = {"R4": 'p.I15["implication proposition"]', "comments": []}
                 new_item_name = f"it stm "
+                _inline = self.strip(if_then[0]) if if_then[0] else None
             elif len(general_statement) > 0:
                 additional_context = {"R4": 'p.I14["mathematical proposition"]', "comments": []}
                 new_item_name = f"gen stm "
+                _inline = self.strip(general_statement[0]) if general_statement[0] else None
             elif len(definition) > 0:
                 definition = self.strip(definition[0])
                 additional_context = {"R4": 'p.I20["mathematical definition"]', "comments": []}
                 new_item_name = f"definition of {definition} "
+                _inline = None
+
+            if _inline:
+                new_item_name = _inline
+                inline_name = True
 
             additional_content = self.get_sub_content(self.lines[i + 1 :])
             top_level_indent = self.get_indent(self.lines[i + 1])
             temp_dict = {"items": {}, "relations": {}}
-            # note: statement name only allowed as first line in statement to prevent mid parsing name changes
-            name = re.findall(r"statement name: (.+?)(?=\.$|$)", self.lines[i + 1])
-            if name:
-                assert name_given == False, "multiple name assignments for statement is not supported"
-                new_item_name += f"{self.strip(name[0])}"
-                name_given = True
-            new_item_name += f"l{i}"
+            if not inline_name:
+                new_item_name += f"l{i}"
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 description = re.findall(self.equation_pattern_dict["description"], l)

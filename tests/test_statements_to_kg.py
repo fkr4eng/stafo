@@ -36,6 +36,7 @@ TEST_DATA10_FPATH = os.path.join(TESTA_DATA_DIR, "statements10_nested_statements
 TEST_DATA11_FPATH = os.path.join(TESTA_DATA_DIR, "statements11_sys_equations.md")
 TEST_DATA12_FPATH = os.path.join(TESTA_DATA_DIR, "statements12_R77.md")
 TEST_DATA14_FPATH = os.path.join(TESTA_DATA_DIR, "statements14_curried_calls.md")
+TEST_DATA15_FPATH = os.path.join(TESTA_DATA_DIR, "statements15_referencing.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -371,3 +372,14 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         lyapunov_res = sa.get_similar_entity("lyapunov")
         self.assertIn("Lyapunov Function", lyapunov_res)
         self.assertGreaterEqual(len(lyapunov_res), 3)
+
+    def test_r01__referencing(self):
+        CM = s2k.ConversionManager(TEST_DATA15_FPATH, [ma_load_dict], num_keys=20)
+        res_mod_fpath = CM.run()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        theorem = get_item_by_name(res_mod_fpath, "test theorem", mod)
+        rel_key = get_key_by_name(res_mod_fpath, "has proof")
+        stms = theorem.get_relations(f"{mod.__URI__}#{rel_key}")
+        self.assertEqual(len(stms), 2)
+

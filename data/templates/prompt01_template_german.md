@@ -24,6 +24,7 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> is applicable to <arg2>.
 - <arg1> is a subproperty of <arg2>.
 - <arg1> is an instance of <arg2>.
+- <arg1> is a secondary instance of <arg2>.
 - <arg1> is a subclass of <arg2>.
 - <arg1> has the associated LaTeX notation <arg2>.
 - <arg1> has the alternative associated LaTeX notation <arg2>.
@@ -32,10 +33,11 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - The type of argument2 of <arg1> is <arg2>.
 - The result type of <arg1> is <arg2>.
 - <arg1> has the verbal description <arg2>.
-- <arg1> has the property <arg2>.
-- <arg1> is associated to <arg2>.
 - <arg1> has the alternative english label <arg2>.
 - <arg1> has the alternative german label <arg2>.
+- <arg1> has the property <arg2>.
+- <arg1> does not have the property <arg2>.
+- <arg1> is associated to <arg2>.
 - Concepts in this snippet:
     - <arg1>
     - <arg2>
@@ -71,6 +73,10 @@ The following Complex Formalized Statements are allowed:
 - // This Complex Formalized Statement serves to model parts of the text which update (e.g. generalize) earlier statements
 - Amend definition of <arg1>:
     - replace <arg1> by <arg2>
+
+- // Statements can optionally be named using parentheses after the statement type keyword. Use this for named theorems, lemmas, or propositions so they can be referenced by name elsewhere (e.g. in 'has proof' relations). Example:
+- There is an if-then-statement ('Schwarz lemma'):
+    - ...
 
 - There is a general statement:
     - full source code: <arg1>
