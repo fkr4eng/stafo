@@ -113,7 +113,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 2472
+        self.stop_at_line = 3261
 
         self.q_ident = "qqq"
 
@@ -439,15 +439,15 @@ class ConversionManager:
         self.type_of_result_pattern = re.compile(r"(?<=The result type of )(.+?)(?: is )(.+)")
         self.definition_pattern = re.compile(r"(?<=Definition of )(.+)")
         self.amend_definition_pattern = re.compile(r"(?<=Amend definition of )(.+)")
-        self.equation_pattern = re.compile(r"There is an equation")  # omit : at eol since llm sometimes forgets it
-        self.math_rel_pattern = re.compile(r"There is a mathematical relation")
+        self.equation_pattern = re.compile(r"There is an equation(?: \((.+?)\))?")  # optional inline name like statements
+        self.math_rel_pattern = re.compile(r"There is a mathematical relation(?: \((.+?)\))?")
         self.equivalence_pattern = re.compile(r"There is an equivalence-statement(?: \((.+?)\))?")
         self.if_then_pattern = re.compile(r"There is an if(?:-| )then(?:-| )statement(?: \((.+?)\))?")
         self.general_statement_pattern = re.compile(r"There is a general statement(?: \((.+?)\))?")
         self.explanation_pattern = re.compile(r"There is an explanation")
         self.for_pattern = re.compile(r"(?<=For all )('?.+?'?) from ('?.+?'?) to ('?.+?'?)(?::?)")
         self.qualifier_pattern = re.compile(r"(?<=- )(.+?)(?= is a qualifier)")
-        self.system_of_equation_pattern = re.compile(r"There is a system of equations")
+        self.system_of_equation_pattern = re.compile(r"There is a system of equations(?: \((.+?)\))?")
         self.concepts_in_snippet_pattern = re.compile(r"Concepts in this snippet")
         self.defined_in_snippet_pattern = re.compile(r"Defined in this snippet")
 
@@ -636,10 +636,12 @@ class ConversionManager:
         elif len(equation) > 0 or len(math_rel) > 0:
             if len(equation) > 0:
                 type = "equation"
-                item_name = f"equation_{i}"
+                _inline = self.strip(equation[0]) if equation[0] else None
+                item_name = _inline if _inline else f"equation_{i}"
             else:
                 type = "mathematical relation"
-                item_name = f"math_relation_{i}"
+                _inline = self.strip(math_rel[0]) if math_rel[0] else None
+                item_name = _inline if _inline else f"math_relation_{i}"
             lines = self.get_sub_content(self.lines[i + 1 :])
             key = self.item_keys.pop()
             eq_dict = {"type": type, "key": key, "snip": self.current_snippet}
@@ -667,7 +669,8 @@ class ConversionManager:
 
         # system of equations
         elif len(sys_equation) > 0:
-            name = f"system_of_equations_{i}"
+            _inline = self.strip(sys_equation[0]) if sys_equation[0] else None
+            name = _inline if _inline else f"system_of_equations_{i}"
             self.add_new_item(
                 d,
                 name,
@@ -1384,7 +1387,7 @@ class ConversionManager:
         entity_declaration = ""
         output = ""
         count = 0
-        self.stop_at_snip = 75
+        self.stop_at_snip = 84
 
         for key in self.entity_order:
             name = self.key_to_name[key]
@@ -1640,15 +1643,13 @@ class ConversionManager:
         insertion_index = 0
         for key, value in subdict["items"].items():
             # if key == "other":
-            if ("equation" in key and not "system_of_equations" in key) or "math_relation" in key:
-                if value["type"] in ["equation", "mathematical relation"]:
-                    res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
-                    for l in res.split("\n"):
-                        # adapt equation to context manager
-                        if len(l) > 0 and not "snippet" in l and not "manually added" in l:
-                            out.insert(insertion_index, l)
-                else:
-                    raise TypeError()
+            if (("equation" in key and not "system_of_equations" in key) or "math_relation" in key or           # regular case
+                ("type" in value.keys() and value["type"] in ["equation", "mathematical relation"])):           # in case of named equations
+                res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
+                for l in res.split("\n"):
+                    # adapt equation to context manager
+                    if len(l) > 0 and not "snippet" in l and not "manually added" in l:
+                        out.insert(insertion_index, l)
             elif "OR" in key or "AND" in key or "NOT" in key:
                 res = self.get_statement_context_recursively(
                     statement_item, subdict["items"][key], context_recursion_depth + 1, indent_depth + 1
