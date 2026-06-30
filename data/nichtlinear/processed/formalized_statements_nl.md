@@ -57,7 +57,8 @@
 - The type of argument1 of 'cartesian product op' is 'set'
 - The type of argument2 of 'cartesian product op' is 'set'
 - The result type of 'cartesian product op' is 'set'
-
+- There is a class: 'differential equation'
+- 'differential equation' is a subclass of 'mathematical equation'
 - // snippet(2)
 - New section: "Lineare Algebra".
 
@@ -3203,6 +3204,9 @@
 - 'trajectory' has the alternative german label 'Integralkurve'
 - 'trajectory' has the alternative german label 'lokale Lösung'
 - 'trajectory' has the alternative german label 'Trajektorie'
+- There is a relation: 'has trajectory'
+- The type of argument1 of 'has trajectory' is 'differential equation'
+- The result type of 'has trajectory' is 'trajectory'
 - Definition of 'trajectory':
     - full source code: Eine auf einem Teilintervall $\tilde{\mathcal{I}}\subseteq\mathcal{I}$ definierte Kurve $\phi:\tilde{\mathcal{I}}\to\mathcal{M}$, die $\forall t\in\tilde{\mathcal{I}}:\dot{\phi}(t)=F(\phi(t),t)$ erfüllt, heißt (lokale) Lösung, Integralkurve oder Trajektorie.
     - formalized setting:
@@ -3232,10 +3236,12 @@
         - 't' is an instance of 'real number'
         - 't' is element of 'I_tilde' qqq univ_quant True
     - formalized premise:
-        - There is an equation:
+        - There is an equation ('ode'):
             - full source code: 'time derivative op'('phi')('t') == 'F'('phi'('t'), 't')
+        - 'ode' is secondary instance of 'differential equation'
     - formalized assertion:
         - 'phi' is secondary instance of 'trajectory'
+        - 'ode' 'has trajectory' 'phi'
 
 - Concepts in this snippet:
     - 'trajectory'
@@ -3255,3 +3261,405 @@
     - 'time derivative op'
 - Defined in this snippet:
     - 'trajectory'
+
+- // snippet(84)
+- There is a class: 'initial value problem' @en
+- 'initial value problem' has the alternative german label 'Anfangswertaufgabe'
+- Definition of 'initial value problem':
+    - full source code: Die zu~(\ref{eq:dgl1}) gehörige Anfangswertaufgabe mit dem Anfangszeitpunkt $t=t_{0}\in\mathcal{I}$ und einem Anfangswert $p\in\mathcal{M}$ lautet $\dot{x}=F(x,t),\quad x(t_{0})=p.\label{eq:awa1}$
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'I'
+        - 'x' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
+    - formalized premise:
+        - There is a system of equations ('awa'):
+            - There is an equation ('dgl for awa'):
+                - full source code: 'time derivative op'('x')('t') == 'F'('x'('t'), 't')
+            - There is an equation ('initial condition for awa1'):
+                - full source code: 'x'('t0') == 'p'
+    - formalized assertion:
+        - 'awa' is secondary instance of 'initial value problem'
+
+- Concepts in this snippet:
+    - 'initial value problem'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'real number'
+    - 'general function'
+    - 'time derivative op'
+- Defined in this snippet:
+    - 'initial value problem'
+
+- // snippet(85)
+- There is a class: 'solution of initial value problem' @en
+- 'solution of initial value problem' has the alternative german label 'Lösung der Anfangswertaufgabe'
+- 'solution of initial value problem' is a subclass of 'trajectory'
+- Definition of 'solution of initial value problem':
+    - full source code: Eine Lösung~$\phi$ von~(\ref{eq:dgl1}) ist Lösung der Anfangswertaufgabe~(\ref{eq:awa1}), wenn zusätzlich $\phi(t_{0})=p$ gilt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'I_tilde' is an instance of 'set'
+        - 'I_tilde' 'is subset of' 'I'
+        - 'I_tilde' has the property 'open'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I_tilde'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' 'has differentiability class' 1
+    - formalized premise:
+        - 'phi' is secondary instance of 'trajectory'
+        - There is an equation ('ode'):
+            - full source code: 'time derivative op'('phi')('t') == 'F'('phi'('t'), 't')
+        - 'ode' is secondary instance of 'differential equation'
+        - There is an equation:
+            - full source code: 'phi'('t0') == 'p'
+    - formalized assertion:
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'ode' 'has trajectory' 'phi'
+
+- There is a property: 'unique' @en
+- 'unique' has the alternative german label 'eindeutig'
+- 'unique' is applicable to 'solution of initial value problem'
+- Definition of 'unique':
+    - full source code: Die Lösung~$\phi$ der Anfangswertaufgabe~(\ref{eq:awa1}) heißt eindeutig, wenn sie mit jeder weiteren Lösung $\bar{\phi}:\bar{\mathcal{I}}\subseteq\mathcal{I}\to\mathcal{M}$ auf dem gemeinsamen Existenzintervall übereinstimmt, d.\,h. $\forall t\in\bar{\mathcal{I}}\cap\mathcal{I}:\phi(t)=\bar{\phi}(t)$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'I_tilde' is an instance of 'set'
+        - 'I_tilde' 'is subset of' 'I'
+        - 'I_tilde' has the property 'open'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I_tilde'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' 'has differentiability class' 1
+        - 'I_tilde_bar' is an instance of 'set'
+        - 'I_tilde_bar' 'is subset of' 'I'
+        - 'I_tilde_bar' has the property 'open'
+        - 'phi_bar' is an instance of 'general function'
+        - 'phi_bar' 'has domain' 'I_tilde_bar'
+        - 'phi_bar' 'has codomain' 'M'
+        - 'phi_bar' 'has differentiability class' 1
+        - 'I_overlap' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'I_overlap' == 'intersection of sets'('I_tilde', 'I_tilde_bar')
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I_overlap' qqq univ_quant True
+    - formalized premise:
+        - There is an equation ('ode'):
+            - full source code: 'time derivative op'('phi')('t') == 'F'('phi'('t'), 't')
+        - 'ode' is secondary instance of 'differential equation'
+        - There is an equation:
+            - full source code: 'phi'('t0') == 'p'
+        - There is an equation ('ode_bar'):
+            - full source code: 'time derivative op'('phi_bar')('t') == 'F'('phi_bar'('t'), 't')
+        - 'ode_bar' is secondary instance of 'differential equation'
+        - There is an equation:
+            - full source code: 'phi_bar'('t0') == 'p'
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'phi_bar' is secondary instance of 'solution of initial value problem'
+        - 'ode' 'has trajectory' 'phi'
+        - 'ode_bar' 'has trajectory' 'phi_bar'
+        - There is an equation:
+            - full source code: 'phi'('t') == 'phi_bar'('t')
+    - formalized assertion:
+        - 'phi' has the property 'unique'
+
+- Concepts in this snippet:
+    - 'trajectory'
+    - 'differential equation'
+    - 'has trajectory'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'real number'
+    - 'is element of'
+    - 'vector'
+    - 'general function'
+    - 'has differentiability class'
+    - 'time derivative op'
+    - 'intersection of sets'
+- Defined in this snippet:
+    - 'solution of initial value problem'
+    - 'unique'
+
+- // snippet(86)
+- There is a class: 'equilibrium point' @en
+- 'equilibrium point' has the alternative english label 'operating point'
+- 'equilibrium point' has the alternative german label 'Ruhelage'
+- 'equilibrium point' has the alternative german label 'Gleichgewichtslage'
+- 'equilibrium point' has the alternative german label 'Arbeitspunkt'
+- Definition of 'equilibrium point':
+    - full source code: Eine konstante Lösung, also $\phi(t)=p$ für alle $t\in\mathcal{I}$, nennt man Ruhelage, Gleichgewichtslage oder Arbeitspunkt (engl. equilibrium point, operating point). Dabei assoziiert man die Ruhelage als Lösung bzw. Zeitfunktion unmittelbar mit den zugehörigen Punkt (Vektor) $p\in\mathcal{M}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I'
+        - 'phi' 'has codomain' 'M'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I' qqq univ_quant True
+        - There is an equation ('ode'):
+            - full source code: 'time derivative op'('phi')('t') == 'F'('phi'('t'), 't')
+        - 'ode' is secondary instance of 'differential equation'
+        - 'phi' is secondary instance of 'trajectory'
+        - 'ode' 'has trajectory' 'phi'
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'phi'('t') == 'p'
+    - formalized assertion:
+        - 'phi' is secondary instance of 'equilibrium point'
+        - 'p' is secondary instance of 'equilibrium point'
+
+- Concepts in this snippet:
+    - 'trajectory'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'general function'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- Defined in this snippet:
+    - 'equilibrium point'
+
+- // snippet(87)
+- There is an equivalence-statement:
+    - full source code: Die Ruhelagen $x\in\mathcal{M}$ der Differentialgleichung~(\ref{eq:dgl1}) lässt sich aus der Bestimmungsgleichung $\forall t\in\mathcal{I}:\quad0=F(x,t)$ ermitteln.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I' qqq univ_quant True
+    - formalized premise:
+        - There is an equation:
+            - full source code: 0 == 'F'('x', 't')
+    - formalized assertion:
+        - 'x' is secondary instance of 'equilibrium point'
+
+- Concepts in this snippet:
+    - 'equilibrium point'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+
+- // snippet(88)
+- There is a unary operator: 'norm op' @en
+- 'norm op' has the alternative german label 'Norm'
+- The type of argument1 of 'norm op' is 'vector'
+- The result type of 'norm op' is 'real number'
+- There is a property: 'continuous' @en
+- 'continuous' has the alternative german label 'stetig'
+- 'continuous' is applicable to 'general function'
+- There is a property: 'Lipschitz condition' @en
+- 'Lipschitz condition' has the alternative german label 'Lipschitz-Bedingung'
+- 'Lipschitz condition' is applicable to 'general function'
+- There is a class: 'Lipschitz constant' @en
+- 'Lipschitz constant' has the alternative german label 'Lipschitz-Konstante'
+- 'Lipschitz constant' is a subclass of 'real number'
+- There is a property: 'Lipschitz-continuous' @en
+- 'Lipschitz-continuous' has the alternative german label 'Lipschitz-stetig'
+- 'Lipschitz-continuous' is applicable to 'general function'
+- // a function satisfying the Lipschitz condition is called Lipschitz-continuous (footnote)
+- Definition of 'Lipschitz condition':
+    - full source code: es existiert eine Lipschitz-Konstante $L>0$ mit $\forall x,\hat{x}\in\mathcal{M}\;\forall t\in\mathcal{I}:\quad\left\Vert F(x,t)-F(\hat{x},t)\right\Vert \leq L\left\Vert x-\hat{x}\right\Vert$
+    - formalized setting:
+        - 'f' is an instance of 'general function'
+        - 'L' is an instance of 'Lipschitz constant'
+        - There is a mathematical relation:
+            - full source code: 'L' > 0
+        - 'x' is an instance of 'vector'
+        - 'x_hat' is an instance of 'vector'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - There is a mathematical relation:
+            - full source code: 'norm op'('f'('x', 't') - 'f'('x_hat', 't')) <= 'L' * 'norm op'('x' - 'x_hat')
+    - formalized assertion:
+        - 'f' has the property 'Lipschitz condition'
+- There is an if-then-statement ('Picard-Lindelöf'):
+    - full source code: Das zeitvariante Vektorfeld~$F$ sei stetig und genüge zusätzlich einer Lipschitz-Bedingung bezüglich des ersten Arguments, d.\,h. es existiert eine Lipschitz-Konstante $L>0$ mit $\forall x,\hat{x}\in\mathcal{M}\;\forall t\in\mathcal{I}:\quad\left\Vert F(x,t)-F(\hat{x},t)\right\Vert \leq L\left\Vert x-\hat{x}\right\Vert$. Für jeden Punkt $p\in\mathcal{M}$ existieren dann ein offenes Intervall $\mathcal{I}_{p}\subseteq\mathbb{R}$ mit $t_{0}\in\mathcal{I}_{p}$ und eine stetig differenzierbare Abbildung $\phi:\mathcal{I}_{p}\to\mathcal{M}$, welche eine eindeutige Lösung der Anfangswertaufgabe~(\ref{eq:awa1}) ist.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+    - formalized premise:
+        - 'F' has the property 'continuous'
+        - 'F' has the property 'Lipschitz condition'
+    - formalized assertion:
+        - 'I_p' is an instance of 'set'
+        - 'I_p' 'is subset of' 'set of real numbers'
+        - 'I_p' has the property 'open'
+        - 't0' is element of 'I_p'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I_p'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' 'has differentiability class' 1
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'phi' has the property 'unique'
+- Concepts in this snippet:
+    - 'norm op'
+    - 'continuous'
+    - 'Lipschitz condition'
+    - 'Lipschitz constant'
+    - 'Lipschitz-continuous'
+    - 'general function'
+    - 'real number'
+    - 'vector'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'time-dependent'
+    - 'cartesian product op'
+    - 'is element of'
+    - 'has differentiability class'
+    - 'solution of initial value problem'
+    - 'unique'
+- Defined in this snippet:
+    - 'norm op'
+    - 'continuous'
+    - 'Lipschitz condition'
+    - 'Lipschitz constant'
+    - 'Lipschitz-continuous'

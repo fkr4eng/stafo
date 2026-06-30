@@ -705,4 +705,54 @@ Differentialgleichung~(\ref{eq:dgl1}) erfüllt, d.\,h.
 heißt \textbf{\em \setref{(lokale) Lösung}{label:trajectory}, \setref{Integralkurve}{label:trajectory}}
 oder \textbf{\em \setref{Trajektorie}{label:trajectory}} von~(\ref{eq:dgl1}).
 
+\snippet{84}
+Die zu~(\ref{eq:dgl1}) gehörige \setref{Anfangswertaufgabe}{label:initial value problem}
+mit dem Anfangszeitpunkt $t=t_{0}\in\mathcal{I}$ und einem Anfangswert
+$p\in\mathcal{M}$ lautet
+\begin{equation}
+\dot{x}=F(x,t),\quad x(t_{0})=p.\label{eq:awa1}
+\end{equation}\eqnote{concepts:'time derivative op', 'vector field', 'time-dependent', 'cartesian product op', 'general function', 'real number', 'vector', 'initial value problem'}{statement:'time derivative op'('general function')('real number') == 'vector field'('general function', 'real number'); 'general function'('real number') == 'vector'}
+
+\snippet{85}
+Eine \setref{Lösung}{label:trajectory}~$\phi$ von~(\ref{eq:dgl1}) ist \setref{Lösung der Anfangswertaufgabe}{label:solution of initial value problem}~(\ref{eq:awa1}),
+wenn zusätzlich $\phi(t_{0})=p$\eqnote{concepts:'general function', 'real number', 'vector', 'solution of initial value problem'}{statement:'general function'('real number') == 'vector'} gilt. Die \setref{Lösung}{label:solution of initial value problem}~$\phi$ der \setref{Anfangswertaufgabe}{label:initial value problem}~(\ref{eq:awa1})
+heißt \textbf{\em \setref{eindeutig}{label:unique}}, wenn sie mit jeder weiteren Lösung $\bar{\phi}:\bar{\mathcal{I}}\subseteq\mathcal{I}\to\mathcal{M}$
+auf dem gemeinsamen Existenzintervall übereinstimmt, d.\,h.
+\[
+\forall t\in\bar{\mathcal{I}}\cap\mathcal{I}:\quad\phi(t)=\bar{\phi}(t).
+\]\eqnote{concepts:'general function', 'real number', 'intersection of sets'}{statement:'general function'('real number') == 'general function'('real number')}
+
+\snippet{86}
+Eine konstante \setref{Lösung}{label:trajectory}, also $\phi(t)=p$ für alle $t\in\mathcal{I}$\eqnote{concepts:'general function', 'real number', 'vector', 'equilibrium point'}{statement:'general function'('real number') == 'vector'},
+nennt man \textbf{\em \setref{Ruhelage}{label:equilibrium point}}, \textbf{\em \setref{Gleichgewichtslage}{label:equilibrium point}}
+oder \textbf{\em \setref{Arbeitspunkt}{label:equilibrium point}} (engl. \textbf{\em \setref{equilibrium
+point}{label:equilibrium point}}, \textbf{\em \setref{operating point}{label:equilibrium point}}). Dabei assoziiert man die \setref{Ruhelage}{label:equilibrium point}
+als \setref{Lösung}{label:trajectory} bzw. Zeitfunktion unmittelbar mit den zugehörigen Punkt
+(Vektor) $p\in\mathcal{M}$\eqnote{concepts:'vector', 'set', 'is element of'}{statement:'vector' 'is element of' 'set'}.
+
+\snippet{87}
+Die \setref{Ruhelagen}{label:equilibrium point} $x\in\mathcal{M}$\eqnote{concepts:'vector', 'set', 'is element of'}{statement:'vector' 'is element of' 'set'} der
+Differentialgleichung~(\ref{eq:dgl1}) lässt sich aus der Bestimmungsgleichung
+\[
+\forall t\in\mathcal{I}:\quad0=F(x,t)
+\]\eqnote{concepts:'vector field', 'vector', 'real number', 'equilibrium point'}{statement:0 == 'vector field'('vector', 'real number')}
+ermitteln.
+
+\snippet{88}
+\begin{theorem}
+[Existenz- und Eindeutigkeitssatz von Picard-Lindelöff]\label{thm:Picard-Lindeloeff}Das
+\setref{zeitvariante}{label:time-dependent} \setref{Vektorfeld}{label:vector field}~$F$ sei \setref{stetig}{label:continuous} und genüge zusätzlich einer\textbf{\em
+\setref{Lipschitz-Bedingung}{label:Lipschitz condition}}\footnote{Eine Funktion, die einer \setref{Lipschitz-Bedingung}{label:Lipschitz condition} genügt, nennt man \textbf{\em \setref{Lipschitz-stetig}{label:Lipschitz-continuous}}.}
+bezüglich des ersten Arguments, d.\,h. es existiert eine sogenannte
+\textbf{\em \setref{Lipschitz-Konstante}{label:Lipschitz constant}} $L>0$\eqnote{concepts:'Lipschitz constant', 'real number'}{statement:'Lipschitz constant' > 0} mit
+\begin{equation}
+\forall x,\hat{x}\in\mathcal{M}\;\forall t\in\mathcal{I}:\quad\left\Vert F(x,t)-F(\hat{x},t)\right\Vert \leq L\left\Vert x-\hat{x}\right\Vert .\label{eq:Lipschitz-Bed-Satz-PL}
+\end{equation}\eqnote{concepts:'norm op', 'vector field', 'vector', 'real number', 'Lipschitz constant', 'Lipschitz condition'}{statement:'norm op'('vector field'('vector', 'real number') - 'vector field'('vector', 'real number')) <= 'Lipschitz constant' * 'norm op'('vector' - 'vector')}
+Für jeden Punkt $p\in\mathcal{M}$ existieren dann ein offenes Intervall
+$\mathcal{I}_{p}\subseteq{\mathbb{R}}$ mit $t_{0}\in\mathcal{I}_{p}$ und eine
+stetig differenzierbare Abbildung $\phi:\mathcal{I}_{p}\to\mathcal{M}$,
+welche eine \setref{eindeutige}{label:unique} \setref{Lösung der Anfangswertaufgabe}{label:solution of initial value problem}~(\ref{eq:awa1})
+ist.
+\end{theorem}
+
 \end{document}
