@@ -378,8 +378,13 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         res_mod_fpath = CM.run()
         mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
 
+        # test referencing scopes
         theorem = get_item_by_name(res_mod_fpath, "test theorem", mod)
         rel_key = get_key_by_name(res_mod_fpath, "has proof")
         stms = theorem.get_relations(f"{mod.__URI__}#{rel_key}")
         self.assertEqual(len(stms), 2)
 
+        # test referencing equations
+        scope = get_item_by_name(res_mod_fpath, "stm2", mod)
+        subj = scope.scp__premise.get_inv_relations("R20")[0].subject
+        self.assertEqual(subj, scope.scp__assertion.get_inv_relations("R20")[0].subject.subject)

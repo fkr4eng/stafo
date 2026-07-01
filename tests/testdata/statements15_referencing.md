@@ -1,5 +1,6 @@
 - There is a class: 'real number'
 - There is a relation: 'has proof'
+- There is a property: 'prop'
 
 - There is an equivalence-statement (test theorem):
     - formalized setting:
@@ -36,3 +37,13 @@
 
 - 'test theorem' 'has proof' 'Proof => of test theorem'
 - 'test theorem' 'has proof' 'Proof <= of test theorem'
+
+- There is a general statement ('stm2'):
+    - formalized setting:
+        - 'a' is an instance of 'real number'.
+        - 'b' is an instance of 'real number'.
+    - formalized premise:
+        - There is an equation ('double'):
+            - full source code: 'a' == 2 * 'b'
+    - formalized assertion:
+        - 'double' 'has the property' 'prop'
