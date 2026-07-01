@@ -3125,7 +3125,7 @@
         - 't' is an instance of 'real number'
         - 'i' is an instance of 'integer number'
         - There is an equation:
-            - full source code: 'h'('x') == 'definite integral'(\sum_{'i'=1}^'n' ('element of sequence'('omega', 'i')('t' * 'x') * 'element of sequence'('x', 'i')), 't', 'tuple op'(0, 1))
+            - full source code: 'h'('x') == 'definite integral'(\sum_{'i'=1}^'n' ('element of sequence'('omega'('t' * 'x'), 'i') * 'element of sequence'('x', 'i')), 't', 'tuple op'(0, 1))
             - reference: 'eq:potential-poincare'
     - formalized premise:
         - 'omega' has the property 'closed'
@@ -3354,6 +3354,8 @@
         - 'phi' 'has domain' 'I_tilde'
         - 'phi' 'has codomain' 'M'
         - 'phi' 'has differentiability class' 1
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
     - formalized premise:
         - 'phi' is secondary instance of 'trajectory'
         - There is an equation ('ode'):
@@ -3597,7 +3599,7 @@
             - full source code: 'norm op'('f'('x', 't') - 'f'('x_hat', 't')) <= 'L' * 'norm op'('x' - 'x_hat')
     - formalized assertion:
         - 'f' has the property 'Lipschitz condition'
-- There is an if-then-statement ('Picard-Lindelöf'):
+- There is an if-then-statement ('Theorem of Picard-Lindelöf'):
     - full source code: Das zeitvariante Vektorfeld~$F$ sei stetig und genüge zusätzlich einer Lipschitz-Bedingung bezüglich des ersten Arguments, d.\,h. es existiert eine Lipschitz-Konstante $L>0$ mit $\forall x,\hat{x}\in\mathcal{M}\;\forall t\in\mathcal{I}:\quad\left\Vert F(x,t)-F(\hat{x},t)\right\Vert \leq L\left\Vert x-\hat{x}\right\Vert$. Für jeden Punkt $p\in\mathcal{M}$ existieren dann ein offenes Intervall $\mathcal{I}_{p}\subseteq\mathbb{R}$ mit $t_{0}\in\mathcal{I}_{p}$ und eine stetig differenzierbare Abbildung $\phi:\mathcal{I}_{p}\to\mathcal{M}$, welche eine eindeutige Lösung der Anfangswertaufgabe~(\ref{eq:awa1}) ist.
     - formalized setting:
         - 'n' is an instance of 'integer number'
