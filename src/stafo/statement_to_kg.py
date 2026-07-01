@@ -1387,7 +1387,7 @@ class ConversionManager:
         entity_declaration = ""
         output = ""
         count = 0
-        self.stop_at_snip = 84
+        self.stop_at_snip = 83
 
         for key in self.entity_order:
             name = self.key_to_name[key]
@@ -1645,7 +1645,7 @@ class ConversionManager:
             # if key == "other":
             if (("equation" in key and not "system_of_equations" in key) or "math_relation" in key or           # regular case
                 ("type" in value.keys() and value["type"] in ["equation", "mathematical relation"])):           # in case of named equations
-                res = self.render_math_relation(statement_item, value, context_recursion_depth, indent_depth)
+                res = self.render_math_relation(statement_item, key, value, context_recursion_depth, indent_depth)
                 for l in res.split("\n"):
                     # adapt equation to context manager
                     if len(l) > 0 and not "snippet" in l and not "manually added" in l:
@@ -1805,8 +1805,11 @@ class ConversionManager:
                         return res
         return ""
 
-    def render_math_relation(self, statement_item, eq_dict, context_recursion_depth, indent_depth):
+    def render_math_relation(self, statement_item, name, eq_dict, context_recursion_depth, indent_depth):
         context = {"key": eq_dict["key"], "rel": [], "rd": context_recursion_depth}
+        # check if equation is named
+        if not re.findall(r"I\d+", name):
+            context["name"] = name
         if "snip" in eq_dict.keys():
             context["snip"] = eq_dict["snip"]
         else:
