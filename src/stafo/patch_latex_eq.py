@@ -66,7 +66,7 @@ context = {
     "preliminaries": prelim,
     "content": new_latex_content,
 }
-res = render_template("latex_template.py", context)
+res = render_template("latex_template.py.jinja", context)
 
 with open(os.path.join(BASE_DIR, "html", "nl_latex_copy.tex"), "wt", encoding="utf-8") as f:
     f.write(res)

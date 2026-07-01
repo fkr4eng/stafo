@@ -113,7 +113,7 @@ class ConversionManager:
         else:
             self.item_keys, self.relation_keys = force_key_tuple
 
-        self.stop_at_line = 3261
+        self.stop_at_line = 3209
 
         self.q_ident = "qqq"
 
@@ -1410,7 +1410,7 @@ class ConversionManager:
 
             context = self.built_simple_context(v)
             context["name"] = self.build_reference(name)
-            res = render_template(f"basic_entity_template.py", context)
+            res = render_template("basic_entity_template.py.jinja", context)
             output += res + "\n\n"
             count += 1
             if "R4" in v.keys() and (
@@ -1441,7 +1441,7 @@ class ConversionManager:
                     context["assertion"] = self.get_statement_context_recursively(v, v[f"formal_ass"])
                 elif "source_ass" in v.keys():
                     context["assertion"] = [f'cm1.create_expression({v["source_ass"]})']
-                res = render_template("statement_template.py", context)
+                res = render_template("statement_template.py.jinja", context)
                 output += res + "\n\n"
 
         pyirk_context = {
@@ -1451,7 +1451,7 @@ class ConversionManager:
             "load_irk_modules": self.load_irk_modules,
         }
 
-        res = render_template("pyirk_template.py", pyirk_context)
+        res = render_template("pyirk_template.py.jinja", pyirk_context)
 
         if final_replacements:
             res = self._final_replacements(res, final_replacements)
@@ -1661,7 +1661,7 @@ class ConversionManager:
                     "new_rd": context_recursion_depth + 1,
                     "indent": " " * 4 * indent_depth,
                 }
-                out.append(render_template("and_or_not_template.py", context))
+                out.append(render_template("and_or_not_template.py.jinja", context))
             elif "for_loop" in key:
                 res = self.get_statement_context_recursively(
                     statement_item, subdict["items"][key], context_recursion_depth, indent_depth + 1
@@ -1681,7 +1681,7 @@ class ConversionManager:
                     "stop": stop,
                     "index_var": f"""{value["index_var"]}""",
                 }
-                out.append(render_template("integer_range_template.py", context))
+                out.append(render_template("integer_range_template.py.jinja", context))
             elif "it stm" in key:
                 context = {
                     "rd": context_recursion_depth + 1,
@@ -1722,7 +1722,7 @@ class ConversionManager:
                                 f'nested statement {statement_item["key"]} has non math_relation statement \
                                 {ass} which is not yet supported'
                             )
-                out.append(render_template("nested_statement_template.py", context))
+                out.append(render_template("nested_statement_template.py.jinja", context))
             else:
                 key_render = self.strip_math(key).replace(" ", "_")
                 if "R4" in value.keys():
@@ -1859,7 +1859,7 @@ class ConversionManager:
             except Exception as e:
                 logger.warning(f"rendering failed for {eq_dict['full_source']} due to {type(e)}: {e}")
                 context["full_source"] = eq_dict["full_source"]
-        res = render_template("math_relation_template.py", context)
+        res = render_template("math_relation_template.py.jinja", context)
         return res
 
     def process_latex(self, statement_item, latex_og, full=False):
