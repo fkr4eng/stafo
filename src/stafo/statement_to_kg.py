@@ -407,7 +407,19 @@ class ConversionManager:
                     "R1": "is symmetrical",
                     "R22": True,
                     "prefix": "p",
-                }
+                },
+                "auto-applies result relation": {
+                    "key": "R88",
+                    "R1": "auto-applies result relation",
+                    "prefix": "p",
+                },
+                "has result-relation target": {
+                    "key": "R89",
+                    "R1": "has result-relation target",
+                    "prefix": "p",
+                    "is_qualifier": True,
+                    "qual_name": "p.auto_result_relation_target",
+                },
             },
         }
         """
@@ -450,6 +462,9 @@ class ConversionManager:
         self.system_of_equation_pattern = re.compile(r"There is a system of equations(?: \((.+?)\))?")
         self.concepts_in_snippet_pattern = re.compile(r"Concepts in this snippet")
         self.defined_in_snippet_pattern = re.compile(r"Defined in this snippet")
+        # "Applying '<operator>' creates relation: result '<relation>' '<target>'"
+        # <target> is either an argument (argument1/2/3) or a (quoted) entity name
+        self.applying_pattern = re.compile(r"(?<=Applying )(.+?) creates relation: result '(.+?)' (.+)")
 
         self.replace_definition_pattern = re.compile(r"(?<=replace )(.+?)(?: by )(.+?)(?=\.$|$)")
 
@@ -556,6 +571,7 @@ class ConversionManager:
         qualifier = re.findall(self.qualifier_pattern, line)
         concepts = re.findall(self.concepts_in_snippet_pattern, line)
         defined = re.findall(self.defined_in_snippet_pattern, line)
+        applying = re.findall(self.applying_pattern, line)
 
         # debug
         if i == self.stop_at_line:
@@ -809,6 +825,29 @@ class ConversionManager:
                 arg1 = re.findall(r"- '?(.+?)'?$", sub_line)
                 if arg1:
                     self.add_relation_inplace(d["items"][self.current_snippet], rel_key, self.build_reference(arg1[0]))
+
+        # "Applying '<operator>' creates relation: result '<relation>' '<target>'"
+        # declares that applying <operator> should auto-set <relation> on its result (R88 + R89 qualifier)
+        elif len(applying) > 0:
+            op_name, rel_name, target_name = self.strip(applying[0])
+            # make sure the relation to be auto-applied is known (match against existing modules if necessary)
+            if rel_name not in self.d["relations"]:
+                self.add_new_rel(self.d, rel_name, language)
+            rel_ref = self.build_reference(rel_name)
+            # resolve the target: an argument index (argument1/2/3) or a fixed entity
+            m = re.match(r"argument\s*([123])$", target_name)
+            if m:
+                target = int(m.group(1))
+            else:
+                if target_name not in self.d["items"] and self.get_existing_item(target_name):
+                    self.add_new_item(self.d, target_name, language, {}, skip_entity_order)
+                target = self.build_reference(target_name)
+            if op_name in self.d["items"]:
+                self.add_relation_inplace(
+                    self.d["items"][op_name], "R88", rel_ref, qualifier=[{"R89": target}]
+                )
+            else:
+                logger.warning(f"'Applying ...' references unknown operator '{op_name}'", extra={"line": i})
 
         else:
             for k, v in self.d["relations"].items():

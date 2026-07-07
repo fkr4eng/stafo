@@ -37,6 +37,7 @@ TEST_DATA11_FPATH = os.path.join(TESTA_DATA_DIR, "statements11_sys_equations.md"
 TEST_DATA12_FPATH = os.path.join(TESTA_DATA_DIR, "statements12_R77.md")
 TEST_DATA14_FPATH = os.path.join(TESTA_DATA_DIR, "statements14_curried_calls.md")
 TEST_DATA15_FPATH = os.path.join(TESTA_DATA_DIR, "statements15_referencing.md")
+TEST_DATA16_FPATH = os.path.join(TESTA_DATA_DIR, "statements16_auto_relation.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -372,6 +373,50 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         lyapunov_res = sa.get_similar_entity("lyapunov")
         self.assertIn("Lyapunov Function", lyapunov_res)
         self.assertGreaterEqual(len(lyapunov_res), 3)
+
+    def test_ar01__auto_applied_result_relation(self):
+        CM = s2k.ConversionManager(TEST_DATA16_FPATH, [ma_load_dict], num_keys=30)
+        res_mod_fpath = CM.run()
+        with open(res_mod_fpath, "rt", encoding="utf-8") as f:
+            res = f.read()
+
+        # the "Applying ..." line must render as a set_relation with R88 + R89 qualifier targeting argument 1
+        self.assertIn('R88["auto-applies result relation"]', res)
+        self.assertIn('p.R15["is element of"]', res)
+        self.assertIn("p.auto_result_relation_target(1)", res)
+
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        # the spec is attached to the (matched) operator `element of sequence`
+        op = p.ds.get_entity_by_uri("irk:/ocse/0.2/math#I8603")
+        specs = op.get_relations("R88")
+        self.assertEqual(len(specs), 1)
+        self.assertEqual(specs[0].object, p.R15["is element of"])
+        self.assertEqual(specs[0].qualifiers[0].object, 1)
+
+        # applying the operator in the fixture produced an evaluated mapping whose R15__is_element_of
+        # was auto-set to the first argument (the sequence)
+        ev_maps = [s for s in op.get_inv_relations("R35", return_subj=True) if s.uri.startswith(mod.__URI__)]
+        self.assertEqual(len(ev_maps), 1)
+        ev = ev_maps[0]
+        first_arg = ev.R36__has_argument_tuple.R39__has_element[0]
+        self.assertEqual(p.aux.ensure_list(ev.R15__is_element_of), [first_arg])
+
+        # --- fixed-item target: `kernel op` result is a secondary instance of `vector space` ---
+        self.assertIn('p.R30["is secondary instance of"]', res)
+
+        kop = get_item_by_name(res_mod_fpath, "kernel op", mod)
+        kspecs = kop.get_relations("R88")
+        self.assertEqual(len(kspecs), 1)
+        self.assertEqual(kspecs[0].object, p.R30["is secondary instance of"])
+        vector_space = kspecs[0].qualifiers[0].object
+        # the target is a fixed item (not an integer argument index)
+        self.assertNotIsInstance(vector_space, int)
+
+        k_ev_maps = [s for s in kop.get_inv_relations("R35", return_subj=True) if s.uri.startswith(mod.__URI__)]
+        self.assertEqual(len(k_ev_maps), 1)
+        k_ev = k_ev_maps[0]
+        self.assertEqual(p.aux.ensure_list(k_ev.R30__is_secondary_instance_of), [vector_space])
 
     def test_r01__referencing(self):
         CM = s2k.ConversionManager(TEST_DATA15_FPATH, [ma_load_dict], num_keys=20)
