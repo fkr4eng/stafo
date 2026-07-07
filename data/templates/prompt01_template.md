@@ -31,6 +31,8 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - The type of argument1 of <arg1> is <arg2>.
 - The type of argument2 of <arg1> is <arg2>.
 - The result type of <arg1> is <arg2>.
+- // Declares that applying an operator automatically adds a relation to the *result* of the application. <target> is either an argument of the operator (argument1, argument2, ...) or a (quoted) entity. Prefer this over the vague 'is used to model'. Example: "Applying 'element of sequence' creates relation: result 'is element of' argument1" means the i-th element of a sequence is an element of that sequence.
+- Applying '<operator>' creates relation: result '<relation>' '<target>'.
 - <arg1> has the verbal description <arg2>.
 - <arg1> has the alternative english label <arg2>.
 - <arg1> has the alternative german label <arg2>.
