@@ -26,6 +26,7 @@
 - The type of argument1 of 'element of sequence' is 'sequence'
 - The type of argument2 of 'element of sequence' is 'integer number'
 - 'element of sequence' has the verbal description 'Operator that returns the i-th element of a sequence'
+- Applying 'element of sequence' creates relation: result 'is element of' argument1
 - There is a class: 'sequence of coefficients'
 - 'sequence of coefficients' is a subclass of 'sequence'
 - // todo all instances of 'sequence of coefficients' have element type 'real number'
@@ -262,12 +263,12 @@
 - There is a class: 'linear hull' @en
 - 'linear hull' has the alternative german label 'lineare Hülle'
 - 'linear hull' has the alternative english label 'linear span'
-- 'linear hull' is a subclass of 'set'
+- 'linear hull' is a subclass of 'vector space'
 - 'linear hull' has the associated LaTeX notation ${\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\}$.
 - There is a unary operator 'span':
 - The type of argument1 of 'span': is 'set' // todo can we specify that this is a set of vectors?
 - The result type of 'span': is 'vector space'
-- 'span' 'is used to model' 'linear hull'
+- Applying 'span' creates relation: result 'is secondary instance of' 'linear hull'
 - Definition of 'span':
     - full source code: Die \textbf{\em lineare Hülle} (engl. \textbf{\em linear hull, linear span}) von $r$ Vektoren $v_{1},\ldots,v_{r}\in{\mathbb{R}}^{n}$ ist die Menge aller Linearkombinationen dieser Vektoren: \[ {\operatorname{span}}\left\{ v_{1},\ldots,v_{r}\right\} :=\left\{ \alpha_{1}v_{1}+\cdots+\alpha_{r}v_{r};\,\alpha_{1},\ldots,\alpha_{r}\in{\mathbb{R}}\right\} . \]
     - formalized setting:
@@ -640,7 +641,7 @@
 - 'dimension op' has the associated LaTeX notation $\dim$.
 - The type of argument1 of 'dimension op' is 'vector space'.
 - The result type of 'dimension op' is 'integer number'.
-- 'dimension op' 'is used to model' 'dimension'
+- Applying 'dimension op' creates relation: result 'is secondary instance of' 'dimension'
 - There is a general statement ('Dimensionsformel'):
     - full source code: Hinsichtlich der Dimensionen besteht folgender Zusammenhang (\textbf{\em Dimensionsformel}): \begin{equation} \dim\mathbb{U}+\dim\mathbb{U}^{\perp}=n.\label{eq:dimensionsformel-ortho-kompl} \end{equation}
     - formalized setting:
@@ -818,7 +819,7 @@
 - The type of argument1 of 'image of matrix op' is 'matrix'
 - The result type of 'image of matrix op' is 'set'
 - 'image of matrix op' has the verbal description 'operator that returns image of matrix'
-- 'image of matrix op' 'is used to model' 'image of matrix'
+- Applying 'image of matrix op' creates relation: result 'is secondary instance of' 'image of matrix'
 - Definition of 'image of matrix op':
     - full source code: Unter dem \textbf{\em Bild} (engl. \textbf{\em image}, \textbf{\em range}) einer Matrix versteht man die Menge \[ \begin{array}{lrl} {\operatorname{im}}\,A & := & \left\{ y\in{\mathbb{R}}^{m};\,\exists x\in{\mathbb{R}}^{n}\textrm{ mit }y=Ax\right\} \\  & = & \{(Ax)\in{\mathbb{R}}^{m};\,x\in{\mathbb{R}}^{n}\}. \end{array} \]
     - formalized setting:
@@ -960,7 +961,7 @@
 - The result type of 'rank op' is 'integer number'
 - 'rank op' has the verbal description 'operator that returns rank of matrix'
 - 'rank op' has the associated LaTeX notation ${\operatorname{rang}}\,A$.
-- 'rank op' 'is used to model' 'rank of matrix'
+- Applying 'rank op' creates relation: result 'is secondary instance of' 'rank of matrix'
 - Definition of 'rank op':
     - full source code: Der \textbf{\em Rang} (engl. \textbf{\em rank}) der Matrix~$A$ ist die Dimension ihres Bildes: \begin{equation} {\operatorname{rang}}\,A:=\dim({\operatorname{im}}\,A).\label{eq:rank} \end{equation}
     - formalized setting:
@@ -992,7 +993,7 @@
 - The type of argument1 of 'ker' is 'matrix'
 - The result type of 'ker' is 'set'
 - 'ker' has the verbal description 'operator that returns kernel of matrix'
-- 'ker' 'is used to model' 'kernel of matrix'
+- Applying 'ker' creates relation: result 'is secondary instance of' 'kernel of matrix'
 - Definition of 'ker':
     - full source code: Der \textbf{\em Kern} oder \textbf{\em Nullraum} (engl. \textbf{\em kernel}, \textbf{\em null space}) einer Matrix~$A$ ist definiert durch \[ \ker\,A:=\left\{ x\in{\mathbb{R}}^{n};\,Ax=0\right\} , \] d.\,h. er ist die Lösungsmenge des zur Matrix~$A$ gehörenden linearen homogenen Gleichungssystems.
     - formalized setting:
@@ -1072,7 +1073,7 @@
 - The result type of 'corank op' is 'integer number'
 - 'corank op' has the verbal description 'operator that returns defect of matrix'
 - 'corank op' has the associated LaTeX notation ${\operatorname{corang}}\,A$.
-- 'corank op' 'is used to model' 'defect of matrix'
+- Applying 'corank op' creates relation: result 'is secondary instance of' 'defect of matrix'
 - Definition of 'corank op':
     - full source code: Die Dimension des Kerns heißt \textbf{\em Defekt} (engl. \textbf{\em nullity}, \textbf{\em corank}): \begin{equation} {\operatorname{corang}}\,A:=\dim(\ker A)=n-{\operatorname{rang}}\,A.\label{eq:corank} \end{equation}
     - formalized setting:
@@ -1361,7 +1362,7 @@
 - There is a unary operator: 'dual'
 - The type of argument1 of 'dual' is 'vector space'
 - The result type of 'dual' is 'vector space'
-- 'dual' 'is used to model' 'dual space'
+- Applying 'dual' creates relation: result 'is secondary instance of' 'dual space'
 - 'dual space' has the associated LaTeX notation $(\mathbb{R}^n)^*$
 - There is a class: 'linear functional' @en
 - 'linear functional' has the alternative german label 'lineares Funktional'
@@ -1823,7 +1824,7 @@
 - There is a unary operator: 'annihilator'
 - The type of argument1 of 'annihilator' is 'vector space'
 - The result type of 'annihilator' is 'vector space'
-- 'annihilator' 'is used to model' 'annihilator space'
+- Applying 'annihilator' creates relation: result 'is secondary instance of' 'annihilator space'
 - Definition of 'annihilator':
     - full source code: In der gleichen Weise, wie mit dem Skalarprodukt zu einem gegebenen Unterraum $\mathbb{U}\subset{\mathbb{R}}^{n}$ das orthogonale Komplement~(\ref{eq:ortho-komplement}) konstruiert wird, kann man mit der natürlichen Paarung den \textbf{\em Annihilatorraum} \begin{equation} \mathbb{U}^{\perp}:=\left\{ \omega\in({\mathbb{R}}^{n})^{*};\;\forall x\in\mathbb{U}:\,\left\langle \omega,x\right\rangle =0\right\} \label{eq:annihilatorraum} \end{equation} erzeugen.
     - formalized setting:
@@ -1939,6 +1940,8 @@
 - There is a class: 'vector field' @en
 - 'vector field' has the alternative german label 'Vektorfeld'
 - 'vector field' is a subclass of 'general function'
+- 'vector field' is secondary subclass of 'sequence'
+- 'vector field' 'has element type' 'scalar function'
 - There is a general statement:
     - full source code: Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ eine offene Teilmenge des Vektorraums~${\mathbb{R}}^{n}$. Abbildungen der Form $h:\mathcal{M}\to{\mathbb{R}}$ bzw. $f:\mathcal{M}\to{\mathbb{R}}^{n}$ nennt man \textbf{\em Skalarfeld} bzw. \textbf{\em Vektorfeld}.
     - formalized setting:
