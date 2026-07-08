@@ -92,6 +92,16 @@ class MainManager:
         self.tex_snippet_list = None
         self.token_count_cache: Dict[str, int] = {}
 
+        # FNL compression: when True, `create_context` replaces the full accumulated
+        # FNL (Input Part 4 of prompt01) with a compact digest -- a glossary of every
+        # concept defined so far plus the last few snippet blocks for style reference.
+        # This bounds the per-snippet prompt size, which otherwise grows with every
+        # processed snippet (O(n) per call, O(n^2) over the document). Off by default
+        # so the normal pipeline is unchanged; enable it for long source documents.
+        # The full FNL stays on disk and remains available to the model via grep.
+        self.slim_fnl_context = False
+        self.num_recent_fnl_blocks = 3
+
         # will refer to the currently processed snippet
         self.snippet_object: LatexSourceSnippet = None
 
@@ -311,6 +321,9 @@ class MainManager:
         pattern = re.compile(r"// ?(?:todo|TODO).+$", re.MULTILINE)
         statement_source = re.sub(pattern, "", self.statement_source)
 
+        if self.slim_fnl_context:
+            statement_source = digest_prior_fnl(statement_source, self.num_recent_fnl_blocks)
+
         context = {
             "processed_latex_source": self.processed_latex_source,
             "resulting_statements": statement_source,
@@ -496,6 +509,62 @@ def call_llm_api(llm, user_prompt, system_prompt=None, tools=None, return_text_o
             return response
     else:
         raise NotImplementedError("Your LLM family is not supported")
+
+# lines that introduce a new concept (class / property / relation / operator) in the FNL
+_CONCEPT_DEF_RE = re.compile(
+    r"^\s*- There is (?:a|an) (?:class|property|relation|general operator|unary operator|binary operator):"
+)
+# label lines that immediately qualify a just-defined concept
+_CONCEPT_LABEL_RE = re.compile(
+    r"^\s*- '[^']+' has the alternative (?:german|english) label "
+)
+
+
+def digest_prior_fnl(statement_source: str, num_recent_blocks: int = 3) -> str:
+    """
+    Compress the accumulated FNL (Input Part 4 of prompt01) to a compact digest that
+    still lets the model reuse existing entity names and match the expected format.
+
+    The digest has two parts:
+      1. a *concept glossary*: every concept-definition line (class / property /
+         relation / operator) with its alternative-label lines -- roughly one entry
+         per concept, so the model sees all names that already exist and must be
+         reused verbatim rather than re-invented;
+      2. the last `num_recent_blocks` snippet blocks verbatim, as up-to-date style /
+         formatting examples.
+
+    This turns a statement file that grows without bound into a fixed-size context.
+    The full FNL is still on disk, so a tool-using model can grep it when it needs
+    detail beyond the glossary.
+    """
+    # 1) glossary: definition lines plus their immediately-following label lines
+    lines = statement_source.splitlines()
+    glossary_lines: List[str] = []
+    for idx, line in enumerate(lines):
+        if _CONCEPT_DEF_RE.match(line):
+            glossary_lines.append(f"- {line.strip().lstrip('- ').strip()}")
+            j = idx + 1
+            while j < len(lines) and _CONCEPT_LABEL_RE.match(lines[j]):
+                glossary_lines.append(f"    - {lines[j].strip().lstrip('- ').strip()}")
+                j += 1
+    glossary = "\n".join(glossary_lines) if glossary_lines else "(none defined yet)"
+
+    # 2) the last N snippet blocks, verbatim
+    blocks = nonconsuming_regex_split(SNIPPET_MD_COMMENT_PATTERN, statement_source)
+    recent_blocks = blocks[-num_recent_blocks:] if num_recent_blocks > 0 else []
+    recent_text = "".join(recent_blocks).strip()
+
+    return (
+        "## Concept glossary\n"
+        "The following concepts have already been defined. Reuse these *exact* names "
+        "(do not invent near-duplicates). The full formalized-statements file is "
+        "available on disk if you need more detail than this list.\n\n"
+        f"{glossary}\n\n"
+        f"## Most recent {len(recent_blocks)} formalized snippet block(s)\n"
+        "These are shown verbatim as up-to-date examples of the expected format.\n\n"
+        f"{recent_text}\n"
+    )
+
 
 # split without consuming the delimiter
 

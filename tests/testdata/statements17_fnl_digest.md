@@ -1,0 +1,19 @@
+- // snippet(1)
+- There is a class: 'set' @en
+- 'set' has the alternative german label 'Menge'
+- There is a relation: 'is subset of'
+- There is an example:
+    - verbal summary: the empty set is a subset of every set.
+    - related to: 'set'.
+- // snippet(2)
+- There is a property: 'open' @en
+- 'open' has the alternative german label 'offen'
+- 'open' is applicable to 'set'
+- There is an if-then-statement ('some named theorem'):
+    - full source code: irrelevant.
+- // snippet(3)
+- There is a binary operator: 'union op'
+- 'union op' has the alternative german label 'Vereinigung'
+- // snippet(4)
+- There is a unary operator: 'closure op'
+- 'closure op' has the alternative german label 'Abschluss'
