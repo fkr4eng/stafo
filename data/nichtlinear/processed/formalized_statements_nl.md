@@ -4453,3 +4453,245 @@
     - 'maximal existence interval'
     - 'global'
     - 'complete'
+- // snippet(101)
+- // Worked example "Endliche Fluchtzeit" (finite escape time): the initial value problem dot x = x^2, x(0) = p > 0 has the solution phi_t(p) = p/(1 - t p). The flow has a pole at t = 1/p, so its maximal existence interval I_p = (-inf, 1/p) is right-bounded and the solution cannot be continued past t = 1/p. Hence the vector field x^2 is not complete.
+- There is a general statement:
+    - full source code: Die Anfangswertaufgabe $\dot{x}=x^{2},\quad x(0)=p>0$ lässt sich durch Trennung der Variablen lösen: $\varphi_{t}(p)=\frac{p}{1-tp}$ für $p>0$. Der Fluss hat das rechtsseitig beschränkte Existenzintervall $\mathcal{I}_{p}=(-\infty,\tfrac{1}{p})$, d.\,h. die Lösung der Anfangswertaufgabe lässt sich nicht über $t=\tfrac{1}{p}$ hinaus fortsetzen, da der Fluss dort eine Polstelle aufweist. Das Vektorfeld ist demnach nicht vollständig.
+    - formalized setting:
+        - 'p' is an instance of 'real number'
+        - There is a mathematical relation:
+            - full source code: 'p' > 0
+        - 'xi' is an instance of 'real number'
+        - 'f' is an instance of 'vector field'
+        - There is an equation ('vf endl fluchtzeit'):
+            - full source code: 'f'('xi') == 'xi' ** 2
+        - 'x' is an instance of 'general function'
+        - 't' is an instance of 'real number'
+        - 'phi' is an instance of 'flow'
+        - 'I_p' is an instance of 'maximal existence interval'
+    - formalized premise:
+        - There is a system of equations ('awa endl fluchtzeit'):
+            - There is an equation ('ode endl fluchtzeit'):
+                - full source code: 'time derivative op'('x')('t') == 'x'('t') ** 2
+            - There is an equation ('ic endl fluchtzeit'):
+                - full source code: 'x'(0) == 'p'
+        - 'ode endl fluchtzeit' is secondary instance of 'differential equation'
+        - 'awa endl fluchtzeit' is secondary instance of 'initial value problem'
+    - formalized assertion:
+        - // solution obtained by separation of variables
+        - There is an equation ('fluss endl fluchtzeit'):
+            - full source code: 'phi'('p', 't') == 'p' / (1 - 't' * 'p')
+        - // the flow has a pole at t = 1/p, so the maximal existence interval I_p = (-inf, 1/p) is right-bounded and the solution cannot be continued past t = 1/p
+        - There is a mathematical relation ('pole bound endl fluchtzeit'):
+            - full source code: 't' < 1 / 'p'
+        - // the vector field x^2 is therefore not complete
+        - 'f' does not have the property 'complete'
+- There is an example:
+    - verbal summary: Finite escape time. The initial value problem dot x = x^2, x(0) = p > 0 has the solution phi_t(p) = p/(1 - t p). The flow has a pole at t = 1/p, so its maximal existence interval I_p = (-inf, 1/p) is right-bounded and the solution cannot be continued past t = 1/p; consequently the vector field x^2 is not complete.
+    - related to: 'complete'.
+- Concepts in this snippet:
+    - 'initial value problem'
+    - 'differential equation'
+    - 'flow'
+    - 'maximal existence interval'
+    - 'complete'
+    - 'vector field'
+    - 'general function'
+    - 'real number'
+    - 'time derivative op'
+- // snippet(102)
+- // This snippet connects the flow concept to linear system and control theory. It introduces a linear state-space model dot x = A x + b u, x(0) = p, with state x, input u, square matrix A in R^{n x n}, vector b in R^n and initial value p in R^n, and gives its general solution x(t) = exp(A t) x(0) + integral from 0 to t of exp(A (t - tau)) b u(tau) dtau. The matrix exponential itself is defined in the next snippet (103), so here the solution form is only referenced.
+- There is a class: 'linear state-space model' @en
+- 'linear state-space model' has the alternative german label 'lineares Zustandsraummodell'
+- 'linear state-space model' is a subclass of 'differential equation'
+- There is a class: 'state' @en
+- 'state' has the alternative german label 'Zustand'
+- 'state' is a subclass of 'general function'
+- There is a class: 'input' @en
+- 'input' has the alternative german label 'Eingang'
+- 'input' is a subclass of 'general function'
+- There is a general statement:
+    - full source code: Wir betrachten ein lineares Zustandsraummodell $\dot{x}=A\,x+b\,u,\quad x(0)=p$ mit dem Zustand~$x$, dem Eingang~$u$, der quadratischen Matrix $A\in{\mathbb{R}}^{n\times n}$, dem Vektor $b\in{\mathbb{R}}^{n}$ und dem Anfangswert $x(0)=p\in{\mathbb{R}}^{n}$. Die allgemeine Lösung dieses Systems hat die Form $x(t)={\mathrm{e}}^{At}x(0)+\int_{0}^{t}{\mathrm{e}}^{A(t-\tau)}bu(\tau)\,{\mathrm{d}}\tau$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'A' is an instance of 'square matrix'
+        - 'b' is an instance of 'vector'
+        - 'b' is element of 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'Rn'
+        - 'x' is an instance of 'state'
+        - 'x' 'has domain' 'set of real numbers'
+        - 'x' 'has codomain' 'Rn'
+        - 'u' is an instance of 'input'
+        - 'u' 'has domain' 'set of real numbers'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - There is a system of equations ('lin zrm'):
+            - There is an equation ('lin zrm ode'):
+                - full source code: 'time derivative op'('x')('t') == 'A' * 'x'('t') + 'b' * 'u'('t')
+            - There is an equation ('lin zrm ic'):
+                - full source code: 'x'(0) == 'p'
+        - 'lin zrm ode' is secondary instance of 'differential equation'
+        - 'lin zrm' is secondary instance of 'linear state-space model'
+    - formalized assertion:
+        - // general solution of the linear state-space model: x(t) = exp(A t) x(0) + integral from 0 to t of exp(A (t - tau)) b u(tau) dtau; the matrix exponential exp(.) is defined in snippet 103
+        - 'lin zrm' is associated to 'flow'
+- Concepts in this snippet:
+    - 'linear state-space model'
+    - 'state'
+    - 'input'
+    - 'differential equation'
+    - 'flow'
+    - 'square matrix'
+    - 'vector'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'time derivative op'
+    - 'set of real numbers'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'is element of'
+- Defined in this snippet:
+    - 'linear state-space model'
+    - 'state'
+    - 'input'
+- // snippet(103)
+- // This snippet defines the matrix exponential function exp(A) = e^A by the absolutely convergent series: sum over k from 0 to infinity of (1/k!) times A^k. The matrix powers A^k = A A ... A (k times) are understood in the sense of matrix multiplication, not elementwise.
+- There is a unary operator: 'matrix exponential op' @en
+- 'matrix exponential op' has the alternative german label 'Matrixexponentialfunktion'
+- 'matrix exponential op' has the associated LaTeX notation $\exp$
+- The type of argument1 of 'matrix exponential op' is 'square matrix'
+- The result type of 'matrix exponential op' is 'square matrix'
+- 'matrix exponential op' has the verbal description 'matrix exponential exp(A) = e^A, defined by the absolutely convergent series sum over k from 0 to infinity of (1/k!) A^k, where the matrix powers A^k are products in the sense of matrix multiplication'
+- There is a binary operator: 'matrix power op' @en
+- 'matrix power op' has the alternative german label 'Matrixpotenz'
+- The type of argument1 of 'matrix power op' is 'square matrix'
+- The type of argument2 of 'matrix power op' is 'integer number'
+- The result type of 'matrix power op' is 'square matrix'
+- 'matrix power op' has the verbal description 'k-th power of a square matrix A, i.e. the product A A ... A taken k times in the sense of matrix multiplication (not elementwise)'
+- There is an explanation:
+    - verbal summary: The matrix exponential function exp(A) = e^A is defined by the absolutely convergent series sum over k from 0 to infinity of (1/k!) A^k. The occurring matrix powers A^k = A A ... A (k times) are meant in the sense of matrix multiplication, not elementwise.
+    - related to: 'matrix exponential op'.
+- Concepts in this snippet:
+    - 'matrix exponential op'
+    - 'matrix power op'
+    - 'square matrix'
+    - 'integer number'
+- Defined in this snippet:
+    - 'matrix exponential op'
+    - 'matrix power op'
+- // snippet(104)
+- // Worked example "Konstantes Vektorfeld und Gruppeneigenschaft": a constant vector field f(x) = b (b in R^n) gives the initial value problem dot x = b, x(0) = p, a special case of the linear state-space model (snippet 102) with A = 0 and constant input u = 1. Using e^{At}|_{A=0} = e^0 = I, the solution is x(t) = p + b t, defined for all p and all t, i.e. the global flow phi_t(p) = p + b t. It satisfies the group property: phi_0(p) = p and phi_t(phi_s(p)) = p + b(t+s) = phi_{t+s}(p).
+- There is a general statement:
+    - full source code: Gegeben sei ein konstantes Vektorfeld $f(x)\equiv b$ mit $b\in{\mathbb{R}}^{n}$. Die zugehörige Anfangswertaufgabe $\dot{x}(t)=b,\quad x(0)=p$ mit $p\in{\mathbb{R}}^{n}$ lässt sich als Spezialfall des linearen Zustandsraummodells mit der $n\times n$-Nullmatrix $A=0$ und dem konstanten Eingang $u\equiv1$ auffassen. Mit ${\mathrm{e}}^{At}|_{A=0}={\mathrm{e}}^{0}=I$ ergibt sich die spezielle Lösung $x(t)=p+b\,t$, die für alle $p\in{\mathbb{R}}^{n}$ und alle $t\in{\mathbb{R}}$ definiert ist. Man erhält den globalen Fluss $\varphi_{t}(p)=p+b\,t$, mit $\varphi_{0}(p)=p$ und $\varphi_{t}\circ\varphi_{s}(p)=p+b(t+s)=\varphi_{t+s}(p)$ liegt die Gruppeneigenschaft vor.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'b' is an instance of 'vector'
+        - 'b' is element of 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'Rn'
+        - 'xi' is an instance of 'vector'
+        - 'f' is an instance of 'vector field'
+        - There is an equation ('const vf'):
+            - full source code: 'f'('xi') == 'b'
+        - 'x' is an instance of 'general function'
+        - 't' is an instance of 'real number'
+        - 's' is an instance of 'real number'
+        - 'phi' is an instance of 'flow'
+    - formalized premise:
+        - There is a system of equations ('awa const vf'):
+            - There is an equation ('ode const vf'):
+                - full source code: 'time derivative op'('x')('t') == 'b'
+            - There is an equation ('ic const vf'):
+                - full source code: 'x'(0) == 'p'
+        - 'ode const vf' is secondary instance of 'differential equation'
+        - 'awa const vf' is secondary instance of 'initial value problem'
+        - // this initial value problem is a special case of the linear state-space model with A = 0 and constant input u = 1
+        - 'awa const vf' is associated to 'linear state-space model'
+    - formalized assertion:
+        - // special solution from the general formula using e^{At}|_{A=0} = I
+        - There is an equation ('sol const vf'):
+            - full source code: 'phi'('p', 't') == 'p' + 'b' * 't'
+        - 'phi' has the property 'global'
+        - // group property: phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p)
+        - There is an equation ('group id const vf'):
+            - full source code: 'phi'('p', 0) == 'p'
+        - There is an equation ('group comp const vf'):
+            - full source code: 'phi'('phi'('p', 's'), 't') == 'phi'('p', 's' + 't')
+        - 'phi' has the property 'group property'
+- There is an example:
+    - verbal summary: Constant vector field and group property. For f(x) = b (b in R^n) the initial value problem dot x = b, x(0) = p is a special case of the linear state-space model with A = 0 and constant input u = 1. Its solution x(t) = p + b t is defined for all p and all t, giving the global flow phi_t(p) = p + b t, which satisfies the group property phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p) = p + b(t+s).
+    - related to: 'group property'.
+- Concepts in this snippet:
+    - 'vector field'
+    - 'initial value problem'
+    - 'differential equation'
+    - 'linear state-space model'
+    - 'flow'
+    - 'global'
+    - 'group property'
+    - 'vector'
+    - 'general function'
+    - 'real number'
+    - 'time derivative op'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'is element of'
+- // snippet(105)
+- // Worked example "Lineares Vektorfeld und Gruppeneigenschaft": a linear vector field f(x) = A x (A in R^{n x n}) is a special case of the linear state-space model (snippet 102) with b = 0 (or u = 0). Its global flow is phi_t(x) = e^{At} x (matrix exponential, snippet 103). The first group property phi_0(x) = e^{A0} x = I x = x follows from e^0 = I; the second phi_t(phi_s(x)) = e^{tA} e^{sA} x = e^{(t+s)A} x = phi_{t+s}(x) follows via the Cauchy product of the series and the binomial theorem.
+- There is a general statement:
+    - full source code: Man betrachte ein lineares Vektorfeld $f:{\mathbb{R}}^{n}\to{\mathbb{R}}^{n}$ mit $f(x)=Ax$ und $A\in{\mathbb{R}}^{n\times n}$. Auch dieses Vektorfeld ist ein Spezialfall des linearen Zustandsraummodells, jetzt mit dem Nullvektor $b=0$ oder mit $u(t)\equiv0$. Man erhält den globalen Fluss $\varphi_{t}(x)={\mathrm{e}}^{At}x$. Die erste Gruppeneigenschaft $\varphi_{0}(x)={\mathrm{e}}^{A0}x=Ix=x$ ergibt sich aus ${\mathrm{e}}^{0}=I$. Die zweite Gruppeneigenschaft $\varphi_{t}(\varphi_{s}(x))={\mathrm{e}}^{tA}{\mathrm{e}}^{sA}x={\mathrm{e}}^{(t+s)A}x=\varphi_{t+s}(x)$ lässt sich mit dem Cauchy-Produkt unendlicher Reihen und dem binomischen Satz zeigen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'A' is an instance of 'square matrix'
+        - 'xi' is an instance of 'vector'
+        - 'f' is an instance of 'vector field'
+        - There is an equation ('lin vf'):
+            - full source code: 'f'('xi') == 'A' * 'xi'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'Rn'
+        - 't' is an instance of 'real number'
+        - 's' is an instance of 'real number'
+        - 'phi' is an instance of 'flow'
+    - formalized premise:
+        - // linear vector field f(x) = A x; special case of the linear state-space model with b = 0 (or u = 0)
+        - 'f' is associated to 'linear state-space model'
+    - formalized assertion:
+        - // global flow read off from the general solution formula: phi_t(x) = e^{At} x
+        - There is an equation ('lin vf flow'):
+            - full source code: 'phi'('x', 't') == 'matrix exponential op'('A' * 't') * 'x'
+        - 'phi' has the property 'global'
+        - // first group property: phi_0(x) = e^{A0} x = I x = x, since e^0 = I
+        - There is an equation ('lin vf group id'):
+            - full source code: 'phi'('x', 0) == 'x'
+        - // second group property via Cauchy product of the series and the binomial theorem: e^{tA} e^{sA} = e^{(t+s)A}
+        - There is an equation ('lin vf group comp'):
+            - full source code: 'phi'('phi'('x', 's'), 't') == 'phi'('x', 's' + 't')
+        - 'phi' has the property 'group property'
+- There is an example:
+    - verbal summary: Linear vector field and group property. For f(x) = A x (A in R^{n x n}), a special case of the linear state-space model with b = 0 (or u = 0), the global flow is phi_t(x) = e^{At} x. It satisfies the group property phi_0(x) = x (from e^0 = I) and phi_t(phi_s(x)) = e^{tA} e^{sA} x = e^{(t+s)A} x = phi_{t+s}(x), shown via the Cauchy product and the binomial theorem.
+    - related to: 'flow'.
+- Concepts in this snippet:
+    - 'vector field'
+    - 'linear state-space model'
+    - 'flow'
+    - 'global'
+    - 'group property'
+    - 'matrix exponential op'
+    - 'square matrix'
+    - 'vector'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'is element of'
