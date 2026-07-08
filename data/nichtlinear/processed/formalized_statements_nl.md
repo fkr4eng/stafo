@@ -2093,7 +2093,7 @@
         - 'TxM' 'has basis' 'b'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'f'('x') == \sum_{i=1}^n 'element of sequence'('f'('x'), 'i') * 'element of sequence'('b', 'i')
+            - full source code: 'f'('x') == \sum_{i=1}^n 'element of sequence'('f', 'i')('x') * 'element of sequence'('b', 'i')
             // todo this will propbably not parse well
 
 - Concepts in this snippet:
@@ -2279,7 +2279,7 @@
             - full source code: 'omegax' == 'omega'(x)
     - formalized assertion:
         - There is an equation:
-            - full source code: 'omega'('x') == \sum_{i=1}^n 'element of sequence'('omega'('x'), 'i') * 'element of sequence'('dualb', 'i')
+            - full source code: 'omega'('x') == \sum_{i=1}^n 'element of sequence'('omega', 'i')('x') * 'element of sequence'('dualb', 'i')
             // todo this will propbably not parse well
 
 
@@ -3668,3 +3668,788 @@
     - 'Lipschitz condition'
     - 'Lipschitz constant'
     - 'Lipschitz-continuous'
+- // snippet(89)
+- // This snippet is the proof sketch (Beweisskizze) for the 'Theorem of Picard-Lindelöf' from snippet(88). It establishes the equivalence of the initial value problem to an integral equation and introduces the Picard iteration whose convergence follows from the Banach fixed-point theorem, exploiting the Lipschitz property of F.
+- There is a class: 'integral equation' @en
+- 'integral equation' has the alternative german label 'Integralgleichung'
+- // note: 'integral equation' left without a superclass; the natural parent 'mathematical equation' is an ocse entity the matcher does not resolve reliably (would emit invalid pyirk). Add a parent by hand if desired.
+- There is a class: 'Picard iteration' @en
+- 'Picard iteration' has the alternative german label 'Picard-Iteration'
+- 'Picard iteration' has the verbal description 'iterative scheme phi_{k+1}(t) = p + integral from t0 to t of F(phi_k(tau), tau) dtau with start function phi_0(t) = p, whose limit solves the initial value problem'
+
+- // The initial value problem (awa1) is equivalent to the integral equation (eq:awa-integralgleichung1).
+- There is an equivalence-statement ('IVP integral equation equivalence'):
+    - full source code: Die Anfangswertaufgabe~(\ref{eq:awa1}) der Differentialgleichung~(\ref{eq:dgl1}) ist äquivalent zur Integralgleichung $x(t)=p+\int_{t_{0}}^{t}F(x(\tau),\tau)\,\mathrm{d}\tau$.
+    - source code of assertion: Die Anfangswertaufgabe~(\ref{eq:awa1}) der Differentialgleichung~(\ref{eq:dgl1}).
+    - source code of premise: $x(t)=p+\int_{t_{0}}^{t}F(x(\tau),\tau)\,\mathrm{d}\tau$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'I'
+        - 'x' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
+        - 'tau' is an instance of 'real number'
+        - 'tau' is element of 'I'
+    - formalized premise:
+        - There is an equation ('integral equation for awa'):
+            - full source code: $x(t)=p+\int_{t_{0}}^{t}F(x(\tau),\tau)\,\mathrm{d}\tau$.
+            - source code of left hand side: $x(t)$.
+            - source code of right hand side: $p+\int_{t_{0}}^{t}F(x(\tau),\tau)\,\mathrm{d}\tau$.
+            - formalized left hand side: 'x'('t')
+            - formalized right hand side: 'p' + 'definite integral'('F'('x'('tau'), 'tau'), 'tau', 'tuple op'('t0', 't')).
+            - reference: 'eq:awa-integralgleichung1'
+        - 'integral equation for awa' is a secondary instance of 'integral equation'
+    - formalized assertion:
+        - 'x' is a secondary instance of 'solution of initial value problem'
+
+- // The Picard iteration is derived from the integral equation to construct the solution.
+- Definition of 'Picard iteration':
+    - full source code: Dazu geht man von der Integralgleichung~(\ref{eq:awa-integralgleichung1}) zu der Picard-Iteration $\phi_{k+1}(t)=p+\int_{t_{0}}^{t}F(\phi_{k}(\tau),\tau)\,\mathrm{d}\tau$ mit der Startfunktion $\phi_{0}(t)\equiv p$ über.
+    - formalized setting:
+        - // I, M, p and t0 are as in the initial value problem (awa1)
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'M' is an instance of 'set'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
+        - 'tau' is an instance of 'real number'
+        - 'tau' is element of 'I'
+        - 'k' is an instance of 'integer number'
+        - 'phi_0' is an instance of 'general function'
+        - 'phi_0' 'has domain' 'I'
+        - 'phi_0' 'has codomain' 'M'
+        - 'phi_k' is an instance of 'general function'
+        - 'phi_k' 'has domain' 'I'
+        - 'phi_k' 'has codomain' 'M'
+        - 'phi_k1' is an instance of 'general function'
+        - 'phi_k1' 'has domain' 'I'
+        - 'phi_k1' 'has codomain' 'M'
+    - formalized assertion:
+        - There is an equation ('picard start function'):
+            - full source code: $\phi_{0}(t)\equiv p$.
+            - source code of left hand side: $\phi_{0}(t)$.
+            - source code of right hand side: $p$.
+            - formalized left hand side: 'phi_0'('t')
+            - formalized right hand side: 'p'.
+        - There is an equation ('picard iteration step'):
+            - full source code: $\phi_{k+1}(t)=p+\int_{t_{0}}^{t}F(\phi_{k}(\tau),\tau)\,\mathrm{d}\tau$.
+            - source code of left hand side: $\phi_{k+1}(t)$.
+            - source code of right hand side: $p+\int_{t_{0}}^{t}F(\phi_{k}(\tau),\tau)\,\mathrm{d}\tau$.
+            - formalized left hand side: 'phi_k1'('t')
+            - formalized right hand side: 'p' + 'definite integral'('F'('phi_k'('tau'), 'tau'), 'tau', 'tuple op'('t0', 't')).
+            - reference: 'eq:picard-iteration'
+
+- 'IVP integral equation equivalence' is associated to 'Theorem of Picard-Lindelöf'
+- 'Picard iteration' is associated to 'Theorem of Picard-Lindelöf'
+
+- // The convergence of the Picard iteration is proven with the Banach fixed-point theorem (Banachscher Fixpunkt-Satz), using the Lipschitz property of F; this constitutes the proof of the theorem.
+- There is an explanation:
+    - verbal summary: The initial value problem is equivalent to an integral equation, whose solution is obtained as the limit of the Picard iteration; the convergence of this iteration is shown via the Banach fixed-point theorem exploiting the Lipschitz property of F. This is the proof sketch of the Picard-Lindelöf theorem.
+    - related to: 'Theorem of Picard-Lindelöf'.
+
+- Concepts in this snippet:
+    - 'integral equation'
+    - 'Picard iteration'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'set of real numbers'
+    - 'cartesian product op'
+    - 'vector field'
+    - 'time-dependent'
+    - 'has domain'
+    - 'has codomain'
+    - 'real number'
+    - 'is element of'
+    - 'vector'
+    - 'general function'
+    - 'definite integral'
+    - 'tuple op'
+    - 'solution of initial value problem'
+    - 'is associated to'
+    - 'Theorem of Picard-Lindelöf'
+- Defined in this snippet:
+    - 'integral equation'
+    - 'Picard iteration'
+- // snippet(90i)
+- // ignored content
+- // snippet(91)
+- There is a property: 'compact' @en
+- 'compact' has the alternative german label 'kompakt'
+- 'compact' is applicable to 'set'
+- There is a property: 'convex' @en
+- 'convex' has the alternative german label 'konvex'
+- 'convex' is applicable to 'set'
+- There is an if-then-statement ('Folgerung aus dem Mittelwertsatz'):
+    - full source code: Sei $F:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$ stetig differenzierbar. Dann genügt~$F$ auf jeder kompakten konvexen Teilmenge $\mathcal{K}\subset\mathcal{M}\times\mathcal{I}$ einer Lipschitz-Bedingung mit der Lipschitz-Konstanten $L:=\max\limits _{(x,t)\in\mathcal{K}}\left\Vert \frac{\partial F(x,t)}{\partial x}\right\Vert$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 'K' is an instance of 'set' qqq univ_quant True
+        - 'K' 'is subset of' 'MxI'
+    - source code of premise: Sei $F:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$ stetig differenzierbar. Sei $\mathcal{K}\subset\mathcal{M}\times\mathcal{I}$ eine kompakte konvexe Teilmenge.
+    - source code of assertion: Dann genügt~$F$ auf $\mathcal{K}$ einer Lipschitz-Bedingung mit der Lipschitz-Konstanten $L:=\max\limits _{(x,t)\in\mathcal{K}}\left\Vert \frac{\partial F(x,t)}{\partial x}\right\Vert$.
+    - formalized premise:
+        - 'F' 'has differentiability class' 1
+        - 'K' has the property 'compact'
+        - 'K' has the property 'convex'
+    - formalized assertion:
+        - 'F' has the property 'Lipschitz condition' qqq 'is valid on set' 'K'
+        - 'L' is an instance of 'Lipschitz constant'
+        - There is an equation:
+            - // the derivative is the partial Jacobian of F with respect to its first (spatial) argument x; the norm is maximized over the compact convex set K
+            - full source code: 'L' == \max_{(x,t) \in K} 'norm op'(\frac{\partial F(x,t)}{\partial x})
+- // comment: the corollary follows from the mean value theorem of differential calculus (Mittelwertsatz der Differentialrechnung); this justification is stated in the caption but is not itself a formalizable statement.
+
+- Concepts in this snippet:
+    - 'compact'
+    - 'convex'
+    - 'set'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'cartesian product op'
+    - 'vector field'
+    - 'time-dependent'
+    - 'has domain'
+    - 'has codomain'
+    - 'has differentiability class'
+    - 'Lipschitz condition'
+    - 'is valid on set'
+    - 'Lipschitz constant'
+    - 'norm op'
+- Defined in this snippet:
+    - 'compact'
+    - 'convex'
+- // snippet(92)
+- // This concluding remark combines the corollary (snippet 91) with the Theorem of Picard-Lindelöf (snippet 88): every continuously differentiable (C^1) time-dependent vector field satisfies a (local) Lipschitz condition, hence existence and uniqueness of a local solution of the associated initial value problem is guaranteed. No new concepts are introduced.
+- There is a general statement:
+    - full source code: Aus dem Korollar geht hervor, dass jedes stetig differenzierbares Vektorfeld~$F$ einer lokalen Lipschitz-Bedingung der Form~(\ref{eq:Lipschitz-Bed-Satz-PL}) genügt. Damit sind Existenz und Eindeutigkeit einer lokalen Lösung der Anfangswertaufgabe~(\ref{eq:awa1}) entsprechend Satz~\ref{thm:Picard-Lindeloeff} gewährleistet.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+    - formalized premise:
+        - 'F' 'has differentiability class' 1
+    - formalized assertion:
+        - // the corollary (snippet 91) guarantees the (local) Lipschitz condition
+        - 'F' has the property 'Lipschitz condition'
+        - // the Theorem of Picard-Lindelöf then guarantees existence and uniqueness of a local solution
+        - 'I_p' is an instance of 'set'
+        - 'I_p' 'is subset of' 'set of real numbers'
+        - 'I_p' has the property 'open'
+        - 't0' is element of 'I_p'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'I_p'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' 'has differentiability class' 1
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'phi' has the property 'unique'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'set of real numbers'
+    - 'cartesian product op'
+    - 'vector field'
+    - 'time-dependent'
+    - 'has domain'
+    - 'has codomain'
+    - 'real number'
+    - 'vector'
+    - 'is element of'
+    - 'has differentiability class'
+    - 'Lipschitz condition'
+    - 'general function'
+    - 'solution of initial value problem'
+    - 'unique'
+- // snippet(93)
+- // This remark shows that the Lipschitz condition in the Theorem of Picard-Lindelöf (snippet 88) is essential for uniqueness of the solution. It gives the counterexample initial value problem dot x = sqrt(x), x(0)=0, whose right-hand side is continuous for x>=0 but not Lipschitz-continuous at x=0. Both the zero function phi(t)=0 and phi_bar(t)=t^2/4 (for t>=0) solve this initial value problem, hence the solution is not unique. Peano's existence theorem already guarantees existence (but not uniqueness) for a merely continuous right-hand side.
+- There is a unary operator: 'square root op' @en
+- 'square root op' has the alternative german label 'Quadratwurzel'
+- 'square root op' has the associated LaTeX notation $\sqrt{}$
+- The type of argument1 of 'square root op' is 'real number'
+- The result type of 'square root op' is 'real number'
+- There is an if-then-statement ('Theorem of Peano'):
+    - full source code: Tatsächlich sichert der Existenzsatz von Peano bereits bei einer stetigen rechten Seite die Existenz einer Lösung, nicht aber deren Eindeutigkeit.
+    - // Peano's existence theorem: a continuous time-dependent vector field (right-hand side) already guarantees the existence of a solution of the initial value problem (awa1), but not its uniqueness.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+    - formalized premise:
+        - 'F' has the property 'continuous'
+    - formalized assertion:
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has codomain' 'M'
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - // existence is guaranteed; in contrast to the Theorem of Picard-Lindelöf, uniqueness of 'phi' is not asserted here
+- There is a general statement:
+    - full source code: Dazu betrachte man die Anfangswertaufgabe $\dot{x}=\sqrt{x},\quad x(0)=0$, bei welcher die rechte Seite der Differentialgleichung für $x\geq0$ stetig, im Punkt $x=0$ aber nicht Lipschitz-stetig ist. Durch direktes Nachrechnen überprüft man, dass sowohl die Nullfunktion (d.\,h. $\phi(t)=0$ für alle $t\in{\mathbb{R}}$) als auch $\bar{\phi}(t)=t^{2}/4$ für $t\geq0$ die Anfangswertaufgabe erfüllen.
+    - // concrete scalar counterexample (n=1): the right-hand side F(x)=sqrt(x) is continuous but not Lipschitz-continuous at 0, and the initial value problem has two different solutions.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'set of real numbers'
+        - // M is the domain x >= 0
+        - 'F' is an instance of 'general function'
+        - 'F' 'has domain' 'M'
+        - 'F' 'has codomain' 'set of real numbers'
+        - There is an equation ('ce right hand side'):
+            - full source code: 'F'('x') == 'square root op'('x')
+        - 't0' is an instance of 'real number'
+        - There is an equation:
+            - full source code: 't0' == 0
+        - 'p' is an instance of 'real number'
+        - There is an equation:
+            - full source code: 'p' == 0
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'I'
+        - 'x' 'has codomain' 'M'
+        - There is a system of equations ('awa_ce'):
+            - There is an equation ('ce ode'):
+                - full source code: 'time derivative op'('x')('t') == 'square root op'('x'('t'))
+            - There is an equation ('ce initial condition'):
+                - full source code: 'x'('t0') == 'p'
+        - 'awa_ce' is secondary instance of 'initial value problem'
+        - 'ce ode' is secondary instance of 'differential equation'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has codomain' 'set of real numbers'
+        - There is an equation ('zero solution'):
+            - full source code: 'phi'('t') == 0
+        - 'phi_bar' is an instance of 'general function'
+        - 'phi_bar' 'has codomain' 'set of real numbers'
+        - There is an equation ('parabola solution'):
+            - full source code: 'phi_bar'('t') == 't'**2 / 4
+    - formalized premise:
+        - // empty
+    - formalized assertion:
+        - 'F' has the property 'continuous'
+        - 'F' does not have the property 'Lipschitz-continuous'
+        - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'phi_bar' is secondary instance of 'solution of initial value problem'
+        - // both phi and phi_bar solve the same initial value problem 'awa_ce', therefore the solution is not unique
+        - 'phi' does not have the property 'unique'
+- There is an explanation:
+    - verbal summary: The Lipschitz condition of the Theorem of Picard-Lindelöf is necessary for uniqueness. Dropping it (continuous but non-Lipschitz right-hand side) can lead to several solutions of the same initial value problem, as demonstrated by the counterexample dot x = sqrt(x), x(0)=0.
+    - related to: 'unique'.
+- There is an explanation:
+    - verbal summary: Peano's existence theorem guarantees existence of a solution of an initial value problem already for a continuous right-hand side, but unlike the Theorem of Picard-Lindelöf it does not guarantee uniqueness.
+    - related to: 'Theorem of Picard-Lindelöf'.
+- Concepts in this snippet:
+    - 'square root op'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'cartesian product op'
+    - 'vector field'
+    - 'time-dependent'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'is element of'
+    - 'continuous'
+    - 'general function'
+    - 'time derivative op'
+    - 'differential equation'
+    - 'initial value problem'
+    - 'solution of initial value problem'
+    - 'unique'
+    - 'Lipschitz-continuous'
+- Defined in this snippet:
+    - 'square root op'
+- // snippet(94)
+- // This snippet introduces the time-dependent flow (Evolution / zeitvarianter Fluss) of the differential equation (dgl1): a two-parameter map phi: M x I x I -> M that collects all solutions, provided an integral curve through every (x,t) exists. It states the two defining relations of the flow (identity at equal times and the cocycle/semigroup property) and defines the composition of maps.
+- There is a class: 'time-dependent flow' @en
+- 'time-dependent flow' has the alternative german label 'Evolution'
+- 'time-dependent flow' has the alternative german label 'zeitvarianter Fluss'
+- 'time-dependent flow' has the alternative german label 'zeitabhängiger Fluss'
+- There is a binary operator: 'function composition op' @en
+- 'function composition op' has the alternative german label 'Hintereinanderausführung'
+- 'function composition op' has the associated LaTeX notation $\circ$
+- The type of argument1 of 'function composition op' is 'general function'
+- The type of argument2 of 'function composition op' is 'general function'
+- The result type of 'function composition op' is 'general function'
+- // The composition of two maps phi and psi is defined by (phi o psi)(x) := phi(psi(x)).
+- Definition of 'time-dependent flow':
+    - full source code: Existiert für alle $(x,t)\in\mathcal{M}\times I$ eine Integralkurve, die zum Zeitpunkt~$t$ durch~$x$ verläuft, dann kann man die Gesamtheit der Lösungen durch eine zweiparametrige Abbildung $\varphi:\mathcal{M}\times\mathcal{I}\times\mathcal{I}\to\mathcal{M}$ erfassen, die Evolution oder zeitvarianter bzw. zeitabhängiger Fluss genannt wird. Dabei ist $\varphi_{t,t_{0}}(p):=\varphi(p,t,t_{0})$ der Funktionswert der Lösung der Anfangswertaufgabe~(\ref{eq:awa1}) zum Zeitpunkt~$t$. Für alle $x\in\mathcal{M}$ gelten folgende Beziehungen: $\varphi_{t_{0},t_{0}}(x)=x$, $\varphi_{t_{2},t_{1}}\circ\varphi_{t_{1},t_{0}}(x)=\varphi_{t_{2},t_{0}}(x)$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'IxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'IxI' == 'cartesian product op'('I', 'I')
+        - 'MxIxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxIxI' == 'cartesian product op'('M', 'IxI')
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'MxIxI'
+        - 'phi' 'has codomain' 'M'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+        - 't1' is an instance of 'real number'
+        - 't1' is element of 'I'
+        - 't2' is an instance of 'real number'
+        - 't2' is element of 'I'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+    - formalized premise:
+        - // for every (x,t) in M x I there exists an integral curve (trajectory) of the differential equation (dgl1) passing through x at time t
+    - formalized assertion:
+        - 'phi' is secondary instance of 'time-dependent flow'
+        - // phi_{t,t0}(p) := phi(p,t,t0) is the value at time t of the solution of the initial value problem (awa1)
+        - // identity relation at equal times: phi_{t0,t0}(x) = x
+        - There is an equation ('flow identity'):
+            - full source code: 'phi'('x', 't0', 't0') == 'x'
+        - // cocycle / semigroup relation: phi_{t2,t1} ∘ phi_{t1,t0}(x) = phi_{t2,t0}(x)
+        - There is an equation ('flow cocycle'):
+            - full source code: 'phi'('phi'('x', 't1', 't0'), 't2', 't1') == 'phi'('x', 't2', 't0')
+- 'time-dependent flow' is associated to 'solution of initial value problem'
+- 'time-dependent flow' is associated to 'differential equation'
+- Concepts in this snippet:
+    - 'time-dependent flow'
+    - 'function composition op'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'set of real numbers'
+    - 'is subset of'
+    - 'open'
+    - 'cartesian product op'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'real number'
+    - 'is element of'
+    - 'vector'
+    - 'trajectory'
+    - 'solution of initial value problem'
+    - 'differential equation'
+- Defined in this snippet:
+    - 'time-dependent flow'
+    - 'function composition op'
+- // snippet(95)
+- // This example treats the linear homogeneous time-variant system dot x = A(t) x with a continuous matrix function A. Its vector field is linear, and the time-dependent flow (from snippet 94) is linear in the initial value: phi_{t,t0}(x) = Phi(t,t0) x. The n x n matrix Phi(t,t0) is the transition matrix, computed via the Peano-Baker formula obtained from the Picard iteration.
+- There is a class: 'transition matrix' @en
+- 'transition matrix' has the alternative german label 'Transitionsmatrix'
+- 'transition matrix' has the alternative german label 'Übergangsmatrix'
+- 'transition matrix' is a subclass of 'square matrix'
+- There is a class: 'Peano-Baker formula' @en
+- 'Peano-Baker formula' has the alternative german label 'Peano-Baker-Formel'
+- 'Peano-Baker formula' has the verbal description 'computation rule for the transition matrix Phi(t,t0), given as the series identity matrix plus the integral of A plus the iterated integrals of A, obtained from the Picard iteration'
+- 'Peano-Baker formula' is associated to 'transition matrix'
+- 'Peano-Baker formula' is associated to 'Picard iteration'
+- There is a general statement:
+    - full source code: Wir betrachten ein lineares homogenes zeitvariantes Differentialgleichungssystem $\dot{x}=A(t)\,x$ mit einer stetigen Matrixfunktion $A:\mathbb{R}\to\mathbb{R}^{n\times n}$. Das zugehörige Vektorfeld ist linear: $F(x,t)=A(t)\,x$. Mit Hilfe der Picard-Iteration erhält man den zeitvarianten Fluss $\varphi_{t,t_{0}}(x)=\Phi(t,t_{0})\,x$. Aufgrund der Linearität ist auch der Fluss linear im Anfangswertargument. Die zu dieser linearen Abbildung gehörende $n\times n$-Matrix~$\Phi(t,t_{0})$ nennt man Transitions- oder Übergangsmatrix.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'A' is an instance of 'general function'
+        - 'A' 'has domain' 'set of real numbers'
+        - 'A' has the property 'continuous'
+        - // A is a matrix function: for each t, A(t) is an n x n square matrix (codomain R^{n x n})
+        - 't' is an instance of 'real number'
+        - 't0' is an instance of 'real number'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'Rn'
+        - 'x_traj' is an instance of 'general function'
+        - 'x_traj' 'has domain' 'set of real numbers'
+        - 'x_traj' 'has codomain' 'Rn'
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'Phi' is an instance of 'square matrix'
+        - 'phi' is an instance of 'time-dependent flow'
+    - formalized premise:
+        - There is an equation ('linear ode'):
+            - full source code: 'time derivative op'('x_traj')('t') == 'A'('t') * 'x_traj'('t')
+        - 'linear ode' is secondary instance of 'differential equation'
+        - There is an equation ('linear vector field'):
+            - full source code: 'F'('x', 't') == 'A'('t') * 'x'
+    - formalized assertion:
+        - 'F' has the property 'linear'
+        - // the time-dependent flow is linear in the initial value argument and given by phi_{t,t0}(x) = Phi(t,t0) x
+        - There is an equation ('flow via transition matrix'):
+            - full source code: 'phi'('x', 't', 't0') == 'Phi'('t', 't0') * 'x'
+        - 'phi' has the property 'linear'
+        - 'Phi' is secondary instance of 'transition matrix'
+- There is an example:
+    - verbal summary: For the linear homogeneous time-variant system dot x = A(t) x with continuous matrix function A, the associated vector field is linear and the time-dependent flow is linear in the initial value: phi_{t,t0}(x) = Phi(t,t0) x, where the n x n matrix Phi(t,t0) is the transition matrix, computed by the Peano-Baker formula.
+    - related to: 'transition matrix'.
+- Concepts in this snippet:
+    - 'transition matrix'
+    - 'Peano-Baker formula'
+    - 'square matrix'
+    - 'time-dependent flow'
+    - 'differential equation'
+    - 'vector field'
+    - 'time-dependent'
+    - 'linear'
+    - 'continuous'
+    - 'Picard iteration'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set of real numbers'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'vector'
+    - 'is element of'
+    - 'time derivative op'
+- Defined in this snippet:
+    - 'transition matrix'
+    - 'Peano-Baker formula'
+- // snippet(96)
+- // This snippet introduces the autonomous (time-invariant) differential equation dot x = f(x) (dgl2), whose vector field f does not depend explicitly on time. The solution then depends only on the time difference to the initial time, not on absolute time, so the initial value problem may be formulated with initial time t0 = 0: dot x = f(x), x(0) = p (awa2).
+- There is a property: 'time-invariant' @en
+- 'time-invariant' has the alternative english label 'autonomous'
+- 'time-invariant' has the alternative german label 'autonom'
+- 'time-invariant' has the alternative german label 'zeitinvariant'
+- 'time-invariant' is applicable to 'differential equation'
+- 'time-invariant' is applicable to 'vector field'
+- 'time-invariant' has the verbal description 'property of a differential equation (or its vector field) whose right-hand side does not depend explicitly on time'
+- There is a general statement:
+    - full source code: Bei vielen Problemstellungen hängt das Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$ nicht explizit von der Zeit ab und lässt sich daher einer autonomen bzw. zeitinvarianten Differentialgleichung $\dot{x}=f(x)$ zuordnen. Die Lösung von~(\ref{eq:dgl2}) hängt dann nicht mehr von der absoluten Zeit~$t$ ab, sondern von der Zeitdifferenz zum Anfangszeitpunkt. Ohne Einschränkungen kann man daher bei der Formulierung der Anfangswertaufgabe vom Anfangszeitpunkt $t_{0}=0$ ausgehen: $\dot{x}=f(x),\quad x(0)=p$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'set of real numbers'
+        - 'x' 'has codomain' 'M'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - 'f' does not have the property 'time-dependent'
+    - formalized assertion:
+        - There is an equation ('dgl2'):
+            - full source code: 'time derivative op'('x')('t') == 'f'('x'('t'))
+        - 'dgl2' is secondary instance of 'differential equation'
+        - 'dgl2' has the property 'time-invariant'
+        - // the initial value problem can be formulated with initial time t0 = 0 (awa2)
+        - There is a system of equations ('awa2'):
+            - There is an equation ('awa2 ode'):
+                - full source code: 'time derivative op'('x')('t') == 'f'('x'('t'))
+            - There is an equation ('awa2 initial condition'):
+                - full source code: 'x'(0) == 'p'
+        - 'awa2' is secondary instance of 'initial value problem'
+- Concepts in this snippet:
+    - 'time-invariant'
+    - 'differential equation'
+    - 'vector field'
+    - 'time-dependent'
+    - 'initial value problem'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'has domain'
+    - 'has codomain'
+    - 'general function'
+    - 'set of real numbers'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+    - 'time derivative op'
+- Defined in this snippet:
+    - 'time-invariant'
+- // snippet(97)
+- // For an autonomous (time-invariant) system the two-parameter time-dependent flow (snippet 94) reduces, via the time difference to the initial time (phi_{t - t0}(.) := phi_{t,t0}(.)), to a one-parameter map phi: M x I -> R^n with phi_t(p) := phi(p,t). This map is called the flow (Fluss / flow / Phasenfluss) and collects the solutions of the autonomous differential equation dgl2.
+- There is a class: 'flow' @en
+- 'flow' has the alternative german label 'Fluss'
+- 'flow' has the alternative german label 'Phasenfluss'
+- 'flow' has the alternative english label 'phase flow'
+- 'flow' has the verbal description 'one-parameter map phi: M x I -> R^n with phi_t(p) := phi(p,t) that collects the solutions of an autonomous (time-invariant) differential equation; it is the reduction of the two-parameter time-dependent flow via the time difference to the initial time'
+- Definition of 'flow':
+    - full source code: Der zeitvariante Fluss als zweiparametrige Abbildung geht dann durch Bildung der Zeitdifferenz zum Anfangszeitpunkt $\varphi_{t-t_{0}}(\cdot):=\varphi_{t,t_{0}}(\cdot)$ in eine einparametrige Abbildung der Form $\varphi:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$ mit $\varphi_{t}(p):=\varphi(p,t)$ über, die man Fluss (engl. flow) oder Phasenfluss nennt. Der Fluss~$\varphi_{t}$ fasst die Lösungen der Differentialgleichung~(\ref{eq:dgl2}) zusammen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'I' is an instance of 'set'
+        - 'I' 'is subset of' 'set of real numbers'
+        - 'I' has the property 'open'
+        - 'MxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'phi_tv' is an instance of 'time-dependent flow'
+        - 'phi' is an instance of 'general function'
+        - 'phi' 'has domain' 'MxI'
+        - 'phi' 'has codomain' 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
+        - 't0' is an instance of 'real number'
+        - 't0' is element of 'I'
+    - formalized premise:
+        - // the underlying differential equation (dgl2) is time-invariant (autonomous), so the solution depends only on the time difference to the initial time
+    - formalized assertion:
+        - 'phi' is secondary instance of 'flow'
+        - // reduction of the two-parameter flow to the one-parameter flow via the time difference: phi(p, t - t0) = phi_tv(p, t, t0)
+        - There is an equation ('flow time-difference reduction'):
+            - full source code: 'phi'('p', 't' - 't0') == 'phi_tv'('p', 't', 't0')
+- 'flow' is associated to 'time-dependent flow'
+- 'flow' is associated to 'time-invariant'
+- 'flow' is associated to 'differential equation'
+- Concepts in this snippet:
+    - 'flow'
+    - 'time-dependent flow'
+    - 'time-invariant'
+    - 'differential equation'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'set of real numbers'
+    - 'cartesian product op'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- Defined in this snippet:
+    - 'flow'
+- // snippet(98)
+- // This snippet states the group property (Gruppeneigenschaft) of the one-parameter flow (snippet 97): for all x in M and for s, t in the temporal existence interval, (1) phi_0(x) = x and (2) phi_t o phi_s (x) = phi_{s+t}(x). Solving an initial value problem for a time s and continuing the solution by a time t agrees with the solution for time s+t.
+- There is a property: 'group property' @en
+- 'group property' has the alternative german label 'Gruppeneigenschaft'
+- 'group property' is applicable to 'flow'
+- 'group property' has the verbal description 'property of a one-parameter flow phi: for all x, phi_0(x) = x and phi_t(phi_s(x)) = phi_{s+t}(x) (composition of the flow by times s and t equals the flow by time s+t)'
+- Definition of 'group property':
+    - full source code: Für alle $x\in\mathcal{M}$ sowie $s$ und $t$ entsprechend des zeitlichen Existenzintervalls gilt: $\varphi_{0}(x)=x$, $\varphi_{t}\circ\varphi_{s}(x)=\varphi_{s+t}(x)$. Diese Beziehungen nennt man Gruppeneigenschaft des Flusses. Löst man eine Anfangswertaufgabe für eine Zeit~$s$ und setzt die Lösung um eine Zeit~$t$ fort, dann stimmt das Ergebnis mit der Lösung der Anfangswertaufgabe für den Zeitpunkt $s+t$ überein.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'phi' is an instance of 'flow'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 's' is an instance of 'real number'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - // identity at time 0: phi_0(x) = x
+        - There is an equation ('flow group identity'):
+            - full source code: 'phi'('x', 0) == 'x'
+        - // composition of the flow: phi_t(phi_s(x)) = phi_{s+t}(x)
+        - There is an equation ('flow group composition'):
+            - full source code: 'phi'('phi'('x', 's'), 't') == 'phi'('x', 's' + 't')
+    - formalized assertion:
+        - 'phi' has the property 'group property'
+- 'group property' is associated to 'function composition op'
+- Concepts in this snippet:
+    - 'group property'
+    - 'flow'
+    - 'function composition op'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- Defined in this snippet:
+    - 'group property'
+- // snippet(99)
+- // This snippet is a purely notational remark: when several vector fields are used simultaneously, the flow belonging to a vector field f at time t is written phi_t^f, and the solution of the initial value problem (awa2) is written phi_t^f(p). No new concept is introduced; it emphasizes the assignment between vector fields and their flows.
+- 'flow' is associated to 'vector field'
+- There is an explanation:
+    - verbal summary: When several vector fields are used at the same time, the flow belonging to a vector field f at time t is denoted phi_t^f, and the solution of the initial value problem (awa2) is denoted phi_t^f(p); this notation highlights the assignment between each vector field and its flow.
+    - related to: 'flow'.
+- Concepts in this snippet:
+    - 'flow'
+    - 'vector field'
+- // snippet(100)
+- // This snippet states that for each initial value p in M there is a maximal existence interval I_p over which the solution of the differential equation (dgl1) cannot be continued further. A flow defined on all of R x M is called a global flow, and the corresponding vector field is called complete (vollstaendig).
+- There is a class: 'maximal existence interval' @en
+- 'maximal existence interval' has the alternative german label 'maximales Existenzintervall'
+- 'maximal existence interval' is a subclass of 'set'
+- 'maximal existence interval' has the verbal description 'maximal time interval I_p, for a given initial value p, over which the solution of the differential equation cannot be continued further'
+- There is a property: 'global' @en
+- 'global' has the alternative german label 'global'
+- 'global' is applicable to 'flow'
+- 'global' has the verbal description 'property of a flow that is defined on all of R x M (a global flow)'
+- There is a property: 'complete' @en
+- 'complete' has the alternative german label 'vollständig'
+- 'complete' is applicable to 'vector field'
+- 'complete' has the verbal description 'property of a vector field whose associated flow is global, i.e. defined for all times'
+- There is a general statement:
+    - full source code: Zu jedem Anfangswert $p\in\mathcal{M}$ existiert ein maximales Existenzintervall~$\mathcal{I}_{p}$, über welches die Lösung der Dgl.~(\ref{eq:dgl1}) nicht mehr fortgesetzt werden kann.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+    - formalized premise:
+        - // empty
+    - formalized assertion:
+        - 'I_p' is an instance of 'maximal existence interval'
+        - 'I_p' 'is subset of' 'set of real numbers'
+        - // I_p is the maximal interval over which the solution of dgl1 for the initial value p cannot be continued further
+- Definition of 'global':
+    - full source code: Ein Fluss, der auf ${\mathbb{R}}\times\mathcal{M}$ definiert ist, heißt globaler Fluss.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'RxM' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'RxM' == 'cartesian product op'('set of real numbers', 'M')
+        - 'phi' is an instance of 'flow'
+    - formalized premise:
+        - 'phi' 'has domain' 'RxM'
+    - formalized assertion:
+        - 'phi' has the property 'global'
+- Definition of 'complete':
+    - full source code: Das zugehörige Vektorfeld nennt man vollständig.
+    - formalized setting:
+        - 'f' is an instance of 'vector field'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+    - formalized premise:
+        - 'phi' has the property 'global'
+    - formalized assertion:
+        - 'f' has the property 'complete'
+- Concepts in this snippet:
+    - 'maximal existence interval'
+    - 'global'
+    - 'complete'
+    - 'flow'
+    - 'vector field'
+    - 'set'
+    - 'is subset of'
+    - 'set of real numbers'
+    - 'cartesian product op'
+    - 'has domain'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+- Defined in this snippet:
+    - 'maximal existence interval'
+    - 'global'
+    - 'complete'

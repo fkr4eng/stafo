@@ -773,12 +773,14 @@ L:=\max\limits _{(x,t)\in\mathcal{K}}\left\Vert \frac{\partial F(x,t)}{\partial 
 \]
 \end{corollary}
 
+\snippet{92}
 Aus dem Korollar geht hervor, dass jedes stetig differenzierbares
 Vektorfeld~$F$ einer lokalen Lipschitz-Bedingung der Form~(\ref{eq:Lipschitz-Bed-Satz-PL})
 genügt. Damit sind Existenz und Eindeutigkeit einer lokalen Lösung
 der Anfangswertaufgabe~(\ref{eq:awa1}) entsprechend Satz~\ref{thm:Picard-Lindeloeff}
 gewährleistet.
 
+\snippet{93}
 \begin{remark}
 \label{rem:Nicht-Lipschitz-Peano}Die Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Satz-PL})
 in Satz~\ref{thm:Picard-Lindeloeff} sichert die Eindeutigkeit der
@@ -797,6 +799,7 @@ nicht aber deren Eindeutigkeit~\cite{amann1995}.
 \end{remark}
 
 
+\snippet{94}
 Existiert für alle $(x,t)\in\mathcal{M}\times I$ eine Integralkurve,
 die zum Zeitpunkt~$t$ durch~$x$ verläuft, dann kann man die Gesamtheit
 der Lösungen durch eine zweiparametrige Abbildung $\varphi:\mathcal{M}\times\mathcal{I}\times\mathcal{I}\to\mathcal{M}$
@@ -813,6 +816,7 @@ Dabei bezeichnet $\circ$ die Hintereinanderausführung von Abbildungen,
 die für zwei Abbildungen $\varphi$ und $\psi$ als $\varphi\circ\psi(x):=\varphi(\psi(x))$
 zu verstehen ist.
 
+\snippet{95}
 \begin{example}
 Wir betrachten ein lineares homogenes zeitvariantes Differentialgleichungssystem
 \begin{equation}
@@ -834,6 +838,7 @@ für die Matrix~$\Phi(t,t_{0})$ heißt \textbf{\em Peano-Baker-Formel}
 (siehe \cite[Abschnitt~{15.5}]{gantmacher86}, \cite[S.~489]{sontag98}).
 \end{example}
 
+\snippet{96}
 Bei vielen Problemstellungen hängt das Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$
 nicht explizit von der Zeit ab und lässt sich daher einer autonomen
 bzw. zeitinvarianten Differentialgleichung
@@ -847,12 +852,14 @@ vom Anfangszeitpunkt $t_{0}=0$ ausgehen:
 \begin{equation}
 \dot{x}=f(x),\quad x(0)=p.\label{eq:awa2}
 \end{equation}
+\snippet{97}
 Der zeitvariante Fluss als zweiparametrige Abbildung geht dann durch
 Bildung der Zeitdifferenz zum Anfangszeitpunkt $\varphi_{t-t_{0}}(\cdot):=\varphi_{t,t_{0}}(\cdot)$
 in eine einparametrige Abbildung der Form $\varphi:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$
 mit $\varphi_{t}(p):=\varphi(p,t)$ über, die man \textbf{\em Fluss}
 (engl. \textbf{\em flow}) oder \textbf{\em Phasenfluss} nennt. Der Fluss~$\varphi_{t}$
 fasst die Lösungen der Differentialgleichung~(\ref{eq:dgl2}) zusammen.
+\snippet{98}
 Für alle $x\in\mathcal{M}$ sowie $s$ und $t$ entsprechend des zeitlichen
 Existenzintervalls gilt:
 \begin{enumerate}
@@ -868,17 +875,20 @@ Anfangswertaufgabe für den Zeitpunkt $s+t$ überein (siehe Abb.~\ref{fig:Vekfor
 
 
 
+\snippet{99}
 Bei der gleichzeitigen Verwendung mehrerer Vektorfelder ist es sinnvoll,
 die Zuordnung zwischen den Vektor\-feldern und den Flüssen hervorzuheben.
 Der zu einem Vektor\-feld~$f$ gehörende Fluss zum Zeitpunkt~$t$
 wird dann mit $\varphi_{t}^{f}$ bezeichnet, die Lösung der Anfangswertaufgabe~(\ref{eq:awa2})
 mit $\varphi_{t}^{f}(p)$.
 
+\snippet{100}
 Zu jedem Anfangswert $p\in\mathcal{M}$ existiert ein maximales Existenzintervall~$\mathcal{I}_{p}$,
 über welches die Lösung der Dgl.~(\ref{eq:dgl1}) nicht mehr fortgesetzt
 werden kann. Ein Fluss, der auf ${\mathbb{R}}\times\mathcal{M}$ definiert ist,
 heißt \textbf{\em globaler Fluss}. Das zugehörige
 Vektorfeld nennt man \textbf{\em vollständig}.
+\snippet{101}
 \begin{example}
 [Endliche Fluchtzeit]\label{exa:EndlicheFluchtzeit}Die Anfangswertaufgabe
 \begin{equation}
