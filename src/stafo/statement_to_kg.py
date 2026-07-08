@@ -54,7 +54,7 @@ class ConversionManager:
         # TODO: improve this; see comment above class definition
         mod_uri="__stafo_default_uri__",  # This will be replaced by a system-dependent hardcoded URI below
         force_key_tuple: tuple = None,
-        num_keys=1000,
+        num_keys=5000,
     ):
         """create a ConversionManager object for conversion of formal natural language to pyrik
 
@@ -64,7 +64,7 @@ class ConversionManager:
                 keys "uri", "module_name", "prefix". Defaults to None.
             mod_uri (_type_, optional): uri for the module. Defaults to None (which means "auto_import_<statments_fpath>).
             force_key_tuple (tuple, optional): tuple of pyirk keys to create entities with. Defaults to None.
-            num_keys (int, optional): number of keys to create at start. Defaults to 1000.
+            num_keys (int, optional): number of keys to create at start. Defaults to 5000.
         """
 
         self.statements_fpath = statements_fpath
