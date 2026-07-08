@@ -1858,7 +1858,10 @@ class ConversionManager:
         if "sys_eq" in eq_dict.keys():
             context["sys_eq"] = {
                 "rel": self.build_reference("is part of system of equations"),
-                "obj": eq_dict["sys_eq"],
+                # the object is a scope-local variable name rendered as `cm<n>.<obj>`; it must be a
+                # valid python identifier and match the `new_var(<name>=...)` definition, which sanitizes
+                # spaces to underscores (see key_render). Mirror that here so multi-word system names work.
+                "obj": eq_dict["sys_eq"].replace(" ", "_"),
             }
 
         if eq_dict["type"] == "equation":
