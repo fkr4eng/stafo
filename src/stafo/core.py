@@ -87,6 +87,8 @@ class MainManager:
         self.processed_latex_source = None
         self.last_llm_result = None
         self.token_counter = 0
+        # file the per-call token usage is appended to (consumed by `evaluate_token_tracking`)
+        self.token_tracking_fpath = "_token_tracking.txt"
         self.tex_snippet_list = None
         self.token_count_cache: Dict[str, int] = {}
 
@@ -183,13 +185,12 @@ class MainManager:
         # do not make an llm-call if snippet should be ignored
         self.snippet_object = LatexSourceSnippet(new_latex_source)
 
-        tokens = self.count_tokens(message)
-        self.token_counter += tokens
-        print(f"processing snippet {i:02d}, {tokens} tokens ({self.dev_mode=})")
+        print(f"processing snippet {i:02d} ({self.dev_mode=})")
         if self.interactive_mode:
             print(new_latex_source)
 
-        response = self.tracked_model_response(message, generation_config=self.llm_config)
+        response = self.tracked_model_response(message)
+        self.track_tokens(response, snippet_idx=i, call_name="prompt01_fnl")
         # IPS()
         # make snapshot before and after response
         self.make_snapshot(self.statement_source, self.start_snippet_idx - 1)
@@ -204,7 +205,8 @@ class MainManager:
             "new_statements": response.text,
         }
         message_q = render_template("prompt04_quality_control_template.md", context_q)
-        response_q = self.tracked_model_response(message_q, generation_config=self.llm_config)
+        response_q = self.tracked_model_response(message_q)
+        self.track_tokens(response_q, snippet_idx=i, call_name="prompt04_quality_control")
 
         self.statement_source = "\n".join((self.statement_source, "- // quality control", response_q.text))
         self.make_snapshot(self.statement_source, self.start_snippet_idx)
@@ -233,7 +235,8 @@ class MainManager:
             "latex_current": new_latex_source,
         }
         message2 = render_template("prompt02_annotate_latex_template.md", context2)
-        response2 = self.tracked_model_response(message2, generation_config=self.llm_config)
+        response2 = self.tracked_model_response(message2)
+        self.track_tokens(response2, snippet_idx=i, call_name="prompt02_annotate_latex")
 
         context3 = {
             "fnl_statements": self.statement_source,
@@ -242,7 +245,8 @@ class MainManager:
             "latex_current": response2.text,
         }
         message3 = render_template("prompt02b_annotate_equations_template.md", context3)
-        response3 = self.tracked_model_response(message3, generation_config=self.llm_config)
+        response3 = self.tracked_model_response(message3)
+        self.track_tokens(response3, snippet_idx=i, call_name="prompt02b_annotate_equations")
 
         def repl_func(mo):
             # wrong annotations by llm
@@ -340,28 +344,94 @@ class MainManager:
         if ignore_flag:
             return the already known answer ("ignored content")
         if not in dev_mode:
-            track the number of tokens we send to the model
+            query the model and keep the raw response so the real token usage
+            can be recorded by `track_tokens`
 
         always:
-            return an object with a .text attribute containing the model response
-            (faked in case of dev_mode)
+            return a Container with
+              - .text : the model response text (faked in case of dev_mode / ignored snippet)
+              - .raw  : the raw API response object, or None if no real call happened
         """
-        tokens = self.count_tokens(message)
-        track_line = f'{time.strftime("%Y-%m-%d %H:%M:%S")}, {tokens}\n'
-
         res = Container()
+        res.raw = None
 
         if self.snippet_object.ignore_flag:
             res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- // ignored content"
         elif not self.dev_mode:
-            with open("_token_tracking.txt", "a") as fp:
-                fp.write(track_line)
-            res.text = call_llm_api(self.llm, message, return_text_only=True)
-
+            res.raw = call_llm_api(self.llm, message, return_text_only=False)
+            res.text = self.extract_response_text(res.raw)
         else:
             res.text = f"- // snippet({self.snippet_object.snippet_delimiter_inner_content})\n- response text\n- response text\n"
 
         return res
+
+    def extract_response_text(self, raw_response) -> str:
+        """
+        Pull the plain answer text out of a raw API response (backend specific).
+        """
+        if self.llm == LLMInfo.gemini:
+            return raw_response.text
+        elif self.llm == LLMInfo.ollama:
+            return raw_response.message.content
+        else:
+            raise NotImplementedError("Your LLM family is not supported")
+
+    def get_token_usage(self, raw_response) -> Dict[str, int]:
+        """
+        Extract the real input/output token counts from a raw API response.
+
+        Returns zeros when no real call happened (`raw_response is None`, i.e.
+        dev_mode or an ignored snippet).
+        """
+        if raw_response is None:
+            return {"input_tokens": 0, "output_tokens": 0}
+
+        if self.llm == LLMInfo.ollama:
+            # ollama ChatResponse reports the token counts directly
+            input_tokens = getattr(raw_response, "prompt_eval_count", 0) or 0
+            output_tokens = getattr(raw_response, "eval_count", 0) or 0
+        elif self.llm == LLMInfo.gemini:
+            usage = getattr(raw_response, "usage_metadata", None)
+            input_tokens = getattr(usage, "prompt_token_count", 0) or 0
+            output_tokens = getattr(usage, "candidates_token_count", 0) or 0
+        else:
+            raise NotImplementedError("Your LLM family is not supported")
+
+        return {"input_tokens": int(input_tokens), "output_tokens": int(output_tokens)}
+
+    def track_tokens(self, response, snippet_idx: int, call_name: str) -> Dict[str, int]:
+        """
+        Record the real token usage of a single LLM call.
+
+        - extracts input/output token counts from the raw API response stored on
+          the `response` Container (see `tracked_model_response`)
+        - accumulates the total in `self.token_counter`
+        - appends one line
+          `timestamp, snippet_idx, call_name, input, output, total`
+          to `self.token_tracking_fpath` (skipped in dev_mode / for ignored snippets,
+          where no real call was made)
+
+        Returns the usage dict for this call.
+        """
+        usage = self.get_token_usage(getattr(response, "raw", None))
+        input_tokens = usage["input_tokens"]
+        output_tokens = usage["output_tokens"]
+        total = input_tokens + output_tokens
+        self.token_counter += total
+
+        if total > 0:
+            track_line = (
+                f'{time.strftime("%Y-%m-%d %H:%M:%S")}, {snippet_idx:02d}, {call_name}, '
+                f"{input_tokens}, {output_tokens}, {total}\n"
+            )
+            with open(self.token_tracking_fpath, "a", encoding="utf-8") as fp:
+                fp.write(track_line)
+
+        print(
+            f"  tokens[{call_name}] in={input_tokens} out={output_tokens} "
+            f"total={total} (cumulative={self.token_counter})"
+        )
+        return usage
 
     def llm_task(self):
         self.get_data()
@@ -586,7 +656,17 @@ def evaluate_token_tracking(fpath: str):
     except ImportError:
         print("Error: This function needs pandas to be installed.")
         exit()
-    df = pd.read_csv(fpath, names=["timestamp", "tokens"])
+    df = pd.read_csv(fpath, header=None, skipinitialspace=True)
+
+    if df.shape[1] >= 6:
+        # new per-call format: timestamp, snippet_idx, call_name, input, output, total
+        df.columns = ["timestamp", "snippet_idx", "call_name", "input_tokens", "output_tokens", "total_tokens"]
+        df["tokens"] = df["total_tokens"]
+        print(f"Cumulated input tokens:  {df['input_tokens'].sum()}")
+        print(f"Cumulated output tokens: {df['output_tokens'].sum()}")
+    else:
+        # legacy format: timestamp, tokens
+        df.columns = ["timestamp", "tokens"]
 
     token_sum = sum(df["tokens"])
     print(f"Cumulated query tokens: {token_sum}")
