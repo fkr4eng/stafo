@@ -4830,3 +4830,295 @@
 - Defined in this snippet:
     - 'smooth'
     - 'analytic'
+- // snippet(111)
+- // This snippet states that if the vector field f is sufficiently smooth, the flow phi_t is sufficiently often differentiable, so a series (Taylor) ansatz phi_t(x) = v_0(x) + v_1(x) t + v_2(x) t^2 + O(t^3) is possible, with coefficient vector fields v_0, v_1, v_2 : M -> R^n. The Landau symbol O(t^k) describes the order of the remainder term; the ansatz is justified by the Lagrange or Cauchy form of the remainder of a Taylor expansion. There is no Landau/big-O operator in the statement file, so the O(t^3) remainder is captured as a comment and the equation is kept to the expressible part.
+- There is an if-then-statement:
+    - full source code: Ist das Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$ hinreichend glatt, so ist auch der Fluss $\varphi_{t}$ ausreichend oft differenzierbar. Dann ist für den Fluss der Reihenansatz $\varphi_{t}(x)=v_{0}(x)+v_{1}(x)t+v_{2}(x)t^{2}+O(t^{3})$ mit den Vektorfeldern $v_{0},v_{1},v_{2}:\mathcal{M}\to{\mathbb{R}}^{n}$ möglich. Hierbei beschreibt das Landau-Symbol $O(t^{k})$ die Größenordnung des Restglieds. Diese Darstellung ist bei einer Taylorentwicklung durch die Lagrange- bzw. Cauchy-Form des Restglieds gerechtfertigt.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'v0' is an instance of 'vector field'
+        - 'v0' 'has domain' 'M'
+        - 'v0' 'has codomain' 'Rn'
+        - 'v1' is an instance of 'vector field'
+        - 'v1' 'has domain' 'M'
+        - 'v1' 'has codomain' 'Rn'
+        - 'v2' is an instance of 'vector field'
+        - 'v2' 'has domain' 'M'
+        - 'v2' 'has codomain' 'Rn'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - 'f' has the property 'sufficiently smooth'
+    - formalized assertion:
+        - // phi is sufficiently often differentiable, so the series ansatz below is possible
+        - 'phi' has the property 'sufficiently smooth'
+        - // series (Taylor) ansatz of the flow: phi_t(x) = v_0(x) + v_1(x) t + v_2(x) t^2 + O(t^3); the O(t^3) remainder term is not expressible with the available operators and is therefore omitted from the formalized equation and only stated here in the comment
+        - There is an equation ('flow series ansatz'):
+            - full source code: 'phi'('x', 't') == 'v0'('x') + 'v1'('x') * 't' + 'v2'('x') * 't' ** 2
+- Concepts in this snippet:
+    - 'vector field'
+    - 'flow'
+    - 'sufficiently smooth'
+    - 'has domain'
+    - 'has codomain'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- // snippet(112)
+- // This snippet continues the series ansatz of the flow from snippet 111. From phi_0(x) = x it follows that v_0(x) = x. Comparing f(phi_t(x)) with the time derivative of the series and matching coefficients in t yields v_1(x) = f(x) and v_2(x) = (1/2) f'(x) f(x), where f'(x) is the Jacobian of the vector field f at x. This gives the second-order expansion phi_t(x) = x + f(x) t + (1/2) f'(x) f(x) t^2 + O(t^3). The Jacobian is modeled via the existing 'Jacobian matrix' class and 'has Jacobian matrix' relation (no inline Jacobian operator exists), so f'(x) is written 'Jf'('x'). The O(t^3) remainder is not expressible with the available operators and is kept only as a comment.
+- There is a general statement:
+    - full source code: Aus $\varphi_{0}(x)=x$ folgt $v_{0}(x)=x$, d.\,h. $\varphi_{t}(x)=x+v_{1}(x)t+v_{2}(x)t^{2}+O(t^{3})$. Einerseits gilt $f(\varphi_{t}(x))=f(x)+f'(x)v_{1}(x)t+\ldots$, andererseits durch Differenzieren des Reihenansatzes $\frac{{\mathrm{d}}}{{\mathrm{d}} t}\varphi_{t}(x)=v_{1}(x)+2v_{2}(x)t+\ldots$. Ein Koeffizientenvergleich bezüglich~$t$ liefert $v_{1}(x)=f(x)$ und $v_{2}(x)=\tfrac{1}{2}f'(x)v_{1}(x)=\tfrac{1}{2}f'(x)f(x)$ und damit $\varphi_{t}(x)=x+f(x)t+\tfrac{1}{2}f'(x)f(x)t^{2}+O(t^{3})$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'Jf' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'Jf'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'v0' is an instance of 'vector field'
+        - 'v0' 'has domain' 'M'
+        - 'v0' 'has codomain' 'Rn'
+        - 'v1' is an instance of 'vector field'
+        - 'v1' 'has domain' 'M'
+        - 'v1' 'has codomain' 'Rn'
+        - 'v2' is an instance of 'vector field'
+        - 'v2' 'has domain' 'M'
+        - 'v2' 'has codomain' 'Rn'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - // from the group property phi_0(x) = x applied to the series ansatz of snippet 111
+        - There is an equation ('flow group identity coeff'):
+            - full source code: 'phi'('x', 0) == 'x'
+    - formalized assertion:
+        - // zeroth coefficient: v_0(x) = x
+        - There is an equation ('coeff v0'):
+            - full source code: 'v0'('x') == 'x'
+        - // first coefficient: v_1(x) = f(x)
+        - There is an equation ('coeff v1'):
+            - full source code: 'v1'('x') == 'f'('x')
+        - // second coefficient: v_2(x) = (1/2) f'(x) f(x), with f'(x) the Jacobian of f at x
+        - There is an equation ('coeff v2'):
+            - full source code: 'v2'('x') == 0.5 * 'Jf'('x') * 'f'('x')
+        - // resulting second-order expansion: phi_t(x) = x + f(x) t + (1/2) f'(x) f(x) t^2 + O(t^3); the O(t^3) remainder is omitted from the formalized equation and stated only in this comment
+        - There is an equation ('flow second order expansion'):
+            - full source code: 'phi'('x', 't') == 'x' + 'f'('x') * 't' + 0.5 * 'Jf'('x') * 'f'('x') * 't' ** 2
+- Concepts in this snippet:
+    - 'vector field'
+    - 'flow'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'has domain'
+    - 'has codomain'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- // snippet(113)
+- // This snippet observes from the series expansion (snippet 112) that the vector field f is tangential to the flow, and conversely gives the inverse relation to recover the generating vector field from a given flow: f(x) equals the time derivative of phi_t(x) evaluated at t = 0.
+- There is an explanation:
+    - // from the series expansion (snippet 112) the vector field f is arranged tangentially to the flow phi
+    - verbal summary: From the series expansion of the flow it becomes clear that the vector field f is tangential to the flow phi. Conversely, the generating vector field can be recovered from a given flow.
+    - related to: 'flow'.
+- There is a general statement:
+    - full source code: Bei der Reihenentwicklung wird deutlich, dass das Vektorfeld~$f$ tangential zum Fluss angeordnet ist. Damit kann man auch umgekehrt aus einem gegebenen Fluss das erzeugende Vektorfeld zurückgewinnen: $f(x)=\frac{{\mathrm{d}}}{{\mathrm{d}} t}\varphi_{t}(x)|_{t=0}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+    - formalized premise:
+        - // empty
+    - formalized assertion:
+        - // inverse relation: f(x) = d/dt phi_t(x) evaluated at t = 0; the time derivative op differentiates phi with respect to its time argument, and the trailing second argument 0 evaluates the result at t = 0
+        - There is an equation ('recover vector field from flow'):
+            - full source code: 'f'('x') == 'time derivative op'('phi')('x', 0)
+- Concepts in this snippet:
+    - 'vector field'
+    - 'flow'
+    - 'time derivative op'
+    - 'has domain'
+    - 'has codomain'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+- // snippet(114)
+- // This remark restates the setting (an autonomous differential equation with a global flow phi, where x(t) = phi_t(p) solves the initial value problem for all p in M and all t >= 0) and introduces the informal term "Abtastung" / "sampling": taking values of the continuous-time system, described by the differential equation, at discrete time points t_k.
+- There is a class: 'sampling' @en
+- 'sampling' has the alternative german label 'Abtastung'
+- 'sampling' has the verbal description 'process of taking values of a continuous-time system, described by a differential equation, at discrete time points t_k'
+- There is an explanation:
+    - // restatement of the setting: the autonomous differential equation (dgl2) has a global flow phi, so x(t) = phi_t(p) is a solution of the initial value problem (awa2) for all p in M and all t >= 0
+    - verbal summary: The autonomous differential equation has a global flow phi, so that x(t) = phi_t(p) is a solution of the initial value problem for all p in M and all t >= 0.
+    - related to: 'flow'.
+- Definition of 'sampling':
+    - full source code: Bei einer \textbf{\em Abtastung} (engl. sampling) werden dem durch die Differentialgleichung beschriebenen zeitkontinuierlichen System zu diskreten Zeitpunkten $t_{k}$ Werte entnommen.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'phi' is an instance of 'flow'
+        - 'phi' has the property 'global'
+        - // phi is the global flow belonging to the vector field f (phi = phi^f)
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'set of real numbers'
+        - 'x' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - // the continuous-time system is described by the autonomous differential equation with solution x(t) = phi_t(p)
+        - There is an equation ('sampling continuous solution'):
+            - full source code: 'x'('t') == 'phi'('p', 't')
+    - formalized assertion:
+        - // sampling: values of the continuous-time system are taken at discrete time points t_k; the concrete discrete-time difference equation follows in the next snippet
+- Concepts in this snippet:
+    - 'sampling'
+    - 'flow'
+    - 'global'
+    - 'vector field'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set of real numbers'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- Defined in this snippet:
+    - 'sampling'
+- // snippet(115)
+- // This snippet treats equidistant sampling with sampling period T > 0 and sampling instants t_k = k T for k in N_0 (non-negative integers). Writing the discrete values as x[k] := x(kT), the sampling of the initial value problem (awa2) yields a discrete-time system described by the difference equation x[k+1] = phi_T(x[k]) with initial condition x[0] = p, where phi is the flow. New concepts: sampling period, equidistant (property of sampling), difference equation, discrete-time system.
+- There is a class: 'sampling period' @en
+- 'sampling period' has the alternative german label 'Abtastperiode'
+- 'sampling period' is a subclass of 'real number'
+- 'sampling period' has the verbal description 'constant time step T > 0 between consecutive sampling instants of an equidistant sampling'
+- There is a property: 'equidistant' @en
+- 'equidistant' has the alternative german label 'äquidistant'
+- 'equidistant' is applicable to 'sampling'
+- 'equidistant' has the verbal description 'property of a sampling whose sampling instants t_k = k T are equally spaced with a constant sampling period T'
+- There is a class: 'difference equation' @en
+- 'difference equation' has the alternative german label 'Differenzengleichung'
+- 'difference equation' has the verbal description 'recurrence relation describing a discrete-time system, e.g. x[k+1] = g(x[k])'
+- There is a class: 'discrete-time system' @en
+- 'discrete-time system' has the alternative german label 'zeitdiskretes System'
+- 'discrete-time system' has the verbal description 'system whose state is defined only at discrete time points, obtained e.g. by sampling a continuous-time system, and described by a difference equation'
+- There is a general statement:
+    - full source code: Wir betrachten den Fall einer äquidistanten Abtastung mit der Abtastperiode $T>0$, d.\,h. $t_{k}=kT$ für $k\in\mathbb{N}_{0}$. Notiert man die diskreten Werte der abhängigen Variablen~$x$ mit $x[k]:=x(kT)$, so erhält man durch die Abtastung von~(\ref{eq:awa2}) ein zeitdiskretes System, welches mit Hilfe des Flusses durch die Differenzengleichung $x[k+1]=\varphi_{T}(x[k]),\quad x[0]=p$ beschrieben wird.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'phi' is an instance of 'flow'
+        - 'phi' has the property 'global'
+        - // phi is the global flow belonging to the vector field f (phi = phi^f)
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'T' is an instance of 'sampling period'
+        - There is a mathematical relation:
+            - full source code: 'T' > 0
+        - 'abt' is an instance of 'sampling'
+        - 'abt' has the property 'equidistant'
+        - 'k' is an instance of 'integer number'
+        - There is a mathematical relation:
+            - full source code: 'k' >= 0
+        - // k in N_0 (non-negative integers)
+        - 'tk' is an instance of 'sequence'
+        - // discrete-time signal x: x[k] := x(kT) collects the sampled values of the continuous solution; its elements are vectors in M
+        - 'x' is an instance of 'sequence'
+        - 'zd' is an instance of 'discrete-time system'
+    - formalized premise:
+        - // equidistant sampling instants: t_k = k T for k in N_0
+        - There is an equation ('sampling instants'):
+            - full source code: 'element of sequence'('tk', 'k') == 'k' * 'T'
+    - formalized assertion:
+        - // discrete-time system obtained by equidistant sampling of the continuous-time initial value problem (awa2), described by the difference equation using the flow phi
+        - There is a system of equations ('sampled difference equation'):
+            - There is an equation ('sampled recurrence'):
+                - full source code: 'element of sequence'('x', 'k' + 1) == 'phi'('element of sequence'('x', 'k'), 'T')
+            - There is an equation ('sampled initial condition'):
+                - full source code: 'element of sequence'('x', 0) == 'p'
+        - 'sampled difference equation' is secondary instance of 'difference equation'
+        - 'zd' is associated to 'sampled difference equation'
+- Concepts in this snippet:
+    - 'sampling period'
+    - 'equidistant'
+    - 'sampling'
+    - 'difference equation'
+    - 'discrete-time system'
+    - 'flow'
+    - 'global'
+    - 'vector field'
+    - 'sequence'
+    - 'element of sequence'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+- Defined in this snippet:
+    - 'sampling period'
+    - 'equidistant'
+    - 'difference equation'
+    - 'discrete-time system'
