@@ -5122,3 +5122,167 @@
     - 'equidistant'
     - 'difference equation'
     - 'discrete-time system'
+- // snippet(116)
+- // This snippet approximates the flow by a first-order Taylor expansion phi_t(x) approx x + f(x) t, which turns the exact sampled recurrence from snippet 115 into the more easily evaluated explicit-Euler difference equation x[k+1] = x[k] + f(x[k]) T with x[0] = p. This time discretization is the explicit Euler method (eulersches Polygonzugverfahren), a numerical method for solving the initial value problem (awa2) of the ordinary differential equation (dgl2). New concept: explicit Euler method.
+- There is a class: 'explicit Euler method' @en
+- 'explicit Euler method' has the alternative german label 'explizites Euler-Verfahren'
+- 'explicit Euler method' has the alternative german label 'eulersches Polygonzugverfahren'
+- 'explicit Euler method' has the verbal description 'numerical method for solving the initial value problem of an ordinary differential equation, obtained by approximating the flow by a first-order Taylor expansion; it produces the difference equation x[k+1] = x[k] + f(x[k]) T'
+- There is a general statement:
+    - full source code: Approximiert man den (meist nicht symbolisch berechenbaren) Fluss durch eine Taylorentwicklung erster Ordnung, also $\varphi_{t}(x)\approx x+f(x)t$, so ergibt sich aus dem zeitdiskreten System die leichter auszuwertende Differenzengleichung $x[k+1]=x[k]+f(x[k])T,\quad x[0]=p$. Diese Zeitdiskretisierung entspricht dem expliziten Euler-Verfahren bzw. dem eulerschen Polygonzugverfahren, welches zur numerischen Lösung des Anfangswertproblems~(\ref{eq:awa2}) der gewöhnlichen Differentialgleichung~(\ref{eq:dgl2}) verwendet werden kann.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'T' is an instance of 'sampling period'
+        - There is a mathematical relation:
+            - full source code: 'T' > 0
+        - 'k' is an instance of 'integer number'
+        - There is a mathematical relation:
+            - full source code: 'k' >= 0
+        - // k in N_0 (non-negative integers)
+        - 'x' is an instance of 'sequence'
+        - // discrete-time signal x[k] approximating the sampled continuous solution; its elements are vectors in M
+        - 'zd' is an instance of 'discrete-time system'
+        - 'x_arg' is an instance of 'vector'
+        - 't' is an instance of 'real number'
+    - formalized premise:
+        - // first-order Taylor approximation of the flow: phi_t(x) approx x + f(x) t (approximation, not exact; the approx sign cannot be written in a formula line, so the right-hand side is stated as the leading terms of the expansion)
+        - There is an equation ('first order flow approximation'):
+            - full source code: 'phi'('x_arg', 't') == 'x_arg' + 'f'('x_arg') * 't'
+    - formalized assertion:
+        - // explicit-Euler difference equation resulting from the first-order approximation applied to the sampled recurrence of snippet 115
+        - There is a system of equations ('Euler step system'):
+            - There is an equation ('Euler recurrence'):
+                - full source code: 'element of sequence'('x', 'k' + 1) == 'element of sequence'('x', 'k') + 'f'('element of sequence'('x', 'k')) * 'T'
+            - There is an equation ('Euler initial condition'):
+                - full source code: 'element of sequence'('x', 0) == 'p'
+        - 'Euler step system' is secondary instance of 'difference equation'
+        - 'zd' is associated to 'Euler step system'
+        - 'Euler step system' is associated to 'explicit Euler method'
+- Concepts in this snippet:
+    - 'explicit Euler method'
+    - 'flow'
+    - 'vector field'
+    - 'sampling period'
+    - 'difference equation'
+    - 'discrete-time system'
+    - 'sequence'
+    - 'element of sequence'
+    - 'has domain'
+    - 'has codomain'
+    - 'real number'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+- Defined in this snippet:
+    - 'explicit Euler method'
+- // snippet(117)
+- // This remark introduces the concept of a "switching system" (schaltendes System): a system class where, at discrete switching times 0 < t_1 < t_2 < ..., one switches between different differential equations, i.e. different vector fields f_1, f_2, ... : M -> R^n. Their time evolution is described via concatenation (composition) of the involved flows. New concept: switching system.
+- There is a class: 'switching system' @en
+- 'switching system' has the alternative german label 'schaltendes System'
+- 'switching system' has the alternative english label 'switched system'
+- 'switching system' has the verbal description 'system class in which, at discrete switching times 0 < t_1 < t_2 < ..., one switches between different differential equations (different vector fields f_1, f_2, ...); its time evolution is described by concatenation of the involved flows'
+- 'switching system' is associated to 'vector field'
+- 'switching system' is associated to 'flow'
+- 'switching system' is associated to 'function composition op'
+- There is an explanation:
+    - // the time evolution of switching systems is described via the concatenation (composition) of flows; the concrete concatenation formula follows in the next snippet
+    - verbal summary: The time evolution of switching systems can be described via the concatenation of flows. In this system class one switches at discrete time points 0 < t_1 < t_2 < ... between different differential equations, i.e. between different vector fields f_1, f_2, ... : M -> R^n.
+    - related to: 'switching system'.
+- Concepts in this snippet:
+    - 'switching system'
+    - 'vector field'
+    - 'flow'
+    - 'differential equation'
+    - 'function composition op'
+- Defined in this snippet:
+    - 'switching system'
+- // snippet(118)
+- // This snippet gives the solution of a switching system as a concatenation of the involved flows. On [0,t_1] the vector field f_1 (with flow phi^{f_1}) acts, on [t_1,t_2] the vector field f_2 (with flow phi^{f_2}), etc. The solution at time t_k with initial value p in M at initial time t=0 is x(t_k) = phi^{f_k}_{tau_k} o ... o phi^{f_1}_{tau_1}(p), with time differences tau_1 = t_1, tau_2 = t_2 - t_1, ..., tau_k = t_k - t_{k-1}. No new concepts; the general k-fold composition is stated in a comment and represented concretely for k = 2 using the nested flow-call idiom (as in the flow cocycle and group-property snippets).
+- There is a general statement:
+    - full source code: Wirkt im Zeitintervall $[0,t_{1}]$ das Vektorfeld $f_{1}$ mit dem Fluss $\varphi^{f_{1}}$, im Zeitintervall $[t_{1},t_{2}]$ das Vektorfeld $f_{2}$ mit dem Fluss $\varphi^{f_{2}}$ usw., so kann man für das schaltende System die Lösung~$x$ zum Zeitpunkt~$t_{k}$ mit dem Anfangswert $p\in\mathcal{M}$ zum Anfangszeitpunkt $t=0$ durch die Verkettung der beteiligten Flüsse $x(t_{k})=\varphi^{f_{k}}_{\tau_{k}}\circ\cdots\circ\varphi^{f_{2}}_{\tau_{2}}\circ\varphi^{f_{1}}_{\tau_{1}}(p)$ mit den Zeitdifferenzen $\tau_{1}=t_{1},\ \tau_{2}=t_{2}-t_{1},\ \ldots,\ \tau_{k}=t_{k}-t_{k-1}$ beschreiben.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'sw' is an instance of 'switching system'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'f1' is an instance of 'vector field'
+        - 'f1' 'has domain' 'M'
+        - 'f1' 'has codomain' 'Rn'
+        - 'f2' is an instance of 'vector field'
+        - 'f2' 'has domain' 'M'
+        - 'f2' 'has codomain' 'Rn'
+        - 'phi1' is an instance of 'flow'
+        - // phi1 is the flow belonging to the vector field f1 (phi1 = phi^{f1})
+        - 'phi1' is associated to 'f1'
+        - 'phi2' is an instance of 'flow'
+        - // phi2 is the flow belonging to the vector field f2 (phi2 = phi^{f2})
+        - 'phi2' is associated to 'f2'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'set of real numbers'
+        - 'x' 'has codomain' 'M'
+        - 't1' is an instance of 'real number'
+        - 't2' is an instance of 'real number'
+        - // switching times: 0 < t_1 < t_2
+        - There is a mathematical relation:
+            - full source code: 0 < 't1'
+        - There is a mathematical relation:
+            - full source code: 't1' < 't2'
+        - 'tau1' is an instance of 'real number'
+        - 'tau2' is an instance of 'real number'
+    - formalized premise:
+        - // time differences: tau_1 = t_1, tau_2 = t_2 - t_1, ..., tau_k = t_k - t_{k-1}
+        - There is an equation ('first time difference'):
+            - full source code: 'tau1' == 't1'
+        - There is an equation ('second time difference'):
+            - full source code: 'tau2' == 't2' - 't1'
+    - formalized assertion:
+        - // solution of the switching system as concatenation of the involved flows; general k-fold form: x(t_k) = phi^{f_k}_{tau_k} composed with ... composed with phi^{f_1}_{tau_1} applied to p (composition via the function composition op, associated to switching system in snippet 117); the arbitrary-k chain cannot be written exactly, so the representative case k = 2 is given below in the nested flow-call idiom used for the flow cocycle and group property
+        - // reading of the k=2 case: first the flow phi1 acts for the time difference tau1 starting from p, then the flow phi2 acts for the time difference tau2 on the result
+        - There is an equation ('switching system solution'):
+            - full source code: 'x'('t2') == 'phi2'('phi1'('p', 'tau1'), 'tau2')
+- Concepts in this snippet:
+    - 'switching system'
+    - 'vector field'
+    - 'flow'
+    - 'function composition op'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set of real numbers'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+- // snippet(119i)
+- // ignored content
+- // snippet(120i)
+- // ignored content
+- // snippet(121i)
+- // ignored content
