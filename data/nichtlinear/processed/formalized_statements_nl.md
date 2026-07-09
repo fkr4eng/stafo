@@ -4695,3 +4695,138 @@
     - 'real vector space'
     - 'has dimension'
     - 'is element of'
+- // snippet(106i)
+- // ignored content
+- // snippet(107i)
+- // ignored content
+- // snippet(108)
+- // This snippet states the theorem "Differenzierbarkeit des Flusses" (differentiability of the flow): for an r-times continuously differentiable vector field f (which, in the case r=0, additionally satisfies a local Lipschitz condition), a local flow phi exists that is r-times continuously differentiable with respect to the initial value and (r+1)-times continuously differentiable with respect to time.
+- There is an if-then-statement ('Theorem of differentiability of the flow'):
+    - full source code: Sei $f:\mathcal{M}\to{\mathbb{R}}^{n}$ ein $r$-mal stetig differenzierbares Vektorfeld, welches im Falle $r=0$ einer lokalen Lipschitz-Bedingung genüge. Dann existiert ein lokaler Fluss~$\varphi$, der $r$-mal stetig nach dem Anfangswert und $(r+1)$-mal stetig nach der Zeit differenzierbar ist.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'r' is an instance of 'integer number'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'f' 'has differentiability class' 'r'
+    - formalized premise:
+        - There is a mathematical relation:
+            - full source code: 'r' >= 0
+        - // in case r = 0, f is additionally required to satisfy a local Lipschitz condition; for r >= 1 this holds automatically since f is continuously differentiable (see snippet 92)
+        - 'f' has the property 'Lipschitz condition'
+    - formalized assertion:
+        - 'phi' is an instance of 'flow'
+        - // phi is the local flow belonging to f (phi = phi^f); existence follows from the Picard-Lindeloef theorem (snippet 88) together with its corollary (snippet 91)
+        - 'phi' 'has differentiability class' 'r'
+        - // more precisely: phi is r-times continuously differentiable with respect to the initial value and (r+1)-times continuously differentiable with respect to time; only the coarser joint bound r is captured by the has differentiability class relation used here
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'has differentiability class'
+    - 'Lipschitz condition'
+    - 'flow'
+- // snippet(109)
+- // This snippet is a concluding remark to the theorem of snippet 108: existence and uniqueness of the local flow are ensured by the Theorem of Picard-Lindeloef (snippet 88) and the corollary from the mean value theorem (snippet 91); the detailed proof of the differentiability theorem is found in the cited literature. It then defines the informal term "hinreichend glatt" (sufficiently smooth).
+- There is a property: 'sufficiently smooth' @en
+- 'sufficiently smooth' has the alternative german label 'hinreichend glatt'
+- 'sufficiently smooth' is applicable to 'general function'
+- 'sufficiently smooth' has the verbal description 'informal property of a function that is sufficiently often continuously differentiable for the respective consideration or computation'
+- There is an explanation:
+    - // existence and uniqueness of the local flow are ensured by the Theorem of Picard-Lindeloef and the corollary from the mean value theorem; the detailed proof of the theorem on differentiability of the flow is found in the cited literature
+    - verbal summary: Existence and uniqueness of the local flow are ensured by the Theorem of Picard-Lindeloef and the corollary from the mean value theorem. The detailed proof of the theorem on differentiability of the flow can be found in the cited literature.
+    - related to: 'Theorem of differentiability of the flow'.
+- Definition of 'sufficiently smooth':
+    - full source code: Eine Funktion nennt man \textbf{\em hinreichend glatt}, wenn sie für die jeweilige Überlegung bzw. Berechnung ausreichend oft stetig differenzierbar ist.
+    - formalized setting:
+        - 'f' is an instance of 'general function'
+    - formalized premise:
+        - // f is sufficiently often continuously differentiable for the respective consideration or computation; the required number of continuous derivatives is context-dependent and not fixed, hence not expressible as a concrete has differentiability class value
+    - formalized assertion:
+        - 'f' has the property 'sufficiently smooth'
+- Concepts in this snippet:
+    - 'sufficiently smooth'
+    - 'general function'
+    - 'Theorem of differentiability of the flow'
+- Defined in this snippet:
+    - 'sufficiently smooth'
+- // snippet(110)
+- // This snippet defines two informal properties: "glatt" (smooth = infinitely often continuously differentiable) and "analytisch" / "reell-analytisch" (analytic = locally representable by a convergent Taylor series). Remarks: a smooth (resp. analytic) vector field has a smooth (resp. analytic) flow; every analytic function is smooth, but not every smooth function is analytic.
+- There is a property: 'smooth' @en
+- 'smooth' has the alternative german label 'glatt'
+- 'smooth' is applicable to 'general function'
+- 'smooth' has the verbal description 'property of a function that is infinitely often continuously differentiable'
+- There is a property: 'analytic' @en
+- 'analytic' has the alternative english label 'real-analytic'
+- 'analytic' has the alternative german label 'analytisch'
+- 'analytic' has the alternative german label 'reell-analytisch'
+- 'analytic' is applicable to 'general function'
+- 'analytic' has the verbal description 'property of a function that can locally be represented by a convergent Taylor series (also called real-analytic)'
+- Definition of 'smooth':
+    - full source code: Eine unendlich oft differenzierbare Funktion nennt man \textbf{\em glatt}.
+    - formalized setting:
+        - 'f' is an instance of 'general function'
+    - formalized premise:
+        - // f is infinitely often continuously differentiable; the differentiability class is not a finite integer, hence not expressible as a concrete has differentiability class value
+    - formalized assertion:
+        - 'f' has the property 'smooth'
+- Definition of 'analytic':
+    - full source code: Eine Funktion heißt dabei \textbf{\em analytisch} oder genauer \textbf{\em reell-analytisch}, wenn sie lokal durch eine konvergente Taylorreihe dargestellt werden kann.
+    - formalized setting:
+        - 'f' is an instance of 'general function'
+    - formalized premise:
+        - // f can locally be represented by a convergent Taylor series
+    - formalized assertion:
+        - 'f' has the property 'analytic'
+- // remark: a smooth vector field has a smooth flow
+- There is an if-then-statement:
+    - full source code: Bei einem glatten Vektorfeld ist auch der Fluss glatt.
+    - formalized setting:
+        - 'f' is an instance of 'vector field'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+    - formalized premise:
+        - 'f' has the property 'smooth'
+    - formalized assertion:
+        - 'phi' has the property 'smooth'
+- // remark: an analytic vector field has an analytic flow
+- There is an if-then-statement:
+    - full source code: Bei einem analytischen Vektorfeld ist auch der Fluss analytisch.
+    - formalized setting:
+        - 'f' is an instance of 'vector field'
+        - 'phi' is an instance of 'flow'
+        - // phi is the flow belonging to the vector field f (phi = phi^f)
+    - formalized premise:
+        - 'f' has the property 'analytic'
+    - formalized assertion:
+        - 'phi' has the property 'analytic'
+- // remark: every analytic function is smooth (infinitely often differentiable), but not every smooth function is analytic
+- There is an if-then-statement:
+    - full source code: Eine analytische Funktion ist unendlich oft differenzierbar, unendlich oft differenzierbare Funktionen müssen nicht unbedingt analytisch sein.
+    - formalized setting:
+        - 'f' is an instance of 'general function'
+    - formalized premise:
+        - 'f' has the property 'analytic'
+    - formalized assertion:
+        - 'f' has the property 'smooth'
+- Concepts in this snippet:
+    - 'smooth'
+    - 'analytic'
+    - 'general function'
+    - 'vector field'
+    - 'flow'
+- Defined in this snippet:
+    - 'smooth'
+    - 'analytic'
