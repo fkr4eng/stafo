@@ -1682,8 +1682,9 @@ class ConversionManager:
         insertion_index = 0
         for key, value in subdict["items"].items():
             # if key == "other":
-            if (("equation" in key and not "system_of_equations" in key) or "math_relation" in key or           # regular case
-                ("type" in value.keys() and value["type"] in ["equation", "mathematical relation"])):           # in case of named equations
+            if ((("equation" in key and not "system_of_equations" in key) or "math_relation" in key)             # regular case
+                    and "type" in value.keys()                                                                  # exclude items (e.g. a system of equations) whose inline name merely contains "equation"
+                or ("type" in value.keys() and value["type"] in ["equation", "mathematical relation"])):         # in case of named equations
                 res = self.render_math_relation(statement_item, key, value, context_recursion_depth, indent_depth)
                 for l in res.split("\n"):
                     # adapt equation to context manager
