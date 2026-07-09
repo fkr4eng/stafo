@@ -5286,3 +5286,217 @@
 - // ignored content
 - // snippet(121i)
 - // ignored content
+- // snippet(122)
+- // This snippet (re)introduces a generic mapping psi: M -> N with domain (Definitionsbereich) M and codomain (Bildbereich) N, and restates the definition of the property "surjektiv" / surjective: psi(M) = N, i.e. for every y in N the equation y = psi(x) has at least one solution x in M. The property 'surjective' (and 'has domain', 'has codomain', 'image of function op') already exist and are reused; no new concepts are introduced.
+- Definition of 'surjective':
+    - full source code: Sei $\psi:\mathcal{M}\to\mathcal{N}$ eine Abbildung von der Menge~$\mathcal{M}$, die man Definitionsbereich nennt, in die Menge~$\mathcal{N}$, den Bildbereich. Die Abbildung heißt surjektiv, falls $\psi(\mathcal{M})=\mathcal{N}$, also der gesamte Bildbereich auch ausgeschöpft wird. Das bedeutet, dass für jedes $y\in\mathcal{N}$ aus dem Bildbereich die Gleichung $y=\psi(x)$ mindestens eine Lösung $x\in\mathcal{M}$ hat.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'N' is an instance of 'set'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'y' is an instance of 'mathematical object'
+        - 'y' is element of 'N'
+        - 'x' is an instance of 'mathematical object'
+        - 'x' is element of 'M'
+    - formalized premise:
+        - // psi is surjective iff the image psi(M) equals the whole codomain N; equivalently, for every y in N the equation y = psi(x) has at least one solution x in M
+        - There is an equation:
+            - full source code: 'image of function op'('psi') == 'N'
+        - // characterization via solvability: for each y in N there exists at least one x in M with psi(x) = y (existential over x)
+        - There is an equation:
+            - full source code: 'psi'('x') == 'y'
+    - formalized assertion:
+        - 'psi' has the property 'surjective'
+- Concepts in this snippet:
+    - 'surjective'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'image of function op'
+    - 'set'
+    - 'mathematical object'
+    - 'is element of'
+- // snippet(123)
+- // This snippet continues snippet 122 for the generic mapping psi: M -> N and restates the definition of the property "injektiv" / injective: the equation y = psi(x) has at most one solution; equivalently, for x_1, x_2 in M, x_1 != x_2 implies psi(x_1) != psi(x_2). The printed source has a typo psi(x_1) != psi(x_1); the intended meaning psi(x_1) != psi(x_2) is formalized. The property 'injective' already exists and is reused; no new concepts are introduced.
+- Definition of 'injective':
+    - full source code: Besitzt diese Gleichung $y=\psi(x)$ höchstens eine Lösung, dann heißt die Abbildung injektiv. In diesem Fall würde aus $x_{1},x_{2}\in\mathcal{M}$ mit $x_{1}\neq x_{2}$ immer $\psi(x_{1})\neq\psi(x_{2})$ folgen.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'N' is an instance of 'set'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'x1' is an instance of 'mathematical object'
+        - 'x1' is element of 'M'
+        - 'x2' is an instance of 'mathematical object'
+        - 'x2' is element of 'M'
+    - formalized premise:
+        - // injective iff y = psi(x) has at most one solution; equivalently, for all x1, x2 in M, x1 != x2 implies psi(x1) != psi(x2)
+        - There is an if-then-statement:
+            - formalized premise:
+                - There is a mathematical relation:
+                    - full source code: 'x1' != 'x2'
+            - formalized assertion:
+                - There is a mathematical relation:
+                    - full source code: 'psi'('x1') != 'psi'('x2')
+    - formalized assertion:
+        - 'psi' has the property 'injective'
+- Concepts in this snippet:
+    - 'injective'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set'
+    - 'mathematical object'
+    - 'is element of'
+- // snippet(124)
+- // This snippet continues snippets 122/123 for the generic mapping psi: M -> N and restates the definition of the property "bijektiv" / bijective: a mapping that is both injective and surjective. In this case the equation y = psi(x) has exactly one solution x in M for every y in N, i.e. the mapping is uniquely invertible. The property 'bijective' already exists and is reused; no new concepts are introduced.
+- Definition of 'bijective':
+    - full source code: Eine Abbildung, die sowohl injektiv als auch surjektiv ist, heißt bijektiv. In diesem Fall hat die Gleichung $y=\psi(x)$ für jedes $y\in\mathcal{N}$ genau eine Lösung $x\in\mathcal{M}$, d.\,h. die Abbildung ist eindeutig umkehrbar.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'N' is an instance of 'set'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'y' is an instance of 'mathematical object'
+        - 'y' is element of 'N'
+        - 'x' is an instance of 'mathematical object'
+        - 'x' is element of 'M'
+    - formalized premise:
+        - 'psi' has the property 'injective'
+        - 'psi' has the property 'surjective'
+    - formalized assertion:
+        - 'psi' has the property 'bijective'
+        - // consequence: for every y in N the equation y = psi(x) has exactly one solution x in M, i.e. psi is uniquely invertible
+        - There is an equation:
+            - full source code: 'psi'('x') == 'y'
+- Concepts in this snippet:
+    - 'bijective'
+    - 'injective'
+    - 'surjective'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set'
+    - 'mathematical object'
+    - 'is element of'
+- // snippet(125)
+- // This snippet has two parts. (1) The inverse mapping / Umkehrabbildung psi^{-1}: N -> M of a bijective psi satisfies x = psi^{-1}(y). (2) It defines the new class 'diffeomorphism' (Diffeomorphismus): a bijective mapping psi: M -> N between open sets M, N such that both psi and psi^{-1} are continuously differentiable (C^1). The inverse mapping is modeled via the existing 'has inverse mapping' relation; continuously differentiable is modeled via 'has differentiability class' 1 as in earlier snippets. New concept: diffeomorphism (modeled as a class, a subclass of general function, mirroring 'isomorphism').
+- There is a general statement:
+    - full source code: Die inverse Abbildung oder Umkehrabbildung $\psi^{-1}:\mathcal{N}\to\mathcal{M}$ erfüllt dann die Gleichung $x=\psi^{-1}(y)$.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'N' is an instance of 'set'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'psi_inv' is an instance of 'general function'
+        - 'psi_inv' 'has domain' 'N'
+        - 'psi_inv' 'has codomain' 'M'
+        - 'psi' 'has inverse mapping' 'psi_inv'
+        - 'x' is an instance of 'mathematical object'
+        - 'x' is element of 'M'
+        - 'y' is an instance of 'mathematical object'
+        - 'y' is element of 'N'
+    - formalized premise:
+        - 'psi' has the property 'bijective'
+        - // y is the image of x under psi
+        - There is an equation:
+            - full source code: 'y' == 'psi'('x')
+    - formalized assertion:
+        - // the inverse mapping recovers x from y: x = psi^{-1}(y) (equivalently psi^{-1}(psi(x)) = x)
+        - There is an equation ('inverse mapping recovery'):
+            - full source code: 'x' == 'psi_inv'('y')
+- There is a class: 'diffeomorphism' @en
+- 'diffeomorphism' has the alternative german label 'Diffeomorphismus'
+- 'diffeomorphism' is a subclass of 'general function'
+- 'diffeomorphism' has the verbal description 'bijective mapping psi between open sets such that both psi and its inverse mapping are continuously differentiable (C^1)'
+- Definition of 'diffeomorphism':
+    - full source code: Eine bijektive Abbildung $\psi:\mathcal{M}\to\mathcal{N}$ zwischen offenen Mengen $\mathcal{M}$ und $\mathcal{N}$ heißt \textbf{\em Diffeomorphismus}, wenn sowohl $\psi$ als auch $\psi^{-1}$ stetig differenzierbar sind.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'M' has the property 'open'
+        - 'N' is an instance of 'set'
+        - 'N' has the property 'open'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'psi_inv' is an instance of 'general function'
+        - 'psi_inv' 'has domain' 'N'
+        - 'psi_inv' 'has codomain' 'M'
+        - 'psi' 'has inverse mapping' 'psi_inv'
+    - formalized premise:
+        - 'psi' has the property 'bijective'
+        - // both psi and its inverse are continuously differentiable (C^1)
+        - 'psi' 'has differentiability class' 1
+        - 'psi_inv' 'has differentiability class' 1
+    - formalized assertion:
+        - 'psi' is secondary instance of 'diffeomorphism'
+- Concepts in this snippet:
+    - 'diffeomorphism'
+    - 'bijective'
+    - 'has inverse mapping'
+    - 'has differentiability class'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set'
+    - 'open'
+    - 'mathematical object'
+    - 'is element of'
+- Defined in this snippet:
+    - 'diffeomorphism'
+- // snippet(126)
+- // This snippet defines the new concept "lokaler Diffeomorphismus" / local diffeomorphism at a point x in M: there exist open neighborhoods U subset M of x and V subset N of psi(x) such that the restriction psi|_U : U -> V is a diffeomorphism. The restriction psi|_U is modeled as a separate general function with domain U and codomain V (identified as the restriction of psi to U by a comment), since no restriction operator exists in the knowledge base. New concept: local diffeomorphism (modeled as a class, a subclass of general function, mirroring 'diffeomorphism').
+- There is a class: 'local diffeomorphism' @en
+- 'local diffeomorphism' has the alternative german label 'lokaler Diffeomorphismus'
+- 'local diffeomorphism' is a subclass of 'general function'
+- 'local diffeomorphism' has the verbal description 'mapping psi that is a local diffeomorphism at a point x if there exist open neighborhoods U of x and V of psi(x) such that the restriction of psi to U is a diffeomorphism'
+- Definition of 'local diffeomorphism':
+    - full source code: Eine Abbildung $\psi$ heißt \textbf{\em lokaler Diffeomorphismus} im Punkt $x\in\mathcal{M}$, wenn offene Umgebungen $\mathcal{U}\subset\mathcal{M}$ von~$x$ und $\mathcal{V}\subset\mathcal{N}$ von $\psi(x)$ existieren, so dass die Einschränkung von $\psi$ auf $\mathcal{U}$, also $\psi|_{\mathcal{U}}:\mathcal{U}\to\mathcal{V}$, ein Diffeomorphismus ist.
+    - formalized setting:
+        - 'M' is an instance of 'set'
+        - 'N' is an instance of 'set'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'N'
+        - 'x' is an instance of 'mathematical object'
+        - 'x' is element of 'M'
+        - 'y' is an instance of 'mathematical object'
+        - // y = psi(x) is the image of x under psi
+        - 'y' is element of 'N'
+        - 'U' is an instance of 'set'
+        - 'U' has the property 'open'
+        - 'U' 'is subset of' 'M'
+        - 'V' is an instance of 'set'
+        - 'V' has the property 'open'
+        - 'V' 'is subset of' 'N'
+        - 'psi_U' is an instance of 'general function'
+        - 'psi_U' 'has domain' 'U'
+        - 'psi_U' 'has codomain' 'V'
+        - // psi_U is the restriction of psi to U (psi|_U); no restriction operator exists, so it is modeled as a separate general function that agrees with psi on U
+    - formalized premise:
+        - // there exist open neighborhoods U of x and V of psi(x) such that the restriction psi|_U : U -> V is a diffeomorphism (existential over U and V)
+        - 'x' is element of 'U'
+        - // V is an open neighborhood of the image point y = psi(x)
+        - 'y' is element of 'V'
+        - 'psi_U' is secondary instance of 'diffeomorphism'
+    - formalized assertion:
+        - // psi is a local diffeomorphism at the point x
+        - 'psi' is secondary instance of 'local diffeomorphism'
+- Concepts in this snippet:
+    - 'local diffeomorphism'
+    - 'diffeomorphism'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'set'
+    - 'open'
+    - 'is subset of'
+    - 'mathematical object'
+    - 'is element of'
+- Defined in this snippet:
+    - 'local diffeomorphism'
