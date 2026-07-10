@@ -39,6 +39,7 @@
 - 'has differentiability class' has the verbal description 'specifies that a function is in class C^n: n-times continuously differentiable (C^0=continuous, C^1=once cont. diff., etc.)'
 - The type of argument1 of 'has differentiability class' is 'general function'
 - The result type of 'has differentiability class' is 'integer number'
+- The result type of 'has differentiability class' is 'infinity'
 - There is a relation: 'is valid on set'
 - 'is valid on set' is a qualifier.
 - There is a general operator: 'universal quantifier'
@@ -48,7 +49,23 @@
 - There is a binary operator: 'tuple op'
 - The result type of 'tuple op' is 'tuple'
 - There is a ternary operator: 'definite integral'
+- The type of argument1 of 'definite integral' is 'general function'
+- The type of argument2 of 'definite integral' is 'variable'
+- The type of argument3 of 'definite integral' is 'tuple'
 - // the 3 arguments of 'definite integral' are integrand, integration variable and a tuple with the limits
+- There is a class: 'variable'
+- There is a class: 'scalar variable'
+- 'scalar variable' is a subclass of 'variable'
+- There is a class: 'vector valued variable'
+- 'vector valued variable' is a subclass of 'variable'
+- There is a relation: 'has independent variable'
+- The type of argument1 of 'has independent variable' is 'general function'
+- The result type of 'has independent variable' is 'variable'
+- There is a ternary operator: 'derivative op' @en
+- The type of argument1 of 'derivative op' is 'general function'
+- The type of argument2 of 'derivative op' is 'variable'
+- The type of argument3 of 'derivative op' is 'integer number'
+- The result type of 'derivative op' is 'general function'
 - There is a unary operator: 'time derivative op' @en
 - 'time derivative op' has the associated LaTeX notation $\dot{}$
 - The type of argument1 of 'time derivative op' is 'general function'
@@ -3264,9 +3281,16 @@
     - 'time derivative op'
 - Defined in this snippet:
     - 'trajectory'
+- // manually added (10)
+- There is a class: 'problem'
+- There is a class: 'solution'
+- There is a relation: 'has solution'
+- The type of argument1 of 'has solution' is 'problem'
+- The result type of 'has solution' is 'solution'
 
 - // snippet(84)
 - There is a class: 'initial value problem' @en
+- 'initial value problem' is a subclass of 'problem'
 - 'initial value problem' has the alternative german label 'Anfangswertaufgabe'
 - Definition of 'initial value problem':
     - full source code: Die zu~(\ref{eq:dgl1}) gehörige Anfangswertaufgabe mit dem Anfangszeitpunkt $t=t_{0}\in\mathcal{I}$ und einem Anfangswert $p\in\mathcal{M}$ lautet $\dot{x}=F(x,t),\quad x(t_{0})=p.\label{eq:awa1}$
@@ -3325,6 +3349,7 @@
 
 - // snippet(85)
 - There is a class: 'solution of initial value problem' @en
+- 'solution of initial value problem' is a subclass of 'solution'
 - 'solution of initial value problem' has the alternative german label 'Lösung der Anfangswertaufgabe'
 - 'solution of initial value problem' is a subclass of 'trajectory'
 - Definition of 'solution of initial value problem':
@@ -3359,6 +3384,12 @@
         - 'phi' 'has differentiability class' 1
         - 't' is an instance of 'real number'
         - 't' is element of 'I'
+        - There is a system of equations ('awa'):
+            - There is an equation ('dgl for awa'):
+                - full source code: 'time derivative op'('x')('t') == 'F'('x'('t'), 't')
+            - There is an equation ('initial condition for awa1'):
+                - full source code: 'x'('t0') == 'p'
+        - 'awa' is secondary instance of 'initial value problem'
     - formalized premise:
         - 'phi' is secondary instance of 'trajectory'
         - There is an equation ('ode'):
@@ -3368,6 +3399,7 @@
             - full source code: 'phi'('t0') == 'p'
     - formalized assertion:
         - 'phi' is secondary instance of 'solution of initial value problem'
+        - 'awa' 'has solution' 'phi'
         - 'ode' 'has trajectory' 'phi'
 
 - There is a property: 'unique' @en
@@ -3428,6 +3460,14 @@
             - full source code: 'phi_bar'('t0') == 'p'
         - 'phi' is secondary instance of 'solution of initial value problem'
         - 'phi_bar' is secondary instance of 'solution of initial value problem'
+        - There is a system of equations ('awa uniqueness'):
+            - There is an equation ('dgl for awa uniqueness'):
+                - full source code: 'time derivative op'('z')('t') == 'F'('z'('t'), 't')
+            - There is an equation ('initial condition for awa uniqueness'):
+                - full source code: 'z'('t0') == 'p'
+        - 'awa uniqueness' is secondary instance of 'initial value problem'
+        - 'awa uniqueness' 'has solution' 'phi'
+        - 'awa uniqueness' 'has solution' 'phi_bar'
         - 'ode' 'has trajectory' 'phi'
         - 'ode_bar' 'has trajectory' 'phi_bar'
         - There is an equation:
@@ -3638,6 +3678,13 @@
         - 'phi' 'has codomain' 'M'
         - 'phi' 'has differentiability class' 1
         - 'phi' is secondary instance of 'solution of initial value problem'
+        - There is a system of equations ('awa pl'):
+            - There is an equation ('dgl for awa pl'):
+                - full source code: 'time derivative op'('z')('t') == 'F'('z'('t'), 't')
+            - There is an equation ('initial condition for awa pl'):
+                - full source code: 'z'('t0') == 'p'
+        - 'awa pl' is secondary instance of 'initial value problem'
+        - 'awa pl' 'has solution' 'phi'
         - 'phi' has the property 'unique'
 - Concepts in this snippet:
     - 'norm op'
@@ -3718,9 +3765,16 @@
             - formalized left hand side: 'x'('t')
             - formalized right hand side: 'p' + 'definite integral'('F'('x'('tau'), 'tau'), 'tau', 'tuple op'('t0', 't')).
             - reference: 'eq:awa-integralgleichung1'
-        - 'integral equation for awa' is a secondary instance of 'integral equation'
+        - 'integral equation for awa' is secondary instance of 'integral equation'
     - formalized assertion:
-        - 'x' is a secondary instance of 'solution of initial value problem'
+        - 'x' is secondary instance of 'solution of initial value problem'
+        - There is a system of equations ('awa int'):
+            - There is an equation ('dgl for awa int'):
+                - full source code: 'time derivative op'('z')('t') == 'F'('z'('t'), 't')
+            - There is an equation ('initial condition for awa int'):
+                - full source code: 'z'('t0') == 'p'
+        - 'awa int' is secondary instance of 'initial value problem'
+        - 'awa int' 'has solution' 'x'
 
 - // The Picard iteration is derived from the integral equation to construct the solution.
 - Definition of 'Picard iteration':
@@ -3767,9 +3821,6 @@
 - 'Picard iteration' is associated to 'Theorem of Picard-Lindelöf'
 
 - // The convergence of the Picard iteration is proven with the Banach fixed-point theorem (Banachscher Fixpunkt-Satz), using the Lipschitz property of F; this constitutes the proof of the theorem.
-- There is an explanation:
-    - verbal summary: The initial value problem is equivalent to an integral equation, whose solution is obtained as the limit of the Picard iteration; the convergence of this iteration is shown via the Banach fixed-point theorem exploiting the Lipschitz property of F. This is the proof sketch of the Picard-Lindelöf theorem.
-    - related to: 'Theorem of Picard-Lindelöf'.
 
 - Concepts in this snippet:
     - 'integral equation'
@@ -3905,6 +3956,13 @@
         - 'phi' 'has codomain' 'M'
         - 'phi' 'has differentiability class' 1
         - 'phi' is secondary instance of 'solution of initial value problem'
+        - There is a system of equations ('awa cor'):
+            - There is an equation ('dgl for awa cor'):
+                - full source code: 'time derivative op'('z')('t') == 'F'('z'('t'), 't')
+            - There is an equation ('initial condition for awa cor'):
+                - full source code: 'z'('t0') == 'p'
+        - 'awa cor' is secondary instance of 'initial value problem'
+        - 'awa cor' 'has solution' 'phi'
         - 'phi' has the property 'unique'
 - Concepts in this snippet:
     - 'integer number'
@@ -3927,122 +3985,8 @@
     - 'general function'
     - 'solution of initial value problem'
     - 'unique'
-- // snippet(93)
-- // This remark shows that the Lipschitz condition in the Theorem of Picard-Lindelöf (snippet 88) is essential for uniqueness of the solution. It gives the counterexample initial value problem dot x = sqrt(x), x(0)=0, whose right-hand side is continuous for x>=0 but not Lipschitz-continuous at x=0. Both the zero function phi(t)=0 and phi_bar(t)=t^2/4 (for t>=0) solve this initial value problem, hence the solution is not unique. Peano's existence theorem already guarantees existence (but not uniqueness) for a merely continuous right-hand side.
-- There is a unary operator: 'square root op' @en
-- 'square root op' has the alternative german label 'Quadratwurzel'
-- 'square root op' has the associated LaTeX notation $\sqrt{}$
-- The type of argument1 of 'square root op' is 'real number'
-- The result type of 'square root op' is 'real number'
-- There is an if-then-statement ('Theorem of Peano'):
-    - full source code: Tatsächlich sichert der Existenzsatz von Peano bereits bei einer stetigen rechten Seite die Existenz einer Lösung, nicht aber deren Eindeutigkeit.
-    - // Peano's existence theorem: a continuous time-dependent vector field (right-hand side) already guarantees the existence of a solution of the initial value problem (awa1), but not its uniqueness.
-    - formalized setting:
-        - 'n' is an instance of 'integer number'
-        - 'Rn' is an instance of 'real vector space'
-        - 'Rn' 'has dimension' 'n'
-        - 'M' is an instance of 'set'
-        - 'M' 'is subset of' 'Rn'
-        - 'M' has the property 'open'
-        - 'I' is an instance of 'set'
-        - 'I' 'is subset of' 'set of real numbers'
-        - 'I' has the property 'open'
-        - 'MxI' is an instance of 'set'
-        - There is an equation:
-            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
-        - 'F' is an instance of 'vector field'
-        - 'F' has the property 'time-dependent'
-        - 'F' 'has domain' 'MxI'
-        - 'F' 'has codomain' 'Rn'
-        - 't0' is an instance of 'real number'
-        - 't0' is element of 'I'
-        - 'p' is an instance of 'vector'
-        - 'p' is element of 'M'
-    - formalized premise:
-        - 'F' has the property 'continuous'
-    - formalized assertion:
-        - 'phi' is an instance of 'general function'
-        - 'phi' 'has codomain' 'M'
-        - 'phi' is secondary instance of 'solution of initial value problem'
-        - // existence is guaranteed; in contrast to the Theorem of Picard-Lindelöf, uniqueness of 'phi' is not asserted here
-- There is a general statement:
-    - full source code: Dazu betrachte man die Anfangswertaufgabe $\dot{x}=\sqrt{x},\quad x(0)=0$, bei welcher die rechte Seite der Differentialgleichung für $x\geq0$ stetig, im Punkt $x=0$ aber nicht Lipschitz-stetig ist. Durch direktes Nachrechnen überprüft man, dass sowohl die Nullfunktion (d.\,h. $\phi(t)=0$ für alle $t\in{\mathbb{R}}$) als auch $\bar{\phi}(t)=t^{2}/4$ für $t\geq0$ die Anfangswertaufgabe erfüllen.
-    - // concrete scalar counterexample (n=1): the right-hand side F(x)=sqrt(x) is continuous but not Lipschitz-continuous at 0, and the initial value problem has two different solutions.
-    - formalized setting:
-        - 'M' is an instance of 'set'
-        - 'M' 'is subset of' 'set of real numbers'
-        - // M is the domain x >= 0
-        - 'F' is an instance of 'general function'
-        - 'F' 'has domain' 'M'
-        - 'F' 'has codomain' 'set of real numbers'
-        - There is an equation ('ce right hand side'):
-            - full source code: 'F'('x') == 'square root op'('x')
-        - 't0' is an instance of 'real number'
-        - There is an equation:
-            - full source code: 't0' == 0
-        - 'p' is an instance of 'real number'
-        - There is an equation:
-            - full source code: 'p' == 0
-        - 'x' is an instance of 'general function'
-        - 'x' 'has domain' 'I'
-        - 'x' 'has codomain' 'M'
-        - There is a system of equations ('awa_ce'):
-            - There is an equation ('ce ode'):
-                - full source code: 'time derivative op'('x')('t') == 'square root op'('x'('t'))
-            - There is an equation ('ce initial condition'):
-                - full source code: 'x'('t0') == 'p'
-        - 'awa_ce' is secondary instance of 'initial value problem'
-        - 'ce ode' is secondary instance of 'differential equation'
-        - 'phi' is an instance of 'general function'
-        - 'phi' 'has codomain' 'set of real numbers'
-        - There is an equation ('zero solution'):
-            - full source code: 'phi'('t') == 0
-        - 'phi_bar' is an instance of 'general function'
-        - 'phi_bar' 'has codomain' 'set of real numbers'
-        - There is an equation ('parabola solution'):
-            - full source code: 'phi_bar'('t') == 't'**2 / 4
-    - formalized premise:
-        - // empty
-    - formalized assertion:
-        - 'F' has the property 'continuous'
-        - 'F' does not have the property 'Lipschitz-continuous'
-        - 'phi' is secondary instance of 'solution of initial value problem'
-        - 'phi_bar' is secondary instance of 'solution of initial value problem'
-        - // both phi and phi_bar solve the same initial value problem 'awa_ce', therefore the solution is not unique
-        - 'phi' does not have the property 'unique'
-- There is an explanation:
-    - verbal summary: The Lipschitz condition of the Theorem of Picard-Lindelöf is necessary for uniqueness. Dropping it (continuous but non-Lipschitz right-hand side) can lead to several solutions of the same initial value problem, as demonstrated by the counterexample dot x = sqrt(x), x(0)=0.
-    - related to: 'unique'.
-- There is an explanation:
-    - verbal summary: Peano's existence theorem guarantees existence of a solution of an initial value problem already for a continuous right-hand side, but unlike the Theorem of Picard-Lindelöf it does not guarantee uniqueness.
-    - related to: 'Theorem of Picard-Lindelöf'.
-- Concepts in this snippet:
-    - 'square root op'
-    - 'real number'
-    - 'integer number'
-    - 'real vector space'
-    - 'has dimension'
-    - 'set'
-    - 'set of real numbers'
-    - 'is subset of'
-    - 'open'
-    - 'cartesian product op'
-    - 'vector field'
-    - 'time-dependent'
-    - 'has domain'
-    - 'has codomain'
-    - 'vector'
-    - 'is element of'
-    - 'continuous'
-    - 'general function'
-    - 'time derivative op'
-    - 'differential equation'
-    - 'initial value problem'
-    - 'solution of initial value problem'
-    - 'unique'
-    - 'Lipschitz-continuous'
-- Defined in this snippet:
-    - 'square root op'
+- // snippet(93i)
+
 - // snippet(94)
 - // This snippet introduces the time-dependent flow (Evolution / zeitvarianter Fluss) of the differential equation (dgl1): a two-parameter map phi: M x I x I -> M that collects all solutions, provided an integral curve through every (x,t) exists. It states the two defining relations of the flow (identity at equal times and the cocycle/semigroup property) and defines the composition of maps.
 - There is a class: 'time-dependent flow' @en
@@ -4071,12 +4015,23 @@
         - 'IxI' is an instance of 'set'
         - There is an equation:
             - full source code: 'IxI' == 'cartesian product op'('I', 'I')
-        - 'MxIxI' is an instance of 'set'
+        - 'MxI' is an instance of 'set'
         - There is an equation:
-            - full source code: 'MxIxI' == 'cartesian product op'('M', 'IxI')
+            - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
+        - 'F' 'has domain' 'MxI'
+        - 'F' 'has codomain' 'Rn'
         - 'phi' is an instance of 'general function'
-        - 'phi' 'has domain' 'MxIxI'
-        - 'phi' 'has codomain' 'M'
+        - // phi is the (curried) time-dependent flow: phi(t, t0) is a map on M, so phi_{t,t0}(x) = phi(t, t0)(x)
+        - 'phi' 'has domain' 'IxI'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 's' is an instance of 'solution of initial value problem'
+        - 's' 'has domain' 'I'
+        - 's' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
         - 't0' is an instance of 'real number'
         - 't0' is element of 'I'
         - 't1' is an instance of 'real number'
@@ -4086,18 +4041,21 @@
         - 'x' is an instance of 'vector'
         - 'x' is element of 'M'
     - formalized premise:
-        - // for every (x,t) in M x I there exists an integral curve (trajectory) of the differential equation (dgl1) passing through x at time t
+        - There is a system of equations ('awa td flow'):
+            - There is an equation ('dgl for awa td flow'):
+                - full source code: 'time derivative op'('z')('t') == 'F'('z'('t'), 't')
+            - There is an equation ('initial condition for awa td flow'):
+                - full source code: 'z'('t0') == 'p'
+        - 'awa td flow' is secondary instance of 'initial value problem'
+        - 'awa td flow' 'has solution' 's'
+        - There is an equation ('flow collects solutions'):
+            - full source code: 'phi'('t', 't0')('p') == 's'('t')
     - formalized assertion:
         - 'phi' is secondary instance of 'time-dependent flow'
-        - // phi_{t,t0}(p) := phi(p,t,t0) is the value at time t of the solution of the initial value problem (awa1)
-        - // identity relation at equal times: phi_{t0,t0}(x) = x
         - There is an equation ('flow identity'):
-            - full source code: 'phi'('x', 't0', 't0') == 'x'
-        - // cocycle / semigroup relation: phi_{t2,t1} ∘ phi_{t1,t0}(x) = phi_{t2,t0}(x)
+            - full source code: 'phi'('t0', 't0')('x') == 'x'
         - There is an equation ('flow cocycle'):
-            - full source code: 'phi'('phi'('x', 't1', 't0'), 't2', 't1') == 'phi'('x', 't2', 't0')
-- 'time-dependent flow' is associated to 'solution of initial value problem'
-- 'time-dependent flow' is associated to 'differential equation'
+            - full source code: 'function composition op'('phi'('t2', 't1'), 'phi'('t1', 't0'))('x') == 'phi'('t2', 't0')('x')
 - Concepts in this snippet:
     - 'time-dependent flow'
     - 'function composition op'
@@ -4260,6 +4218,7 @@
 - // snippet(97)
 - // For an autonomous (time-invariant) system the two-parameter time-dependent flow (snippet 94) reduces, via the time difference to the initial time (phi_{t - t0}(.) := phi_{t,t0}(.)), to a one-parameter map phi: M x I -> R^n with phi_t(p) := phi(p,t). This map is called the flow (Fluss / flow / Phasenfluss) and collects the solutions of the autonomous differential equation dgl2.
 - There is a class: 'flow' @en
+- 'flow' is a subclass of 'time-dependent flow'
 - 'flow' has the alternative german label 'Fluss'
 - 'flow' has the alternative german label 'Phasenfluss'
 - 'flow' has the alternative english label 'phase flow'
@@ -4296,9 +4255,6 @@
         - // reduction of the two-parameter flow to the one-parameter flow via the time difference: phi(p, t - t0) = phi_tv(p, t, t0)
         - There is an equation ('flow time-difference reduction'):
             - full source code: 'phi'('p', 't' - 't0') == 'phi_tv'('p', 't', 't0')
-- 'flow' is associated to 'time-dependent flow'
-- 'flow' is associated to 'time-invariant'
-- 'flow' is associated to 'differential equation'
 - Concepts in this snippet:
     - 'flow'
     - 'time-dependent flow'
@@ -4341,15 +4297,12 @@
         - 's' is an instance of 'real number'
         - 't' is an instance of 'real number'
     - formalized premise:
-        - // identity at time 0: phi_0(x) = x
         - There is an equation ('flow group identity'):
-            - full source code: 'phi'('x', 0) == 'x'
-        - // composition of the flow: phi_t(phi_s(x)) = phi_{s+t}(x)
+            - full source code: 'phi'(0)('x') == 'x'
         - There is an equation ('flow group composition'):
-            - full source code: 'phi'('phi'('x', 's'), 't') == 'phi'('x', 's' + 't')
+            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('x') == 'phi'('s' + 't')('x')
     - formalized assertion:
         - 'phi' has the property 'group property'
-- 'group property' is associated to 'function composition op'
 - Concepts in this snippet:
     - 'group property'
     - 'flow'
@@ -4366,14 +4319,7 @@
 - Defined in this snippet:
     - 'group property'
 - // snippet(99)
-- // This snippet is a purely notational remark: when several vector fields are used simultaneously, the flow belonging to a vector field f at time t is written phi_t^f, and the solution of the initial value problem (awa2) is written phi_t^f(p). No new concept is introduced; it emphasizes the assignment between vector fields and their flows.
-- 'flow' is associated to 'vector field'
-- There is an explanation:
-    - verbal summary: When several vector fields are used at the same time, the flow belonging to a vector field f at time t is denoted phi_t^f, and the solution of the initial value problem (awa2) is denoted phi_t^f(p); this notation highlights the assignment between each vector field and its flow.
-    - related to: 'flow'.
-- Concepts in this snippet:
-    - 'flow'
-    - 'vector field'
+
 - // snippet(100)
 - // This snippet states that for each initial value p in M there is a maximal existence interval I_p over which the solution of the differential equation (dgl1) cannot be continued further. A flow defined on all of R x M is called a global flow, and the corresponding vector field is called complete (vollstaendig).
 - There is a class: 'maximal existence interval' @en
@@ -4574,9 +4520,13 @@
 - The type of argument2 of 'matrix power op' is 'integer number'
 - The result type of 'matrix power op' is 'square matrix'
 - 'matrix power op' has the verbal description 'k-th power of a square matrix A, i.e. the product A A ... A taken k times in the sense of matrix multiplication (not elementwise)'
-- There is an explanation:
-    - verbal summary: The matrix exponential function exp(A) = e^A is defined by the absolutely convergent series sum over k from 0 to infinity of (1/k!) A^k. The occurring matrix powers A^k = A A ... A (k times) are meant in the sense of matrix multiplication, not elementwise.
-    - related to: 'matrix exponential op'.
+- Definition of 'matrix exponential op':
+    - formalized setting:
+        - 'A' is an instance of 'square matrix'
+        - 'k' is an instance of 'integer number'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'matrix exponential op'('A') == 'sum over index'('matrix power op'('A', 'k') / 'factorial op'('k'), 'k', 'tuple'(0, 'infinity'))
 - Concepts in this snippet:
     - 'matrix exponential op'
     - 'matrix power op'
@@ -4616,15 +4566,16 @@
         - // this initial value problem is a special case of the linear state-space model with A = 0 and constant input u = 1
         - 'awa const vf' is associated to 'linear state-space model'
     - formalized assertion:
+        - // phi in curried form: phi_t = phi(t) is the time-t map, phi_t(p) = phi(t)(p)
         - // special solution from the general formula using e^{At}|_{A=0} = I
         - There is an equation ('sol const vf'):
-            - full source code: 'phi'('p', 't') == 'p' + 'b' * 't'
+            - full source code: 'phi'('t')('p') == 'p' + 'b' * 't'
         - 'phi' has the property 'global'
         - // group property: phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p)
         - There is an equation ('group id const vf'):
-            - full source code: 'phi'('p', 0) == 'p'
+            - full source code: 'phi'(0)('p') == 'p'
         - There is an equation ('group comp const vf'):
-            - full source code: 'phi'('phi'('p', 's'), 't') == 'phi'('p', 's' + 't')
+            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('p') == 'phi'('s' + 't')('p')
         - 'phi' has the property 'group property'
 - There is an example:
     - verbal summary: Constant vector field and group property. For f(x) = b (b in R^n) the initial value problem dot x = b, x(0) = p is a special case of the linear state-space model with A = 0 and constant input u = 1. Its solution x(t) = p + b t is defined for all p and all t, giving the global flow phi_t(p) = p + b t, which satisfies the group property phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p) = p + b(t+s).
@@ -4667,16 +4618,17 @@
         - // linear vector field f(x) = A x; special case of the linear state-space model with b = 0 (or u = 0)
         - 'f' is associated to 'linear state-space model'
     - formalized assertion:
+        - // phi in curried form: phi_t = phi(t) is the time-t map, phi_t(x) = phi(t)(x)
         - // global flow read off from the general solution formula: phi_t(x) = e^{At} x
         - There is an equation ('lin vf flow'):
-            - full source code: 'phi'('x', 't') == 'matrix exponential op'('A' * 't') * 'x'
+            - full source code: 'phi'('t')('x') == 'matrix exponential op'('A' * 't') * 'x'
         - 'phi' has the property 'global'
         - // first group property: phi_0(x) = e^{A0} x = I x = x, since e^0 = I
         - There is an equation ('lin vf group id'):
-            - full source code: 'phi'('x', 0) == 'x'
+            - full source code: 'phi'(0)('x') == 'x'
         - // second group property via Cauchy product of the series and the binomial theorem: e^{tA} e^{sA} = e^{(t+s)A}
         - There is an equation ('lin vf group comp'):
-            - full source code: 'phi'('phi'('x', 's'), 't') == 'phi'('x', 's' + 't')
+            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('x') == 'phi'('s' + 't')('x')
         - 'phi' has the property 'group property'
 - There is an example:
     - verbal summary: Linear vector field and group property. For f(x) = A x (A in R^{n x n}), a special case of the linear state-space model with b = 0 (or u = 0), the global flow is phi_t(x) = e^{At} x. It satisfies the group property phi_0(x) = x (from e^0 = I) and phi_t(phi_s(x)) = e^{tA} e^{sA} x = e^{(t+s)A} x = phi_{t+s}(x), shown via the Cauchy product and the binomial theorem.
@@ -4744,26 +4696,49 @@
 - 'sufficiently smooth' has the alternative german label 'hinreichend glatt'
 - 'sufficiently smooth' is applicable to 'general function'
 - 'sufficiently smooth' has the verbal description 'informal property of a function that is sufficiently often continuously differentiable for the respective consideration or computation'
-- There is an explanation:
-    - // existence and uniqueness of the local flow are ensured by the Theorem of Picard-Lindeloef and the corollary from the mean value theorem; the detailed proof of the theorem on differentiability of the flow is found in the cited literature
-    - verbal summary: Existence and uniqueness of the local flow are ensured by the Theorem of Picard-Lindeloef and the corollary from the mean value theorem. The detailed proof of the theorem on differentiability of the flow can be found in the cited literature.
-    - related to: 'Theorem of differentiability of the flow'.
-- Definition of 'sufficiently smooth':
-    - full source code: Eine Funktion nennt man \textbf{\em hinreichend glatt}, wenn sie für die jeweilige Überlegung bzw. Berechnung ausreichend oft stetig differenzierbar ist.
-    - formalized setting:
-        - 'f' is an instance of 'general function'
-    - formalized premise:
-        - // f is sufficiently often continuously differentiable for the respective consideration or computation; the required number of continuous derivatives is context-dependent and not fixed, hence not expressible as a concrete has differentiability class value
-    - formalized assertion:
-        - 'f' has the property 'sufficiently smooth'
 - Concepts in this snippet:
     - 'sufficiently smooth'
     - 'general function'
     - 'Theorem of differentiability of the flow'
 - Defined in this snippet:
     - 'sufficiently smooth'
+
+- // manually added (11)
+- There is a unary operator: 'factorial op'
+- The type of argument1 of 'factorial op' is 'integer number'
+- The result type of 'factorial op' is 'integer number'
+- There is a class: 'series'
+- There is a class: 'Taylor series'
+- 'Taylor series' is a subclass of 'series'
+- There is a property: 'convergent'
+- There is a property: 'divergent'
+- 'convergent' 'is applicable to' 'series'
+- 'divergent' 'is applicable to' 'series'
+- There is a relation: 'has series expansion'
+- The type of argument1 of 'has series expansion' is 'general function'
+- The result type of 'has series expansion' is 'series'
+- Definition of 'Taylor series':
+    - formalized setting:
+        - 'x' is an instance of 'scalar variable'
+        - 'f' is an instance of 'general function'
+        - 'f' 'has domain' 'set of real numbers'
+        - 'f' 'has codomain' 'set of real numbers'
+        - 'f' has the property 'smooth'
+        - 'f' 'has independent variable' 'x'
+        - 'k' is an instance of 'integer number'
+        - 'a' is an instance of 'real number'
+        - 'TS' is an instance of 'general function'
+    - formalized assertion:
+        - There is an equation:
+            - full source code: 'TS' == 'sum over index'('derivative op'('f', 'x', 'k')('a') / 'factorial op'('k') * ('x'-'a')**'k', 'k', 'tuple'(0, 'infinity'))
+        - 'TS' is secondary instance of 'Taylor series'
+        - 'f' 'has series expansion' 'TS'
 - // snippet(110)
 - // This snippet defines two informal properties: "glatt" (smooth = infinitely often continuously differentiable) and "analytisch" / "reell-analytisch" (analytic = locally representable by a convergent Taylor series). Remarks: a smooth (resp. analytic) vector field has a smooth (resp. analytic) flow; every analytic function is smooth, but not every smooth function is analytic.
+- There is a relation: 'is flow of'
+- The type of argument1 of 'is flow of' is 'flow'
+- The result type of 'is flow of' is 'vector field'
+- 'is flow of' has the verbal description 'links a flow to the vector field it is generated by: phi is the flow of f (phi = phi^f)'
 - There is a property: 'smooth' @en
 - 'smooth' has the alternative german label 'glatt'
 - 'smooth' is applicable to 'general function'
@@ -4779,15 +4754,18 @@
     - formalized setting:
         - 'f' is an instance of 'general function'
     - formalized premise:
-        - // f is infinitely often continuously differentiable; the differentiability class is not a finite integer, hence not expressible as a concrete has differentiability class value
+        - // f is infinitely often continuously differentiable (C-infinity)
+        - 'f' 'has differentiability class' 'infinity'
     - formalized assertion:
         - 'f' has the property 'smooth'
 - Definition of 'analytic':
     - full source code: Eine Funktion heißt dabei \textbf{\em analytisch} oder genauer \textbf{\em reell-analytisch}, wenn sie lokal durch eine konvergente Taylorreihe dargestellt werden kann.
     - formalized setting:
         - 'f' is an instance of 'general function'
+        - 'TS' is an instance of 'Taylor series'
     - formalized premise:
-        - // f can locally be represented by a convergent Taylor series
+        - 'f' 'has series expansion' 'TS'
+        - 'TS' 'has property' 'convergent'
     - formalized assertion:
         - 'f' has the property 'analytic'
 - // remark: a smooth vector field has a smooth flow
@@ -4796,7 +4774,7 @@
     - formalized setting:
         - 'f' is an instance of 'vector field'
         - 'phi' is an instance of 'flow'
-        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'phi' 'is flow of' 'f'
     - formalized premise:
         - 'f' has the property 'smooth'
     - formalized assertion:
@@ -4807,7 +4785,7 @@
     - formalized setting:
         - 'f' is an instance of 'vector field'
         - 'phi' is an instance of 'flow'
-        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'phi' 'is flow of' 'f'
     - formalized premise:
         - 'f' has the property 'analytic'
     - formalized assertion:
@@ -4831,7 +4809,13 @@
     - 'smooth'
     - 'analytic'
 - // snippet(111)
-- // This snippet states that if the vector field f is sufficiently smooth, the flow phi_t is sufficiently often differentiable, so a series (Taylor) ansatz phi_t(x) = v_0(x) + v_1(x) t + v_2(x) t^2 + O(t^3) is possible, with coefficient vector fields v_0, v_1, v_2 : M -> R^n. The Landau symbol O(t^k) describes the order of the remainder term; the ansatz is justified by the Lagrange or Cauchy form of the remainder of a Taylor expansion. There is no Landau/big-O operator in the statement file, so the O(t^3) remainder is captured as a comment and the equation is kept to the expressible part.
+- // This snippet states that if the vector field f is sufficiently smooth, the flow phi_t is sufficiently often differentiable, so a series (Taylor) ansatz phi_t(x) = v_0(x) + v_1(x) t + v_2(x) t^2 + O(t^3) is possible, with coefficient vector fields v_0, v_1, v_2 : M -> R^n. The Landau symbol O(t^k) describes the order of the remainder term; the ansatz is justified by the Lagrange or Cauchy form of the remainder of a Taylor expansion. The remainder O(t^k) is modeled by the operator 'higher order terms op'(t, k) defined here.
+- There is a binary operator: 'higher order terms op' @en
+- 'higher order terms op' has the alternative german label 'Landau-Restglied'
+- The type of argument1 of 'higher order terms op' is 'mathematical object'
+- The type of argument2 of 'higher order terms op' is 'integer number'
+- The result type of 'higher order terms op' is 'mathematical object'
+- 'higher order terms op' has the verbal description 'Landau remainder O(arg1^arg2): the collected terms of order arg2 or higher in the small quantity arg1, as truncated in a Taylor expansion; its value type matches the expression it complements'
 - There is an if-then-statement:
     - full source code: Ist das Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$ hinreichend glatt, so ist auch der Fluss $\varphi_{t}$ ausreichend oft differenzierbar. Dann ist für den Fluss der Reihenansatz $\varphi_{t}(x)=v_{0}(x)+v_{1}(x)t+v_{2}(x)t^{2}+O(t^{3})$ mit den Vektorfeldern $v_{0},v_{1},v_{2}:\mathcal{M}\to{\mathbb{R}}^{n}$ möglich. Hierbei beschreibt das Landau-Symbol $O(t^{k})$ die Größenordnung des Restglieds. Diese Darstellung ist bei einer Taylorentwicklung durch die Lagrange- bzw. Cauchy-Form des Restglieds gerechtfertigt.
     - formalized setting:
@@ -4845,7 +4829,7 @@
         - 'f' 'has domain' 'M'
         - 'f' 'has codomain' 'Rn'
         - 'phi' is an instance of 'flow'
-        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'phi' 'is flow of' 'f'
         - 'v0' is an instance of 'vector field'
         - 'v0' 'has domain' 'M'
         - 'v0' 'has codomain' 'Rn'
@@ -4863,9 +4847,9 @@
     - formalized assertion:
         - // phi is sufficiently often differentiable, so the series ansatz below is possible
         - 'phi' has the property 'sufficiently smooth'
-        - // series (Taylor) ansatz of the flow: phi_t(x) = v_0(x) + v_1(x) t + v_2(x) t^2 + O(t^3); the O(t^3) remainder term is not expressible with the available operators and is therefore omitted from the formalized equation and only stated here in the comment
+        - // series (Taylor) ansatz of the flow with explicit Landau remainder O(t^3)
         - There is an equation ('flow series ansatz'):
-            - full source code: 'phi'('x', 't') == 'v0'('x') + 'v1'('x') * 't' + 'v2'('x') * 't' ** 2
+            - full source code: 'phi'('x', 't') == 'v0'('x') + 'v1'('x') * 't' + 'v2'('x') * 't' ** 2 + 'higher order terms op'('t', 3)
 - Concepts in this snippet:
     - 'vector field'
     - 'flow'
@@ -4882,7 +4866,7 @@
     - 'is element of'
     - 'real number'
 - // snippet(112)
-- // This snippet continues the series ansatz of the flow from snippet 111. From phi_0(x) = x it follows that v_0(x) = x. Comparing f(phi_t(x)) with the time derivative of the series and matching coefficients in t yields v_1(x) = f(x) and v_2(x) = (1/2) f'(x) f(x), where f'(x) is the Jacobian of the vector field f at x. This gives the second-order expansion phi_t(x) = x + f(x) t + (1/2) f'(x) f(x) t^2 + O(t^3). The Jacobian is modeled via the existing 'Jacobian matrix' class and 'has Jacobian matrix' relation (no inline Jacobian operator exists), so f'(x) is written 'Jf'('x'). The O(t^3) remainder is not expressible with the available operators and is kept only as a comment.
+- // This snippet continues the series ansatz of the flow from snippet 111. From phi_0(x) = x it follows that v_0(x) = x. Comparing f(phi_t(x)) with the time derivative of the series and matching coefficients in t yields v_1(x) = f(x) and v_2(x) = (1/2) f'(x) f(x), where f'(x) is the Jacobian of the vector field f at x. This gives the second-order expansion phi_t(x) = x + f(x) t + (1/2) f'(x) f(x) t^2 + O(t^3). The Jacobian is modeled via the existing 'Jacobian matrix' class and 'has Jacobian matrix' relation (no inline Jacobian operator exists), so f'(x) is written 'Jf'('x'). The O(t^3) remainder is modeled with the 'higher order terms op' operator.
 - There is a general statement:
     - full source code: Aus $\varphi_{0}(x)=x$ folgt $v_{0}(x)=x$, d.\,h. $\varphi_{t}(x)=x+v_{1}(x)t+v_{2}(x)t^{2}+O(t^{3})$. Einerseits gilt $f(\varphi_{t}(x))=f(x)+f'(x)v_{1}(x)t+\ldots$, andererseits durch Differenzieren des Reihenansatzes $\frac{{\mathrm{d}}}{{\mathrm{d}} t}\varphi_{t}(x)=v_{1}(x)+2v_{2}(x)t+\ldots$. Ein Koeffizientenvergleich bezüglich~$t$ liefert $v_{1}(x)=f(x)$ und $v_{2}(x)=\tfrac{1}{2}f'(x)v_{1}(x)=\tfrac{1}{2}f'(x)f(x)$ und damit $\varphi_{t}(x)=x+f(x)t+\tfrac{1}{2}f'(x)f(x)t^{2}+O(t^{3})$.
     - formalized setting:
@@ -4898,7 +4882,7 @@
         - 'Jf' is an instance of 'Jacobian matrix'
         - 'f' 'has Jacobian matrix' 'Jf'
         - 'phi' is an instance of 'flow'
-        - // phi is the flow belonging to the vector field f (phi = phi^f)
+        - 'phi' 'is flow of' 'f'
         - 'v0' is an instance of 'vector field'
         - 'v0' 'has domain' 'M'
         - 'v0' 'has codomain' 'Rn'
@@ -4925,9 +4909,9 @@
         - // second coefficient: v_2(x) = (1/2) f'(x) f(x), with f'(x) the Jacobian of f at x
         - There is an equation ('coeff v2'):
             - full source code: 'v2'('x') == 0.5 * 'Jf'('x') * 'f'('x')
-        - // resulting second-order expansion: phi_t(x) = x + f(x) t + (1/2) f'(x) f(x) t^2 + O(t^3); the O(t^3) remainder is omitted from the formalized equation and stated only in this comment
+        - // resulting second-order expansion with explicit Landau remainder O(t^3)
         - There is an equation ('flow second order expansion'):
-            - full source code: 'phi'('x', 't') == 'x' + 'f'('x') * 't' + 0.5 * 'Jf'('x') * 'f'('x') * 't' ** 2
+            - full source code: 'phi'('x', 't') == 'x' + 'f'('x') * 't' + 0.5 * 'Jf'('x') * 'f'('x') * 't' ** 2 + 'higher order terms op'('t', 3)
 - Concepts in this snippet:
     - 'vector field'
     - 'flow'
@@ -4946,10 +4930,6 @@
     - 'real number'
 - // snippet(113)
 - // This snippet observes from the series expansion (snippet 112) that the vector field f is tangential to the flow, and conversely gives the inverse relation to recover the generating vector field from a given flow: f(x) equals the time derivative of phi_t(x) evaluated at t = 0.
-- There is an explanation:
-    - // from the series expansion (snippet 112) the vector field f is arranged tangentially to the flow phi
-    - verbal summary: From the series expansion of the flow it becomes clear that the vector field f is tangential to the flow phi. Conversely, the generating vector field can be recovered from a given flow.
-    - related to: 'flow'.
 - There is a general statement:
     - full source code: Bei der Reihenentwicklung wird deutlich, dass das Vektorfeld~$f$ tangential zum Fluss angeordnet ist. Damit kann man auch umgekehrt aus einem gegebenen Fluss das erzeugende Vektorfeld zurückgewinnen: $f(x)=\frac{{\mathrm{d}}}{{\mathrm{d}} t}\varphi_{t}(x)|_{t=0}$.
     - formalized setting:
@@ -4991,10 +4971,6 @@
 - There is a class: 'sampling' @en
 - 'sampling' has the alternative german label 'Abtastung'
 - 'sampling' has the verbal description 'process of taking values of a continuous-time system, described by a differential equation, at discrete time points t_k'
-- There is an explanation:
-    - // restatement of the setting: the autonomous differential equation (dgl2) has a global flow phi, so x(t) = phi_t(p) is a solution of the initial value problem (awa2) for all p in M and all t >= 0
-    - verbal summary: The autonomous differential equation has a global flow phi, so that x(t) = phi_t(p) is a solution of the initial value problem for all p in M and all t >= 0.
-    - related to: 'flow'.
 - Definition of 'sampling':
     - full source code: Bei einer \textbf{\em Abtastung} (engl. sampling) werden dem durch die Differentialgleichung beschriebenen zeitkontinuierlichen System zu diskreten Zeitpunkten $t_{k}$ Werte entnommen.
     - formalized setting:
@@ -5083,7 +5059,6 @@
         - 'tk' is an instance of 'sequence'
         - // discrete-time signal x: x[k] := x(kT) collects the sampled values of the continuous solution; its elements are vectors in M
         - 'x' is an instance of 'sequence'
-        - 'zd' is an instance of 'discrete-time system'
     - formalized premise:
         - // equidistant sampling instants: t_k = k T for k in N_0
         - There is an equation ('sampling instants'):
@@ -5096,7 +5071,6 @@
             - There is an equation ('sampled initial condition'):
                 - full source code: 'element of sequence'('x', 0) == 'p'
         - 'sampled difference equation' is secondary instance of 'difference equation'
-        - 'zd' is associated to 'sampled difference equation'
 - Concepts in this snippet:
     - 'sampling period'
     - 'equidistant'
@@ -5153,13 +5127,12 @@
         - // k in N_0 (non-negative integers)
         - 'x' is an instance of 'sequence'
         - // discrete-time signal x[k] approximating the sampled continuous solution; its elements are vectors in M
-        - 'zd' is an instance of 'discrete-time system'
         - 'x_arg' is an instance of 'vector'
         - 't' is an instance of 'real number'
     - formalized premise:
-        - // first-order Taylor approximation of the flow: phi_t(x) approx x + f(x) t (approximation, not exact; the approx sign cannot be written in a formula line, so the right-hand side is stated as the leading terms of the expansion)
+        - // first-order Taylor expansion of the flow, written exactly with the Landau remainder O(t^2); the explicit Euler step below is obtained by dropping this remainder
         - There is an equation ('first order flow approximation'):
-            - full source code: 'phi'('x_arg', 't') == 'x_arg' + 'f'('x_arg') * 't'
+            - full source code: 'phi'('x_arg', 't') == 'x_arg' + 'f'('x_arg') * 't' + 'higher order terms op'('t', 2)
     - formalized assertion:
         - // explicit-Euler difference equation resulting from the first-order approximation applied to the sampled recurrence of snippet 115
         - There is a system of equations ('Euler step system'):
@@ -5168,7 +5141,6 @@
             - There is an equation ('Euler initial condition'):
                 - full source code: 'element of sequence'('x', 0) == 'p'
         - 'Euler step system' is secondary instance of 'difference equation'
-        - 'zd' is associated to 'Euler step system'
         - 'Euler step system' is associated to 'explicit Euler method'
 - Concepts in this snippet:
     - 'explicit Euler method'
@@ -5198,13 +5170,6 @@
 - 'switching system' has the alternative german label 'schaltendes System'
 - 'switching system' has the alternative english label 'switched system'
 - 'switching system' has the verbal description 'system class in which, at discrete switching times 0 < t_1 < t_2 < ..., one switches between different differential equations (different vector fields f_1, f_2, ...); its time evolution is described by concatenation of the involved flows'
-- 'switching system' is associated to 'vector field'
-- 'switching system' is associated to 'flow'
-- 'switching system' is associated to 'function composition op'
-- There is an explanation:
-    - // the time evolution of switching systems is described via the concatenation (composition) of flows; the concrete concatenation formula follows in the next snippet
-    - verbal summary: The time evolution of switching systems can be described via the concatenation of flows. In this system class one switches at discrete time points 0 < t_1 < t_2 < ... between different differential equations, i.e. between different vector fields f_1, f_2, ... : M -> R^n.
-    - related to: 'switching system'.
 - Concepts in this snippet:
     - 'switching system'
     - 'vector field'
@@ -5234,11 +5199,9 @@
         - 'f2' 'has domain' 'M'
         - 'f2' 'has codomain' 'Rn'
         - 'phi1' is an instance of 'flow'
-        - // phi1 is the flow belonging to the vector field f1 (phi1 = phi^{f1})
-        - 'phi1' is associated to 'f1'
+        - 'phi1' 'is flow of' 'f1'
         - 'phi2' is an instance of 'flow'
-        - // phi2 is the flow belonging to the vector field f2 (phi2 = phi^{f2})
-        - 'phi2' is associated to 'f2'
+        - 'phi2' 'is flow of' 'f2'
         - 'x' is an instance of 'general function'
         - 'x' 'has domain' 'set of real numbers'
         - 'x' 'has codomain' 'M'

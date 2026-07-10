@@ -780,7 +780,7 @@ genügt. Damit sind Existenz und Eindeutigkeit einer lokalen Lösung
 der Anfangswertaufgabe~(\ref{eq:awa1}) entsprechend Satz~\ref{thm:Picard-Lindeloeff}
 gewährleistet.
 
-\snippet{93}
+\snippet{93i}
 \begin{remark}
 \label{rem:Nicht-Lipschitz-Peano}Die Lipschitz-Bedingung~(\ref{eq:Lipschitz-Bed-Satz-PL})
 in Satz~\ref{thm:Picard-Lindeloeff} sichert die Eindeutigkeit der
@@ -816,7 +816,7 @@ Dabei bezeichnet $\circ$ die Hintereinanderausführung von Abbildungen,
 die für zwei Abbildungen $\varphi$ und $\psi$ als $\varphi\circ\psi(x):=\varphi(\psi(x))$
 zu verstehen ist.
 
-\snippet{95}
+\snippet{95i}
 \begin{example}
 Wir betrachten ein lineares homogenes zeitvariantes Differentialgleichungssystem
 \begin{equation}
@@ -888,7 +888,7 @@ Zu jedem Anfangswert $p\in\mathcal{M}$ existiert ein maximales Existenzintervall
 werden kann. Ein Fluss, der auf ${\mathbb{R}}\times\mathcal{M}$ definiert ist,
 heißt \textbf{\em globaler Fluss}. Das zugehörige
 Vektorfeld nennt man \textbf{\em vollständig}.
-\snippet{101}
+\snippet{101i}
 \begin{example}
 [Endliche Fluchtzeit]\label{exa:EndlicheFluchtzeit}Die Anfangswertaufgabe
 \begin{equation}
@@ -942,7 +942,7 @@ A^{k}=\underbrace{A\cdot A\cdots A}_{k\;\text{mal}}
 sind in Sinne der Matrizenmultiplikation (d.\,h. nicht elementweise)
 zu verstehen.
 
-\snippet{104}
+\snippet{104i}
 Die nachfolgenden Beispiele illustrieren das Konzept des Flusses auf
 Basis der Lösung~(\ref{eq:diff-geo-loesing-linearer-zustandsmodell})
 des Zustandsraummodells~(\ref{eq:diff-geo-lineares-zustandsraummodell}).
@@ -978,7 +978,7 @@ für alle $p\in{\mathbb{R}}^{n}$ und alle $t,s\in{\mathbb{R}}$ liegt die Gruppen
 vor.
 \end{example}
 
-\snippet{105}
+\snippet{105i}
 \begin{example}
 [Lineares Vektorfeld und Gruppeneigenschaft]\label{exa:lineares-Vektorfeld-Gruppeneig}Man
 betrachte ein lineares Vektorfeld $f:{\mathbb{R}}^{n}\to{\mathbb{R}}^{n}$ mit $f(x)=Ax$
@@ -1013,7 +1013,7 @@ wiedergegeben.
 \end{example}
 
 
-\snippet{106}
+\snippet{106i}
 \begin{example}
 Man betrachte einen Massepunkt der Masse~$m$ im Schwerefeld der
 Erde (siehe Abb.~\ref{fig:Massepunkt-im-Schwerefeld}). Die vertikale
@@ -1059,7 +1059,7 @@ x_{2}-gt
 
 
 \medskip{}
-
+\snippet{107i}
 Zur Lösung gewöhnlicher Differentialgleichungen gibt es zwar etliche
 Ansätze (z.\,B. Trennung der Variablen für Differentialgleichungen
 erster Ordnung, Variation der Konstanten für lineare Differentialgleichungen),
@@ -1069,6 +1069,7 @@ einer nichtlinearen Differentialgleichung wird man jedoch nur in Ausnahmefällen
 explizit als symbolischen Ausdruck angeben können. Um eine Approximation
 mittels Taylorentwicklung zu rechtfertigen muss sichergestellt sein,
 dass die Lösung bzw. der Fluss ausreichend oft differenzierbar sind.
+\snippet{108}
 \begin{theorem}
 [Differenzierbarkeit des Flusses]\label{thm:differenzierbarkeit-fluss}Sei
 $f:\mathcal{M}\to{\mathbb{R}}^{n}$ ein $r$-mal stetig differenzierbares Vektorfeld,
@@ -1077,13 +1078,16 @@ Dann existiert ein lokaler Fluss~$\varphi$, der $r$-mal stetig
 nach dem Anfangswert und $(r+1)$-mal stetig nach der Zeit differenzierbar
 ist.
 \end{theorem}
+\snippet{109}
 Existenz und Eindeutigkeit des lokalen Flusses sind durch Satz~\ref{thm:Picard-Lindeloeff}
 bzw. Korollar~\ref{cor:Lipschitz-Mittelwertsatz} sichergestellt.
 Der detaillierte Beweis von Satz~\ref{thm:differenzierbarkeit-fluss}
 ist beispielsweise in~\cite{broecker1992,arnold2001,fischer2014band2}
 zu finden. Eine Funktion nennt man \textbf{\em hinreichend glatt},
 wenn sie für die jeweilige Überlegung bzw. Berechnung ausreichend
-oft stetig differenzierbar ist. Eine unendlich oft differenzierbare
+oft stetig differenzierbar ist.
+\snippet{110}
+Eine unendlich oft differenzierbare
 Funktion nennt man \textbf{\em glatt}. Bei einem glatten bzw. analytischem
 Vektorfeld ist auch der Fluss glatt bzw. analytisch. Eine Funktion
 heißt dabei \textbf{\em analytisch} oder genauer
@@ -1091,7 +1095,7 @@ heißt dabei \textbf{\em analytisch} oder genauer
 dargestellt werden kann~\cite{koenigsberger2-2004}. Eine analytische
 Funktion ist unendlich oft differenzierbar, unendlich oft differenzierbare
 Funktionen müssen nicht unbedingt analytisch sein.
-
+\snippet{111}
 Ist das Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$ hinreichend glatt, so
 ist auch der Fluss~$\varphi_{t}$ ausreichend oft differenzierbar.
 Dann ist für den Fluss der Reihenansatz
@@ -1102,7 +1106,9 @@ mit den Vektorfeldern $v_{0},v_{1},v_{2}:\mathcal{M}\to{\mathbb{R}}^{n}$ möglic
 Hierbei beschreibt das Landau-Symbol $\mathcal{O}(t^{k})$ die Größenordnung
 des Restglieds~\cite[Abschn.~{1.3.1.4}]{zeidler2003}. Diese Darstellung
 ist bei einer Taylorentwicklung durch die Lagrange- bzw. Cauchy-Form
-des Restglieds gerechtfertigt~\cite{kaballo2000ana1}. Aus $\varphi_{0}(x)\equiv x$
+des Restglieds gerechtfertigt~\cite{kaballo2000ana1}.
+\snippet{112}
+Aus $\varphi_{0}(x)\equiv x$
 folgt $v_{0}(x)\equiv x$, d.h. $\varphi_{t}(x)=x+v_{1}(x)t+v_{2}(x)t^{2}+\mathcal{O}(t^{3})$.
 Einerseits gilt
 \[
@@ -1124,7 +1130,7 @@ und damit auch
 \begin{equation}
 \varphi_{t}(x)=x+f(x)t+\tfrac{1}{2} f^{\prime}(x)f(x)t^{2}+\mathcal{O}(t^{3}).\label{eq:ReihentwicklungFluss}
 \end{equation}
-
+\snippet{113}
 Bei der Reihenentwicklung~(\ref{eq:ReihentwicklungFluss}) wird insbesondere
 deutlich, dass das Vektorfeld~$f$ tangential zum Fluss angeordnet
 ist (siehe Abb.~\ref{cap:Vektorfeld-ist-tangential-zum-Fluss}).
@@ -1133,7 +1139,7 @@ Vektor\-feld rückgewinnen:
 \begin{equation}
 f(x)=\frac{{\mathrm{d}}}{{\mathrm{d}} t}\left.\varphi_{t}(x)\right|_{t=0}.\label{eq:VF-tangential-zum-Fluss}
 \end{equation}
-
+\snippet{114}
 
 
 \begin{remark}
@@ -1143,7 +1149,9 @@ für alle $p\in\mathcal{M}$ und alle $t\geq0$ eine Lösung der Anfangswertaufgab
 ist. Bei einer \textbf{\em Abtastung} (engl. \textbf{\em sampling})
 werden dem durch die Differentialgleichung~(\ref{eq:dgl2}) beschriebenen
 zeitkontinuierlichen System zu diskreten Zeitpunkten $t_{k}$ Werte
-entnommen. Wir betrachten den Fall einer äquidistanten Abtastung mit
+entnommen.
+\snippet{115}
+Wir betrachten den Fall einer äquidistanten Abtastung mit
 der Abtastperiode $T>0$, d.\,h. $t_{k}=kT$ für $k\in{\mathbb{N}_0}$. Notiert
 man die diskreten Werte der abhängigen Variablen~$x$ mit $x[k]:=x(kT)$,
 so erhält man durch die Abtastung von~(\ref{eq:awa2}) ein zeitdiskretes
@@ -1151,7 +1159,9 @@ System, welches mit Hilfe des Flusses durch die Differenzengleichung
 \begin{equation}
 x[k+1]=\varphi_{T}(x[k]),\quad x[0]=p\label{eq:zeitdiskretes-system}
 \end{equation}
-beschrieben wird (siehe Abb.~\ref{fig:abtastsystem}). Approximiert
+beschrieben wird (siehe Abb.~\ref{fig:abtastsystem}).
+\snippet{116}
+Approximiert
 man den (meist nicht symbolisch berechenbaren) Fluss durch eine Taylorentwicklung
 erster Ordnung, also $\varphi_{t}(x)\approx x+f(x)t$, so ergibt sich
 aus~(\ref{eq:zeitdiskretes-system}) die leichter auszuwertende Differenzengleichung
@@ -1164,7 +1174,7 @@ welches zur numerischen Lösung des Anfangswertproblems~(\ref{eq:awa2})
 der gewöhnlichen Differentialgleichungen~(\ref{eq:dgl2}) verwendet
 werden kann.
 \end{remark}
-
+\snippet{117}
 
 \begin{remark}
 \label{rem:Flussverkettung-schaltende-Systeme}Über die Verkettung
@@ -1173,6 +1183,7 @@ beschreiben. Bei dieser Systemklasse schaltet man zu diskreten Zeitpunkten
 $0<t_{1}<t_{2}<\cdots$ zwischen verschiedenen Differentialgleichungen~(\ref{eq:dgl2})
 bzw. verschiedenen Vektorfeldern $f_{1},f_{2},\ldots:\mathcal{M}\to{\mathbb{R}}^{n}$
 um (siehe~\cite{liberzon2003} bzw. Abb.~\ref{fig:schaltendes-system}).
+\snippet{118}
 Wirkt im Zeitintervall $[0,t_{1}]$ das Vektorfeld~$f_{1}$ mit dem
 Fluss~$\varphi^{f_{1}}$, im Zeitintervall $[t_{1},t_{2}]$ das Vektorfeld~$f_{2}$
 mit dem Fluss~$\varphi^{f_{2}}$ usw., so kann man für das schaltende
@@ -1185,6 +1196,7 @@ x(t_{k})=\varphi_{\tau_{k}}^{f_{k}}\circ\cdots\circ\varphi_{\tau_{2}}^{f_{2}}\ci
 mit den Zeitdifferenzen $\tau_{1}=t_{1},\tau_{2}=t_{2}-t_{1},\ldots\tau_{k}=t_{k}-t_{k-1}$
 beschreiben.
 \end{remark}
+\snippet{119i}
 
 
 Die Reihenentwicklung~(\ref{eq:ReihentwicklungFluss}) lässt sich
@@ -1194,6 +1206,7 @@ ist bei Konverterschaltungen üblich und wird am Beispiel des Hochsetzstellers
 illustriert~\cite{sira-ramirez1989pwm}. Weitere Anwendungen dieses
 Ansatzes werden in Abschnitt~\ref{sec:Lie-Klammern-dynamische-Systeme}
 vertieft.
+\snippet{120i}
 \begin{example}
 \label{exa:Hochsetzsteller-gemitteltes-Modell}Man betrachte das geschaltete
 Modell des Hochsetzstellers
@@ -1263,31 +1276,40 @@ Dieses Vektorfeld beschreibt das \textbf{\em gemittelte Modell }des Hochsetzstel
 welches in unserem Fall die gleiche Struktur wie das geschaltete Modell~(\ref{eq:grundlagen-hochsetzsteller-geschaltet})
 aufweist, nur dass die Stellgröße $u$ kontinuierliche Werte zwischen
 $0$ und $1$ annehmen kann.
-
+\snippet{121i}
 
 
 \begin{remark}
 \label{rem:Umkehrabbildung-Diffeomorphismus}An dieser Stelle sollen
 einige generelle Begriffe und Aussagen zu Funktionen bzw. Abbildungen
-in Erinnerung gerufen werden. Sei $\psi:\mathcal{M}\to\mathcal{N}$
+in Erinnerung gerufen werden.
+\snippet{122}
+Sei $\psi:\mathcal{M}\to\mathcal{N}$
 eine Abbildung von der Menge $\mathcal{M}$, die man \textbf{\em Definitionsbereich}
 nennt, in die Menge $\mathcal{N}$, den \textbf{\em Bildbereich}. Die Abbildung
 heißt \textbf{\em surjektiv}, falls $\psi(\mathcal{M})=\mathcal{N}$,
 also der gesamte Bildbereich auch ausgeschöpft wird. Das bedeutet,
 dass für jedes $y\in\mathcal{N}$ aus dem Bildbereich die Gleichung
-$y=\psi(x)$ mindestens eine Lösung $x\in\mathcal{M}$ hat. Besitzt
+$y=\psi(x)$ mindestens eine Lösung $x\in\mathcal{M}$ hat.
+\snippet{123}
+Besitzt
 diese Gleichung höchstens eine Lösung, dann heißt die Abbildung \textbf{\em injektiv}.
 In diesem Fall würde aus $x_{1},x_{2}\in\mathcal{M}$ mit $x_{1}\neq x_{2}$
-immer $\psi(x_{1})\neq\psi(x_{1})$ folgen. Eine Abbildung, die sowohl
+immer $\psi(x_{1})\neq\psi(x_{1})$ folgen.
+\snippet{124}
+Eine Abbildung, die sowohl
 injektiv als auch surjektiv ist, heißt \textbf{\em bijektiv}.
 In diesem Fall hat die Gleichung $y=\psi(x)$ für jedes $y\in\mathcal{N}$
 genau eine Lösung $x\in\mathcal{M}$, d.\,h. die Abbildung ist eindeutig
-umkehrbar. Die \textbf{\em inverse Abbildung} oder \textbf{\em Umkehrabbildung}
+umkehrbar.
+\snippet{125}
+Die \textbf{\em inverse Abbildung} oder \textbf{\em Umkehrabbildung}
 $\psi^{-1}:\mathcal{N}\to\mathcal{M}$ erfüllt dann die Gleichung
 $x=\psi^{-1}(y)$, siehe~\cite{zeidler2003}. Eine bijektive Abbildung
 $\psi:\mathcal{M}\to\mathcal{N}$ zwischen offenen Mengen $\mathcal{M}$
 und $\mathcal{N}$ heißt \textbf{\em Diffeomorphismus},
 wenn sowohl $\psi$ als auch $\psi^{-1}$ stetig differenzierbar sind.
+\snippet{126}
 Eine Abbildung $\psi$ heißt \textbf{\em lokaler Diffeomorphismus}
 im Punkt $x\in\mathcal{M}$, wenn offene Umgebungen $\mathcal{U}\subset\mathcal{M}$
 von $x$ und $\mathcal{V}\subset\mathcal{N}$ von $\psi(x)$ existieren,
@@ -1295,7 +1317,7 @@ so dass die \textbf{\em Einschränkung} von $\psi$ auf $\mathcal{U}$, also
 $\left.\psi\right|_{\mathcal{U}}:\mathcal{U}\to\mathcal{V}$, ein
 Diffeomorphismus ist (vgl. Abb.~\ref{cap:Einschraenkung-einer-Abbildung}).
 \end{remark}
-
+\snippet{127}
 
 Die Existenz eines lokalen Diffeomorphismus lässt sich leicht mit
 dem Satz über die Umkehrabbildung bzw. -funktion gewährleisten~\cite{hildebrandt2003-2,kerner2007}:
