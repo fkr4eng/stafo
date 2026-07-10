@@ -38,7 +38,6 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> has the alternative german label <arg2>.
 - <arg1> has the property <arg2>.
 - <arg1> does not have the property <arg2>.
-- <arg1> is associated to <arg2>.
 - Concepts in this snippet:
     - <arg1>
     - <arg2>

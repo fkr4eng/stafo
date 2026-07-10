@@ -39,7 +39,6 @@ Simple Formalized Statements consist of one line. They are not followed by a lin
 - <arg1> has the alternative german label <arg2>.
 - <arg1> has the property <arg2>.
 - <arg1> does not have the property <arg2>.
-- <arg1> is associated to <arg2>.
 - Concepts in this snippet:
     - <arg1>
     - <arg2>
@@ -159,11 +158,10 @@ The following Complex Formalized Statements are allowed:
 
 It might be desirable to reference a Complex Formalized Statements in a later statement. This can be done as in the following example:
 
-- There is an equation:
+- There is an equation (<eq_name>):
     - // this can only be used inside a setting, premise or assertion
     - full source code: $a^2 + b^2 = c^2$.
-    - reference: 'ref_eq1'
-- 'ref_eq1' is associated to 'Pythagorean theorem'
+- 'eq_name' is associated to 'Pythagorean theorem'
 
 
 ## Expressions
@@ -255,5 +253,10 @@ You are not supposed to convert this LaTeX code to formalized statements. Howeve
 # Input Part 7: Final Instructions
 
 Please generate a list of formalized statements (like in Input Part 4) which represent the information from Input Part 5. Thereby, adhere to the statement types given in Input Part 1 and the given instructions.
+
+If you cannot formalize a statement faithfully and exactly, stop and pose a specific question about how to model it. The default is: rather leave it unformalized (and clearly flagged) than formalize it wrongly. A partial/false formalization is worse than none.
+
+Reuse or introduce a construct — When genuinely missing, introduce a properly-typed construct rather than describing the math in prose.
+
 At the end of the list, generate a list of all formalized concepts (classes, properties, relations, ...) that appeared in that snippet. Distinguish between concepts, that were defined in this snippet (usually indicatd by "There is a class:" or similar), those should be listed under "Defined in this snippet", and all concepts that occur in this snippet, those should be listed under "Concepts in this snippet". Keep in mind that the second category includes concepts that were defined in the snippet and also concepts, that occur inside nested statements.
 Only use the formalized names, no language alternatives. Dont use equations.
