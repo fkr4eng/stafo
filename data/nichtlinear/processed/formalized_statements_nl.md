@@ -5463,3 +5463,67 @@
     - 'is element of'
 - Defined in this snippet:
     - 'local diffeomorphism'
+- // snippet(127)
+- // This snippet states the inverse function theorem (Satz ueber die Umkehrabbildung): for M subset Rn open and psi: M -> Rn continuously differentiable, if the Jacobian matrix of psi at a point p in M is regular (nonzero determinant), then psi is a local diffeomorphism at p. Reuses 'general function', 'Jacobian matrix', 'has Jacobian matrix', 'square matrix' and the 'local diffeomorphism' class from snippets 118-126. New constructs: the unary operator 'determinant op' (square matrix -> real number) and the property 'regular' (applicable to square matrix, meaning nonzero determinant); both are genuinely missing from the knowledge base and are reused again in snippet 129 (regularity of the flow's Jacobian).
+- There is a unary operator: 'determinant op' @en
+- 'determinant op' has the alternative german label 'Determinante'
+- The type of argument1 of 'determinant op' is 'square matrix'
+- The result type of 'determinant op' is 'real number'
+- 'determinant op' has the verbal description 'the determinant of a square matrix'
+- There is a property: 'regular' @en
+- 'regular' has the alternative german label 'regulär'
+- 'regular' is applicable to 'square matrix'
+- 'regular' has the verbal description 'property of a square matrix whose determinant is nonzero (equivalently, the matrix is invertible)'
+- There is an if-then-statement ('Satz ueber die Umkehrabbildung'):
+    - full source code: Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ offen und $\psi:\mathcal{M}\to{\mathbb{R}}^{n}$ stetig differenzierbar. Für ein $p\in\mathcal{M}$ sei die Jacobimatrix $\psi^{\prime}(p)$ regulär, d.\,h. es gelte \[ \det\psi^{\prime}(p)\neq0. \] Dann ist $\psi$ im Punkt $p$ ein lokaler Diffeomorphismus.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'psi' is an instance of 'general function'
+        - 'psi' 'has domain' 'M'
+        - 'psi' 'has codomain' 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'J' is an instance of 'Jacobian matrix'
+        - 'psi' 'has Jacobian matrix' 'J'
+        - 'Jp' is an instance of 'square matrix'
+        - 'Jp' 'has number of rows' 'n'
+        - 'Jp' 'has number of columns' 'n'
+        - There is an equation:
+            - full source code: 'Jp' == 'J'('p')
+    - formalized premise:
+        - 'psi' 'has differentiability class' 1
+        - 'Jp' has the property 'regular'
+        - // d.h. es gelte det psi'(p) != 0
+        - There is a mathematical relation:
+            - full source code: 'determinant op'('Jp') != 0
+    - formalized assertion:
+        - 'psi' is secondary instance of 'local diffeomorphism'
+- Concepts in this snippet:
+    - 'determinant op'
+    - 'regular'
+    - 'square matrix'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'is element of'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'has differentiability class'
+    - 'local diffeomorphism'
+- Defined in this snippet:
+    - 'determinant op'
+    - 'regular'
