@@ -5527,3 +5527,49 @@
 - Defined in this snippet:
     - 'determinant op'
     - 'regular'
+- // snippet(128)
+- // This snippet states the proposition "Lokale Invertierbarkeit des Flusses": for a continuously differentiable vector field f: M -> Rn and a point p in M, the flow phi_t is a local diffeomorphism. Reuses 'vector field', 'flow', 'is flow of', 'local diffeomorphism' and 'has differentiability class' from earlier snippets. The fixed-time flow map phi_t is introduced as a local instance 'phi_t' (an instance of 'general function' equal to 'phi'('t')), mirroring how snippet 127 introduced 'Jp' as a declared entity standing for 'J'('p'). No new class, property, relation or operator is introduced.
+- There is an if-then-statement ('Lokale Invertierbarkeit des Flusses'):
+    - full source code: Sei $f:\mathcal{M}\to{\mathbb{R}}^{n}$ stetig differenzierbar und $p\in\mathcal{M}$. Dann ist der Fluss~$\varphi_{t}$ ein lokaler Diffeomorphismus.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 't' is an instance of 'real number'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+    - formalized premise:
+        - 'f' 'has differentiability class' 1
+    - formalized assertion:
+        - 'phi_t' is secondary instance of 'local diffeomorphism'
+- Concepts in this snippet:
+    - 'vector field'
+    - 'flow'
+    - 'is flow of'
+    - 'local diffeomorphism'
+    - 'has differentiability class'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
