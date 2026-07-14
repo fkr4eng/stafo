@@ -1331,6 +1331,7 @@ $\psi^{\prime}(p)$ regulär, d.\,h. es gelte
 \]
 Dann ist $\psi$ im Punkt $p$ ein lokaler Diffeomorphismus.
 \end{theorem}
+\snippet{128}
 
 Der Fluss wird an verschiedenen Stellen dieses Buches für nichtlineare
 Koordinatentransformationen eingesetzt. Die Rechtfertigung für dieses
@@ -1340,6 +1341,7 @@ Vorgehen liefert die folgende Proposition:
 $f:\mathcal{M}\to{\mathbb{R}}^{n}$ stetig differenzierbar und $p\in\mathcal{M}$.
 Dann ist der Fluss~$\varphi_{t}$ ein lokaler Diffeomorphismus.
 \end{proposition}
+\snippet{129}
 \begin{svmultproof}
 Aufgrund der stetigen Differenzierbarkeit von~$f$ existiert der
 lokale Fluss $\varphi:\mathcal{I}_{p}\times\mathcal{U}_{p}$ und ist
@@ -1358,7 +1360,7 @@ von~$\left.\varphi_{t}\right|_{\mathcal{U}}$ auf~$\mathcal{U}$
 ein Diffeomorphismus ist (vgl. Abb.~\ref{cap:Lokale-Invertierbarkeit-Fluss}).
 \end{svmultproof}
 
-
+\snippet{130}
 
 Auf Basis der Gruppeneigenschaft
 \begin{equation}
@@ -1375,7 +1377,7 @@ direkt darstellen lässt:
 \end{equation}
 Die Umkehrabbildung des Flusses erhält man also durch Umkehrung der
 Zeit\-richtung.
-
+\snippet{131i}
 \begin{example}
 \label{exa:invertierbarkeit-fluss-lin-dgl}In der Ebene $\mathcal{M}={\mathbb{R}}^{2}$
 betrachte man das lineare Vektorfeld $f(x)=Ax$ mit der Matrix
@@ -1391,10 +1393,11 @@ zeigt die Überführung der offenen Kugel $\mathcal{U}=\left\{ x\in\mathcal{M};\
 mit Zentrum $p=(-2,-1)^{T}\in\mathcal{M}$ unter Wirkung des Flusses
 $\varphi_{t}(\cdot)$ mit $t=1$ in eine Bildmenge~$\mathcal{V}$.
 \end{example}
-
+\snippet{132i}
 
 Mit Prop.~\ref{pro:Lokale-Invertierbarkeit-Fluss} wurde nur die
 lokale Invertiertbarkeit des Flusses gezeigt.
+\snippet{133}
 Tatsächlich ist der Fluss auf seinem gesamten Existenzbereich invertierbar.
 Im Falle eines globalen Flusses ist der bereits verwendete Begriff
 der Gruppen\-eigen\-schaft auch im Sinne der Algebra gerechtfertigt:
@@ -1407,16 +1410,18 @@ ein inverses Element existiert~\cite{waerden1,bronstein2000,zeidler2003}.
 Das Vektorfeld~$f:\mathcal{M}\to\mathbb{R}$ habe den globalen Fluss~$\varphi_{t}$.
 Für beliebige $t\in\mathbb{R}$ ist die Abbildung $x\mapsto\varphi_{t}(x)$
 ein Diffeomorphismus auf~$\mathcal{M}$.
+\snippet{134}
 Die Menge der Diffeomorphismen ist zusammen mit der durch die Hintereinanderausführung
 der Flüsse nach Eigenschaft~(\ref{eq:Gruppeneigenschaft2}) definierten
 Operation~$\circ$ eine Gruppe, die man auch als \textbf{\em einparametrige
 Transformationsgruppe} bezeichnet~\cite{stephani1994,arnold2001,kuehnel2011}.
 \end{remark}
 \medskip{}
-
+\snippet{135i}
 Zur Untersuchung des nichtlinearen Systems~(\ref{eq:dgl2}) greift
 man mitunter auf die Linearisierung entlang einer Trajektorie des
 Systems zurück. Dabei wird man auf die Variationsgleichung geführt~\cite[Kap.~{32}]{arnold2001}:
+\snippet{136}
 \begin{proposition}
 [Variationsgleichung]\label{pro:Variationsgleichung}Sei~$\varphi_{t}$
 der Fluss der Dgl.~(\ref{eq:dgl2}) mit einem zweimal stetig differenzierbaren
@@ -1429,9 +1434,11 @@ X(t):=\varphi_{t}^{\prime}(p)\label{eq:Loesung_Variationsgleichung}
 \dot{X}=f^{\prime}(\varphi_{t}(p))\cdot X,\quad X(0)=I.\label{eq:Variationsgleichung}
 \end{equation}
 \end{proposition}
+\snippet{137}
 Gl.~(\ref{eq:Variationsgleichung}) heißt \textbf{\em Variationsgleichung}
 von~(\ref{eq:awa2}). Ihre Lösung ist die Ableitung des Flusses der
 ursprünglichen Differentialgleichung~(\ref{eq:dgl2}) nach dem Anfangswert.
+\snippet{138}
 \begin{svmultproof}
 Sei $X$ entsprechend Gl.~(\ref{eq:Loesung_Variationsgleichung})
 definiert. Mit Lemma~\ref{lem:Schwarz} gilt
@@ -1451,7 +1458,7 @@ Satz~\ref{thm:Picard-Lindeloeff} garantiert die Eindeutigkeit der
 Lösung. Damit hat jede Lösung von~(\ref{eq:Variationsgleichung})
 die Form $X(t)=\varphi_{t}^{\prime}(p)$.
 \end{svmultproof}
-
+\snippet{139i}
 Die Verwendung einer matrixwertigen Linearisierung mag zunächst verwundern.
 Man würde nach der Linearisierung von~(\ref{eq:dgl2}) ein System
 der gleichen Dimension erwarten, nämlich ein (lineares) System im
@@ -1464,7 +1471,7 @@ der Basisvektoren $e_{1},\ldots,e_{n}\in{\mathbb{R}}^{n}$ dargestellt werden
 kann. Mit dem matrixwertigen Anfangswert $X(0)=I=(e_{1},\ldots,e_{n})$
 betrachtet man simultan die Anfangsabweichungen in Richtung der $n$
 Einheitsvektoren (siehe Abb.~\ref{fig:Variationsgleichung_matrixwertig}).
-
+\snippet{140}
 
 
 Bei verschiedenen Aufgabenstellungen (z.\,B. Empfindlichkeitsuntersuchungen
@@ -1483,6 +1490,7 @@ Z(t):=\varphi_{-t}^{\prime}(\varphi_{t}(p))\label{eq:Loesung_Adj_Variationsgl}
 \dot{Z}=-Z\cdot f^{\prime}(\varphi_{t}(p)),\quad Z(0)=I.\label{eq:AdjVariationsgleichung}
 \end{equation}
 \end{proposition}
+\snippet{141}
 \begin{svmultproof}
 Der Fluss~$\varphi_{t}$ ist ein lokaler Diffeomorphismus. Daher
 gilt $\varphi_{-t}(\varphi_{t}(x))=x$ für alle $x$ in der Umgebung
@@ -1504,7 +1512,7 @@ erhält man
 Multipliziert man diese Gleichung von rechts mit $(\varphi_{t}^{\prime}(p))^{-1}$,
 so erhält man die gewünschte Differentialgleichung~(\ref{eq:AdjVariationsgleichung}).
 \end{svmultproof}
-
+\snippet{142i}
 Die Berechnung der Lösung~(\ref{eq:Loesung_Adj_Variationsgl}) der
 adjungierten Variationsgleichung~(\ref{eq:AdjVariationsgleichung})
 erscheint auf den ersten Blick aufwendiger als im Fall der Variationsgleichung~(\ref{eq:Variationsgleichung}).
@@ -1522,7 +1530,7 @@ der Lösung~(\ref{eq:Loesung_Variationsgleichung}):
 \begin{equation}
 Z(t)=X^{-1}(t).\label{eq:Loesung_adj_als_Inverse}
 \end{equation}
-
+\snippet{143i}
 
 \section*{Übungsaufgaben\addcontentsline{toc}{section}{Übungsaufgaben}}
 
