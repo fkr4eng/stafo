@@ -5573,3 +5573,90 @@
     - 'vector'
     - 'is element of'
     - 'real number'
+- // snippet(129)
+- // This snippet is the proof (Beweis) of the proposition "Lokale Invertierbarkeit des Flusses" (snippet 128). It establishes that the flow phi is continuously differentiable (via the Theorem of differentiability of the flow, snippet 108, applied with r = 1), that the Jacobian matrix of phi_0 (the flow at time 0) evaluated at p equals the identity matrix and is thus regular, that by continuity of phi' the Jacobian of phi_t at p remains regular for small |t|, and concludes via the inverse function theorem (Satz ueber die Umkehrabbildung, snippet 127) that phi_t is a local diffeomorphism at p. Reuses 'flow', 'is flow of', 'has differentiability class', 'Jacobian matrix', 'has Jacobian matrix', 'square matrix', 'identity matrix', 'regular', 'local diffeomorphism' and 'has proof' from earlier snippets; 'determinant op' and 'regular' introduced in snippet 127 are indeed reused here since the text explicitly calls the flow's Jacobian matrix regulaer. No new class, property, relation or operator is introduced.
+- There is an if-then-statement ('Proof of Lokale Invertierbarkeit des Flusses'):
+    - full source code: Aufgrund der stetigen Differenzierbarkeit von~$f$ existiert der lokale Fluss $\varphi:\mathcal{I}_{p}\times\mathcal{U}_{p}$ und ist selber stetig differenzierbar. Aus $\varphi_{0}(x)\equiv x$ folgt \[ \varphi_{0}^{\prime}(x)=\frac{\partial\varphi_{0}(x)}{\partial x}=I, \] d.\,h. im Zeitpunkt $t=0$ ist die Ableitung des Flusses nach dem Anfangswert die Einheitsmatrix und damit regulär. Da $\varphi^{\prime}$ außerdem stetig ist, ist für kleine $|t|$ auch $\varphi_{t}^{\prime}$ regulär. Nach dem Satz über die Umkehrabbildung (Satz~\ref{thm: Umkehrfunktion}) ist $\varphi_{t}$ im Punkt $p$ somit ein lokaler Diffeomorphismus, d.\,h. es existieren offene Umgebungen $\mathcal{U}\subseteq\mathcal{U}_{p}$ von~$p$ und $\mathcal{V}$ von~$\varphi_{t}(p)$, so dass die Einschränkung von~$\left.\varphi_{t}\right|_{\mathcal{U}}$ auf~$\mathcal{U}$ ein Diffeomorphismus ist (vgl. Abb.~\ref{cap:Lokale-Invertierbarkeit-Fluss}).
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 't' is an instance of 'real number'
+        - 'phi_0' is an instance of 'general function'
+        - 'phi_0' 'has domain' 'M'
+        - 'phi_0' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_0' == 'phi'(0)
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+        - 'J0' is an instance of 'Jacobian matrix'
+        - 'phi_0' 'has Jacobian matrix' 'J0'
+        - 'J0p' is an instance of 'square matrix'
+        - 'J0p' 'has number of rows' 'n'
+        - 'J0p' 'has number of columns' 'n'
+        - There is an equation:
+            - full source code: 'J0p' == 'J0'('p')
+        - 'Jt' is an instance of 'Jacobian matrix'
+        - 'phi_t' 'has Jacobian matrix' 'Jt'
+        - 'Jtp' is an instance of 'square matrix'
+        - 'Jtp' 'has number of rows' 'n'
+        - 'Jtp' 'has number of columns' 'n'
+        - There is an equation:
+            - full source code: 'Jtp' == 'Jt'('p')
+        - 'In' is an instance of 'square matrix'
+        - 'In' 'has number of rows' 'n'
+        - 'In' 'has number of columns' 'n'
+        - 'In' is secondary instance of 'identity matrix'
+    - formalized premise:
+        - 'f' 'has differentiability class' 1
+    - formalized assertion:
+        - // existence and continuous differentiability of phi follow from the Theorem of differentiability of the flow (snippet 108) applied with r = 1
+        - 'phi' 'has differentiability class' 1
+        - // from phi_0(x) = x for all x (group property of the flow, snippet 97), phi_0 is the identity map on M, so its Jacobian matrix at p equals the identity matrix
+        - There is an equation:
+            - full source code: 'J0p' == 'In'
+        - 'J0p' has the property 'regular'
+        - // phi' (the Jacobian of phi with respect to the initial value) is continuous in t; regularity is an open condition (nonzero determinant), so from J0p regular at t = 0 it follows that Jtp is regular for small |t|
+        - 'Jtp' has the property 'regular'
+        - // by the inverse function theorem (Satz ueber die Umkehrabbildung, snippet 127) applied to phi_t at p, since Jtp is regular
+        - 'phi_t' is secondary instance of 'local diffeomorphism'
+- 'Lokale Invertierbarkeit des Flusses' 'has proof' 'Proof of Lokale Invertierbarkeit des Flusses'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'vector'
+    - 'is element of'
+    - 'flow'
+    - 'is flow of'
+    - 'has differentiability class'
+    - 'general function'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'square matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'identity matrix'
+    - 'regular'
+    - 'local diffeomorphism'
+    - 'has proof'
+    - 'Lokale Invertierbarkeit des Flusses'
