@@ -5474,6 +5474,16 @@
 - 'regular' has the alternative german label 'regulär'
 - 'regular' is applicable to 'square matrix'
 - 'regular' has the verbal description 'property of a square matrix whose determinant is nonzero (equivalently, the matrix is invertible)'
+
+- There is an equivanlence statement:
+    - formalized setting:
+        - 'm' is an instance of 'square matrix'
+    - formalized premise:
+        - There is an equation:
+            - full source code: 'determinant op'('m') != 0
+    - formalized assertion:
+        - 'm' 'has property' 'regular'
+
 - There is an if-then-statement ('Satz ueber die Umkehrabbildung'):
     - full source code: Sei $\mathcal{M}\subseteq{\mathbb{R}}^{n}$ offen und $\psi:\mathcal{M}\to{\mathbb{R}}^{n}$ stetig differenzierbar. Für ein $p\in\mathcal{M}$ sei die Jacobimatrix $\psi^{\prime}(p)$ regulär, d.\,h. es gelte \[ \det\psi^{\prime}(p)\neq0. \] Dann ist $\psi$ im Punkt $p$ ein lokaler Diffeomorphismus.
     - formalized setting:
@@ -5491,8 +5501,6 @@
         - 'J' is an instance of 'Jacobian matrix'
         - 'psi' 'has Jacobian matrix' 'J'
         - 'Jp' is an instance of 'square matrix'
-        - 'Jp' 'has number of rows' 'n'
-        - 'Jp' 'has number of columns' 'n'
         - There is an equation:
             - full source code: 'Jp' == 'J'('p')
     - formalized premise:
@@ -5719,3 +5727,95 @@
 - // ignored content
 - // snippet(132i)
 - // ignored content
+- // snippet(133)
+- // This snippet has three parts. (1) It notes that the flow is invertible on its entire domain of existence, generalizing the fixed-t inverse-mapping result of snippet 130 to the whole (possibly non-global) existence interval; no separate statement is added for this since 'has inverse mapping' already captures it for arbitrary t. (2) It gives the abstract algebraic definition of a group (Gruppe): a set G with an associative binary operation that has a neutral element and in which every element has an inverse element. This is independent of flows and justifies reusing the term 'group property' (Gruppeneigenschaft, snippet 98) also in the algebraic sense. New concept: 'group', modeled as a class, a subclass of 'set' (mirroring how 'vector space' is modeled), since no algebraic-structure class exists in the knowledge base yet; the operation itself is instantiated locally as a 'general function' (mirroring how arbitrary maps like 'psi' and 'F' are instantiated elsewhere) rather than introducing a new operator type, since 'function composition op' is typed to 'general function' arguments only and would not fit an arbitrary set G. (3) For a global flow phi of a vector field f, it states that for arbitrary t the map phi_t is a (full, not merely local) diffeomorphism on M. Reuses 'vector field', 'flow', 'is flow of', 'global' and 'diffeomorphism' from snippets 100/121-129; no new construct needed for this part. The source literally types the vector field as f: M -> R (not R^n); this is treated as a typo and modeled with codomain 'Rn', consistent with every other vector field in this knowledge base.
+- There is a class: 'group' @en
+- 'group' has the alternative german label 'Gruppe'
+- 'group' is a subclass of 'set'
+- 'group' has the verbal description 'a set equipped with an associative binary operation that has a neutral element and in which every element has an inverse element'
+- Definition of 'group':
+    - full source code: Eine Menge~$\mathcal{G}$ mit einer binären Operation $\circ:\mathcal{G}\times\mathcal{G}\to\mathcal{G}$ heißt \textbf{\em Gruppe}, wenn die Operation~$\circ$ assoziativ ist, ein neutrales Element besitzt und zu jedem Element der Gruppe ein inverses Element existiert~\cite{waerden1,bronstein2000,zeidler2003}.
+    - formalized setting:
+        - 'G' is an instance of 'set'
+        - 'GxG' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'GxG' == 'cartesian product op'('G', 'G')
+        - 'circ_G' is an instance of 'general function'
+        - 'circ_G' 'has domain' 'GxG'
+        - 'circ_G' 'has codomain' 'G'
+        - 'a' is an instance of 'mathematical object'
+        - 'a' is element of 'G'
+        - 'b' is an instance of 'mathematical object'
+        - 'b' is element of 'G'
+        - 'c' is an instance of 'mathematical object'
+        - 'c' is element of 'G'
+        - // existence of a neutral element e, independent of a, b, c, g
+        - 'e' is an instance of 'mathematical object'
+        - 'e' is element of 'G'
+        - 'g' is an instance of 'mathematical object'
+        - 'g' is element of 'G'
+        - // existence, for the arbitrary element g, of an inverse element g_inv
+        - 'g_inv' is an instance of 'mathematical object'
+        - 'g_inv' is element of 'G'
+    - formalized premise:
+        - // circ_G is associative
+        - There is an equation:
+            - full source code: 'circ_G'('circ_G'('a', 'b'), 'c') == 'circ_G'('a', 'circ_G'('b', 'c'))
+        - // e is a neutral element of circ_G
+        - There is an equation:
+            - full source code: 'circ_G'('e', 'g') == 'g'
+        - There is an equation:
+            - full source code: 'circ_G'('g', 'e') == 'g'
+        - // g_inv is an inverse element of g under circ_G
+        - There is an equation:
+            - full source code: 'circ_G'('g', 'g_inv') == 'e'
+        - There is an equation:
+            - full source code: 'circ_G'('g_inv', 'g') == 'e'
+    - formalized assertion:
+        - 'G' is secondary instance of 'group'
+- There is an if-then-statement:
+    - full source code: Das Vektorfeld~$f:\mathcal{M}\to\mathbb{R}$ habe den globalen Fluss~$\varphi_{t}$. Für beliebige $t\in\mathbb{R}$ ist die Abbildung $x\mapsto\varphi_{t}(x)$ ein Diffeomorphismus auf~$\mathcal{M}$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 't' is an instance of 'real number'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'M'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+    - formalized premise:
+        - 'phi' has the property 'global'
+    - formalized assertion:
+        - 'phi_t' is secondary instance of 'diffeomorphism'
+- Concepts in this snippet:
+    - 'group'
+    - 'set'
+    - 'cartesian product op'
+    - 'general function'
+    - 'has domain'
+    - 'has codomain'
+    - 'mathematical object'
+    - 'is element of'
+    - 'vector field'
+    - 'flow'
+    - 'is flow of'
+    - 'global'
+    - 'diffeomorphism'
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'is subset of'
+    - 'open'
+    - 'real number'
+- Defined in this snippet:
+    - 'group'
