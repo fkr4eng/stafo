@@ -48,6 +48,21 @@ version = {attr = "stafo.__version__"}
 # this siginificantly speeds up pytest
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# testpaths only applies when pytest is called with no path argument. Tools that invoke
+# `pytest <repo-root>` explicitly (e.g. a CI/agent smoke test) would otherwise recurse into
+# ignored_content/, whose *_test.py scratch scripts are not tests and fail at collection.
+norecursedirs = [
+    "ignored_content",
+    "snapshots",
+    "match_history",
+    "html",
+    "webinterface",
+    "data",
+    ".venv",
+    ".orchester",
+]
+# Only test_*.py are real tests; ignored_content/*_test.py are old scratch scripts.
+python_files = ["test_*.py"]
 filterwarnings = [
     "error",
     "ignore::UserWarning:huggingface_hub",

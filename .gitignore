@@ -15,6 +15,8 @@ output_no_error.py
 uv.lock
 CLAUDE.md
 
+.orchester/*
+
 # dont commit the pickle file
 *.pcl
 
@@ -48,3 +50,4 @@ html/res/
 *.fdb_latexmk
 *.xdv
 .aider*
+.orchester/
