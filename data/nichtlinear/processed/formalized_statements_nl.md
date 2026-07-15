@@ -5660,3 +5660,58 @@
     - 'local diffeomorphism'
     - 'has proof'
     - 'Lokale Invertierbarkeit des Flusses'
+- // snippet(130)
+- // This snippet derives the inverse mapping of the flow from the group property (snippet 98): substituting s = -t into the group property equation phi_t o phi_s(x) = phi_{s+t}(x) gives phi_{-t}(phi_t(x)) = phi_0(x) = x, so phi_{-t} is the inverse mapping of phi_t; the inverse of the flow is obtained by reversing the direction of time. Reuses 'flow', 'is flow of', 'group property', 'vector field', 'general function', 'vector', 'is element of' and the existing 'has inverse mapping' relation (introduced for the diffeomorphism/psi_inv snippet, 125) instead of introducing a new relation, since the meaning (phi_t^{-1} = phi_{-t}) is exactly that relation. As in snippets 128/129, the domain of phi_t and phi_{-t} is modeled as M (the neighborhood U_p from the source is not separately introduced). No new class, property, relation or operator is introduced.
+- There is a general statement:
+    - full source code: Auf Basis der Gruppeneigenschaft \[ \varphi_{t}\circ\varphi_{s}(x)=\varphi_{s+t}(x) \] erhält man für $s=-t$ die Beziehung \[ x=\varphi_{0}(x)=\varphi_{t-t}(x)=\varphi_{-t}(\varphi_{t}(x)), \] womit sich die Umkehrabbildung~$\varphi_{t}^{-1}$ des Flusses~$\varphi_{t}$ direkt darstellen lässt: \[ \forall x\in\mathcal{U}_{p}:\quad\varphi_{t}^{-1}(x)=\varphi_{-t}(x). \] Die Umkehrabbildung des Flusses erhält man also durch Umkehrung der Zeitrichtung.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 'phi' has the property 'group property'
+        - 't' is an instance of 'real number'
+        - 'x' is an instance of 'vector'
+        - 'x' is element of 'M'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+        - 'phi_mt' is an instance of 'general function'
+        - 'phi_mt' 'has domain' 'M'
+        - 'phi_mt' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_mt' == 'phi'(0 - 't')
+    - formalized premise:
+        - // group property (snippet 98) of phi, instantiated with s = -t: phi_t o phi_s(x) = phi_{s+t}(x) becomes phi_{-t}(phi_t(x)) = phi_0(x) = x
+        - There is an equation:
+            - full source code: 'phi_mt'('phi_t'('x')) == 'x'
+    - formalized assertion:
+        - // reversing the direction of time inverts the flow: phi_t^{-1} = phi_{-t}
+        - 'phi_t' 'has inverse mapping' 'phi_mt'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'flow'
+    - 'is flow of'
+    - 'group property'
+    - 'real number'
+    - 'vector'
+    - 'is element of'
+    - 'general function'
+    - 'has inverse mapping'
