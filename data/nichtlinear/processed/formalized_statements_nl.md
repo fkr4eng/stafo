@@ -6044,3 +6044,83 @@
     - 'Variationsgleichung'
 - // snippet(139i)
 - // ignored content
+- // snippet(140)
+- // This snippet is the proposition "Adjungierte Variationsgleichung" (adjoint variation equation): for the flow phi of the autonomous ODE dgl2 with a twice continuously differentiable vector field f, and p in M, Z(t) := phi_{-t}'(phi_t(p)) - the Jacobian of the inverse-time flow phi_{-t}, evaluated at phi_t(p) - solves the matrix-valued initial value problem Z-dot = -Z * f'(phi_t(p)), Z(0) = I. Modeled exactly as snippet 136's Variationsgleichung, with phi_mt := phi(0 - t) (reusing the phi_mt / "0 - t" pattern already introduced in snippet 130 for the flow's time-reversal) in place of phi_t, and its Jacobian J_mt in place of Jt; the negation of the matrix product Z(t)*f'(phi_t(p)) on the right-hand side of the ODE is written as 0 - ... , mirroring the same "0 - t" negation convention. Reuses 'flow', 'is flow of', 'vector field', 'has differentiability class', 'Jacobian matrix', 'has Jacobian matrix', 'time derivative op', 'square matrix', 'identity matrix', 'initial value problem', 'solution', 'has solution' and the standard M/Rn/vector setup. No new class, property, relation or operator is introduced.
+- There is an if-then-statement ('Adjungierte Variationsgleichung'):
+    - full source code: Sei~$\varphi_{t}$ der Fluss der Dgl.~(\ref{eq:dgl2}) mit einem zweimal stetig differenzierbaren Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$. Für $p\in\mathcal{M}$ ist \begin{equation} Z(t):=\varphi_{-t}^{\prime}(\varphi_{t}(p)) \end{equation} die Lösung der matrixwertigen Anfangswertaufgabe \begin{equation} \dot{Z}=-Z\cdot f^{\prime}(\varphi_{t}(p)),\quad Z(0)=I. \end{equation}
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'f' 'has differentiability class' 2
+        - 'Jf' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'Jf'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+        - 'phi_mt' is an instance of 'general function'
+        - 'phi_mt' 'has domain' 'M'
+        - 'phi_mt' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_mt' == 'phi'(0 - 't')
+        - 'J_mt' is an instance of 'Jacobian matrix'
+        - 'phi_mt' 'has Jacobian matrix' 'J_mt'
+        - 'In' is an instance of 'square matrix'
+        - 'In' 'has number of rows' 'n'
+        - 'In' 'has number of columns' 'n'
+        - 'In' is secondary instance of 'identity matrix'
+        - 'Z' is an instance of 'general function'
+        - 'Z' 'has domain' 'set of real numbers'
+        - // Z is a matrix-valued function: for each t, Z(t) is an n x n matrix, defined as the Jacobian of the inverse-time flow phi_{-t} with respect to its argument, evaluated at phi_t(p)
+        - There is an equation:
+            - full source code: 'Z'('t') == 'J_mt'('phi_t'('p'))
+    - formalized assertion:
+        - There is a system of equations ('adjungierte variationsgleichung'):
+            - There is an equation ('adjungierte variationsgleichung ode'):
+                - full source code: 'time derivative op'('Z')('t') == 0 - 'Z'('t') * 'Jf'('phi_t'('p'))
+            - There is an equation ('adjungierte variationsgleichung ic'):
+                - full source code: 'Z'(0) == 'In'
+        - 'adjungierte variationsgleichung' is secondary instance of 'initial value problem'
+        - 'Z' is secondary instance of 'solution'
+        - 'adjungierte variationsgleichung' 'has solution' 'Z'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'has differentiability class'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'flow'
+    - 'is flow of'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+    - 'general function'
+    - 'square matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'identity matrix'
+    - 'set of real numbers'
+    - 'time derivative op'
+    - 'initial value problem'
+    - 'solution'
+    - 'has solution'
