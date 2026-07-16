@@ -5883,3 +5883,78 @@
     - 'one-parameter transformation group'
 - // snippet(135i)
 - // ignored content
+- // snippet(136)
+- // This snippet is the proposition "Variationsgleichung" (variation equation): for the flow phi of the autonomous ODE dgl2 with a twice continuously differentiable vector field f, and p in M, the derivative of the flow with respect to the initial value, X(t) := phi_t'(p), solves the matrix-valued initial value problem X-dot = f'(phi_t(p)) X, X(0) = I. Reuses 'flow', 'is flow of', 'vector field', 'has differentiability class', 'Jacobian matrix', 'has Jacobian matrix' (Jacobian of phi_t at p, as in the Jt/Jtp pattern of the "Lokale Invertierbarkeit des Flusses" proof, snippet 129, and Jacobian of f, as in snippet 112), 'time derivative op', 'square matrix', 'identity matrix', 'initial value problem', 'solution', 'has solution' and the standard M/Rn/vector setup. X itself is modeled as a matrix-valued 'general function' of t (domain 'set of real numbers'), mirroring how the transition matrix A(t) was modeled in snippet 95, since no dedicated codomain class for matrix-valued functions exists. No new class, property, relation or operator is introduced.
+- There is an if-then-statement ('Variationsgleichung'):
+    - full source code: Sei~$\varphi_{t}$ der Fluss der Dgl.~(\ref{eq:dgl2}) mit einem zweimal stetig differenzierbaren Vektorfeld $f:\mathcal{M}\to{\mathbb{R}}^{n}$. Für $p\in\mathcal{M}$ ist \begin{equation} X(t):=\varphi_{t}^{\prime}(p) \end{equation} die Lösung der matrixwertigen Anfangswertaufgabe \begin{equation} \dot{X}=f^{\prime}(\varphi_{t}(p))\cdot X,\quad X(0)=I. \end{equation}
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'f' 'has differentiability class' 2
+        - 'Jf' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'Jf'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+        - 'Jt' is an instance of 'Jacobian matrix'
+        - 'phi_t' 'has Jacobian matrix' 'Jt'
+        - 'In' is an instance of 'square matrix'
+        - 'In' 'has number of rows' 'n'
+        - 'In' 'has number of columns' 'n'
+        - 'In' is secondary instance of 'identity matrix'
+        - 'X' is an instance of 'general function'
+        - 'X' 'has domain' 'set of real numbers'
+        - // X is a matrix-valued function: for each t, X(t) is an n x n matrix, defined as the Jacobian of the flow phi_t with respect to the initial value, evaluated at p
+        - There is an equation:
+            - full source code: 'X'('t') == 'Jt'('p')
+    - formalized assertion:
+        - There is a system of equations ('variationsgleichung'):
+            - There is an equation ('variationsgleichung ode'):
+                - full source code: 'time derivative op'('X')('t') == 'Jf'('phi_t'('p')) * 'X'('t')
+            - There is an equation ('variationsgleichung ic'):
+                - full source code: 'X'(0) == 'In'
+        - 'variationsgleichung' is secondary instance of 'initial value problem'
+        - 'X' is secondary instance of 'solution'
+        - 'variationsgleichung' 'has solution' 'X'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'has differentiability class'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'flow'
+    - 'is flow of'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+    - 'general function'
+    - 'square matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'identity matrix'
+    - 'set of real numbers'
+    - 'time derivative op'
+    - 'initial value problem'
+    - 'solution'
+    - 'has solution'
