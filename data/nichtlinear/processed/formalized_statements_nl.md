@@ -5960,3 +5960,85 @@
     - 'has solution'
 - // snippet(137)
 - // DEFERRED for human review - open modeling question, see .orchester/questions.md
+- // snippet(138)
+- // This snippet is the proof (Beweis) of the proposition "Variationsgleichung" (snippet 136): X(t) := phi_t'(p) is shown to satisfy the matrix-valued IVP X-dot = f'(phi_t(p)) X, X(0) = I by differentiating X(t) = d/dx phi_t(x)|_{x=p} with respect to t, using the Schwarz lemma (snippet 73) to exchange the order of the t- and x-partial derivatives, and then the chain rule applied to phi-dot_t(x) = f(phi_t(x)); uniqueness of the solution then follows from the Theorem of Picard-Lindeloef (snippet 88), so every solution of the IVP has the form X(t) = phi_t'(p). As in the analogous proof of snippet 129 (Proof of Lokale Invertierbarkeit des Flusses), the setting is re-declared locally rather than referencing snippet 136's named instances directly, since named instances declared inside a formalized setting/premise/assertion block are locally scoped in the converter and cannot be referenced from a different, later complex statement (root cause documented for snippet 137). Reuses 'vector field', 'has differentiability class', 'Jacobian matrix', 'has Jacobian matrix', 'flow', 'is flow of', 'time derivative op', 'square matrix', 'identity matrix', 'initial value problem', 'solution', 'has solution', 'has proof' and 'unique' (defined in snippet 85 as applicable to 'solution of initial value problem', i.e. vector-valued trajectories; reused here for the matrix-valued solution X since the same Picard-Lindeloef existence-and-uniqueness argument applies dimension-independently) and the standard M/Rn/vector setup, all as in snippet 136's own proposition statement. No new class, property, relation or operator is introduced.
+- There is an if-then-statement ('Proof of Variationsgleichung'):
+    - full source code: Sei $X$ entsprechend Gl.~(\ref{eq:Loesung_Variationsgleichung}) definiert. Mit Lemma~\ref{lem:Schwarz} gilt \[ \begin{array}{ccl} \dot{X}(t) & = & \frac{\partial}{\partial t}X(t)\\ & = & \frac{\partial}{\partial t}\frac{\partial}{\partial x}\left.\varphi_{t}(x)\right|_{x=p}\\ & \stackrel{(\ref{eq:lemma-schwarz})}{=} & \frac{\partial}{\partial x}\frac{\partial}{\partial t}\left.\varphi_{t}(x)\right|_{x=p}\\ & = & \frac{\partial}{\partial x}\left.\dot{\varphi}_{t}(x)\right|_{x=p}\\ & = & \frac{\partial}{\partial x}\left.f(\varphi_{t}(x))\right|_{x=p}\\ & = & \left.f^{\prime}(\varphi_{t}(x))\cdot\varphi_{t}^{\prime}(x)\right|_{x=p}\\ & = & f^{\prime}(\varphi_{t}(p))\cdot X(t), \end{array} \] d.\,h. $X$ erfüllt die Anfangswertaufgabe~(\ref{eq:Variationsgleichung}). Satz~\ref{thm:Picard-Lindeloeff} garantiert die Eindeutigkeit der Lösung. Damit hat jede Lösung von~(\ref{eq:Variationsgleichung}) die Form $X(t)=\varphi_{t}^{\prime}(p)$.
+    - formalized setting:
+        - 'n' is an instance of 'integer number'
+        - 'Rn' is an instance of 'real vector space'
+        - 'Rn' 'has dimension' 'n'
+        - 'M' is an instance of 'set'
+        - 'M' 'is subset of' 'Rn'
+        - 'M' has the property 'open'
+        - 'f' is an instance of 'vector field'
+        - 'f' 'has domain' 'M'
+        - 'f' 'has codomain' 'Rn'
+        - 'f' 'has differentiability class' 2
+        - 'Jf' is an instance of 'Jacobian matrix'
+        - 'f' 'has Jacobian matrix' 'Jf'
+        - 'phi' is an instance of 'flow'
+        - 'phi' 'is flow of' 'f'
+        - 'p' is an instance of 'vector'
+        - 'p' is element of 'M'
+        - 't' is an instance of 'real number'
+        - 'phi_t' is an instance of 'general function'
+        - 'phi_t' 'has domain' 'M'
+        - 'phi_t' 'has codomain' 'Rn'
+        - There is an equation:
+            - full source code: 'phi_t' == 'phi'('t')
+        - 'Jt' is an instance of 'Jacobian matrix'
+        - 'phi_t' 'has Jacobian matrix' 'Jt'
+        - 'In' is an instance of 'square matrix'
+        - 'In' 'has number of rows' 'n'
+        - 'In' 'has number of columns' 'n'
+        - 'In' is secondary instance of 'identity matrix'
+        - 'X' is an instance of 'general function'
+        - 'X' 'has domain' 'set of real numbers'
+        - // X is given, per its definition in snippet 136, as the Jacobian of the flow phi_t with respect to the initial value, evaluated at p
+        - There is an equation:
+            - full source code: 'X'('t') == 'Jt'('p')
+    - formalized assertion:
+        - // by the Schwarz lemma (mixed partial derivatives of phi commute) applied to phi_t(x), then the chain rule applied to phi-dot_t(x) = f(phi_t(x)), the time derivative of X(t) = d/dx phi_t(x)|_{x=p} equals f'(phi_t(p)) times X(t)
+        - There is a system of equations ('variationsgleichung'):
+            - There is an equation:
+                - full source code: 'time derivative op'('X')('t') == 'Jf'('phi_t'('p')) * 'X'('t')
+            - There is an equation:
+                - full source code: 'X'(0) == 'In'
+        - 'variationsgleichung' is secondary instance of 'initial value problem'
+        - 'X' is secondary instance of 'solution'
+        - 'variationsgleichung' 'has solution' 'X'
+        - // uniqueness of the solution follows from the Theorem of Picard-Lindeloef (snippet 88); the 'unique' property is reused here for the matrix-valued solution X since the same existence-and-uniqueness argument applies regardless of the codomain's dimension
+        - 'X' has the property 'unique'
+- 'Variationsgleichung' 'has proof' 'Proof of Variationsgleichung'
+- Concepts in this snippet:
+    - 'integer number'
+    - 'real vector space'
+    - 'has dimension'
+    - 'set'
+    - 'is subset of'
+    - 'open'
+    - 'vector field'
+    - 'has domain'
+    - 'has codomain'
+    - 'has differentiability class'
+    - 'Jacobian matrix'
+    - 'has Jacobian matrix'
+    - 'flow'
+    - 'is flow of'
+    - 'vector'
+    - 'is element of'
+    - 'real number'
+    - 'general function'
+    - 'square matrix'
+    - 'has number of rows'
+    - 'has number of columns'
+    - 'identity matrix'
+    - 'set of real numbers'
+    - 'time derivative op'
+    - 'initial value problem'
+    - 'solution'
+    - 'has solution'
+    - 'unique'
+    - 'has proof'
+    - 'Variationsgleichung'
