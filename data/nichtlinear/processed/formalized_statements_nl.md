@@ -6207,3 +6207,5 @@
     - 'has solution'
     - 'has proof'
     - 'Adjungierte Variationsgleichung'
+- // snippet(142i)
+- // ignored content
