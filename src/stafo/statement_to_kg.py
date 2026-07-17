@@ -731,7 +731,7 @@ class ConversionManager:
             for ii, l in enumerate(additional_content):
                 full_source = re.findall(self.equation_pattern_dict["full_source"], l)
                 description = re.findall(self.equation_pattern_dict["description"], l)
-                if len(full_source) > 0:
+                if len(full_source) > 0 and self.get_indent(self.lines[i + ii + 1]) == top_level_indent: # only print statement comment, not equation source code
                     additional_context["comments"].append(full_source[0])
                     continue
                 elif len(description) > 0:
