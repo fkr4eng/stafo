@@ -2001,6 +2001,8 @@
 - There is a class: 'covector field' @en
 - 'covector field' has the alternative german label 'Kovektorfeld'
 - 'covector field' is a subclass of 'general function'
+- 'covector field' is secondary subclass of 'sequence'
+- 'covector field' 'has element type' 'scalar function'
 - 'covector field' has the alternative german label 'Differentialform ersten Grades'
 - 'covector field' has the alternative german label '1-Form'
 - 'covector field' has the alternative german label 'Pfaffsche Form'
@@ -3375,6 +3377,9 @@
         - 't0' is element of 'I'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
+        - 'x' is an instance of 'general function'
+        - 'x' 'has domain' 'I'
+        - 'x' 'has codomain' 'M'
         - 'I_tilde' is an instance of 'set'
         - 'I_tilde' 'is subset of' 'I'
         - 'I_tilde' has the property 'open'
@@ -3428,6 +3433,9 @@
         - 't0' is element of 'I'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
+        - 'z' is an instance of 'general function'
+        - 'z' 'has domain' 'I'
+        - 'z' 'has codomain' 'M'
         - 'I_tilde' is an instance of 'set'
         - 'I_tilde' 'is subset of' 'I'
         - 'I_tilde' has the property 'open'
@@ -3665,6 +3673,11 @@
         - 't0' is element of 'I'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
+        - 'z' is an instance of 'general function'
+        - 'z' 'has domain' 'I'
+        - 'z' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
     - formalized premise:
         - 'F' has the property 'continuous'
         - 'F' has the property 'Lipschitz condition'
@@ -3753,6 +3766,9 @@
         - 'x' is an instance of 'general function'
         - 'x' 'has domain' 'I'
         - 'x' 'has codomain' 'M'
+        - 'z' is an instance of 'general function'
+        - 'z' 'has domain' 'I'
+        - 'z' 'has codomain' 'M'
         - 't' is an instance of 'real number'
         - 't' is element of 'I'
         - 'tau' is an instance of 'real number'
@@ -3780,7 +3796,6 @@
 - Definition of 'Picard iteration':
     - full source code: Dazu geht man von der Integralgleichung~(\ref{eq:awa-integralgleichung1}) zu der Picard-Iteration $\phi_{k+1}(t)=p+\int_{t_{0}}^{t}F(\phi_{k}(\tau),\tau)\,\mathrm{d}\tau$ mit der Startfunktion $\phi_{0}(t)\equiv p$ über.
     - formalized setting:
-        - // I, M, p and t0 are as in the initial value problem (awa1)
         - 'I' is an instance of 'set'
         - 'I' 'is subset of' 'set of real numbers'
         - 'M' is an instance of 'set'
@@ -3788,6 +3803,8 @@
         - 'p' is element of 'M'
         - 't0' is an instance of 'real number'
         - 't0' is element of 'I'
+        - 'F' is an instance of 'vector field'
+        - 'F' has the property 'time-dependent'
         - 't' is an instance of 'real number'
         - 't' is element of 'I'
         - 'tau' is an instance of 'real number'
@@ -3941,12 +3958,15 @@
         - 't0' is element of 'I'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
+        - 'z' is an instance of 'general function'
+        - 'z' 'has domain' 'I'
+        - 'z' 'has codomain' 'M'
+        - 't' is an instance of 'real number'
+        - 't' is element of 'I'
     - formalized premise:
         - 'F' 'has differentiability class' 1
     - formalized assertion:
-        - // the corollary (snippet 91) guarantees the (local) Lipschitz condition
         - 'F' has the property 'Lipschitz condition'
-        - // the Theorem of Picard-Lindelöf then guarantees existence and uniqueness of a local solution
         - 'I_p' is an instance of 'set'
         - 'I_p' 'is subset of' 'set of real numbers'
         - 'I_p' has the property 'open'
@@ -3990,9 +4010,17 @@
 - // snippet(94)
 - // This snippet introduces the time-dependent flow (Evolution / zeitvarianter Fluss) of the differential equation (dgl1): a two-parameter map phi: M x I x I -> M that collects all solutions, provided an integral curve through every (x,t) exists. It states the two defining relations of the flow (identity at equal times and the cocycle/semigroup property) and defines the composition of maps.
 - There is a class: 'time-dependent flow' @en
+- 'time-dependent flow' is a subclass of 'general function'
 - 'time-dependent flow' has the alternative german label 'Evolution'
 - 'time-dependent flow' has the alternative german label 'zeitvarianter Fluss'
 - 'time-dependent flow' has the alternative german label 'zeitabhängiger Fluss'
+- // phi_{t,t0} is the partial application of the flow which fixes both time arguments; it is the map on the state space which the source defines by phi_{t,t0}(p) := phi(p,t,t0)
+- There is a ternary operator: 'flow at times op' @en
+- 'flow at times op' has the associated LaTeX notation $\varphi_{t,t_{0}}$
+- The type of argument1 of 'flow at times op' is 'time-dependent flow'
+- The type of argument2 of 'flow at times op' is 'real number'
+- The type of argument3 of 'flow at times op' is 'real number'
+- The result type of 'flow at times op' is 'general function'
 - There is a binary operator: 'function composition op' @en
 - 'function composition op' has the alternative german label 'Hintereinanderausführung'
 - 'function composition op' has the associated LaTeX notation $\circ$
@@ -4018,18 +4046,22 @@
         - 'MxI' is an instance of 'set'
         - There is an equation:
             - full source code: 'MxI' == 'cartesian product op'('M', 'I')
+        - 'MxIxI' is an instance of 'set'
+        - There is an equation:
+            - full source code: 'MxIxI' == 'cartesian product op'('M', 'IxI')
         - 'F' is an instance of 'vector field'
         - 'F' has the property 'time-dependent'
         - 'F' 'has domain' 'MxI'
         - 'F' 'has codomain' 'Rn'
         - 'phi' is an instance of 'general function'
-        - // phi is the (curried) time-dependent flow: phi(t, t0) is a map on M, so phi_{t,t0}(x) = phi(t, t0)(x)
-        - 'phi' 'has domain' 'IxI'
+        - 'phi' 'has domain' 'MxIxI'
+        - 'phi' 'has codomain' 'M'
         - 'p' is an instance of 'vector'
         - 'p' is element of 'M'
-        - 's' is an instance of 'solution of initial value problem'
+        - 's' is an instance of 'general function'
         - 's' 'has domain' 'I'
         - 's' 'has codomain' 'M'
+        - 's' is secondary instance of 'solution of initial value problem'
         - 't' is an instance of 'real number'
         - 't' is element of 'I'
         - 't0' is an instance of 'real number'
@@ -4040,6 +4072,9 @@
         - 't2' is element of 'I'
         - 'x' is an instance of 'vector'
         - 'x' is element of 'M'
+        - 'z' is an instance of 'general function'
+        - 'z' 'has domain' 'I'
+        - 'z' 'has codomain' 'M'
     - formalized premise:
         - There is a system of equations ('awa td flow'):
             - There is an equation ('dgl for awa td flow'):
@@ -4049,15 +4084,18 @@
         - 'awa td flow' is secondary instance of 'initial value problem'
         - 'awa td flow' 'has solution' 's'
         - There is an equation ('flow collects solutions'):
-            - full source code: 'phi'('t', 't0')('p') == 's'('t')
+            - full source code: 'phi'('p', 't', 't0') == 's'('t')
     - formalized assertion:
         - 'phi' is secondary instance of 'time-dependent flow'
+        - There is an equation ('flow at times definition'):
+            - full source code: 'flow at times op'('phi', 't', 't0')('p') == 'phi'('p', 't', 't0')
         - There is an equation ('flow identity'):
-            - full source code: 'phi'('t0', 't0')('x') == 'x'
+            - full source code: 'flow at times op'('phi', 't0', 't0')('x') == 'x'
         - There is an equation ('flow cocycle'):
-            - full source code: 'function composition op'('phi'('t2', 't1'), 'phi'('t1', 't0'))('x') == 'phi'('t2', 't0')('x')
+            - full source code: 'function composition op'('flow at times op'('phi', 't2', 't1'), 'flow at times op'('phi', 't1', 't0'))('x') == 'flow at times op'('phi', 't2', 't0')('x')
 - Concepts in this snippet:
     - 'time-dependent flow'
+    - 'flow at times op'
     - 'function composition op'
     - 'integer number'
     - 'real vector space'
@@ -4078,6 +4116,7 @@
     - 'differential equation'
 - Defined in this snippet:
     - 'time-dependent flow'
+    - 'flow at times op'
     - 'function composition op'
 - // snippet(95)
 - // This example treats the linear homogeneous time-variant system dot x = A(t) x with a continuous matrix function A. Its vector field is linear, and the time-dependent flow (from snippet 94) is linear in the initial value: phi_{t,t0}(x) = Phi(t,t0) x. The n x n matrix Phi(t,t0) is the transition matrix, computed via the Peano-Baker formula obtained from the Picard iteration.
@@ -4099,7 +4138,6 @@
         - 'A' is an instance of 'general function'
         - 'A' 'has domain' 'set of real numbers'
         - 'A' has the property 'continuous'
-        - // A is a matrix function: for each t, A(t) is an n x n square matrix (codomain R^{n x n})
         - 't' is an instance of 'real number'
         - 't0' is an instance of 'real number'
         - 'x' is an instance of 'vector'
@@ -4109,7 +4147,8 @@
         - 'x_traj' 'has codomain' 'Rn'
         - 'F' is an instance of 'vector field'
         - 'F' has the property 'time-dependent'
-        - 'Phi' is an instance of 'square matrix'
+        - // Phi is the map (t,t0) -> Phi(t,t0); it is the value Phi(t,t0) which the source calls the transition matrix
+        - 'Phi' is an instance of 'general function'
         - 'phi' is an instance of 'time-dependent flow'
     - formalized premise:
         - There is an equation ('linear ode'):
@@ -4119,7 +4158,6 @@
             - full source code: 'F'('x', 't') == 'A'('t') * 'x'
     - formalized assertion:
         - 'F' has the property 'linear'
-        - // the time-dependent flow is linear in the initial value argument and given by phi_{t,t0}(x) = Phi(t,t0) x
         - There is an equation ('flow via transition matrix'):
             - full source code: 'phi'('x', 't', 't0') == 'Phi'('t', 't0') * 'x'
         - 'phi' has the property 'linear'
@@ -4186,7 +4224,6 @@
             - full source code: 'time derivative op'('x')('t') == 'f'('x'('t'))
         - 'dgl2' is secondary instance of 'differential equation'
         - 'dgl2' has the property 'time-invariant'
-        - // the initial value problem can be formulated with initial time t0 = 0 (awa2)
         - There is a system of equations ('awa2'):
             - There is an equation ('awa2 ode'):
                 - full source code: 'time derivative op'('x')('t') == 'f'('x'('t'))
@@ -4223,6 +4260,12 @@
 - 'flow' has the alternative german label 'Phasenfluss'
 - 'flow' has the alternative english label 'phase flow'
 - 'flow' has the verbal description 'one-parameter map phi: M x I -> R^n with phi_t(p) := phi(p,t) that collects the solutions of an autonomous (time-invariant) differential equation; it is the reduction of the two-parameter time-dependent flow via the time difference to the initial time'
+- // phi_t is the partial application of the flow which fixes the time argument; it is the map on the state space which the source defines by phi_t(p) := phi(p,t). It is the one-parameter analogue of 'flow at times op'
+- There is a binary operator: 'flow at time op' @en
+- 'flow at time op' has the associated LaTeX notation $\varphi_{t}$
+- The type of argument1 of 'flow at time op' is 'flow'
+- The type of argument2 of 'flow at time op' is 'real number'
+- The result type of 'flow at time op' is 'general function'
 - Definition of 'flow':
     - full source code: Der zeitvariante Fluss als zweiparametrige Abbildung geht dann durch Bildung der Zeitdifferenz zum Anfangszeitpunkt $\varphi_{t-t_{0}}(\cdot):=\varphi_{t,t_{0}}(\cdot)$ in eine einparametrige Abbildung der Form $\varphi:\mathcal{M}\times\mathcal{I}\to{\mathbb{R}}^{n}$ mit $\varphi_{t}(p):=\varphi(p,t)$ über, die man Fluss (engl. flow) oder Phasenfluss nennt. Der Fluss~$\varphi_{t}$ fasst die Lösungen der Differentialgleichung~(\ref{eq:dgl2}) zusammen.
     - formalized setting:
@@ -4252,11 +4295,13 @@
         - // the underlying differential equation (dgl2) is time-invariant (autonomous), so the solution depends only on the time difference to the initial time
     - formalized assertion:
         - 'phi' is secondary instance of 'flow'
-        - // reduction of the two-parameter flow to the one-parameter flow via the time difference: phi(p, t - t0) = phi_tv(p, t, t0)
+        - There is an equation ('flow at time definition'):
+            - full source code: 'flow at time op'('phi', 't')('p') == 'phi'('p', 't')
         - There is an equation ('flow time-difference reduction'):
             - full source code: 'phi'('p', 't' - 't0') == 'phi_tv'('p', 't', 't0')
 - Concepts in this snippet:
     - 'flow'
+    - 'flow at time op'
     - 'time-dependent flow'
     - 'time-invariant'
     - 'differential equation'
@@ -4276,6 +4321,7 @@
     - 'real number'
 - Defined in this snippet:
     - 'flow'
+    - 'flow at time op'
 - // snippet(98)
 - // This snippet states the group property (Gruppeneigenschaft) of the one-parameter flow (snippet 97): for all x in M and for s, t in the temporal existence interval, (1) phi_0(x) = x and (2) phi_t o phi_s (x) = phi_{s+t}(x). Solving an initial value problem for a time s and continuing the solution by a time t agrees with the solution for time s+t.
 - There is a property: 'group property' @en
@@ -4298,14 +4344,15 @@
         - 't' is an instance of 'real number'
     - formalized premise:
         - There is an equation ('flow group identity'):
-            - full source code: 'phi'(0)('x') == 'x'
+            - full source code: 'flow at time op'('phi', 0)('x') == 'x'
         - There is an equation ('flow group composition'):
-            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('x') == 'phi'('s' + 't')('x')
+            - full source code: 'function composition op'('flow at time op'('phi', 't'), 'flow at time op'('phi', 's'))('x') == 'flow at time op'('phi', 's' + 't')('x')
     - formalized assertion:
         - 'phi' has the property 'group property'
 - Concepts in this snippet:
     - 'group property'
     - 'flow'
+    - 'flow at time op'
     - 'function composition op'
     - 'integer number'
     - 'real vector space'
@@ -4520,16 +4567,21 @@
 - The type of argument2 of 'matrix power op' is 'integer number'
 - The result type of 'matrix power op' is 'square matrix'
 - 'matrix power op' has the verbal description 'k-th power of a square matrix A, i.e. the product A A ... A taken k times in the sense of matrix multiplication (not elementwise)'
+- // the factorial is first needed here (in the series below); it is used again in the Taylor series
+- There is a unary operator: 'factorial op'
+- The type of argument1 of 'factorial op' is 'integer number'
+- The result type of 'factorial op' is 'integer number'
 - Definition of 'matrix exponential op':
     - formalized setting:
         - 'A' is an instance of 'square matrix'
         - 'k' is an instance of 'integer number'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'matrix exponential op'('A') == 'sum over index'('matrix power op'('A', 'k') / 'factorial op'('k'), 'k', 'tuple'(0, 'infinity'))
+            - full source code: 'matrix exponential op'('A') == 'sum over index'('matrix power op'('A', 'k') / 'factorial op'('k'), 'k', 'tuple op'(0, 'infinity'))
 - Concepts in this snippet:
     - 'matrix exponential op'
     - 'matrix power op'
+    - 'factorial op'
     - 'square matrix'
     - 'integer number'
 - Defined in this snippet:
@@ -4566,16 +4618,15 @@
         - // this initial value problem is a special case of the linear state-space model with A = 0 and constant input u = 1
         - 'awa const vf' is associated to 'linear state-space model'
     - formalized assertion:
-        - // phi in curried form: phi_t = phi(t) is the time-t map, phi_t(p) = phi(t)(p)
         - // special solution from the general formula using e^{At}|_{A=0} = I
         - There is an equation ('sol const vf'):
-            - full source code: 'phi'('t')('p') == 'p' + 'b' * 't'
+            - full source code: 'flow at time op'('phi', 't')('p') == 'p' + 'b' * 't'
         - 'phi' has the property 'global'
         - // group property: phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p)
         - There is an equation ('group id const vf'):
-            - full source code: 'phi'(0)('p') == 'p'
+            - full source code: 'flow at time op'('phi', 0)('p') == 'p'
         - There is an equation ('group comp const vf'):
-            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('p') == 'phi'('s' + 't')('p')
+            - full source code: 'function composition op'('flow at time op'('phi', 't'), 'flow at time op'('phi', 's'))('p') == 'flow at time op'('phi', 's' + 't')('p')
         - 'phi' has the property 'group property'
 - There is an example:
     - verbal summary: Constant vector field and group property. For f(x) = b (b in R^n) the initial value problem dot x = b, x(0) = p is a special case of the linear state-space model with A = 0 and constant input u = 1. Its solution x(t) = p + b t is defined for all p and all t, giving the global flow phi_t(p) = p + b t, which satisfies the group property phi_0(p) = p and phi_t(phi_s(p)) = phi_{t+s}(p) = p + b(t+s).
@@ -4586,6 +4637,8 @@
     - 'differential equation'
     - 'linear state-space model'
     - 'flow'
+    - 'flow at time op'
+    - 'function composition op'
     - 'global'
     - 'group property'
     - 'vector'
@@ -4618,17 +4671,16 @@
         - // linear vector field f(x) = A x; special case of the linear state-space model with b = 0 (or u = 0)
         - 'f' is associated to 'linear state-space model'
     - formalized assertion:
-        - // phi in curried form: phi_t = phi(t) is the time-t map, phi_t(x) = phi(t)(x)
         - // global flow read off from the general solution formula: phi_t(x) = e^{At} x
         - There is an equation ('lin vf flow'):
-            - full source code: 'phi'('t')('x') == 'matrix exponential op'('A' * 't') * 'x'
+            - full source code: 'flow at time op'('phi', 't')('x') == 'matrix exponential op'('A' * 't') * 'x'
         - 'phi' has the property 'global'
         - // first group property: phi_0(x) = e^{A0} x = I x = x, since e^0 = I
         - There is an equation ('lin vf group id'):
-            - full source code: 'phi'(0)('x') == 'x'
+            - full source code: 'flow at time op'('phi', 0)('x') == 'x'
         - // second group property via Cauchy product of the series and the binomial theorem: e^{tA} e^{sA} = e^{(t+s)A}
         - There is an equation ('lin vf group comp'):
-            - full source code: 'function composition op'('phi'('t'), 'phi'('s'))('x') == 'phi'('s' + 't')('x')
+            - full source code: 'function composition op'('flow at time op'('phi', 't'), 'flow at time op'('phi', 's'))('x') == 'flow at time op'('phi', 's' + 't')('x')
         - 'phi' has the property 'group property'
 - There is an example:
     - verbal summary: Linear vector field and group property. For f(x) = A x (A in R^{n x n}), a special case of the linear state-space model with b = 0 (or u = 0), the global flow is phi_t(x) = e^{At} x. It satisfies the group property phi_0(x) = x (from e^0 = I) and phi_t(phi_s(x)) = e^{tA} e^{sA} x = e^{(t+s)A} x = phi_{t+s}(x), shown via the Cauchy product and the binomial theorem.
@@ -4637,6 +4689,8 @@
     - 'vector field'
     - 'linear state-space model'
     - 'flow'
+    - 'flow at time op'
+    - 'function composition op'
     - 'global'
     - 'group property'
     - 'matrix exponential op'
@@ -4704,9 +4758,6 @@
     - 'sufficiently smooth'
 
 - // manually added (11)
-- There is a unary operator: 'factorial op'
-- The type of argument1 of 'factorial op' is 'integer number'
-- The result type of 'factorial op' is 'integer number'
 - There is a class: 'series'
 - There is a class: 'Taylor series'
 - 'Taylor series' is a subclass of 'series'
@@ -4717,6 +4768,7 @@
 - There is a relation: 'has series expansion'
 - The type of argument1 of 'has series expansion' is 'general function'
 - The result type of 'has series expansion' is 'series'
+- There is a property: 'smooth' @en
 - Definition of 'Taylor series':
     - formalized setting:
         - 'x' is an instance of 'scalar variable'
@@ -4730,7 +4782,7 @@
         - 'TS' is an instance of 'general function'
     - formalized assertion:
         - There is an equation:
-            - full source code: 'TS' == 'sum over index'('derivative op'('f', 'x', 'k')('a') / 'factorial op'('k') * ('x'-'a')**'k', 'k', 'tuple'(0, 'infinity'))
+            - full source code: 'TS' == 'sum over index'('derivative op'('f', 'x', 'k')('a') / 'factorial op'('k') * ('x'-'a')**'k', 'k', 'tuple op'(0, 'infinity'))
         - 'TS' is secondary instance of 'Taylor series'
         - 'f' 'has series expansion' 'TS'
 - // snippet(110)
@@ -4739,7 +4791,7 @@
 - The type of argument1 of 'is flow of' is 'flow'
 - The result type of 'is flow of' is 'vector field'
 - 'is flow of' has the verbal description 'links a flow to the vector field it is generated by: phi is the flow of f (phi = phi^f)'
-- There is a property: 'smooth' @en
+
 - 'smooth' has the alternative german label 'glatt'
 - 'smooth' is applicable to 'general function'
 - 'smooth' has the verbal description 'property of a function that is infinitely often continuously differentiable'
