@@ -38,6 +38,7 @@ TEST_DATA12_FPATH = os.path.join(TESTA_DATA_DIR, "statements12_R77.md")
 TEST_DATA14_FPATH = os.path.join(TESTA_DATA_DIR, "statements14_curried_calls.md")
 TEST_DATA15_FPATH = os.path.join(TESTA_DATA_DIR, "statements15_referencing.md")
 TEST_DATA16_FPATH = os.path.join(TESTA_DATA_DIR, "statements16_auto_relation.md")
+TEST_DATA18_FPATH = os.path.join(TESTA_DATA_DIR, "statements18_curried_element_type.md")
 
 ma_load_dict = {"uri": "irk:/ocse/0.2/math", "prefix": "ma", "module_name": "math"}
 ct_load_dict = {"uri": "irk:/ocse/0.2/control_theory", "prefix": "ct", "module_name": "control_theory"}
@@ -417,6 +418,39 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertEqual(len(k_ev_maps), 1)
         k_ev = k_ev_maps[0]
         self.assertEqual(p.aux.ensure_list(k_ev.R30__is_secondary_instance_of), [vector_space])
+
+    def test_ar02__curried_call_via_element_type(self):
+        """A curried call `element of sequence(f, i)(x)` must resolve, driven only by declarations in the FNL.
+
+        The chain: the R88 spec sets `ev R15 f` -> the (eagerly applied) element type rule of ocse reads the
+        element type declared for f's class and sets `ev R30 scalar function` -> since scalar function is a
+        subclass of I6, ev becomes callable -> `(x)` can be applied to it.
+        """
+        CM = s2k.ConversionManager(TEST_DATA18_FPATH, [ma_load_dict], num_keys=30)
+        res_mod_fpath = CM.run()
+        mod = p.irkloader.load_mod_from_path(res_mod_fpath, prefix="ut")
+
+        # the declarations must have been matched to the existing ocse entities (not newly created ones),
+        # otherwise the rule of ocse cannot fire
+        op = p.ds.get_entity_by_uri("irk:/ocse/0.2/math#I8603")  # element of sequence
+        scalar_function = p.ds.get_entity_by_uri("irk:/ocse/0.2/math#I1063")
+        vector_field = p.ds.get_entity_by_uri("irk:/ocse/0.2/math#I9841")
+        self.assertEqual(
+            vector_field.get_relations("irk:/ocse/0.2/math#R7280", return_obj=True), [scalar_function]
+        )
+
+        ev_maps = [s for s in op.get_inv_relations("R35", return_subj=True) if s.uri.startswith(mod.__URI__)]
+        self.assertEqual(len(ev_maps), 1)
+        ev = ev_maps[0]
+
+        # the eager rule typed the result via the element type of its sequence
+        self.assertIn(scalar_function, p.aux.ensure_list(ev.R30__is_secondary_instance_of))
+
+        # ... which made it callable, so the outer application `(x)` exists and points to ev
+        outer = [s for s in ev.get_inv_relations("R35", return_subj=True)]
+        self.assertEqual(len(outer), 1)
+        stm = get_item_by_name(res_mod_fpath, "gen stm l16", mod)
+        self.assertEqual(outer[0].R36__has_argument_tuple.R39__has_element, [stm.x])
 
     def test_r01__referencing(self):
         CM = s2k.ConversionManager(TEST_DATA15_FPATH, [ma_load_dict], num_keys=20)
