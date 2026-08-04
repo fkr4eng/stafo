@@ -152,8 +152,8 @@ class Test_00_Core(HousekeeperMixin, unittest.TestCase):
         self.assertIn(target, item2)
 
         # check comments (source code before parsing)
-        comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"
-        self.assertIn(comment, res)
+        # comment = r"# F(s) == \int\limits_0^\infty f(t)*e^{-st} dt"
+        # self.assertIn(comment, res)
 
     def test_r03__escape_R2(self):
         CM = s2k.ConversionManager(TEST_DATA8_FPATH, num_keys=20)

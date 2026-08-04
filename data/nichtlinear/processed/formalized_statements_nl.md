@@ -6010,8 +6010,8 @@
     - 'initial value problem'
     - 'solution'
     - 'has solution'
-- // snippet(137)
-- // DEFERRED for human review - open modeling question, see .orchester/questions.md
+- // snippet(137i)
+- // ignored content
 - // snippet(138)
 - // This snippet is the proof (Beweis) of the proposition "Variationsgleichung" (snippet 136): X(t) := phi_t'(p) is shown to satisfy the matrix-valued IVP X-dot = f'(phi_t(p)) X, X(0) = I by differentiating X(t) = d/dx phi_t(x)|_{x=p} with respect to t, using the Schwarz lemma (snippet 73) to exchange the order of the t- and x-partial derivatives, and then the chain rule applied to phi-dot_t(x) = f(phi_t(x)); uniqueness of the solution then follows from the Theorem of Picard-Lindeloef (snippet 88), so every solution of the IVP has the form X(t) = phi_t'(p). As in the analogous proof of snippet 129 (Proof of Lokale Invertierbarkeit des Flusses), the setting is re-declared locally rather than referencing snippet 136's named instances directly, since named instances declared inside a formalized setting/premise/assertion block are locally scoped in the converter and cannot be referenced from a different, later complex statement (root cause documented for snippet 137). Reuses 'vector field', 'has differentiability class', 'Jacobian matrix', 'has Jacobian matrix', 'flow', 'is flow of', 'time derivative op', 'square matrix', 'identity matrix', 'initial value problem', 'solution', 'has solution', 'has proof' and 'unique' (defined in snippet 85 as applicable to 'solution of initial value problem', i.e. vector-valued trajectories; reused here for the matrix-valued solution X since the same Picard-Lindeloef existence-and-uniqueness argument applies dimension-independently) and the standard M/Rn/vector setup, all as in snippet 136's own proposition statement. No new class, property, relation or operator is introduced.
 - There is an if-then-statement ('Proof of Variationsgleichung'):
